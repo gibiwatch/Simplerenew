@@ -10,9 +10,5 @@ defined('_JEXEC') or die();
 
 //require_once JPATH_LIBRARIES . '/fof/include.php';
 
-require_once __DIR__ . '/helpers/install.php';
-
-$install = new SimplerenewInstall();
-
-$install->packages(__DIR__ . '/helpers/packages.xml', __DIR__.'/additions');
-
+?>
+Under Construction
