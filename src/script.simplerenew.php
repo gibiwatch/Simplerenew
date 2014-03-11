@@ -132,6 +132,13 @@ class Com_SimplerenewInstallerScript
     public function postFlight($type, $parent)
     {
         $this->installRelated();
+
+        if ($fof = $this->installFOF()) {
+            if ($fof->installed) {
+                $text = 'COM_SIMPLERENEW_FOF_' . ($fof->required ? 'INSTALL' : 'UPDATE');
+                $this->setMessage(JText::sprintf($text, $fof->version, $fof->date->format('Y-m-d')));
+            }
+        }
         $this->showMessages();
     }
 
@@ -156,7 +163,7 @@ class Com_SimplerenewInstallerScript
                         $path .= '/' . $element;
                         if (is_dir($path)) {
                             $current = $this->findExtension($type, $element, $folder);
-                            $isNew = empty($current);
+                            $isNew   = empty($current);
 
                             $text = 'COM_SIMPLERENEW_RELATED_' . ($isNew ? 'INSTALL' : 'UPDATE');
                             if ($installer->install($path)) {
@@ -171,7 +178,7 @@ class Com_SimplerenewInstallerScript
                                     }
                                 }
                             } else {
-                                $this->setMessage(JText::sprintf($text.'_FAIL', $type, $element), 'error');
+                                $this->setMessage(JText::sprintf($text . '_FAIL', $type, $element), 'error');
                             }
                         }
                     }
@@ -193,7 +200,7 @@ class Com_SimplerenewInstallerScript
                     foreach ($extensions as $element => $settings) {
                         if ($settings[1]) {
                             if ($current = $this->findExtension($type, $element, $folder)) {
-                                $msg = 'COM_SIMPLERENEW_RELATED_UNINSTALL';
+                                $msg     = 'COM_SIMPLERENEW_RELATED_UNINSTALL';
                                 $msgtype = 'message';
                                 if (!$installer->uninstall($current->type, $current->extension_id)) {
                                     $msg .= '_FAIL';
@@ -245,7 +252,7 @@ class Com_SimplerenewInstallerScript
     protected function setPluginOrder(JTable $extension, $order)
     {
         if ($extension->type == 'plugin' && !empty($order)) {
-            $db = JFactory::getDbo();
+            $db    = JFactory::getDbo();
             $query = $db->getQuery(true);
 
             $query->select('extension_id, element');
@@ -270,15 +277,13 @@ class Com_SimplerenewInstallerScript
                 if ((is_numeric($order) && $order <= 1) || $order == 'first') {
                     // First in order
                     $neworder = array_merge($target, $others);
-                }
-                elseif (($order == '*') || ($order == 'last')) {
+                } elseif (($order == '*') || ($order == 'last')) {
                     // Last in order
                     $neworder = array_merge($others, $target);
-                }
-                elseif (preg_match('/^(before|after):(\S+)$/', $order, $match)) {
+                } elseif (preg_match('/^(before|after):(\S+)$/', $order, $match)) {
                     // place before or after named plugin
-                    $place = $match[1];
-                    $element = $match[2];
+                    $place    = $match[1];
+                    $element  = $match[2];
                     $neworder = array();
                     $previous = '';
 
@@ -287,20 +292,22 @@ class Com_SimplerenewInstallerScript
                             $neworder = array_merge($neworder, $target);
                         }
                         $neworder[$plugin->element] = $plugin;
-                        $previous = $plugin->element;
+                        $previous                   = $plugin->element;
                     }
                     if (count($neworder) < count($plugins)) {
                         // Make it last if the requested plugin isn't installed
                         $neworder = array_merge($neworder, $target);
                     }
-                }
-                else {
+                } else {
                     $neworder = array();
                 }
 
                 if (count($neworder) == count($plugins)) {
                     // Only reorder if have a validated new order
-                    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_plugins/models', 'PluginsModels');
+                    JModelLegacy::addIncludePath(
+                        JPATH_ADMINISTRATOR . '/components/com_plugins/models',
+                        'PluginsModels'
+                    );
                     $model = JModelLegacy::getInstance('Plugin', 'PluginsModel');
 
                     $ids = array();
@@ -315,13 +322,113 @@ class Com_SimplerenewInstallerScript
     }
 
     /**
+     * Check if FoF is already installed and install if not
+     *
+     * @return  object object with performed actions summary
+     */
+    protected function installFOF()
+    {
+        if(version_compare(JVERSION, '3.2.0', 'ge')) {
+            return null;
+        }
+
+        $src = $this->installer->getPath('source');
+
+        // Load dependencies
+        JLoader::import('joomla.filesystem.file');
+        JLoader::import('joomla.utilities.date');
+        $source = $src . '/assets/fof';
+
+        if (!defined('JPATH_LIBRARIES')) {
+            $target = JPATH_ROOT . '/libraries/fof';
+        } else {
+            $target = JPATH_LIBRARIES . '/fof';
+        }
+
+        $haveToInstallFOF = true;
+        if (is_dir($target)) {
+            $fofVersion = array();
+
+            if (file_exists($target . '/version.txt')) {
+                $rawData                 = JFile::read($target . '/version.txt');
+                $info                    = explode("\n", $rawData);
+                $fofVersion['installed'] = array(
+                    'version' => trim($info[0]),
+                    'date'    => new JDate(trim($info[1]))
+                );
+            } else {
+                $fofVersion['installed'] = array(
+                    'version' => '0.0',
+                    'date'    => new JDate('2011-01-01')
+                );
+            }
+
+            $rawData               = JFile::read($source . '/version.txt');
+            $info                  = explode("\n", $rawData);
+            $fofVersion['package'] = array(
+                'version' => trim($info[0]),
+                'date'    => new JDate(trim($info[1]))
+            );
+
+            $haveToInstallFOF = $fofVersion['package']['date']->toUNIX() > $fofVersion['installed']['date']->toUNIX();
+        }
+
+        $installedFOF = false;
+
+        if ($haveToInstallFOF) {
+            $versionSource = 'package';
+            $installer     = new JInstaller;
+            $installedFOF  = $installer->install($source);
+        } else {
+            $versionSource = 'installed';
+        }
+
+        if (!isset($fofVersion)) {
+            $fofVersion = array();
+
+            if (file_exists($target . '/version.txt')) {
+                $rawData                 = JFile::read($target . '/version.txt');
+                $info                    = explode("\n", $rawData);
+                $fofVersion['installed'] = array(
+                    'version' => trim($info[0]),
+                    'date'    => new JDate(trim($info[1]))
+                );
+            } else {
+                $fofVersion['installed'] = array(
+                    'version' => '0.0',
+                    'date'    => new JDate('2011-01-01')
+                );
+            }
+
+            $rawData               = JFile::read($source . '/version.txt');
+            $info                  = explode("\n", $rawData);
+            $fofVersion['package'] = array(
+                'version' => trim($info[0]),
+                'date'    => new JDate(trim($info[1]))
+            );
+            $versionSource         = 'installed';
+        }
+
+        if (!($fofVersion[$versionSource]['date'] instanceof JDate)) {
+            $fofVersion[$versionSource]['date'] = new JDate;
+        }
+
+        return (object)array(
+            'required'  => $haveToInstallFOF,
+            'installed' => $installedFOF,
+            'version'   => $fofVersion[$versionSource]['version'],
+            'date'      => $fofVersion[$versionSource]['date'],
+        );
+    }
+
+    /**
      * Display messages from array
      *
      * @return void
      */
     protected function showMessages()
     {
-        $app  = JFactory::getApplication();
+        $app = JFactory::getApplication();
         foreach ($this->messages as $msg) {
             $app->enqueueMessage($msg[0], $msg[1]);
         }
@@ -335,7 +442,7 @@ class Com_SimplerenewInstallerScript
      *
      * @return void
      */
-    protected function setMessage($msg, $type='message')
+    protected function setMessage($msg, $type = 'message')
     {
         $this->messages[] = array($msg, $type);
     }
