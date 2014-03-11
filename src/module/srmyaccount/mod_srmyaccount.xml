@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="2.5" method="upgrade">
+    <name>mod_srmyaccount</name>
+    <author>OSTraining</author>
+    <creationDate>February 13, 2014</creationDate>
+    <copyright>Copyright (C) 2013 OSTraining.com</copyright>
+    <license>GPL v3</license>
+    <authorEmail>info@ostraining.com</authorEmail>
+    <authorUrl>http://www.ostraining.com</authorUrl>
+    <version>1.1.0</version>
+    <description>mod_srmyaccount_desc</description>
+
+    <files>
+        <folder>assets</folder>
+        <folder>language</folder>
+        <folder>tmpl</folder>
+        <filename module="mod_srmyaccount">mod_srmyaccount.php</filename>
+    </files>
+
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field
+                        name="size"
+                        type="text"
+                        default="80"
+                        size="5"
+                        label="MOD_SRMYACCOUNT_FIELD_SIZE_LABEL"
+                        description="MOD_SRMYACCOUNT_FIELD_SIZE_DESC"/>
+
+                <field
+                        name="default_image"
+                        type="media"
+                        label="MOD_SRMYACCOUNT_FIELD_DEFAULT_IMAGE_LABEL"
+                        description="MOD_SRMYACCOUNT_FIELD_DEFAULT_IMAGE_DESC"/>
+
+            </fieldset>
+
+            <fieldset name="advanced">
+                <field
+                        name="layout"
+                        type="modulelayout"
+                        label="JFIELD_ALT_LAYOUT_LABEL"
+                        description="JFIELD_ALT_MODULE_LAYOUT_DESC"/>
+
+                <field
+                        name="moduleclass_sfx"
+                        type="text"
+                        label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+                        description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+            </fieldset>
+        </fields>
+    </config>
+</extension>
