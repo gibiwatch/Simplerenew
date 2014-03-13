@@ -51,7 +51,7 @@ class Psr4AutoloaderClass
         $base_dir = rtrim($base_dir, '/') . DIRECTORY_SEPARATOR;
         $base_dir = rtrim($base_dir, DIRECTORY_SEPARATOR) . '/';
 
-        // initialize the namespace prefix array
+        // initialise the namespace prefix array
         if (isset($this->prefixes[$prefix]) === false) {
             $this->prefixes[$prefix] = array();
         }
