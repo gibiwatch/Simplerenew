@@ -6,18 +6,17 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew;
-
 defined('_JEXEC') or die();
 
-class Account
+class SimplerenewController extends JControllerLegacy
 {
-    /**
-     * Just a bogus method to test unit testing
-     * @return bool
-     */
-    public function dummyMethod()
+    public function display()
     {
-        return true;
+        $input = JFactory::getApplication()->input;
+
+        $view = $input->getCmd('view', $this->default_view);
+        SimplerenewHelper::addSubmenu($view);
+
+        parent::display();
     }
 }

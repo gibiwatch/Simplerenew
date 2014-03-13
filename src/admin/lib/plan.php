@@ -6,4 +6,8 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+namespace Simplerenew;
+
 defined('_JEXEC') or die();
+
+class Plan {}

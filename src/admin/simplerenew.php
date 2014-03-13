@@ -8,7 +8,18 @@
 
 defined('_JEXEC') or die();
 
-//require_once JPATH_LIBRARIES . '/fof/include.php';
+// Access check.
+if (!JFactory::getUser()->authorise('core.manage', 'com_simplerenew')) {
+    throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
+}
 
-?>
-Under Construction
+require_once JPATH_COMPONENT_ADMINISTRATOR . '/helpers/initialise.php';
+
+// Load dependencies
+//jimport('joomla.application.component.controller');
+
+$input      = JFactory::getApplication()->input;
+$controller = JControllerLegacy::getInstance('Simplerenew');
+
+//$controller->execute($input->getCmd('task'));
+//$controller->redirect();

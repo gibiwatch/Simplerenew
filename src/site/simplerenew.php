@@ -8,4 +8,5 @@
 
 defined('_JEXEC') or die();
 
-require_once JPATH_LIBRARIES . '/fof/include.php';
+require_once JPATH_ADMINISTRATOR . '/helpers/initialise.php';
+

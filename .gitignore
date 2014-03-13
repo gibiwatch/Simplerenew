@@ -20,7 +20,6 @@ Desktop.ini
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
-
 # Eclipse #
 ###########
 bin/**
@@ -45,3 +44,4 @@ nb-configuration.xml
 # misc other files #
 ####################
 _notes/
+tests/config.php

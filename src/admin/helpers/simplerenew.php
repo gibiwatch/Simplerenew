@@ -6,18 +6,15 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew;
-
 defined('_JEXEC') or die();
 
-class Account
+abstract class SimplerenewHelper
 {
-    /**
-     * Just a bogus method to test unit testing
-     * @return bool
-     */
-    public function dummyMethod()
+    public static function addSubmenu($view)
     {
-        return true;
+        JSubMenuHelper::addEntry(
+            JText::_('COM_SIMPLERENEW_SUBMENU_XX'),
+            'index.php?option=com_simplerenew&view=classes',
+            $view == 'xx');
     }
 }
