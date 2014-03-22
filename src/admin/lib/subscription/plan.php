@@ -6,18 +6,10 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew;
+namespace Simplerenew\Subscription;
+
+use Simplerenew\SubscriptionBase;
 
 defined('_JEXEC') or die();
 
-class Account
-{
-    /**
-     * Just a bogus method to test unit testing
-     * @return bool
-     */
-    public function dummyMethod()
-    {
-        return true;
-    }
-}
+class Plan extends SubscriptionBase {}
