@@ -25,26 +25,3 @@ $loader->addNamespace('Simplerenew', SIMPLERENEW_ADMIN  . '/lib');
 if (!defined('FOF_INCLUDED')) {
     require_once JPATH_LIBRARIES . '/fof/include.php';
 }
-
-// Register exceptions to loader rules
-JLoader::register('SimplerenewHelper', SIMPLERENEW_ADMIN . '/helpers/simplerenew.php');
-
-// Add standard paths
-//JTable::addIncludePath(OSCLASSROOM_ADMIN . '/tables');
-//JHtml::addIncludePath(OSCLASSROOM_ADMIN . '/helpers/html');
-
-// Ignore the rest if we're running as a CLI
-if (!defined('SIMPLERENEW_CLI')) {
-    switch (JFactory::getApplication()->getName()) {
-        case 'administrator':
-            break;
-
-        case 'site':
-//            jimport('joomla.application.component.model');
-
-//            JTable::addIncludePath(SIMPLERENEW_SITE . '/tables');
-//            JModel::addIncludePath(SIMPLERENEW_SITE . '/models');
-
-            break;
-    }
-}
