@@ -18,7 +18,7 @@ class SimplerenewToolbar extends FOFToolbar
     public function onCpanelsBrowse()
     {
         // Set the toolbar title
-        JToolBarHelper::title(JText::_('COM_SIMPLERENEW'), 'simplenrenew');
+        JToolBarHelper::title(JText::_('COM_SIMPLERENEW'), 'simplerenew');
 
         // Add Components options (see config.xml)
         JToolBarHelper::preferences('com_simplerenew');
