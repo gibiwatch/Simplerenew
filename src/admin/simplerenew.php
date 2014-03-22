@@ -15,11 +15,4 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_simplerenew')) {
 
 require_once JPATH_COMPONENT_ADMINISTRATOR . '/helpers/initialise.php';
 
-// Load dependencies
-//jimport('joomla.application.component.controller');
-
-$input      = JFactory::getApplication()->input;
-$controller = JControllerLegacy::getInstance('Simplerenew');
-
-//$controller->execute($input->getCmd('task'));
-//$controller->redirect();
+FOFDispatcher::getTmpInstance('com_simplerenew')->dispatch();
