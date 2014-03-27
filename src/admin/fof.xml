@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fof>
+    <backend>
+        <!-- Dispatcher options -->
+        <dispatcher>
+            <option name="default_view">cpanels</option>
+        </dispatcher>
+    </backend>
+</fof>

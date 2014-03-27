@@ -46,7 +46,6 @@
         <menu img="../media/com_simplerenew/images/simplerenew-16.png">COM_SIMPLERENEW_ADMINMENU</menu>
 
         <files folder="admin">
-            <folder>controllers</folder>
             <folder>helpers</folder>
             <folder>language</folder>
             <folder>lib</folder>
@@ -54,10 +53,8 @@
             <folder>views</folder>
             <filename>access.xml</filename>
             <filename>config.xml</filename>
-            <filename>controller.php</filename>
-            <filename>dispatcher.php</filename>
+            <filename>fof.xml</filename>
             <filename>simplerenew.php</filename>
-            <filename>toolbar.php</filename>
         </files>
     </administration>
 </extension>
