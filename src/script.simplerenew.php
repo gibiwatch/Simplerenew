@@ -20,11 +20,12 @@ class Com_SimplerenewInstallerScript
      *            type => [ (folder) => [ (element) => [ (publish), (uninstall), (unused) ] ] ]
      */
     protected $relatedExtensions = array(
-        'module' => array(
+/*        'module' => array(
             'site' => array(
                 'srmyaccount' => array(1, 0, null)
             )
         ),
+*/
         'plugin' => array(
             'system' => array(
                 'simplerenew' => array(1, 1, null)

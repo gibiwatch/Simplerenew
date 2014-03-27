@@ -1,68 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="2.5" method="upgrade">
-	<name>COM_SIMPLERENEW</name>
-	<author>OSTraining</author>
-	<creationDate>March 03 2014</creationDate>
-	<copyright>Copyright (C) 2013 OSTraining.com</copyright>
-	<license>GPL v3</license>
-	<authorEmail>info@ostraining.com</authorEmail>
-	<authorUrl>http://www.ostraining.com</authorUrl>
-	<version>-alpha</version>
-	<description>COM_SIMPLERENEW_COMPONENT_DESCRIPTION</description>
+    <name>COM_SIMPLERENEW</name>
+    <author>OSTraining</author>
+    <creationDate>March 03 2014</creationDate>
+    <copyright>Copyright (C) 2013 OSTraining.com</copyright>
+    <license>GPL v3</license>
+    <authorEmail>info@ostraining.com</authorEmail>
+    <authorUrl>http://www.ostraining.com</authorUrl>
+    <version>0.0.0</version>
+    <description>COM_SIMPLERENEW_COMPONENT_DESCRIPTION</description>
 
-	<scriptfile>script.simplerenew.php</scriptfile>
-<!--
-	<install>
-		<sql>
-			<file driver="mysql" charset="utf8">sql/install/mysql/install.sql</file>
-			<file driver="mysqli" charset="utf8">sql/install/mysql/install.sql</file>
-			<file driver="mysql">sql/install/mysql/install.sql</file>
-			<file driver="mysqli">sql/install/mysql/install.sql</file>
-		</sql>
-	</install>
+    <scriptfile>script.simplerenew.php</scriptfile>
 
-	<uninstall>
-		<sql>
-			<file driver="mysql" charset="utf8">sql/install/mysql/uninstall.sql</file>
-			<file driver="mysqli" charset="utf8">sql/install/mysql/uninstall.sql</file>
-			<file driver="mysql">sql/install/mysql/uninstall.sql</file>
-			<file driver="mysqli">sql/install/mysql/uninstall.sql</file>
-		</sql>
-	</uninstall>
+    <install>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install/mysql/install.sql</file>
+        </sql>
+    </install>
 
-	<update>
-		<schemas>
-			<schemapath type="mysql" charset="utf8">sql/updates/mysql</schemapath>
-			<schemapath type="mysqli" charset="utf8">sql/updates/mysql</schemapath>
-			<schemapath type="mysql">sql/updates/mysql</schemapath>
-			<schemapath type="mysqli">sql/updates/mysql</schemapath>
-		</schemas>
-	</update>
--->
-	<media destination="com_simplerenew" folder="media">
-		<folder>css</folder>
-		<folder>images</folder>
-	</media>
+    <uninstall>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install/mysql/uninstall.sql</file>
+        </sql>
+    </uninstall>
 
-	<files folder="site">
-		<filename>simplerenew.php</filename>
-	</files>
+    <update>
+        <schemas>
+            <schemapath type="mysql" charset="utf8">sql/updates/mysql</schemapath>
+            <schemapath type="mysqli" charset="utf8">sql/updates/mysql</schemapath>
+            <schemapath type="mysql">sql/updates/mysql</schemapath>
+            <schemapath type="mysqli">sql/updates/mysql</schemapath>
+        </schemas>
+    </update>
 
-	<administration>
-		<menu img="../media/com_simplerenew/images/simplerenew-16.png">COM_SIMPLERENEW_ADMINMENU</menu>
+    <media destination="com_simplerenew" folder="media">
+        <folder>css</folder>
+        <folder>images</folder>
+    </media>
 
-		<files folder="admin">
+    <files folder="site">
+        <filename>simplerenew.php</filename>
+    </files>
+
+    <administration>
+        <menu img="../media/com_simplerenew/images/simplerenew-16.png">COM_SIMPLERENEW_ADMINMENU</menu>
+
+        <files folder="admin">
             <folder>controllers</folder>
             <folder>helpers</folder>
-			<folder>language</folder>
+            <folder>language</folder>
             <folder>lib</folder>
+            <folder>sql</folder>
             <folder>views</folder>
             <filename>access.xml</filename>
             <filename>config.xml</filename>
             <filename>controller.php</filename>
             <filename>dispatcher.php</filename>
-			<filename>simplerenew.php</filename>
+            <filename>simplerenew.php</filename>
             <filename>toolbar.php</filename>
-		</files>
-	</administration>
+        </files>
+    </administration>
 </extension>

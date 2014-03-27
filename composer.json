@@ -13,8 +13,9 @@
             "email": "bill@ostraining.com"
         }
     ],
-    "require": {
-        "php"                          : ">= 5.3.0",
-        "ext-curl"                     : "*"
+    "require"          : {
+        "php"     : ">= 5.3",
+        "ext-curl": "*",
+        "fof"     : ">= 2.1"
     }
 }

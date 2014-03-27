@@ -1,6 +1,7 @@
 # General exclusion of system files
 ###################################
 .*
+*.bak
 *~
 !.gitignore
 
