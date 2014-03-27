@@ -13,6 +13,6 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_simplerenew')) {
     throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
 }
 
-require_once JPATH_COMPONENT_ADMINISTRATOR . '/helpers/initialise.php';
+require_once JPATH_COMPONENT_ADMINISTRATOR . '/include.php';
 
 FOFDispatcher::getTmpInstance('com_simplerenew')->dispatch();

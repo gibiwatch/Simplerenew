@@ -46,14 +46,15 @@
         <menu img="../media/com_simplerenew/images/simplerenew-16.png">COM_SIMPLERENEW_ADMINMENU</menu>
 
         <files folder="admin">
-            <folder>helpers</folder>
             <folder>language</folder>
-            <folder>lib</folder>
+            <folder>library</folder>
             <folder>sql</folder>
             <folder>views</folder>
             <filename>access.xml</filename>
             <filename>config.xml</filename>
+            <filename>dispatcher.php</filename>
             <filename>fof.xml</filename>
+            <filename>include.php</filename>
             <filename>simplerenew.php</filename>
         </files>
     </administration>

@@ -8,19 +8,19 @@
 
 defined('_JEXEC') or die();
 
-if (!defined('SIMPLERENEW_ADMIN')) {
+if (!defined('SIMPLERENEW_LOADED')) {
+    define('SIMPLERENEW_LOADED', 1);
     define('SIMPLERENEW_ADMIN', JPATH_ADMINISTRATOR . '/components/com_simplerenew');
-}
-if (!defined('SIMPLERENEW_SITE')) {
     define('SIMPLERENEW_SITE', JPATH_SITE . '/components/com_simplerenew');
+    define('SIMPLERENEW_MEDIA', JPATH_SITE . '/media/com_simplerenew');
+
+    // Initialise and register the autoloader and paths
+    require_once SIMPLERENEW_ADMIN . '\library\autoloader.php';
+    $loader = new \Simplerenew\Psr4AutoloaderClass();
+
+    $loader->register();
+    $loader->addNamespace('Simplerenew', SIMPLERENEW_ADMIN  . '/library');
 }
-
-// Iinitialise and register the autoloader and paths
-require_once SIMPLERENEW_ADMIN . '\helpers\autoloader.php';
-$loader = new \Simplerenew\Psr4AutoloaderClass();
-
-$loader->register();
-$loader->addNamespace('Simplerenew', SIMPLERENEW_ADMIN  . '/lib');
 
 if (!defined('FOF_INCLUDED')) {
     require_once JPATH_LIBRARIES . '/fof/include.php';
