@@ -1,9 +1,8 @@
-CREATE TABLE IF NOT EXISTS `#__sr_accounts` (
+CREATE TABLE IF NOT EXISTS `#__simplerenew_accounts` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NULL,
   `managed` TINYINT NOT NULL,
   `code` VARCHAR(45) NOT NULL,
-  `status` VARCHAR(45) NOT NULL,
   `firstname` VARCHAR(45) NOT NULL,
   `lastname` VARCHAR(45) NOT NULL,
   `company` VARCHAR(45) NOT NULL,
@@ -26,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `#__sr_accounts` (
   UNIQUE INDEX `idx_user` (`user_id` ASC))
 ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `#__sr_billing` (
+CREATE TABLE IF NOT EXISTS `#__simplerenew_billing` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `account_id` INT NOT NULL,
   `firstname` VARCHAR(45) NOT NULL,
@@ -46,13 +45,12 @@ CREATE TABLE IF NOT EXISTS `#__sr_billing` (
   INDEX `fk_account` (`account_id` ASC))
 ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `#__sr_coupons` (
+CREATE TABLE IF NOT EXISTS `#__simplerenew_coupons` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `code` VARCHAR(45) NOT NULL,
   `title` VARCHAR(45) NOT NULL,
   `slug` VARCHAR(45) NOT NULL,
   `description` TEXT NULL,
-  `status` VARCHAR(45) NOT NULL,
   `percent` TINYINT NOT NULL,
   `value` DECIMAL(10,2) NOT NULL,
   `max_redemption` INT NULL,
@@ -68,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `#__sr_coupons` (
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `#__sr_plans` (
+CREATE TABLE IF NOT EXISTS `#__simplerenew_plans` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `code` VARCHAR(45) NOT NULL,
   `title` VARCHAR(45) NOT NULL,
@@ -91,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `#__sr_plans` (
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `#__sr_subscriptions` (
+CREATE TABLE IF NOT EXISTS `#__simplerenew_subscriptions` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `uuid` VARCHAR(45) NULL,
   `account_id` INT NOT NULL,
@@ -118,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `#__sr_subscriptions` (
   INDEX `fk_plan_idx` (`plan_id` ASC))
 ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `#__sr_coupons_plans` (
+CREATE TABLE IF NOT EXISTS `#__simplerenew_coupons_plans` (
   `plan_id` INT NOT NULL,
   `coupon_id` INT NOT NULL,
   INDEX `fk_plan_idx` (`plan_id` ASC),
