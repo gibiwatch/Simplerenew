@@ -140,6 +140,7 @@ class Com_SimplerenewInstallerScript
                 $this->setMessage(JText::sprintf($text, $fof->version, $fof->date->format('Y-m-d')));
             }
         }
+
         $this->showMessages();
     }
 
@@ -329,7 +330,7 @@ class Com_SimplerenewInstallerScript
      */
     protected function installFOF()
     {
-        if(version_compare(JVERSION, '3.2.0', 'ge')) {
+        if (version_compare(JVERSION, '3.2.0', 'ge')) {
             return null;
         }
 

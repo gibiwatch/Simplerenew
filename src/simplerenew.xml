@@ -46,6 +46,7 @@
         <menu img="../media/com_simplerenew/images/simplerenew-16.png">COM_SIMPLERENEW_ADMINMENU</menu>
 
         <files folder="admin">
+            <folder>controllers</folder>
             <folder>language</folder>
             <folder>library</folder>
             <folder>sql</folder>

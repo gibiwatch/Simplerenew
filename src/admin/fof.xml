@@ -9,7 +9,6 @@
     </common>
 
     <backend>
-        <!-- Dispatcher options -->
         <dispatcher>
             <option name="default_view">cpanels</option>
         </dispatcher>
