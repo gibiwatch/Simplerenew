@@ -12,8 +12,6 @@ jimport('joomla.plugin.plugin');
 
 class plgSystemSimplerenew extends JPlugin
 {
-    protected static $calls = 0;
-
     /**
      * @param object $subject
      * @param array  $config
@@ -21,8 +19,6 @@ class plgSystemSimplerenew extends JPlugin
     public function __construct(&$subject, array $config = array())
     {
         parent::__construct($subject, $config);
-
-        $lang = JFactory::getLanguage();
-        $lang->load('plg_system_simplerenew', __DIR__);
+        $this->loadLanguage();
     }
 }

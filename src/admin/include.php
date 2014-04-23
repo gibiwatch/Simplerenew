@@ -13,13 +13,17 @@ if (!defined('SIMPLERENEW_LOADED')) {
     define('SIMPLERENEW_ADMIN', JPATH_ADMINISTRATOR . '/components/com_simplerenew');
     define('SIMPLERENEW_SITE', JPATH_SITE . '/components/com_simplerenew');
     define('SIMPLERENEW_MEDIA', JPATH_SITE . '/media/com_simplerenew');
+    define('SIMPLERENEW_LIBRARY', SIMPLERENEW_ADMIN . '/library');
 
     // Initialise and register the autoloader and paths
-    require_once SIMPLERENEW_ADMIN . '\library\autoloader.php';
+    require_once SIMPLERENEW_LIBRARY . '/autoloader.php';
     $loader = new \Simplerenew\Psr4AutoloaderClass();
 
     $loader->register();
-    $loader->addNamespace('Simplerenew', SIMPLERENEW_ADMIN  . '/library');
+    $loader->addNamespace('Simplerenew', SIMPLERENEW_LIBRARY);
+
+    // Register additional classes
+    JLoader::register('Pimple', SIMPLERENEW_LIBRARY . '/pimple.php');
 }
 
 if (!defined('FOF_INCLUDED')) {

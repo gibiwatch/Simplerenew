@@ -6,15 +6,10 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\Subscription;
-
-use Simplerenew\SubscriptionBase;
+namespace \Simplerenew\Manager;
 
 defined('_JEXEC') or die();
 
-class Account extends SubscriptionBase
+class Account
 {
-    protected $firstName = null;
-    protected $lastName  = null;
-
 }
