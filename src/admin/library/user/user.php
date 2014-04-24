@@ -21,63 +21,81 @@ defined('_JEXEC') or die();
  * @property string $email
  * @property string $firstname
  * @property string $lastname
+ * @property string $fullname
  * @property array  $groups
- *
  */
 abstract class User
 {
-    protected $user = null;
-
     /**
      * @param int $id
+     *
+     * @throws \Exception
      */
     public function __construct($id = null)
     {
         $this->user = $this->getSystemObject($id);
     }
 
-    public function __get($name)
+    final public function __get($name)
     {
         return $this->get($name);
     }
 
     /**
-     * Determine what system we're running on and get an appropriate user object
+     * Get the appropriate User object for this system
      *
      * @param null $id
      *
      * @return User
      * @throws \Exception
      */
-    public static function getInstance($id = null)
+    final public static function getUser($id = null)
     {
-        // Only on Joomla for now
-        $class = 'Simplerenew\\User\\Joomla';
-        if (class_exists($class)) {
-            return new $class($id);
-        }
-
-        throw new \Exception('No such user class ' . $class);
+        $class = self::getSystemClassName();
+        return new $class($id);
     }
 
     /**
-     * Standard getter
+     *
+     * @return string
+     * @throws \Exception
+     */
+    final protected static function getSystemClassName()
+    {
+        // Only recognize Joomla for now
+        if (class_exists('\JUser')) {
+            $class = 'Simplerenew\\User\\Joomla';
+        }
+
+        if (empty($class) || !class_exists($class)) {
+            throw new \Exception(__CLASS__ . ':: No such user class - ' . $class);
+        }
+
+        return $class;
+    }
+
+    /**
+     * Get the value of the user field from a hierarchy of
+     * overrides. Subclasses are expected to provide methods
+     * or a system object with appropriate properties/methods
+     * for retrieving the associated field
      *
      * @param string $name
      *
      * @return mixed
+     * @throws \Exception
      */
-    public function get($name)
+    final public function get($name)
     {
         $name   = strtolower($name);
         $method = 'get' . ucfirst($name);
 
-        // Allow subclasses to provide their own getters
+        // Allow for override getters
         if (method_exists($this, $method)) {
             return $this->$method();
         }
 
-        // Then look to the system object
+        // Look to the system object
         if (!empty($this->user->$name)) {
             return $this->user->$name;
         } elseif (method_exists($this->user, $method)) {
@@ -86,23 +104,21 @@ abstract class User
             return $this->user->get($name);
         }
 
-        return null;
+        throw new \Exception(__CLASS__ . ':: unknown property - ' . $name);
     }
 
     /**
-     * Get the user object for this system.
-     * id=-1 should load a blank/empty user object
-     * id=0|null should load the current user
-     * id>0 loads the selected user
+     * Get the fullname from its parts
      *
-     * @param int $id
-     *
-     * @return mixed
+     * @return string
      */
-    abstract protected function getSystemObject($id = null);
+    protected function getFullname()
+    {
+        return trim($this->get('firstname') . ' ' . $this->get('lastname'));
+    }
 
     /**
-     * Create a new user
+     * Public facing method to create a new user
      *
      * @param string $email
      * @param string $username
@@ -112,12 +128,47 @@ abstract class User
      * @param array  $groups
      *
      * @return User
+     * @throws \Exception
      */
-    abstract public static function create(
+    final public static function create(
         $email,
         $username,
         $password,
-        $firstname=null,
-        $lastname=null,
-        $groups=array());
+        $firstname = null,
+        $lastname = null,
+        $groups = null
+    ) {
+        $class = self::getSystemClassName();
+
+        $data = array(
+            'email'     => $email,
+            'username'  => $username,
+            'password'  => $password,
+            'firstname' => $firstname . $lastname ? $firstname : $username,
+            'lastname'  => $lastname
+        );
+
+        return call_user_func($class . '::createUser', $data);
+    }
+
+    /**
+     * Get the user object for this system.
+     * id=0|null should load the current user
+     * id>0 loads the selected user
+     *
+     * @param int $id
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    abstract protected function getSystemObject($id = null);
+
+    /**
+     * System specific method to create a user.
+     *
+     * @param $data
+     *
+     * @return mixed
+     */
+    abstract public static function createUser($data);
 }

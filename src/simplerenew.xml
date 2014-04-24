@@ -53,7 +53,6 @@
             <folder>views</folder>
             <filename>access.xml</filename>
             <filename>config.xml</filename>
-            <filename>dispatcher.php</filename>
             <filename>fof.xml</filename>
             <filename>include.php</filename>
             <filename>simplerenew.php</filename>
