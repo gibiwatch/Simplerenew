@@ -8,6 +8,8 @@
 
 namespace Simplerenew\Gateway;
 
+use Simplerenew\Configuration;
+
 defined('_JEXEC') or die();
 
 class Recurly extends Gateway
@@ -15,7 +17,9 @@ class Recurly extends Gateway
     public function __construct()
     {
         require_once __DIR__ . '/recurly/recurly.php';
-        \Recurly_Client::$apiKey = '6d00ae5e11894d1581830bcc8deb8778';
+
+        $config = new Configuration();
+        \Recurly_Client::$apiKey = $config->get('gateway.recurly.apikey');
     }
 
     public function getAccountCode($userId=null)
