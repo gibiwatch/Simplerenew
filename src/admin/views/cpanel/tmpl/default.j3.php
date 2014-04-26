@@ -6,8 +6,6 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-use \Simplerenew\User\User;
-
 defined('_JEXEC') or die();
 ?>
 <div id="j-sidebar-container" class="span2">
@@ -16,17 +14,19 @@ defined('_JEXEC') or die();
 <div id="j-main-container" class="span12">
     <?php
     try {
+        $user = new \Simplerenew\User();
+
         // Create a new user - should throw error if already exists
-        //$user = User::create('guest@billtomczak.com', 'fred', 'pooka', 'Fred', 'Flintstone');
+        //$user->create('guest@billtomczak.com', 'fred', 'pooka', 'Fred', 'Flintstone');
 
         // Load current user - Should throw error if not logged in
-        //$user = User::getUser();
+        //$user->load();
 
         // Load a nonexistent user ID - should throw error
-        //$user = User::getUser(999999);
+        //$user->load(999999);
 
         // Load an existing user - Should throw error if User ID does not exist
-        $user = User::getUser(463);
+        $user->load(463);
 
         echo join('<br/>', array(
                 $user->id,
