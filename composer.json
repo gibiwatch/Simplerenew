@@ -29,6 +29,6 @@
     "require"          : {
         "php"       : ">= 5.3",
         "ext-curl"  : "*",
-        "akeeba/fof": "2.2.1"
+        "akeeba/fof": ">=2.2"
     }
 }
