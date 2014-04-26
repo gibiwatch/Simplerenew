@@ -10,7 +10,7 @@ namespace Simplerenew\User;
 
 defined('_JEXEC') or die();
 
-class Joomla extends User
+class Joomla implements UserAdapter
 {
     /**
      * @var array Joomla user name split into first/last
@@ -18,14 +18,74 @@ class Joomla extends User
     private $splitName = null;
 
     /**
-     * Create a new Joomla! user.
+     * @var \JUser
+     */
+    private $juser = null;
+
+    /**
+     * @param int $id
      *
-     * @param $data associative array passed by the parent User class
-     *
-     * @return User
+     * @return UserAdapter
      * @throws \Exception
      */
-    public static function createUser($data)
+    public function load($id=null)
+    {
+        $this->juser = \JFactory::getUser($id);
+        if (!$this->juser || $this->juser->id <= 0) {
+            throw new \Exception(__CLASS__ . ':: User ID not found - ' . $id);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $username
+     *
+     * @return UserAdapter
+     * @throws \Exception
+     */
+    public function loadByUsername($username)
+    {
+        if ($id = \JUserHelper::getUserId($username)) {
+            $this->load($id);
+            return $this;
+        }
+
+        throw new \Exception(__CLASS__ . ':: Username not found ' . $username);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function get($name)
+    {
+        switch ($name) {
+            case 'firstname':
+                return $this->getFirstname();
+                break;
+
+            case 'lastname':
+                return $this->getLastname();
+                break;
+
+            case 'fullname':
+                return $this->juser->get('name');
+                break;
+
+            default:
+                return $this->juser->get($name);
+        }
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return UserAdapter
+     * @throws \Exception
+     */
+    public function create(array $data)
     {
         // Reformat for Joomla
         $name = trim($data['firstname'] . ' ' . $data['lastname']);
@@ -49,7 +109,7 @@ class Joomla extends User
         $lang->load('com_users', JPATH_SITE);
 
         if ($id = $model->register($temp)) {
-            $newUser = User::getInstance($id);
+            $newUser = (new self())->load($id);
             return $newUser;
         }
 
@@ -77,16 +137,6 @@ class Joomla extends User
     }
 
     /**
-     * Override the default full name method since Joomla already has it
-     *
-     * @return string
-     */
-    protected function getFullname()
-    {
-        return $this->user->name;
-    }
-
-    /**
      * Parse and return the selected first/last name field from
      * the Joomla User name field
      *
@@ -97,7 +147,7 @@ class Joomla extends User
     protected function getName($field)
     {
         if ($this->splitName === null) {
-            $name = preg_split('/\s/', $this->user->name);
+            $name = preg_split('/\s/', $this->juser->name);
 
             if (count($name) == 1) {
                 $firstname = $name[0];
@@ -120,21 +170,6 @@ class Joomla extends User
             return $this->splitName[$field];
         }
         return '';
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return \JUser
-     * @throws \Exception
-     */
-    protected function getSystemObject($id = null)
-    {
-        $user = \JFactory::getUser($id);
-        if (!$user || $user->id <= 0) {
-            throw new \Exception(__CLASS__ . ':: User ID not found - ' . (int)$id);
-        }
-        return $user;
     }
 }
 
