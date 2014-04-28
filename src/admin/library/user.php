@@ -25,7 +25,9 @@ defined('_JEXEC') or die();
  */
 class User
 {
-    /** @var User\UserAdapter  */
+    /**
+     * @var User\UserAdapter
+     */
     protected $adapter = null;
 
     /**
@@ -44,6 +46,7 @@ class User
 
     /**
      * Load a user from their username
+     *
      * @param $username
      *
      * @return User
@@ -54,6 +57,7 @@ class User
         $this->getAdapter()->loadByUsername($username);
         return $this;
     }
+
     /**
      * Get the currently set User Adapter
      *
@@ -108,6 +112,11 @@ class User
         return $this->getAdapter()->get($name);
     }
 
+    public function __set($name, $value)
+    {
+        return $this->getAdapter()->set($name, $value);
+    }
+
     public function __toString()
     {
         return get_class($this->getAdapter());
@@ -123,6 +132,19 @@ class User
     public function get($name)
     {
         return $this->getAdapter()->get($name);
+    }
+
+    /**
+     * Set a user property
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return mixed
+     */
+    public function set($name, $value = null)
+    {
+        return $this->getAdapter()->set($name, $value);
     }
 
     /**
@@ -154,5 +176,17 @@ class User
         );
 
         return $this->getAdapter()->create($data);
+    }
+
+    /**
+     * Update the current user with the current property settings
+     *
+     * @return User
+     * @throws \Exception
+     */
+    final public function update()
+    {
+        $this->getAdapter()->update();
+        return $this;
     }
 }

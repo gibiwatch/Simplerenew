@@ -42,6 +42,16 @@ interface UserAdapter
     public function get($name);
 
     /**
+     * Set a user property
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return mixed The original value
+     */
+    public function set($name, $value);
+
+    /**
      * Create a new user.
      *
      * @param array $data associative array passed by the parent User class
@@ -51,4 +61,12 @@ interface UserAdapter
      * @throws \Exception
      */
     public function create(array $data);
+
+    /**
+     * Update the system user with the current property settings
+     *
+     * @return UserAdapter
+     * @throws \Exception
+     */
+    public function update();;
 }

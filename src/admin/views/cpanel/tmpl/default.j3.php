@@ -26,9 +26,18 @@ defined('_JEXEC') or die();
         //$user->load(999999);
 
         // Load an existing user - Should throw error if User ID does not exist
-        $user->load(463);
+        $user->load(466);
 
-        echo join('<br/>', array(
+
+        // Update the user info
+        //$user->firstname = 'Fred';
+        //$user->lastname  = 'Flintstone';
+        //$user->password = 'xyzzy';
+        //$user->update();
+
+        echo join(
+            '<br/>',
+            array(
                 $user->id,
                 $user->fullname,
                 $user->firstname,

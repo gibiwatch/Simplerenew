@@ -22,20 +22,12 @@ class Joomla implements UserAdapter
      */
     private $juser = null;
 
-    /**
-     * @param int $id
-     *
-     * @return UserAdapter
-     * @throws \Exception
-     */
-    public function load($id=null)
+    public function __construct()
     {
-        $this->juser = \JFactory::getUser($id);
-        if (!$this->juser || $this->juser->id <= 0) {
-            throw new \Exception(__CLASS__ . ':: User ID not found - ' . $id);
-        }
+        \JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_users/models');
 
-        return $this;
+        $lang = \JFactory::getLanguage();
+        $lang->load('com_users', JPATH_SITE);
     }
 
     /**
@@ -52,6 +44,22 @@ class Joomla implements UserAdapter
         }
 
         throw new \Exception(__CLASS__ . ':: Username not found ' . $username);
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return UserAdapter
+     * @throws \Exception
+     */
+    public function load($id = null)
+    {
+        $this->juser = \JFactory::getUser($id);
+        if (!$this->juser || $this->juser->id <= 0) {
+            throw new \Exception(__CLASS__ . ':: User ID not found - ' . $id);
+        }
+
+        return $this;
     }
 
     /**
@@ -80,43 +88,6 @@ class Joomla implements UserAdapter
     }
 
     /**
-     * @param array $data
-     *
-     * @return UserAdapter
-     * @throws \Exception
-     */
-    public function create(array $data)
-    {
-        // Reformat for Joomla
-        $name = trim($data['firstname'] . ' ' . $data['lastname']);
-        if (!$name) {
-            $name = $data['username'];
-        }
-
-        $temp = array(
-            'email1'    => $data['email'],
-            'username'  => $data['username'],
-            'name'      => $name,
-            'password1' => $data['password']
-        );
-
-        \JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_users/models');
-
-        /** @var \UsersModelRegistration $model */
-        $model = \JModelLegacy::getInstance('Registration', 'UsersModel');
-
-        $lang = \JFactory::getLanguage();
-        $lang->load('com_users', JPATH_SITE);
-
-        if ($id = $model->register($temp)) {
-            $newUser = (new self())->load($id);
-            return $newUser;
-        }
-
-        throw new \Exception(join('<br/>', $model->getErrors()));
-    }
-
-    /**
      * Get the first name as parsed from the Joomla User name field
      *
      * @return string
@@ -127,16 +98,6 @@ class Joomla implements UserAdapter
     }
 
     /**
-     * Get the lastname as parsed from the Joomla User name field
-     *
-     * @return string
-     */
-    protected function getLastname()
-    {
-        return $this->getName('lastname');
-    }
-
-    /**
      * Parse and return the selected first/last name field from
      * the Joomla User name field
      *
@@ -144,7 +105,7 @@ class Joomla implements UserAdapter
      *
      * @return string
      */
-    protected function getName($field)
+    protected function getName($field = null)
     {
         if ($this->splitName === null) {
             $name = preg_split('/\s/', $this->juser->name);
@@ -166,10 +127,117 @@ class Joomla implements UserAdapter
             );
         }
 
-        if (!empty($this->splitName[$field])) {
+        if (empty($field)) {
+            return join(' ', $this->splitName);
+        } elseif (!empty($this->splitName[$field])) {
             return $this->splitName[$field];
         }
         return '';
+    }
+
+    /**
+     * Get the lastname as parsed from the Joomla User name field
+     *
+     * @return string
+     */
+    protected function getLastname()
+    {
+        return $this->getName('lastname');
+    }
+
+    /**
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return mixed
+     */
+    public function set($name, $value)
+    {
+        switch ($name) {
+            case 'firstname':
+                $return                       = $this->getName('firstname');
+                $this->splitName['firstname'] = trim($value);
+                $this->juser->name            = trim(join(' ', $this->splitName));
+                break;
+
+            case 'lastname':
+                $return                      = $this->getName('lastname');
+                $this->splitName['lastname'] = trim($value);
+                $this->juser->name           = trim(join(' ', $this->splitName));
+                break;
+
+            case 'fullname':
+                $return            = $this->juser->name;
+                $this->juser->name = $value;
+                break;
+
+
+            case 'password':
+                $return                      = null;
+                $this->juser->password_clear = $value;
+                break;
+
+            default:
+                $return = $this->juser->get($name);
+                $this->juser->set($name, $value);
+                $this->splitName = null;
+                break;
+        }
+
+        return $return;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return UserAdapter
+     * @throws \Exception
+     */
+    public function create(array $data)
+    {
+        // Reformat for Joomla
+        $name = trim($data['firstname'] . ' ' . $data['lastname']);
+        if (!$name) {
+            $name = $data['username'];
+        }
+
+        $temp = array(
+            'email1'    => $data['email'],
+            'username'  => $data['username'],
+            'name'      => $name,
+            'password1' => $data['password']
+        );
+
+        /** @var \UsersModelRegistration $model */
+        $model = \JModelLegacy::getInstance('Registration', 'UsersModel');
+
+        if ($id = $model->register($temp)) {
+            $newUser = (new self())->load($id);
+            return $newUser;
+        }
+
+        throw new \Exception(join('<br/>', $model->getErrors()));
+    }
+
+    /**
+     * @return UserAdapter
+     * @throws \Exception
+     */
+    public function update()
+    {
+        if ($this->juser->password_clear) {
+            $data = array(
+                'password'  => $this->juser->password_clear,
+                'password2' => $this->juser->password_clear
+            );
+            $this->juser->bind($data);
+        }
+
+        if (!$this->juser->save(true)) {
+            throw new \Exception(join('<br/>', $this->juser->getErrors()));
+        }
+
+        return $this;
     }
 }
 
