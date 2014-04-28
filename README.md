@@ -1,7 +1,7 @@
-Simple Renewal
+Simple Renew
 ==============
 
-Simple Renewal manages renewable subscriptions to your site.
+Simple Renew manages renewable subscriptions to your site.
 
 ## Features
 
