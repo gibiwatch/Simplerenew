@@ -18,6 +18,7 @@ defined('_JEXEC') or die();
  * @property int    $id
  * @property string $username
  * @property string $email
+ * @property string $password
  * @property string $firstname
  * @property string $lastname
  * @property string $fullname
