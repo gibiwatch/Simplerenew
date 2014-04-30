@@ -80,7 +80,9 @@ class User
      */
     public function setAdapter(User\UserAdapter $adapter = null)
     {
-        if (!$adapter instanceof User\UserAdapter) {
+        if ($adapter instanceof User\UserAdapter) {
+            $this->adapter = $adapter;
+        } else {
             if (class_exists('\\JUser')) {
                 $className = 'Joomla';
             } else {
@@ -176,7 +178,10 @@ class User
             'lastname'  => $lastname
         );
 
-        return $this->getAdapter()->create($data);
+        $newAdapter = $this->getAdapter()->create($data);
+        $newUser = (new self());
+        $newUser->setAdapter($newAdapter);
+        return $newUser;
     }
 
     /**

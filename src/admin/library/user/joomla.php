@@ -54,7 +54,7 @@ class Joomla implements UserAdapter
      */
     public function load($id = null)
     {
-        $this->juser = \JFactory::getUser($id);
+        $this->juser = clone(\JFactory::getUser($id));
         if (!$this->juser || $this->juser->id <= 0) {
             throw new \Exception(__CLASS__ . ':: User ID not found - ' . $id);
         }
@@ -212,8 +212,8 @@ class Joomla implements UserAdapter
         $model = \JModelLegacy::getInstance('Registration', 'UsersModel');
 
         if ($id = $model->register($temp)) {
-            $newUser = (new self())->load($id);
-            return $newUser;
+            $newAdapter = (new self())->load($id);
+            return $newAdapter;
         }
 
         throw new \Exception(join('<br/>', $model->getErrors()));
