@@ -8,6 +8,8 @@
 
 namespace Simplerenew\User;
 
+use Simplerenew\Exception;
+
 defined('_JEXEC') or die();
 
 class Joomla implements UserAdapter
@@ -28,13 +30,15 @@ class Joomla implements UserAdapter
 
         $lang = \JFactory::getLanguage();
         $lang->load('com_users', JPATH_SITE);
+
+        $this->juser = new \JUser();
     }
 
     /**
      * @param string $username
      *
      * @return UserAdapter
-     * @throws \Exception
+     * @throws Exception
      */
     public function loadByUsername($username)
     {
@@ -43,20 +47,21 @@ class Joomla implements UserAdapter
             return $this;
         }
 
-        throw new \Exception(__CLASS__ . ':: Username not found ' . $username);
+        throw new Exception('Username not found - '. $username);
     }
 
     /**
      * @param int $id
      *
      * @return UserAdapter
-     * @throws \Exception
+     * @throws Exception
      */
     public function load($id = null)
     {
+        $this->splitName = null;
         $this->juser = clone(\JFactory::getUser($id));
         if (!$this->juser || $this->juser->id <= 0) {
-            throw new \Exception(__CLASS__ . ':: User ID not found - ' . $id);
+            throw new Exception('User ID not found - ' . $id);
         }
 
         return $this;
@@ -188,40 +193,31 @@ class Joomla implements UserAdapter
     }
 
     /**
-     * @param array $data
-     *
      * @return UserAdapter
-     * @throws \Exception
+     * @throws Exception
      */
-    public function create(array $data)
+    public function create()
     {
-        // Reformat for Joomla
-        $name = trim($data['firstname'] . ' ' . $data['lastname']);
-        if (!$name) {
-            $name = $data['username'];
-        }
-
-        $temp = array(
-            'email1'    => $data['email'],
-            'username'  => $data['username'],
-            'name'      => $name,
-            'password1' => $data['password']
-        );
-
         /** @var \UsersModelRegistration $model */
         $model = \JModelLegacy::getInstance('Registration', 'UsersModel');
 
-        if ($id = $model->register($temp)) {
-            $newAdapter = (new self())->load($id);
-            return $newAdapter;
+        $data = array(
+            'email1'    => $this->juser->email,
+            'username'  => $this->juser->username,
+            'name'      => $this->juser->name,
+            'password1' => $this->juser->password_clear
+        );
+
+        if ($id = $model->register($data)) {
+            return $this->load($id);
         }
 
-        throw new \Exception(join('<br/>', $model->getErrors()));
+        throw new Exception('<br/>' . join('<br/>', $model->getErrors()));
     }
 
     /**
      * @return UserAdapter
-     * @throws \Exception
+     * @throws Exception
      */
     public function update()
     {
@@ -234,7 +230,7 @@ class Joomla implements UserAdapter
         }
 
         if (!$this->juser->save(true)) {
-            throw new \Exception(join('<br/>', $this->juser->getErrors()));
+            throw new Exception('<br/>' . join('<br/>', $this->juser->getErrors()));
         }
 
         return $this;

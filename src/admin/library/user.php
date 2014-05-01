@@ -37,7 +37,7 @@ class User
      * @param int $id
      *
      * @return User
-     * @throws \Exception
+     * @throws Exception
      */
     public function load($id = null)
     {
@@ -51,7 +51,7 @@ class User
      * @param $username
      *
      * @return User
-     * @throws \Exception
+     * @throws Exception
      */
     public function loadByUsername($username)
     {
@@ -76,7 +76,7 @@ class User
      * @param User\UserAdapter $adapter
      *
      * @return User
-     * @throws \InvalidArgumentException
+     * @throws Exception
      */
     public function setAdapter(User\UserAdapter $adapter = null)
     {
@@ -91,12 +91,7 @@ class User
 
             $className = '\\Simplerenew\\User\\' . $className;
             if (!class_exists($className)) {
-                throw new \InvalidArgumentException(
-                    sprintf(
-                        __CLASS__ . ':: User adapter not found - %s',
-                        $className
-                    )
-                );
+                throw new Exception('User adapter not found - ' . $className);
             }
             $this->adapter = new $className();
         }
@@ -151,48 +146,61 @@ class User
     }
 
     /**
-     * Create a new user
+     * Set multiple user properties
      *
-     * @param string $email
-     * @param string $username
-     * @param string $password
-     * @param string $firstname
-     * @param string $lastname
+     * @param array|object $data
+     *
+     * @return void
+     * @throws Exception
+     *
+     */
+    public function setProperties($data)
+    {
+        if (is_object($data)) {
+            $properties = get_object_vars($data);
+        } elseif (is_array($data)) {
+            $properties = $data;
+        } else {
+            throw new Exception('Expecting object or array. Received ' . gettype($data) . '.');
+        }
+
+        $adapter = $this->getAdapter();
+        foreach ($properties as $k => $v) {
+            $adapter->set($k, $v);
+        }
+    }
+
+    /**
+     * Create a new user.
      *
      * @return User
-     * @throws \Exception
+     * @throws Exception
      */
-    final public function create(
-        $email,
-        $username,
-        $password,
-        $firstname = null,
-        $lastname = null
-    ) {
+    public function create()
+    {
+        $id = $this->adapter->get('id');
+        if (empty($id)) {
+            $this->adapter->create();
+            return $this;
+        }
 
-        $data = array(
-            'email'     => $email,
-            'username'  => $username,
-            'password'  => $password,
-            'firstname' => $firstname . $lastname ? $firstname : $username,
-            'lastname'  => $lastname
-        );
-
-        $newAdapter = $this->getAdapter()->create($data);
-        $newUser = (new self());
-        $newUser->setAdapter($newAdapter);
-        return $newUser;
+        throw new Exception('User ID must not be set to create new user');
     }
 
     /**
      * Update the current user with the current property settings
      *
      * @return User
-     * @throws \Exception
+     * @throws Exception
      */
     final public function update()
     {
-        $this->getAdapter()->update();
-        return $this;
+        $id = $this->adapter->get('id');
+        if (!empty($id)) {
+            $this->adapter->update();
+            return $this;
+        }
+
+        throw new Exception('No current user to update.');
     }
 }

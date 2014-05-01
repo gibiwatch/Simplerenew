@@ -8,6 +8,8 @@
 
 namespace Simplerenew\User;
 
+use Simplerenew\Exception;
+
 defined('_JEXEC') or die();
 
 interface UserAdapter
@@ -18,7 +20,7 @@ interface UserAdapter
      * @param int $id
      *
      * @return UserAdapter
-     * @throws \Exception
+     * @throws Exception
      */
     public function load($id = null);
 
@@ -28,7 +30,7 @@ interface UserAdapter
      * @param string $username
      *
      * @return UserAdapter
-     * @throws \Exception
+     * @throws Exception
      */
     public function loadByUsername($username);
 
@@ -52,21 +54,20 @@ interface UserAdapter
     public function set($name, $value);
 
     /**
-     * Create a new user.
-     *
-     * @param array $data associative array passed by the parent User class
-     *                    email, username, password, firstname, lastname
+     * Create a new user with the current user properties.
+     * It is up to the system instances to perform validation
+     * on the properties.
      *
      * @return UserAdapter
-     * @throws \Exception
+     * @throws Exception
      */
-    public function create(array $data);
+    public function create();
 
     /**
      * Update the system user with the current property settings
      *
      * @return UserAdapter
-     * @throws \Exception
+     * @throws Exception
      */
-    public function update();;
+    public function update();
 }

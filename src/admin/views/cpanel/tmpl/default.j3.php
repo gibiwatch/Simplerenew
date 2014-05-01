@@ -17,21 +17,41 @@ defined('_JEXEC') or die();
         $user = new \Simplerenew\User();
 
         // Create a new user - should throw error if already exists
-        //$user->create('guest@billtomczak.com', 'fred', 'pooka', 'Fred', 'Flintstone');
+        /*
+        $user->email = 'guest@billtomczak.com';
+        $user->username = 'fred';
+        $user->password = 'pooka';
+        $user->firstname = 'Fred';
+        $user->lastname = 'Flintstone';
+        $user->create();
+        */
 
-        // Load current user - Should throw error if not logged in
-        //$user->load();
+        // Set properties using array/object
+        /*
+        $user->setProperties(array(
+                'email' => 'guest@billtomczak.com',
+                'username' => 'fred',
+                'password' => 'pooka',
+                'firstname' => 'Fred',
+                'lastname' => 'Flintstone'
+            ));
+        $user->update();
+        $user->create();
+        */
+
+        // Load current user
+        $user->load();
+        $user->create(); // Should generate error
 
         // Load a nonexistent user ID - should throw error
         //$user->load(999999);
 
         // Load an existing user - Should throw error if User ID does not exist
-        $user->load(466);
-
+        //$user->loadByUsername('admin');
 
         // Update the user info
-        //$user->firstname = 'Fred';
-        //$user->lastname  = 'Flintstone';
+        //$user->firstname = 'Super Duper';
+        //$user->lastname  = 'User';
         //$user->password = 'xyzzy';
         //$user->update();
 
@@ -51,8 +71,8 @@ defined('_JEXEC') or die();
         print_r($user);
         echo '</pre>';
 
-    } catch (Exception $e) {
-        echo 'ERROR: ' . $e->getMessage();
+    } catch (Simplerenew\Exception $e) {
+        echo $e->traceMessage();
     }
     ?>
 </div>
