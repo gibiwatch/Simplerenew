@@ -29,7 +29,7 @@ abstract class RecurlyLoader
             if (array_key_exists($class, self::$exceptions)) {
                 $file = self::$exceptions[$class];
             } else {
-                list(,$file) = explode('_', $class);
+                list(,$file) = explode('_', $class, 2);
                 $parts = preg_split('/(?<=[a-z])(?=[A-Z])/x', $file);
                 $file = strtolower(join('_', $parts)) . '.php';
             }
