@@ -193,7 +193,7 @@ class User
      * @return User
      * @throws Exception
      */
-    final public function update()
+    public function update()
     {
         $id = $this->adapter->get('id');
         if (!empty($id)) {
