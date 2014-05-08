@@ -6,8 +6,8 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\Manager\Payment;
+namespace Simplerenew\Api\Payment;
 
 defined('_JEXEC') or die();
 
-interface Paymentinterface {}
+interface PaymentInterface {}

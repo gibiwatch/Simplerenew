@@ -16,25 +16,41 @@ defined('_JEXEC') or die();
  *
  * This is a complete punt until we figure out how to handle configurations
  * from a non-Joomla perspective
- * @TODO: Convert to something not Joomla-centric
+ * @TODO    : Convert to something not Joomla-centric
  */
 class Configuration extends \JRegistry
 {
-    public function __construct($data=null)
+    public function __construct($data = null)
     {
         $data = array(
+            'account' => array(
+                'codemask' => 'OS_%s'
+            ),
             'gateway' => array(
-                'recurly' => array(
-                    'test' => array(
-                        'apikey' => '6d00ae5e11894d1581830bcc8deb8778',
-                        'private' => '699d2b94ab364f9594e41a7d2e5ee1c7'
-                    ),
-                    'apikey' => '808896419fd94121ba4bbcb0f32f460b',
-                    'private' => 'f284ad043e784180b97661881fb459da'
+                'selected'  => 'recurly',
+                'available' => array(
+                    'recurly' => array(
+                        'test'    => array(
+                            'apikey'  => '6d00ae5e11894d1581830bcc8deb8778',
+                            'private' => '699d2b94ab364f9594e41a7d2e5ee1c7'
+                        ),
+                        'apikey'  => '808896419fd94121ba4bbcb0f32f460b',
+                        'private' => 'f284ad043e784180b97661881fb459da'
+                    )
                 )
             )
         );
 
         parent::__construct($data);
+    }
+
+    public function getGateway()
+    {
+        $name = $this->get('gateway.selected');
+        if ($gateway = $this->get('gateway.available.' . $name)) {
+            return $gateway;
+        }
+
+        throw new Exception('Unknown gateway selected - ' . $name);
     }
 }

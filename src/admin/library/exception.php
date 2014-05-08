@@ -12,7 +12,7 @@ defined('_JEXEC') or die();
 
 class Exception extends \Exception
 {
-    public function traceMessage()
+    public function getTraceMessage()
     {
         $caller = array_shift($this->getTrace());
 

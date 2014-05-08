@@ -6,8 +6,11 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\Manager;
+namespace Simplerenew\Api;
 
 defined('_JEXEC') or die();
 
-class Address {}
+abstract class AccountAdapter implements AdapterInterface
+{
+
+}

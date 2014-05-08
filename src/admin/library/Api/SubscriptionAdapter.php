@@ -6,8 +6,11 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\Manager\Payment;
+namespace Simplerenew\Api;
 
 defined('_JEXEC') or die();
 
-class Creditcard implements Paymentinterface {}
+abstract class SubscriptionAdapter implements AdapterInterface
+{
+
+}

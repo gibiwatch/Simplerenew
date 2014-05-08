@@ -6,8 +6,14 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\Manager;
+namespace Simplerenew\Api;
+
+use Simplerenew\Base;
+use Simplerenew\Configuration;
 
 defined('_JEXEC') or die();
 
-class Subscription {}
+interface AdapterInterface
+{
+
+}

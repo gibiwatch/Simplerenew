@@ -6,8 +6,13 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\Manager\Payment;
+namespace Simplerenew\Gateway\Recurly;
+
+use Simplerenew\Api\SubscriptionAdapter;
 
 defined('_JEXEC') or die();
 
-class PaymentPaypal implements Paymentinterface {}
+class Subscription extends SubscriptionAdapter
+{
+
+}

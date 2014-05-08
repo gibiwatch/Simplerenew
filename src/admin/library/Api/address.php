@@ -6,10 +6,8 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\Manager;
+namespace Simplerenew\Api;
 
 defined('_JEXEC') or die();
 
-interface Managerinterface
-{
-}
+class Address {}

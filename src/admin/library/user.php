@@ -63,11 +63,22 @@ class User
      * Get the currently set User Adapter
      *
      * @return User\UserAdapter
+     * @throws Exception
      */
     public function getAdapter()
     {
         if ($this->adapter === null) {
-            $this->setAdapter();
+            if (class_exists('\\JUser')) {
+                $className = 'Joomla';
+            } else {
+                throw new Exception('User adapter not found for current system');
+            }
+
+            $className = '\\Simplerenew\\User\\' . $className;
+            if (!class_exists($className)) {
+                throw new Exception('No such user adapter - ' . $className);
+            }
+            $this->adapter = new $className();
         }
         return $this->adapter;
     }
@@ -78,22 +89,10 @@ class User
      * @return User
      * @throws Exception
      */
-    public function setAdapter(User\UserAdapter $adapter = null)
+    public function setAdapter(User\UserAdapter $adapter)
     {
         if ($adapter instanceof User\UserAdapter) {
             $this->adapter = $adapter;
-        } else {
-            if (class_exists('\\JUser')) {
-                $className = 'Joomla';
-            } else {
-                $className = 'Unknown';
-            }
-
-            $className = '\\Simplerenew\\User\\' . $className;
-            if (!class_exists($className)) {
-                throw new Exception('User adapter not found - ' . $className);
-            }
-            $this->adapter = new $className();
         }
         return $this;
     }
