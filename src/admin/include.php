@@ -15,8 +15,12 @@ if (!defined('SIMPLERENEW_LOADED')) {
     define('SIMPLERENEW_MEDIA', JPATH_SITE . '/media/com_simplerenew');
     define('SIMPLERENEW_LIBRARY', SIMPLERENEW_ADMIN . '/library');
 
-    // Initialise Simplerenew application
-    require_once SIMPLERENEW_LIBRARY . '/init.php';
+    // Setup autoloaded libraries
+    require_once SIMPLERENEW_LIBRARY . '/psr4autoloader.php';
+    $loader = new Psr4AutoloaderClass();
+
+    $loader->register();
+    $loader->addNamespace('Simplerenew', SIMPLERENEW_LIBRARY . '/simplerenew');
 }
 
 if (!defined('FOF_INCLUDED')) {

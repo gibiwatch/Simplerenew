@@ -1,7 +1,5 @@
 <?php
 
-namespace Simplerenew;
-
 /**
  * An example of a general-purpose implementation, copied from
  *
