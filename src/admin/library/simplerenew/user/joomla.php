@@ -12,7 +12,7 @@ use Simplerenew\Exception;
 
 defined('_JEXEC') or die();
 
-class Joomla implements UserAdapter
+class Joomla implements UserInterface
 {
     /**
      * @var array Joomla user name split into first/last
@@ -37,7 +37,7 @@ class Joomla implements UserAdapter
     /**
      * @param string $username
      *
-     * @return UserAdapter
+     * @return UserInterface
      * @throws Exception
      */
     public function loadByUsername($username)
@@ -53,7 +53,7 @@ class Joomla implements UserAdapter
     /**
      * @param int $id
      *
-     * @return UserAdapter
+     * @return UserInterface
      * @throws Exception
      */
     public function load($id = null)
@@ -193,7 +193,7 @@ class Joomla implements UserAdapter
     }
 
     /**
-     * @return UserAdapter
+     * @return UserInterface
      * @throws Exception
      */
     public function create()
@@ -216,7 +216,7 @@ class Joomla implements UserAdapter
     }
 
     /**
-     * @return UserAdapter
+     * @return UserInterface
      * @throws Exception
      */
     public function update()
