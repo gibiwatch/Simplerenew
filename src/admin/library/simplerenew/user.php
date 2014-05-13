@@ -27,7 +27,7 @@ defined('_JEXEC') or die();
 class User
 {
     /**
-     * @var User\UserAdapter
+     * @var User\UserInterface
      */
     protected $adapter = null;
 
@@ -62,7 +62,7 @@ class User
     /**
      * Get the currently set User Adapter
      *
-     * @return User\UserAdapter
+     * @return User\UserInterface
      * @throws Exception
      */
     public function getAdapter()
@@ -84,14 +84,14 @@ class User
     }
 
     /**
-     * @param User\UserAdapter $adapter
+     * @param User\UserInterface $adapter
      *
      * @return User
      * @throws Exception
      */
-    public function setAdapter(User\UserAdapter $adapter)
+    public function setAdapter(User\UserInterface $adapter)
     {
-        if ($adapter instanceof User\UserAdapter) {
+        if ($adapter instanceof User\UserInterface) {
             $this->adapter = $adapter;
         }
         return $this;
