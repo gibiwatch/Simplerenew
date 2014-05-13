@@ -13,41 +13,20 @@ defined('_JEXEC') or die();
 FOFTemplateUtils::addCSS('media://com_simplerenew/css/backend.css');
 
 try {
-    $user = new \Simplerenew\User();
+    $data = json_decode(file_get_contents(SIMPLERENEW_LIBRARY . '/configuration.json'), true);
 
-    // Create a new user - should throw error if already exists
-    //$user->create('guest@billtomczak.com', 'fred', 'pooka', 'Fred', 'Flintstone');
+    $sr = new Simplerenew\Factory('recurly', $data['gateway']['test']);
 
-    // Load current user - Should throw error if not logged in
-    //$user->load();
-
-    // Load a nonexistent user ID - should throw error
-    //$user->load(999999);
-
-    // Load an existing user - Should throw error if User ID does not exist
-    $user->load(466);
-
-
-    // Update the user info
-    //$user->firstname = 'Fred';
-    //$user->lastname  = 'Flintstone';
-    //$user->password = 'xyzzy';
-    //$user->update();
-
-    echo join(
-        '<br/>',
-        array(
-            $user->id,
-            $user->fullname,
-            $user->firstname,
-            $user->lastname,
-            $user->username,
-            join(':', $user->groups)
-        )
-    );
+    //$di = new Simplerenew\DI\Pimple(json_decode($data, true));
+    //$config = new Simplerenew\Configuration($data);
+    //$account = new Simplerenew\Gateway\Recurly\Account($config);
 
     echo '<pre>';
-    print_r($user);
+    print_r($data);
+    print_r($sr);
+    //print_r($di->offsetGet('account'));
+    //print_r($di);
+    //print_r($account->getProperties());
     echo '</pre>';
 
 } catch (Exception $e) {

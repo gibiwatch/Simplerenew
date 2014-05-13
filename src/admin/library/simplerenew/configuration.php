@@ -14,43 +14,63 @@ defined('_JEXEC') or die();
  * Class Configuration
  * @package Simplerenew
  *
- * This is a complete punt until we figure out how to handle configurations
- * from a non-Joomla perspective
- * @TODO    : Convert to something not Joomla-centric
  */
-class Configuration extends \JRegistry
+class Configuration
 {
+    protected $data = null;
+
     public function __construct($data = null)
     {
-        $data = array(
-            'account' => array(
-                'codemask' => 'OS_%s'
-            ),
-            'gateway' => array(
-                'selected'  => 'recurly',
-                'available' => array(
-                    'recurly' => array(
-                        'test'    => array(
-                            'apikey'  => '6d00ae5e11894d1581830bcc8deb8778',
-                            'private' => '699d2b94ab364f9594e41a7d2e5ee1c7'
-                        ),
-                        'apikey'  => '808896419fd94121ba4bbcb0f32f460b',
-                        'private' => 'f284ad043e784180b97661881fb459da'
-                    )
-                )
-            )
-        );
-
-        parent::__construct($data);
+        $this->load($data);
     }
 
-    public function getGateway()
+    public function load($data)
     {
-        $name = $this->get('gateway.selected');
-        if ($gateway = $this->get('gateway.available.' . $name)) {
-            return $gateway;
+        if (is_string($data)) {
+            $data = json_decode($data);
         }
 
-        throw new Exception('Unknown gateway selected - ' . $name);
+        if (is_object($data)) {
+            $this->data = $data;
+        }
+
+        return $this;
+    }
+
+    public function get($path, $default = null)
+    {
+        if (!strpos($path, '.')) {
+            if (isset($this->data->$path) && $this->data->$path !== null && $this->data->$path !== '') {
+                return $this->data->$path;
+            } else {
+                return $default;
+            }
+        }
+
+        $result = $default;
+
+        // Explode the path into an array
+        $nodes = explode('.', $path);
+
+        // Initialize the current node to be the registry root.
+        $node  = $this->data;
+        $found = false;
+
+        // Traverse the registry to find the correct node for the result.
+        foreach ($nodes as $n) {
+            if (isset($node->$n)) {
+                $node  = $node->$n;
+                $found = true;
+            } else {
+                $found = false;
+                break;
+            }
+        }
+
+        if ($found && $node !== null && $node !== '') {
+            $result = $node;
+        }
+
+        return $result;
     }
 }

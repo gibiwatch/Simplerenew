@@ -8,7 +8,7 @@
 
 namespace Simplerenew\Gateway\Recurly;
 
-use Simplerenew\Api\AccountAdapter;
+use Simplerenew\Adapter\AccountAdapter;
 
 defined('_JEXEC') or die();
 

@@ -14,12 +14,15 @@ defined('_JEXEC') or die();
 <div id="j-main-container" class="span12">
     <?php
     try {
-        $adapter = new Simplerenew\Gateway\Recurly\Subscription();
-        $account = new Simplerenew\Account($adapter);
-        $account->load();
+        $account = new Simplerenew\Gateway\Recurly\Account();
+        //$account = new Simplerenew\Account();
+        //$account->load();
+
+//        $data = file_get_contents(SIMPLERENEW_LIBRARY . '/configuration.json');
+//        $config = new Simplerenew\Configuration($data);
 
         echo '<pre>';
-        print_r($account->getAdapter());
+        print_r($account);
         echo '</pre>';
     } catch (\Simplerenew\Exception $e) {
         echo $e->getTraceMessage();
