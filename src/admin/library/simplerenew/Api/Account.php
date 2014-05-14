@@ -8,13 +8,12 @@
 
 namespace Simplerenew\Api;
 
-use Simplerenew\Exception;
-use Simplerenew\Gateway\AccountInterface;
-use Simplerenew\Gateway\GatewayBase;
+use Simplerenew\Gateway\InterfaceAccount;
+use Simplerenew\User;
 
 defined('_JEXEC') or die();
 
-class Account extends ApiBase
+class Account extends AbstractApiBase
 {
     public $code = null;
     public $status = null;
@@ -25,11 +24,24 @@ class Account extends ApiBase
     public $company = null;
     public $address = null;
 
-    public function __construct(GatewayBase $imp)
+    /**
+     * @var InterfaceAccount
+     */
+    protected $imp = null;
+
+    /**
+     * @var User
+     */
+    protected $user = null;
+
+    public function __construct(InterfaceAccount $imp)
     {
-        if (!$imp instanceof AccountInterface) {
-            throw new Exception('Mismatched Gateway Object - ' . get_class($imp));
-        }
         parent::__construct($imp);
     }
+
+    public function load(User $user)
+    {
+        return $this->imp->load('OS_' . $user->id);
+    }
+
 }

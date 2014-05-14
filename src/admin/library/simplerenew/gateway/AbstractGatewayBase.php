@@ -10,7 +10,6 @@ namespace Simplerenew\Gateway;
 
 defined('_JEXEC') or die();
 
-abstract class GatewayBase
+abstract class AbstractGatewayBase
 {
-
 }

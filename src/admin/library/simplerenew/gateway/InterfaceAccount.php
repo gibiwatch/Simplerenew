@@ -10,7 +10,9 @@ namespace Simplerenew\Gateway;
 
 defined('_JEXEC') or die();
 
-interface AccountInterface
+interface InterfaceAccount
 {
+    public function __construct(array $config = array());
 
+    public function load($accountCode);
 }

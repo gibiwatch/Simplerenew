@@ -6,20 +6,31 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-use Simplerenew\User\User;
+use Simplerenew\Api;
+use Simplerenew\Gateway;
 
 defined('_JEXEC') or die();
 
 FOFTemplateUtils::addCSS('media://com_simplerenew/css/backend.css');
 
 try {
-    $imp = new Simplerenew\Gateway\Recurly\AccountImp();
-    $account = new Simplerenew\Api\Account($imp);
+    $config = json_decode(file_get_contents(SIMPLERENEW_LIBRARY . '/configuration.json'), true);
 
     echo '<pre>';
-    print_r($account->getProperties());
+    print_r($config);
     echo '</pre>';
 
-} catch (Simplerenew\Exception $e) {
-    echo 'ERROR: ' . $e->getTraceMessage();
+    $imp = new Gateway\Recurly\AccountImp($config['gateway']['live']);
+    $account = new Api\Account($imp);
+    $user = new Simplerenew\User();
+    $user->load();
+
+    echo '<pre>';
+    print_r($account->load($user));
+    echo '</pre>';
+} catch (Exception $e) {
+    echo 'ERROR: ' . $e->getMessage();
+    if ($e instanceof Simplerenew\Exception) {
+        echo '<br/>SIMPLERENEW: ' . $e->getTraceMessage();
+    }
 }
