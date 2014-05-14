@@ -13,22 +13,13 @@ defined('_JEXEC') or die();
 FOFTemplateUtils::addCSS('media://com_simplerenew/css/backend.css');
 
 try {
-    $data = json_decode(file_get_contents(SIMPLERENEW_LIBRARY . '/configuration.json'), true);
-
-    $sr = new Simplerenew\Factory('recurly', $data['gateway']['test']);
-
-    //$di = new Simplerenew\DI\Pimple(json_decode($data, true));
-    //$config = new Simplerenew\Configuration($data);
-    //$account = new Simplerenew\Gateway\Recurly\Account($config);
+    $imp = new Simplerenew\Gateway\Recurly\AccountImp();
+    $account = new Simplerenew\Api\Account($imp);
 
     echo '<pre>';
-    print_r($data);
-    print_r($sr);
-    //print_r($di->offsetGet('account'));
-    //print_r($di);
-    //print_r($account->getProperties());
+    print_r($account->getProperties());
     echo '</pre>';
 
-} catch (Exception $e) {
-    echo 'ERROR: ' . $e->getMessage();
+} catch (Simplerenew\Exception $e) {
+    echo 'ERROR: ' . $e->getTraceMessage();
 }

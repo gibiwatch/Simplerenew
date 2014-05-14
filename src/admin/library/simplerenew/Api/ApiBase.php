@@ -6,22 +6,19 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\Adapter;
+namespace Simplerenew\Api;
 
-use Simplerenew\Configuration;
+use Simplerenew\Gateway\GatewayBase;
 use Simplerenew\Object;
 
 defined('_JEXEC') or die();
 
-abstract class BaseAdapter extends Object
+abstract class ApiBase extends Object
 {
-    /**
-     * @var Configuration
-     */
-    protected $configuration = null;
+    protected $imp = null;
 
-    public function __construct(Configuration $config)
+    public function __construct(GatewayBase $imp)
     {
-        $this->configuration = $config;
+        $this->imp = $imp;
     }
 }

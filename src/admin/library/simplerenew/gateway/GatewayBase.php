@@ -6,13 +6,11 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\Gateway\Recurly;
-
-use Simplerenew\Adapter\AccountAdapter;
+namespace Simplerenew\Gateway;
 
 defined('_JEXEC') or die();
 
-class Account extends AccountAdapter
+abstract class GatewayBase
 {
 
 }
