@@ -123,14 +123,13 @@ class User
     public function setProperties($data)
     {
         if (is_object($data)) {
-            $properties = get_object_vars($data);
-        } elseif (is_array($data)) {
-            $properties = $data;
-        } else {
+            $data = get_object_vars($data);
+        }
+        if (!is_array($data)) {
             throw new Exception('Expecting object or array. Received ' . gettype($data) . '.');
         }
 
-        foreach ($properties as $k => $v) {
+        foreach ($data as $k => $v) {
             $this->adapter->set($k, $v);
         }
     }
