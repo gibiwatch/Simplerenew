@@ -14,7 +14,7 @@
             "private": "f284ad043e784180b97661881fb459da"
         }
     },
-    "user" : {
-        "adapter" : "joomla"
+    "user"   : {
+        "adapter": "joomla"
     }
 }

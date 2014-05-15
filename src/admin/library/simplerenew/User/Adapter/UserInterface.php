@@ -6,7 +6,7 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\User;
+namespace Simplerenew\User\Adapter;
 
 use Simplerenew\Exception;
 

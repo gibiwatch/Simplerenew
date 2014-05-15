@@ -6,7 +6,9 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew;
+namespace Simplerenew\User;
+
+use Simplerenew\Exception;
 
 defined('_JEXEC') or die();
 
@@ -27,11 +29,11 @@ defined('_JEXEC') or die();
 class User
 {
     /**
-     * @var User\UserInterface
+     * @var Adapter\UserInterface
      */
     protected $adapter = null;
 
-    public function __construct(User\UserInterface $adapter)
+    public function __construct(Adapter\UserInterface $adapter)
     {
         $this->adapter = $adapter;
     }
