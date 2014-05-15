@@ -16,7 +16,8 @@ defined('_JEXEC') or die();
 
 class AccountImp extends AbstractGatewayBase implements AccountInterface
 {
-    public function __construct(array $config = array()) {
+    public function __construct(array $config = array())
+    {
         require_once __DIR__ . '/api/autoloader.php';
 
         if (empty(\Recurly_Client::$apiKey)) {

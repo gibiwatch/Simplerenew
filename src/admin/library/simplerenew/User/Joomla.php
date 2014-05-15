@@ -236,4 +236,3 @@ class Joomla implements UserInterface
         return $this;
     }
 }
-
