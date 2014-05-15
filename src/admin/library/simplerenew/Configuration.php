@@ -14,19 +14,38 @@ defined('_JEXEC') or die();
  * Class Configuration
  * @package Simplerenew
  *
+ * A very simplistic configuration class
+ *
  */
 class Configuration
 {
     protected $data = null;
 
-    public function __construct($data = null)
+    /**
+     * @param null $data
+     * @param bool $isFile
+     */
+    public function __construct($data = null, $isFile = false)
     {
-        $this->load($data);
+        $this->load($data, $isFile);
     }
 
-    public function load($data)
+    /**
+     * Load configuration settings. Will completely overwrite any existing configuration data
+     *
+     * @param mixed $data object, JSON string or path to a .json type file
+     * @param bool  $isFile
+     *
+     * @return $this
+     */
+    public function load($data, $isFile = false)
     {
         if (is_string($data)) {
+            if ($isFile) {
+                if (file_exists($data)) {
+                    $data = file_get_contents($data);
+                }
+            }
             $data = json_decode($data);
         }
 
@@ -37,6 +56,14 @@ class Configuration
         return $this;
     }
 
+    /**
+     * Get a configuration value using dot notation
+     *
+     * @param string $path
+     * @param null   $default
+     *
+     * @return mixed
+     */
     public function get($path, $default = null)
     {
         if (!strpos($path, '.')) {
