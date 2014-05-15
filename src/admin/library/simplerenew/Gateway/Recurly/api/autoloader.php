@@ -25,19 +25,19 @@ abstract class RecurlyLoader
 
     protected static function load($class)
     {
-        if ( !class_exists($class) && strpos($class, 'Recurly_') === 0 ) {
+        if (!class_exists($class) && strpos($class, 'Recurly_') === 0) {
             if (array_key_exists($class, self::$exceptions)) {
                 $file = self::$exceptions[$class];
             } elseif (strpos($class, 'Error') == (strlen($class) - 5)) {
                 $file = 'errors.php';
             } else {
-                list(,$file) = explode('_', $class, 2);
+                list(, $file) = explode('_', $class, 2);
                 $parts = preg_split('/(?<=[a-z])(?=[A-Z])/x', $file);
-                $file = strtolower(join('_', $parts)) . '.php';
+                $file  = strtolower(join('_', $parts)) . '.php';
             }
             $file = __DIR__ . '/recurly/' . $file;
 
-            if ( file_exists($file) ) {
+            if (file_exists($file)) {
                 require_once $file;
                 return $file;
             }
