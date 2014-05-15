@@ -22,7 +22,9 @@ try {
 
     $imp = new Gateway\Recurly\AccountImp($config['gateway']['live']);
     $account = new Api\Account($imp);
-    $user = new Simplerenew\User();
+
+    $adapter = new Simplerenew\User\Joomla();
+    $user = new Simplerenew\User($adapter);
     $user->load();
 
     echo '<pre>';

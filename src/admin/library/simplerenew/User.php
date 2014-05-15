@@ -31,6 +31,11 @@ class User
      */
     protected $adapter = null;
 
+    public function __construct(User\UserInterface $adapter)
+    {
+        $this->adapter = $adapter;
+    }
+
     /**
      * Load a user from system ID
      *
@@ -41,7 +46,7 @@ class User
      */
     public function load($id = null)
     {
-        $this->getAdapter()->load($id);
+        $this->adapter->load($id);
         return $this;
     }
 
@@ -55,45 +60,7 @@ class User
      */
     public function loadByUsername($username)
     {
-        $this->getAdapter()->loadByUsername($username);
-        return $this;
-    }
-
-    /**
-     * Get the currently set User Adapter
-     *
-     * @return User\UserInterface
-     * @throws Exception
-     */
-    public function getAdapter()
-    {
-        if ($this->adapter === null) {
-            if (class_exists('\\JUser')) {
-                $className = 'Joomla';
-            } else {
-                throw new Exception('User adapter not found for current system');
-            }
-
-            $className = '\\Simplerenew\\User\\' . $className;
-            if (!class_exists($className)) {
-                throw new Exception('No such user adapter - ' . $className);
-            }
-            $this->adapter = new $className();
-        }
-        return $this->adapter;
-    }
-
-    /**
-     * @param User\UserInterface $adapter
-     *
-     * @return User
-     * @throws Exception
-     */
-    public function setAdapter(User\UserInterface $adapter)
-    {
-        if ($adapter instanceof User\UserInterface) {
-            $this->adapter = $adapter;
-        }
+        $this->adapter->loadByUsername($username);
         return $this;
     }
 
@@ -106,17 +73,17 @@ class User
      */
     public function __get($name)
     {
-        return $this->getAdapter()->get($name);
+        return $this->adapter->get($name);
     }
 
     public function __set($name, $value)
     {
-        return $this->getAdapter()->set($name, $value);
+        return $this->adapter->set($name, $value);
     }
 
     public function __toString()
     {
-        return get_class($this->getAdapter());
+        return get_class($this->adapter);
     }
 
     /**
@@ -128,7 +95,7 @@ class User
      */
     public function get($name)
     {
-        return $this->getAdapter()->get($name);
+        return $this->adapter->get($name);
     }
 
     /**
@@ -141,7 +108,7 @@ class User
      */
     public function set($name, $value = null)
     {
-        return $this->getAdapter()->set($name, $value);
+        return $this->adapter->set($name, $value);
     }
 
     /**
@@ -163,9 +130,8 @@ class User
             throw new Exception('Expecting object or array. Received ' . gettype($data) . '.');
         }
 
-        $adapter = $this->getAdapter();
         foreach ($properties as $k => $v) {
-            $adapter->set($k, $v);
+            $this->adapter->set($k, $v);
         }
     }
 
