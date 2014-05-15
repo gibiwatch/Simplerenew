@@ -14,7 +14,7 @@ defined('_JEXEC') or die();
 FOFTemplateUtils::addCSS('media://com_simplerenew/css/backend.css');
 
 try {
-    $config = json_decode(file_get_contents(SIMPLERENEW_LIBRARY . '/configuration.json'), true);
+    $config = new Simplerenew\Configuration(SIMPLERENEW_LIBRARY . '/configuration.json', true);
 
     echo '<pre>';
     print_r($config);
@@ -26,11 +26,11 @@ try {
     $user->load();
 
     // Get the account object
-    $imp = new Gateway\Recurly\AccountImp($config['gateway']['live']);
-    $account = new Api\Account($imp);
+    //$imp = new Gateway\Recurly\AccountImp($config['gateway']['live']);
+    //$account = new Api\Account($imp);
 
     echo '<pre>';
-    print_r($account->load($user));
+    //print_r($account->load($user));
     echo '</pre>';
 } catch (Exception $e) {
     echo 'ERROR: ' . $e->getMessage();

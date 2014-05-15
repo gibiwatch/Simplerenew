@@ -25,7 +25,7 @@ class Account extends AbstractApiBase
     public $address = null;
 
     /**
-     * @var AccountInterface
+     * @var \Simplerenew\Gateway\AccountInterface
      */
     protected $imp = null;
 

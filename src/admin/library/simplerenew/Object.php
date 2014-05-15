@@ -17,6 +17,9 @@ class Object
      */
     private $reflection = null;
 
+    /**
+     * @var array
+     */
     private $properties = null;
 
     /**
@@ -48,7 +51,7 @@ class Object
      *
      * @param mixed $data Associative array or object with properties to copy to $this
      *
-     * @return $this
+     * @return void
      * @throws Exception
      */
     public function setProperties($data)
@@ -57,7 +60,7 @@ class Object
             $data = get_object_vars($data);
         }
         if (!is_array($data)) {
-            throw new Exception('Invalid arguement given - ' . gettype($data));
+            throw new Exception('Invalid argument given - ' . gettype($data));
         }
 
         $properties = $this->getProperties();
@@ -66,8 +69,6 @@ class Object
                 $this->$k = $data[$k];
             }
         }
-
-        return $this;
     }
 
     /**
@@ -81,18 +82,6 @@ class Object
             $this->reflection = new \ReflectionObject($this);
         }
         return $this->reflection;
-    }
-
-    /**
-     * @TODO: Refactor to non-Joomla cache class
-     *
-     * @return JCache
-     */
-    protected function getCache()
-    {
-        $cache = \JFactory::getCache('com_recurly.api', null);
-        $cache->setCaching(true);
-        return $cache;
     }
 
     /**

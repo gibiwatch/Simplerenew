@@ -13,5 +13,8 @@
             "apikey" : "808896419fd94121ba4bbcb0f32f460b",
             "private": "f284ad043e784180b97661881fb459da"
         }
+    },
+    "user" : {
+        "adapter" : "joomla"
     }
 }
