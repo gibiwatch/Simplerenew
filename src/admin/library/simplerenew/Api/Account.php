@@ -8,7 +8,7 @@
 
 namespace Simplerenew\Api;
 
-use Simplerenew\Gateway\AccountInterface;
+use Simplerenew\Gateway\AbstractGatewayBase;
 use Simplerenew\User;
 
 defined('_JEXEC') or die();
@@ -34,14 +34,14 @@ class Account extends AbstractApiBase
      */
     protected $user = null;
 
-    public function __construct(AccountInterface $imp)
+    public function __construct(AbstractGatewayBase $imp)
     {
         parent::__construct($imp);
+        $this->imp = $imp;
     }
 
     public function load(User $user)
     {
         return $this->imp->load('OS_' . $user->id);
     }
-
 }
