@@ -12,7 +12,5 @@ defined('_JEXEC') or die();
 
 interface AccountInterface
 {
-    public function __construct(array $config = array());
-
     public function load($accountCode);
 }

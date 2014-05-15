@@ -15,22 +15,22 @@ FOFTemplateUtils::addCSS('media://com_simplerenew/css/backend.css');
 
 try {
     $config = new Simplerenew\Configuration(SIMPLERENEW_LIBRARY . '/configuration.json', true);
-
-    echo '<pre>';
-    print_r($config);
-    echo '</pre>';
+    $sr = new \Simplerenew\Factory($config);
 
     // Get the user object and load current user
-    $adapter = new Simplerenew\User\Joomla();
-    $user = new Simplerenew\User($adapter);
-    $user->load();
+    $user = $sr->getUser()->load();
 
     // Get the account object
-    //$imp = new Gateway\Recurly\AccountImp($config['gateway']['live']);
-    //$account = new Api\Account($imp);
+    $account = $sr->getAccount();
 
     echo '<pre>';
-    //print_r($account->load($user));
+    print_r(
+        array(
+            $user->fullname,
+            $user->lastname . ', ' . $user->firstname
+        )
+    );
+    print_r($account->load($user));
     echo '</pre>';
 } catch (Exception $e) {
     echo 'ERROR: ' . $e->getMessage();

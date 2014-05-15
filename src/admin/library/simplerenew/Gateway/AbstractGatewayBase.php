@@ -8,8 +8,11 @@
 
 namespace Simplerenew\Gateway;
 
+use Simplerenew\Configuration;
+
 defined('_JEXEC') or die();
 
 abstract class AbstractGatewayBase
 {
+    abstract public function __construct(Configuration $config);
 }

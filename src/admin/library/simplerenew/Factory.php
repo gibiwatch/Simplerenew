@@ -10,20 +10,88 @@ namespace Simplerenew;
 
 defined('_JEXEC') or die();
 
+/**
+ * Class Factory
+ * @package Simplerenew
+ *
+ * @TODO: Investigate replacing with a proper DI container
+ */
 class Factory
 {
-    protected $namespace = null;
-
+    /**
+     * @var Configuration
+     */
     protected $configuration = null;
 
-    public function __construct($namespace, array $config)
+    /**
+     * @var string
+     */
+    protected $userAdapterClass = null;
+
+    /**
+     * @var Configuration
+     */
+    protected $gatewayConfig = null;
+
+    /**
+     * @var string
+     */
+    protected $gatewayNamespace = null;
+
+    public function __construct(Configuration $config)
     {
-        if (strpos($namespace, '\\') === false) {
-            $this->namespace = '\\Simplerenew\\Gateway\\' . ucfirst(strtolower($namespace));
-        } else {
-            $this->namespace = $namespace;
-        }
         $this->configuration = $config;
 
+        // Verify valid user adapter
+        $userAdapterClass = $config->get('user.adapter');
+        if (strpos($userAdapterClass, '\\') === false) {
+            $userAdapterClass = '\\Simplerenew\\User\\Adapter\\' . ucfirst(strtolower($userAdapterClass));
+        }
+        if (!class_exists($userAdapterClass)) {
+            throw new Exception('User adapter not found - ' . $userAdapterClass);
+        }
+        $this->userAdapterClass = $userAdapterClass;
+
+        // Get and verify Gateway configurations
+        $gatewayNamespace = $config->get('gateway.name');
+        if (strpos($gatewayNamespace, '\\') === false) {
+            $gatewayNamespace = '\\Simplerenew\\Gateway\\' . ucfirst(strtolower($gatewayNamespace));
+        }
+        if (!class_exists($gatewayNamespace . '\\AccountImp')) {
+            throw new Exception('Gateway namespace not valid - ' . $gatewayNamespace);
+        }
+        $this->gatewayNamespace = $gatewayNamespace;
+        $this->gatewayConfig = new Configuration($config->get('gateway'));
+
+    }
+
+    /**
+     * Create a new user object
+     *
+     * @return User\User
+     * @throws Exception
+     */
+    public function getUser()
+    {
+        $className = $this->userAdapterClass;
+        $adapter = new $className();
+        $user = new User\User($adapter);
+        return $user;
+    }
+
+    /**
+     * Create a new Api\Account object
+     *
+     * @return Api\Account
+     * @throws Exception
+     */
+    public function getAccount()
+    {
+        $className = $this->gatewayNamespace . '\\AccountImp';
+
+        $imp = new $className($this->gatewayConfig);
+        $account = new Api\Account($imp);
+
+        return $account;
     }
 }

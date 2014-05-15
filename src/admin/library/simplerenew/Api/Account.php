@@ -9,7 +9,7 @@
 namespace Simplerenew\Api;
 
 use Simplerenew\Gateway\AbstractGatewayBase;
-use Simplerenew\User;
+use Simplerenew\User\User;
 
 defined('_JEXEC') or die();
 
