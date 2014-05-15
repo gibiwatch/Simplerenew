@@ -20,12 +20,14 @@ try {
     print_r($config);
     echo '</pre>';
 
-    $imp = new Gateway\Recurly\AccountImp($config['gateway']['live']);
-    $account = new Api\Account($imp);
-
+    // Get the user object and load current user
     $adapter = new Simplerenew\User\Joomla();
     $user = new Simplerenew\User($adapter);
     $user->load();
+
+    // Get the account object
+    $imp = new Gateway\Recurly\AccountImp($config['gateway']['live']);
+    $account = new Api\Account($imp);
 
     echo '<pre>';
     print_r($account->load($user));
