@@ -9,12 +9,12 @@
 namespace Simplerenew\Gateway\Recurly;
 
 use Simplerenew\Exception;
-use Simplerenew\Gateway\InterfaceAccount;
+use Simplerenew\Gateway\AccountInterface;
 use Simplerenew\Gateway\AbstractGatewayBase;
 
 defined('_JEXEC') or die();
 
-class AccountImp extends AbstractGatewayBase implements InterfaceAccount
+class AccountImp extends AbstractGatewayBase implements AccountInterface
 {
     public function __construct(array $config = array()) {
         require_once __DIR__ . '/api/autoloader.php';
