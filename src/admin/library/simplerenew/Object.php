@@ -17,23 +17,57 @@ class Object
      */
     private $reflection = null;
 
+    private $properties = null;
+
     /**
      * Retrieve all public properties and their values
      * Although this duplicates get_object_vars(), it
      * is mostly useful for internal calls when we need
-     * to filter out the non-public properties
+     * to filter out the non-public properties. Note
+     * we cache the property names assuming the public
+     * facing properties will not change in the lifetime
+     * of the object
      *
      * @return array
      */
     public function getProperties()
     {
-        $properties = $this->getReflection()->getProperties(\ReflectionProperty::IS_PUBLIC);
-        $result = array();
-        foreach ($properties as $property) {
-            $name = $property->name;
-            $result[$name] = $this->$name;
+        if ($this->properties === null) {
+            $data = $this->getReflection()->getProperties(\ReflectionProperty::IS_PUBLIC);
+            $this->properties = array();
+            foreach ($data as $property) {
+                $name = $property->name;
+                $this->properties[$name] = $this->$name;
+            }
         }
-        return $result;
+        return $this->properties;
+    }
+
+    /**
+     * Set the public properties from the passed array/object
+     *
+     * @param mixed $data Associative array or object with properties to copy to $this
+     *
+     * @return $this
+     * @throws Exception
+     */
+    public function setProperties($data)
+    {
+        if (is_object($data)) {
+            $data = get_object_vars($data);
+        }
+        if (!is_array($data)) {
+            throw new Exception('Invalid arguement given - ' . gettype($data));
+        }
+
+        $properties = $this->getProperties();
+        foreach ($properties as $k => $v) {
+            if (array_key_exists($k, $data)) {
+                $this->$k = $data[$k];
+            }
+        }
+
+        return $this;
     }
 
     /**
@@ -61,6 +95,12 @@ class Object
         return $cache;
     }
 
+    /**
+     * Default string rendering for the object. Subclasses should feel
+     * free to override as desired.
+     *
+     * @return string
+     */
     public function __toString()
     {
         return get_class($this);
