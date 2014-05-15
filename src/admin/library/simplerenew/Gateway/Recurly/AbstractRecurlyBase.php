@@ -9,6 +9,7 @@
 namespace Simplerenew\Gateway\Recurly;
 
 use Simplerenew\Configuration;
+use Simplerenew\Exception;
 use Simplerenew\Gateway\AbstractGatewayBase;
 
 defined('_JEXEC') or die();
@@ -17,13 +18,25 @@ require_once __DIR__ . '/api/autoloader.php';
 
 abstract class AbstractRecurlyBase extends AbstractGatewayBase
 {
+    /**
+     * @var object
+     */
+    protected static $settings = null;
+
     public function __construct(Configuration $config)
     {
-        if (empty(\Recurly_Client::$apiKey)) {
-            $settings = $config->get($config->get('mode'));
+        if (self::$settings === null) {
+            self::$settings = $config->get('gateway');
 
-            if (!empty($settings->apikey)) {
-                \Recurly_Client::$apiKey = $settings->apikey;
+            if (!empty(self::$settings->mode)) {
+                $mode = self::$settings->mode;
+                if (!empty(self::$settings->$mode->apikey)) {
+                    $apikey = self::$settings->$mode->apikey;
+                }
+            }
+
+            if (!empty($apikey)) {
+                \Recurly_Client::$apiKey = $apikey;
             } else {
                 throw new Exception('Recurly API requires an api key');
             }

@@ -29,11 +29,6 @@ class Factory
     protected $userAdapterClass = null;
 
     /**
-     * @var Configuration
-     */
-    protected $gatewayConfig = null;
-
-    /**
      * @var string
      */
     protected $gatewayNamespace = null;
@@ -61,7 +56,6 @@ class Factory
             throw new Exception('Gateway namespace not valid - ' . $gatewayNamespace);
         }
         $this->gatewayNamespace = $gatewayNamespace;
-        $this->gatewayConfig = new Configuration($config->get('gateway'));
 
     }
 
@@ -89,8 +83,8 @@ class Factory
     {
         $className = $this->gatewayNamespace . '\\AccountImp';
 
-        $imp = new $className($this->gatewayConfig);
-        $account = new Api\Account($imp);
+        $imp = new $className($this->configuration);
+        $account = new Api\Account($imp, $this->configuration);
 
         return $account;
     }

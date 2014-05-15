@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Api;
 
+use Simplerenew\Configuration;
 use Simplerenew\Gateway\AbstractGatewayBase;
 use Simplerenew\User\User;
 
@@ -34,7 +35,7 @@ class Account extends AbstractApiBase
      */
     protected $user = null;
 
-    public function __construct(AbstractGatewayBase $imp)
+    public function __construct(AbstractGatewayBase $imp, Configuration $config)
     {
         parent::__construct($imp);
         $this->imp = $imp;
