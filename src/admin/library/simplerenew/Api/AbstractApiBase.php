@@ -24,4 +24,17 @@ abstract class AbstractApiBase extends Object
     {
         $this->config = $config;
     }
+
+    /**
+     * Don't fail on unknown properties. We expect subclasses to
+     * handle properties relevant to their case.
+     *
+     * @param $name
+     *
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        return null;
+    }
 }

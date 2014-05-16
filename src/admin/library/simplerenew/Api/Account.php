@@ -90,7 +90,7 @@ class Account extends AbstractApiBase
                 break;
         }
 
-        return null;
+        return parent::__get($name);
     }
 
     /**

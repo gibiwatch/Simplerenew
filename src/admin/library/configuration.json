@@ -4,7 +4,7 @@
     },
     "gateway": {
         "name": "recurly",
-        "mode": "test",
+        "mode": "live",
         "test": {
             "apikey" : "6d00ae5e11894d1581830bcc8deb8778",
             "private": "699d2b94ab364f9594e41a7d2e5ee1c7"
