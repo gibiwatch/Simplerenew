@@ -15,12 +15,12 @@ FOFTemplateUtils::addCSS('media://com_simplerenew/css/backend.css');
 
 try {
     $config = new Simplerenew\Configuration(SIMPLERENEW_LIBRARY . '/configuration.json', true);
-    $sr = new \Simplerenew\Factory($config);
+    $sr     = new \Simplerenew\Factory($config);
 
     // Get the user object and load current user
     //$user = $sr->getUser()->load();
-    $user = $sr->getUser();
-    $user->id = 978;
+    $user     = $sr->getUser();
+    $user->id = 28998;
 
     // Get the account object
     $account = $sr->getAccount()->load($user);
@@ -29,8 +29,10 @@ try {
     echo '<pre>';
     print_r(
         array(
-            'Code' => $account->code,
-            'Name' => trim($account->firstname . ' ' . $account->lastname)
+            'Status'   => (int)$account->status,
+            'Code'     => $account->code,
+            'Username' => $account->username,
+            'Name'     => trim($account->firstname . ' ' . $account->lastname)
         )
     );
     echo '</pre>';
