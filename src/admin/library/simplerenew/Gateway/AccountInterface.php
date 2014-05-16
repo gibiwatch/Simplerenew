@@ -12,5 +12,15 @@ defined('_JEXEC') or die();
 
 interface AccountInterface
 {
-    public function load($accountCode);
+    /**
+     * Retrieve basic account information from the subscription gateway.
+     * Fields to retrieve and their new values are passed through $data
+     *
+     * @param string $accountCode
+     * @param array  $data
+     *
+     * @return void
+     * @throws \Simplerenew\Exception
+     */
+    public function load($accountCode, array &$data);
 }

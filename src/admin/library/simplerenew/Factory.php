@@ -14,14 +14,14 @@ defined('_JEXEC') or die();
  * Class Factory
  * @package Simplerenew
  *
- * @TODO: Investigate replacing with a proper DI container
+ * @TODO    : Investigate replacing with a proper DI container
  */
 class Factory
 {
     /**
      * @var Configuration
      */
-    protected $configuration = null;
+    protected $config = null;
 
     /**
      * @var string
@@ -35,7 +35,7 @@ class Factory
 
     public function __construct(Configuration $config)
     {
-        $this->configuration = $config;
+        $this->config = $config;
 
         // Verify valid user adapter
         $userAdapterClass = $config->get('user.adapter');
@@ -68,8 +68,8 @@ class Factory
     public function getUser()
     {
         $className = $this->userAdapterClass;
-        $adapter = new $className();
-        $user = new User\User($adapter);
+        $adapter   = new $className();
+        $user      = new User\User($adapter);
         return $user;
     }
 
@@ -83,8 +83,8 @@ class Factory
     {
         $className = $this->gatewayNamespace . '\\AccountImp';
 
-        $imp = new $className($this->configuration);
-        $account = new Api\Account($imp, $this->configuration);
+        $imp     = new $className($this->config);
+        $account = new Api\Account($this->config, $imp);
 
         return $account;
     }

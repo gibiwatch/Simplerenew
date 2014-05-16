@@ -18,19 +18,21 @@ try {
     $sr = new \Simplerenew\Factory($config);
 
     // Get the user object and load current user
-    $user = $sr->getUser()->load();
+    //$user = $sr->getUser()->load();
+    $user = $sr->getUser();
+    $user->id = 978;
 
     // Get the account object
-    $account = $sr->getAccount();
+    $account = $sr->getAccount()->load($user);
 
+    echo $account;
     echo '<pre>';
     print_r(
         array(
-            $user->fullname,
-            $user->lastname . ', ' . $user->firstname
+            'Code' => $account->code,
+            'Name' => trim($account->firstname . ' ' . $account->lastname)
         )
     );
-    print_r($account->load($user));
     echo '</pre>';
 } catch (Exception $e) {
     echo 'ERROR: ' . $e->getMessage();

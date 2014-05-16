@@ -31,16 +31,18 @@ class Object
      * facing properties will not change in the lifetime
      * of the object
      *
+     * @param bool $new Use true for empty values
+     *
      * @return array
      */
-    public function getProperties()
+    public function getProperties($new = false)
     {
         if ($this->properties === null) {
             $data = $this->getReflection()->getProperties(\ReflectionProperty::IS_PUBLIC);
             $this->properties = array();
             foreach ($data as $property) {
                 $name = $property->name;
-                $this->properties[$name] = $this->$name;
+                $this->properties[$name] = $new ? null : $this->$name;
             }
         }
         return $this->properties;
@@ -64,8 +66,8 @@ class Object
         }
 
         $properties = $this->getProperties();
-        foreach ($properties as $k => $v) {
-            if (array_key_exists($k, $data)) {
+        foreach ($data as $k => $v) {
+            if (array_key_exists($k, $properties)) {
                 $this->$k = $data[$k];
             }
         }

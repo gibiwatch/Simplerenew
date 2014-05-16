@@ -8,7 +8,7 @@
 
 namespace Simplerenew\Api;
 
-use Simplerenew\Gateway\AbstractGatewayBase;
+use Simplerenew\Configuration;
 use Simplerenew\Object;
 
 defined('_JEXEC') or die();
@@ -16,12 +16,12 @@ defined('_JEXEC') or die();
 abstract class AbstractApiBase extends Object
 {
     /**
-     * @var AbstractGatewayBase
+     * @var Configuration
      */
-    protected $imp = null;
+    protected $config = null;
 
-    public function __construct(AbstractGatewayBase $imp)
+    public function __construct(Configuration $config)
     {
-        $this->imp = $imp;
+        $this->config = $config;
     }
 }

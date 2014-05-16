@@ -14,5 +14,13 @@ defined('_JEXEC') or die();
 
 abstract class AbstractGatewayBase
 {
-    abstract public function __construct(Configuration $config);
+    /**
+     * @var Configuration
+     */
+    protected $config = null;
+
+    public function __construct(Configuration $config)
+    {
+        $this->config = $config;
+    }
 }

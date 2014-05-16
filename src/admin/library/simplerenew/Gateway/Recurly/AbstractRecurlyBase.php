@@ -18,25 +18,17 @@ require_once __DIR__ . '/api/autoloader.php';
 
 abstract class AbstractRecurlyBase extends AbstractGatewayBase
 {
-    /**
-     * @var object
-     */
-    protected static $settings = null;
-
     public function __construct(Configuration $config)
     {
-        if (self::$settings === null) {
-            self::$settings = $config->get('gateway');
+        parent::__construct($config);
 
-            if (!empty(self::$settings->mode)) {
-                $mode = self::$settings->mode;
-                if (!empty(self::$settings->$mode->apikey)) {
-                    $apikey = self::$settings->$mode->apikey;
-                }
-            }
+        if (empty(\Recurly_Client::$apiKey)) {
+            // Initialise the native Recurly API
+            $mode = $this->config->get('gateway.mode');
+            $keys = $this->config->get("gateway.{$mode}");
 
-            if (!empty($apikey)) {
-                \Recurly_Client::$apiKey = $apikey;
+            if (!empty($keys->apikey)) {
+                \Recurly_Client::$apiKey = $keys->apikey;
             } else {
                 throw new Exception('Recurly API requires an api key');
             }
