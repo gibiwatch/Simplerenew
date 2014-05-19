@@ -8,19 +8,20 @@
 
 namespace Simplerenew\Gateway;
 
+use Simplerenew\Api\Account;
+
 defined('_JEXEC') or die();
 
-interface AccountInterface
+interface BillingInterface
 {
     /**
-     * Retrieve basic account information from the subscription gateway.
-     * Fields to retrieve and their new values are passed through $data
+     * Retrieve billing information for the specified account
      *
      * @param string $accountCode
      * @param array  $keys
      *
      * @return array
-     * @throws \Simplerenew\Exception
+     * throws \Simplerenew\Exception
      */
     public function load($accountCode, array $keys);
 }

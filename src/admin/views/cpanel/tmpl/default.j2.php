@@ -20,21 +20,28 @@ try {
     // Get the user object and load current user
     //$user = $sr->getUser()->load();
     $user     = $sr->getUser();
-    $user->id = 28998;
+    $user->id = 31350;
 
     // Get the account object
     $account = $sr->getAccount()->load($user);
 
-    echo $account;
+    // Get the billing object
+    $billing = $sr->getBilling();
+    $billing->load($account);
+
     echo '<pre>';
     print_r(
         array(
             'Status'   => (int)$account->status,
+            'User ID'  => $account->user->id,
             'Code'     => $account->code,
             'Username' => $account->username,
             'Name'     => trim($account->firstname . ' ' . $account->lastname)
         )
     );
+
+    echo 'CODE: ' . $billing->accountCode;
+    print_r($billing->getProperties());
     echo '</pre>';
 } catch (Exception $e) {
     echo 'ERROR: ' . $e->getMessage();

@@ -27,12 +27,13 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
         'status'    => array(
             'state' => array(
                 'active' => Account::STATUS_ACTIVE,
-                'closed' => Account::STATUS_CLOSED
+                'closed' => Account::STATUS_CLOSED,
+                '::'     => Account::STATUS_UNKNOWN
             )
         )
     );
 
-    public function load($accountCode, array &$data)
+    public function load($accountCode, array $keys)
     {
         try {
             $result = \Recurly_Account::get($accountCode, self::$recurlyClient);
@@ -40,20 +41,6 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
 
-        foreach ($data as $srKey => $recurlyKey) {
-            if (isset($this->fieldMap[$srKey])) {
-                if (is_array($this->fieldMap[$srKey])) {
-                    $values       = reset($this->fieldMap[$srKey]);
-                    $field        = key($this->fieldMap[$srKey]);
-                    $selected     = $result->$field;
-                    $data[$srKey] = isset($values[$selected]) ? $values[$selected] : Account::STATUS_UNKNOWN;
-                } else {
-                    $field        = $this->fieldMap[$srKey];
-                    $data[$srKey] = $result->$field;
-                }
-            } else {
-                $data[$srKey] = $result->$srKey;
-            }
-        }
+        return $this->map($result, $keys, $this->fieldMap);
     }
 }

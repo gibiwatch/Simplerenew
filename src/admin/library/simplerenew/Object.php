@@ -18,11 +18,6 @@ class Object
     private $reflection = null;
 
     /**
-     * @var array
-     */
-    private $properties = null;
-
-    /**
      * Retrieve all public properties and their values
      * Although this duplicates get_object_vars(), it
      * is mostly useful for internal calls when we need
@@ -31,21 +26,17 @@ class Object
      * facing properties will not change in the lifetime
      * of the object
      *
-     * @param bool $new Use true for empty values
-     *
      * @return array
      */
-    public function getProperties($new = false)
+    public function getProperties()
     {
-        if ($this->properties === null) {
-            $data = $this->getReflection()->getProperties(\ReflectionProperty::IS_PUBLIC);
-            $this->properties = array();
-            foreach ($data as $property) {
-                $name = $property->name;
-                $this->properties[$name] = $new ? null : $this->$name;
-            }
+        $properties = $this->getReflection()->getProperties(\ReflectionProperty::IS_PUBLIC);
+        $data       = array();
+        foreach ($properties as $property) {
+            $name        = $property->name;
+            $data[$name] = $this->$name;
         }
-        return $this->properties;
+        return $data;
     }
 
     /**

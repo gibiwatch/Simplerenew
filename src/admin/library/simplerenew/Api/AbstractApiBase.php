@@ -26,8 +26,8 @@ abstract class AbstractApiBase extends Object
     }
 
     /**
-     * Don't fail on unknown properties. We expect subclasses to
-     * handle properties relevant to their case.
+     * Allow protected properties to be exposed for use. Private properties
+     * in subclasses will not be exposed.
      *
      * @param $name
      *
@@ -35,6 +35,9 @@ abstract class AbstractApiBase extends Object
      */
     public function __get($name)
     {
+        if (isset($this->$name)) {
+            return $this->$name;
+        }
         return null;
     }
 }

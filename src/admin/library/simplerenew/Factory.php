@@ -88,4 +88,14 @@ class Factory
 
         return $account;
     }
+
+    public function getBilling()
+    {
+        $className = $this->gatewayNamespace . '\\BillingImp';
+
+        $imp     = new $className($this->config);
+        $billing = new Api\Billing($this->config, $imp);
+
+        return $billing;
+    }
 }

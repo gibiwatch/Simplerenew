@@ -14,6 +14,12 @@ use Simplerenew\User\User;
 
 defined('_JEXEC') or die();
 
+/**
+ * Class Account
+ * @package Simplerenew\Api
+ *
+ * @property-read User $user
+ */
 class Account extends AbstractApiBase
 {
     const STATUS_ACTIVE  = 1;
@@ -56,41 +62,25 @@ class Account extends AbstractApiBase
     public $company = null;
 
     /**
-     * @var null
+     * @var User
      */
-    public $address = null;
+    protected $user = null;
 
     /**
      * @var AccountInterface
      */
-    protected $imp = null;
+    private $imp = null;
 
     /**
      * @var string A sprintf template for generating account codes based on User ID
      */
-    protected $codeMask = null;
-
-    /**
-     * @var User
-     */
-    protected $user = null;
+    private $codeMask = null;
 
     public function __construct(Configuration $config, AccountInterface $imp)
     {
         parent::__construct($config);
 
         $this->imp = $imp;
-    }
-
-    public function __get($name)
-    {
-        switch ($name) {
-            case 'user':
-                return $this->$name;
-                break;
-        }
-
-        return parent::__get($name);
     }
 
     /**
@@ -103,10 +93,9 @@ class Account extends AbstractApiBase
      */
     public function load(User $user)
     {
+        $keys        = array_keys($this->getProperties());
         $accountCode = $this->getAccountCode($user);
-
-        $newValues = $this->getProperties(true);
-        $this->imp->load($accountCode, $newValues);
+        $newValues   = $this->imp->load($accountCode, $keys);
 
         $this->user = $user;
         $this->setProperties($newValues);
