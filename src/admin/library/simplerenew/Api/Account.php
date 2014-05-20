@@ -72,7 +72,7 @@ class Account extends AbstractApiBase
     private $imp = null;
 
     /**
-     * @var string A sprintf template for generating account codes based on User ID
+     * @var string
      */
     private $codeMask = '%s';
 
@@ -129,11 +129,11 @@ class Account extends AbstractApiBase
 
         $this->setProperties(
             array(
-                'code' => $this->getAccountCode($this->user),
-                'username'=> $this->user->username,
-                'email' => $this->user->email,
+                'code'      => $this->getAccountCode($this->user),
+                'username'  => $this->user->username,
+                'email'     => $this->user->email,
                 'firstname' => $this->user->firstname,
-                'lastname' => $this->user->lastname
+                'lastname'  => $this->user->lastname
             )
         );
 
@@ -142,11 +142,24 @@ class Account extends AbstractApiBase
         return $this;
     }
 
+    /**
+     *
+     * @return string
+     */
     public function getCodeMask()
     {
         return $this->codeMask;
     }
 
+    /**
+     * A code mask can be used to convert a user ID into an account code for the
+     * subscription manager. The mask should contain one %s token for use in
+     * sprintf(). The default is to use the plain User ID as the account code.
+     *
+     * @param $mask
+     *
+     * @return string
+     */
     public function setCodeMask($mask)
     {
         $oldMask = $this->codeMask;
@@ -179,12 +192,11 @@ class Account extends AbstractApiBase
      * Get the account code for the selected user.
      * Defaults to currently loaded user if there is one.
      *
-     * @param User   $user
-     * @param string $mask
+     * @param User $user
      *
      * @return null|string
      */
-    public function getAccountCode(User $user = null, $mask = null)
+    public function getAccountCode(User $user = null)
     {
         if (!$user) {
             if ($this->code) {
@@ -194,7 +206,7 @@ class Account extends AbstractApiBase
         }
 
         if ($user->id > 0) {
-            return sprintf($this->getCodeMask($mask), $user->id);
+            return sprintf($this->codeMask, $user->id);
         }
 
         return null;

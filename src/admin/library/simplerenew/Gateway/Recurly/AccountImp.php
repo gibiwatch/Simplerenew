@@ -33,6 +33,13 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
         )
     );
 
+    /**
+     * @param string $accountCode
+     * @param array  $keys
+     *
+     * @return array
+     * @throws Exception
+     */
     public function load($accountCode, array $keys)
     {
         try {
@@ -44,6 +51,13 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
         return $this->map($result, $keys, $this->fieldMap);
     }
 
+    /**
+     * @param Account $parent
+     * @param bool    $isNew
+     *
+     * @return array
+     * @throws Exception
+     */
     public function save(Account $parent, $isNew)
     {
         try {

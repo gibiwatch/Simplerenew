@@ -23,6 +23,13 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
         'ipaddress' => 'ip_address'
     );
 
+    /**
+     * @param string $accountCode
+     * @param array  $keys
+     *
+     * @return array
+     * @throws Exception
+     */
     public function load($accountCode, array $keys)
     {
         try {
