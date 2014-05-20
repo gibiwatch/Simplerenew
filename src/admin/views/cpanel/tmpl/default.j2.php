@@ -43,6 +43,8 @@ try {
             )
         )
     );
+
+    print_r($billing->getProperties());
     echo '</pre>';
 
 } catch (Exception $e) {

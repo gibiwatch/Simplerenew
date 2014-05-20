@@ -18,52 +18,79 @@ defined('_JEXEC') or die();
  * @package Simplerenew\Api
  *
  * @property-read Account $account
- * @property-read string  $accountCode
  */
 class Billing extends AbstractApiBase
 {
+    /**
+     * @var string
+     */
     public $firstname = null;
+
+    /**
+     * @var string
+     */
     public $lastname = null;
+
+    /**
+     * @var string
+     */
     public $address1 = null;
+
+    /**
+     * @var string
+     */
     public $address2 = null;
+
+    /**
+     * @var string
+     */
     public $city = null;
-    public $state = null;
+
+    /**
+     * @var string State/Province/Region
+     */
+    public $region = null;
+
+    /**
+     * @var string 2-letter ISO country code
+     */
     public $country = null;
+
+    /**
+     * @var string
+     */
     public $postal = null;
+
+    /**
+     * @var string
+     */
     public $phone = null;
 
     /**
-     * @var BillingInterface
+     * @var string
      */
-    protected $imp = null;
+    public $ipaddress = null;
 
     /**
      * @var Account
      */
     protected $account = null;
 
+    /**
+     * @var BillingInterface
+     */
+    private $imp = null;
+
     public function __construct(BillingInterface $imp)
     {
         $this->imp = $imp;
     }
 
-    public function __get($name)
-    {
-        switch ($name) {
-            case 'accountCode':
-                if ($this->account) {
-                    return $this->account->code;
-                }
-                break;
-
-            case 'account':
-                return $this->$name;
-                break;
-        }
-
-        return parent::__get($name);
-    }
-
+    /**
+     * @param Account $account
+     *
+     * @return $this
+     */
     public function load(Account $account)
     {
         $keys      = array_keys($this->getProperties());

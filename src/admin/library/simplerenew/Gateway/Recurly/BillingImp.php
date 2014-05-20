@@ -18,7 +18,9 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
     protected $fieldMap = array(
         'firstname' => 'first_name',
         'lastname'  => 'last_name',
-        'postal'    => 'zip'
+        'region'    => 'state',
+        'postal'    => 'zip',
+        'ipaddress' => 'ip_address'
     );
 
     public function load($accountCode, array $keys)
