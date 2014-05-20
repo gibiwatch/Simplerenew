@@ -8,6 +8,8 @@
 
 namespace Simplerenew;
 
+use Simplerenew\User\Adapter\UserInterface;
+
 defined('_JEXEC') or die();
 
 /**
@@ -45,14 +47,19 @@ class Factory
         }
 
         // Verify valid user adapter
-        $userAdapterClass = empty($config['user']['adapter']) ? null : $config['user']['adapter'];
-        if (strpos($userAdapterClass, '\\') === false) {
-            $userAdapterClass = '\\Simplerenew\\User\\Adapter\\' . ucfirst(strtolower($userAdapterClass));
+        $userAdapter = empty($config['user']['adapter']) ? null : $config['user']['adapter'];
+        if (is_string($userAdapter)) {
+            if (strpos($userAdapter, '\\') === false) {
+                $userAdapter = '\\Simplerenew\\User\\Adapter\\' . ucfirst(strtolower($userAdapter));
+            }
+            if (class_exists($userAdapter)) {
+                $userAdapter = new $userAdapter();
+            }
         }
-        if (!class_exists($userAdapterClass)) {
-            throw new Exception('User adapter not found - ' . $userAdapterClass);
+        if (!$userAdapter instanceof UserInterface) {
+            throw new Exception('User adapter not found - ' . $userAdapter);
         }
-        $this->userAdapter = new $userAdapterClass();
+        $this->userAdapter = $userAdapter;
 
         // Get and verify Gateway configurations
         if (!empty($config['gateway'])) {
