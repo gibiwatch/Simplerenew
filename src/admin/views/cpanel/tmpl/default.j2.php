@@ -14,8 +14,8 @@ defined('_JEXEC') or die();
 FOFTemplateUtils::addCSS('media://com_simplerenew/css/backend.css');
 
 try {
-    $config = new Simplerenew\Configuration(SIMPLERENEW_LIBRARY . '/configuration.json', true);
-    $sr     = new \Simplerenew\Factory($config);
+    $config = file_get_contents(SIMPLERENEW_LIBRARY . '/configuration.json');
+    $sr     = new \Simplerenew\Factory(json_decode($config, true));
 
     // Get the user object and load current user
     //$user = $sr->getUser()->load();
@@ -36,13 +36,15 @@ try {
             'User ID'  => $account->user->id,
             'Code'     => $account->code,
             'Username' => $account->username,
-            'Name'     => trim($account->firstname . ' ' . $account->lastname)
+            'Name'     => trim($account->firstname . ' ' . $account->lastname),
+            'Billing'  => array(
+                'Name'    => trim($billing->firstname . ' ' . $billing->lastname),
+                'Country' => $billing->country
+            )
         )
     );
-
-    echo 'CODE: ' . $billing->accountCode;
-    print_r($billing->getProperties());
     echo '</pre>';
+
 } catch (Exception $e) {
     echo 'ERROR: ' . $e->getMessage();
     if ($e instanceof Simplerenew\Exception) {

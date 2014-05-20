@@ -24,7 +24,7 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
     public function load($accountCode, array $keys)
     {
         try {
-            $billing = \Recurly_BillingInfo::get($accountCode, self::$recurlyClient);
+            $billing = \Recurly_BillingInfo::get($accountCode, $this->client);
         } catch (\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }

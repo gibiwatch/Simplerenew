@@ -19,11 +19,6 @@ defined('_JEXEC') or die();
 class Factory
 {
     /**
-     * @var Configuration
-     */
-    protected $config = null;
-
-    /**
      * @var string
      */
     protected $userAdapterClass = null;
@@ -33,12 +28,24 @@ class Factory
      */
     protected $gatewayNamespace = null;
 
-    public function __construct(Configuration $config)
+    /**
+     * @var array
+     */
+    protected $gatewayConfig = null;
+
+    /**
+     * @var array
+     */
+    protected $accountConfig = null;
+
+    public function __construct(array $config)
     {
-        $this->config = $config;
+        if (!empty($config['account'])) {
+            $this->accountConfig = $config['account'];
+        }
 
         // Verify valid user adapter
-        $userAdapterClass = $config->get('user.adapter');
+        $userAdapterClass = empty($config['user']['adapter']) ? null : $config['user']['adapter'];
         if (strpos($userAdapterClass, '\\') === false) {
             $userAdapterClass = '\\Simplerenew\\User\\Adapter\\' . ucfirst(strtolower($userAdapterClass));
         }
@@ -48,15 +55,20 @@ class Factory
         $this->userAdapterClass = $userAdapterClass;
 
         // Get and verify Gateway configurations
-        $gatewayNamespace = $config->get('gateway.name');
-        if (strpos($gatewayNamespace, '\\') === false) {
-            $gatewayNamespace = '\\Simplerenew\\Gateway\\' . ucfirst(strtolower($gatewayNamespace));
-        }
-        if (!class_exists($gatewayNamespace . '\\AccountImp')) {
-            throw new Exception('Gateway namespace not valid - ' . $gatewayNamespace);
-        }
-        $this->gatewayNamespace = $gatewayNamespace;
+        if (!empty($config['gateway'])) {
+            $gateway = $config['gateway'];
 
+            $gatewayNamespace = empty($gateway['name']) ? 'recurly': $gateway['name'];
+            if (strpos($gatewayNamespace, '\\') === false) {
+                $gatewayNamespace = '\\Simplerenew\\Gateway\\' . ucfirst(strtolower($gatewayNamespace));
+            }
+            if (!class_exists($gatewayNamespace . '\\AccountImp')) {
+                throw new Exception('Gateway namespace not valid - ' . $gatewayNamespace);
+            }
+            $this->gatewayNamespace = $gatewayNamespace;
+
+            $this->gatewayConfig = $gateway;
+        }
     }
 
     /**
@@ -83,8 +95,8 @@ class Factory
     {
         $className = $this->gatewayNamespace . '\\AccountImp';
 
-        $imp     = new $className($this->config);
-        $account = new Api\Account($this->config, $imp);
+        $imp     = new $className($this->gatewayConfig);
+        $account = new Api\Account($imp, $this->accountConfig);
 
         return $account;
     }
@@ -93,8 +105,8 @@ class Factory
     {
         $className = $this->gatewayNamespace . '\\BillingImp';
 
-        $imp     = new $className($this->config);
-        $billing = new Api\Billing($this->config, $imp);
+        $imp     = new $className($this->gatewayConfig);
+        $billing = new Api\Billing($imp);
 
         return $billing;
     }

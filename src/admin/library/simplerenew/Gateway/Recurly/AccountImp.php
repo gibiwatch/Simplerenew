@@ -36,7 +36,7 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
     public function load($accountCode, array $keys)
     {
         try {
-            $result = \Recurly_Account::get($accountCode, self::$recurlyClient);
+            $result = \Recurly_Account::get($accountCode, $this->client);
         } catch (\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }

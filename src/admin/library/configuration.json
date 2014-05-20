@@ -1,6 +1,6 @@
 {
     "account": {
-        "codemask": "OS_%s"
+        "codeMask": "OS_%s"
     },
     "gateway": {
         "name": "recurly",

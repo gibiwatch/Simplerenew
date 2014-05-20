@@ -16,16 +16,6 @@ defined('_JEXEC') or die();
 abstract class AbstractApiBase extends Object
 {
     /**
-     * @var Configuration
-     */
-    protected $config = null;
-
-    public function __construct(Configuration $config)
-    {
-        $this->config = $config;
-    }
-
-    /**
      * Allow protected properties to be exposed for use. Private properties
      * in subclasses will not be exposed.
      *

@@ -42,10 +42,8 @@ class Billing extends AbstractApiBase
      */
     protected $account = null;
 
-    public function __construct(Configuration $config, BillingInterface $imp)
+    public function __construct(BillingInterface $imp)
     {
-        parent::__construct($config);
-
         $this->imp = $imp;
     }
 

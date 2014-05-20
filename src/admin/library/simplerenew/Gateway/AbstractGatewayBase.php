@@ -16,15 +16,7 @@ defined('_JEXEC') or die();
 
 abstract class AbstractGatewayBase
 {
-    /**
-     * @var Configuration
-     */
-    protected $config = null;
-
-    public function __construct(Configuration $config)
-    {
-        $this->config = $config;
-    }
+    abstract public function __construct(array $config = array());
 
     /**
      * Map values in a source object/array to Simplerenew keys using a map

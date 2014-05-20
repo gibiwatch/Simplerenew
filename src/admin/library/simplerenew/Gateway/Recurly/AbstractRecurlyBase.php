@@ -21,22 +21,17 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
     /**
      * @var \Recurly_Client
      */
-    protected static $recurlyClient = null;
+    protected $client = null;
 
-    public function __construct(Configuration $config)
+    public function __construct(array $config = array())
     {
-        parent::__construct($config);
+        // Initialise the native Recurly API
+        $mode = empty($config['mode']) ? 'test' : $config['mode'];
 
-        if (self::$recurlyClient === null) {
-            // Initialise the native Recurly API
-            $mode = $this->config->get('gateway.mode');
-            $keys = $this->config->get("gateway.{$mode}");
-
-            if (!empty($keys->apikey)) {
-                self::$recurlyClient = new \Recurly_Client($keys->apikey);
-            } else {
-                throw new Exception('Recurly API requires an api key');
-            }
+        if (!empty($config[$mode]['apikey'])) {
+            $this->client = new \Recurly_Client($config[$mode]['apikey']);
+        } else {
+            throw new Exception('Recurly API requires an api key');
         }
     }
 }

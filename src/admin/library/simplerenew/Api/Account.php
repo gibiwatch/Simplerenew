@@ -8,7 +8,6 @@
 
 namespace Simplerenew\Api;
 
-use Simplerenew\Configuration;
 use Simplerenew\Gateway\AccountInterface;
 use Simplerenew\User\User;
 
@@ -74,13 +73,15 @@ class Account extends AbstractApiBase
     /**
      * @var string A sprintf template for generating account codes based on User ID
      */
-    private $codeMask = null;
+    private $codeMask = '%s';
 
-    public function __construct(Configuration $config, AccountInterface $imp)
+    public function __construct(AccountInterface $imp, array $config = array())
     {
-        parent::__construct($config);
-
         $this->imp = $imp;
+
+        if (!empty($config['codeMask'])) {
+            $this->setCodeMask($config['codeMask']);
+        }
     }
 
     /**
@@ -103,40 +104,53 @@ class Account extends AbstractApiBase
         return $this;
     }
 
+    public function getCodeMask($mask = null)
+    {
+        if ($mask === null) {
+            return $this->codeMask;
+        }
+
+        switch (substr_count($mask, '%s') == 1) {
+            case 1:
+                // Just right!
+                break;
+
+            case 0:
+                // Need at least one
+                if (!empty($mask)) {
+                    $mask .= '_';
+                }
+                $mask .= '%s';
+                break;
+
+            default:
+                // Too many!
+                $start = strpos($mask, '%s') + 2;
+                $mask  = substr($mask, 0, $start);
+                break;
+        }
+
+        return $mask;
+    }
+
+    public function setCodeMask($mask)
+    {
+        $oldMask        = $this->codeMask;
+        $this->codeMask = $this->getCodeMask($mask);
+        return $oldMask;
+    }
+
     /**
      * Get the account code for the selected user.
      * Defaults to currently loaded user if there is one.
      *
-     * @param User $user
+     * @param User   $user
+     * @param string $mask
      *
      * @return null|string
      */
-    public function getAccountCode(User $user = null)
+    public function getAccountCode(User $user = null, $mask = null)
     {
-        if ($this->codeMask === null) {
-            // Build/verify the account code mask
-            $this->codeMask = $this->config->get('account.codemask');
-            switch (substr_count($this->codeMask, '%s')) {
-                case 0:
-                    // Need at least one
-                    if (!empty($this->codeMask)) {
-                        $this->codeMask .= '_';
-                    }
-                    $this->codeMask .= '%s';
-                    break;
-
-                case 1:
-                    // Just right!
-                    break;
-
-                default:
-                    // Too many!
-                    $start          = strpos($this->codeMask, '%s') + 2;
-                    $this->codeMask = substr($this->codeMask, 0, $start);
-                    break;
-            }
-        }
-
         if (!$user) {
             if ($this->code) {
                 return $this->code;
@@ -145,7 +159,7 @@ class Account extends AbstractApiBase
         }
 
         if ($user->id > 0) {
-            return sprintf($this->codeMask, $user->id);
+            return sprintf($this->getCodeMask($mask), $user->id);
         }
 
         return null;
