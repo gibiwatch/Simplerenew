@@ -19,9 +19,9 @@ defined('_JEXEC') or die();
 class Factory
 {
     /**
-     * @var string
+     * @var User\Adapter\UserInterface
      */
-    protected $userAdapterClass = null;
+    protected $userAdapter = null;
 
     /**
      * @var string
@@ -52,13 +52,13 @@ class Factory
         if (!class_exists($userAdapterClass)) {
             throw new Exception('User adapter not found - ' . $userAdapterClass);
         }
-        $this->userAdapterClass = $userAdapterClass;
+        $this->userAdapter = new $userAdapterClass();
 
         // Get and verify Gateway configurations
         if (!empty($config['gateway'])) {
             $gateway = $config['gateway'];
 
-            $gatewayNamespace = empty($gateway['name']) ? 'recurly': $gateway['name'];
+            $gatewayNamespace = empty($gateway['name']) ? 'recurly' : $gateway['name'];
             if (strpos($gatewayNamespace, '\\') === false) {
                 $gatewayNamespace = '\\Simplerenew\\Gateway\\' . ucfirst(strtolower($gatewayNamespace));
             }
@@ -74,40 +74,53 @@ class Factory
     /**
      * Create a new user object
      *
+     * @param User\Adapter\UserInterface
+     *
      * @return User\User
      * @throws Exception
      */
-    public function getUser()
+    public function getUser(User\Adapter\UserInterface $adapter = null)
     {
-        $className = $this->userAdapterClass;
-        $adapter   = new $className();
-        $user      = new User\User($adapter);
+        if (!$adapter) {
+            $adapter = $this->userAdapter;
+        }
+        $user = new User\User($adapter);
         return $user;
     }
 
     /**
      * Create a new Api\Account object
      *
+     * @param Gateway\AccountInterface
+     *
      * @return Api\Account
      * @throws Exception
      */
-    public function getAccount()
+    public function getAccount(Gateway\AccountInterface $imp = null)
     {
-        $className = $this->gatewayNamespace . '\\AccountImp';
+        if (!$imp) {
+            $className = $this->gatewayNamespace . '\\AccountImp';
+            $imp       = new $className($this->gatewayConfig);
+        }
 
-        $imp     = new $className($this->gatewayConfig);
         $account = new Api\Account($imp, $this->accountConfig);
-
         return $account;
     }
 
-    public function getBilling()
+    /**
+     * @param Gateway\BillingInterface $imp
+     *
+     * @return Api\Billing
+     */
+    public function getBilling(Gateway\BillingInterface $imp = null)
     {
-        $className = $this->gatewayNamespace . '\\BillingImp';
 
-        $imp     = new $className($this->gatewayConfig);
+        if (!$imp) {
+            $className = $this->gatewayNamespace . '\\BillingImp';
+            $imp       = new $className($this->gatewayConfig);
+        }
+
         $billing = new Api\Billing($imp);
-
         return $billing;
     }
 }
