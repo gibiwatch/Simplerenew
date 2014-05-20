@@ -43,4 +43,30 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
 
         return $this->map($result, $keys, $this->fieldMap);
     }
+
+    public function save(Account $parent, $isNew)
+    {
+        try {
+            \Recurly_Client::$apiKey = $this->client->apiKey();
+            $account                 = new \Recurly_Account();
+
+            $account->account_code = $parent->code;
+            $account->username     = $parent->username;
+            $account->email        = $parent->email;
+            $account->first_name   = $parent->firstname;
+            $account->last_name    = $parent->lastname;
+            $account->company_name = $parent->company;
+
+            if ($isNew) {
+                $account->create();
+            } else {
+                $account->update();
+            }
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
+        }
+
+        $keys = array_keys($parent->getProperties());
+        return $this->map($account, $keys, $this->fieldMap);
+    }
 }

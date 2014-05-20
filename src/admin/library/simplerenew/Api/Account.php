@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Api;
 
+use Simplerenew\Exception;
 use Simplerenew\Gateway\AccountInterface;
 use Simplerenew\User\User;
 
@@ -85,18 +86,23 @@ class Account extends AbstractApiBase
     }
 
     /**
-     * Load subscription account information for the selected user
+     * Load account information for the selected user
      *
      * @param User $user
      *
-     * @return $this
-     * @throws \Simplerenew\Exception
+     * @return Account
      */
     public function load(User $user)
     {
-        $keys        = array_keys($this->getProperties());
-        $accountCode = $this->getAccountCode($user);
-        $newValues   = $this->imp->load($accountCode, $keys);
+        $keys = array_keys($this->getProperties());
+
+        try {
+            $accountCode = $this->getAccountCode($user);
+            $newValues   = $this->imp->load($accountCode, $keys);
+
+        } catch (Exception $e) {
+            $newValues = array_fill_keys($keys, null);
+        }
 
         $this->user = $user;
         $this->setProperties($newValues);
@@ -104,11 +110,46 @@ class Account extends AbstractApiBase
         return $this;
     }
 
-    public function getCodeMask($mask = null)
+    /**
+     * @param bool $create Allow account creation
+     *
+     * @return Account
+     * @throws Exception
+     */
+    public function save($create = true)
     {
-        if ($mask === null) {
-            return $this->codeMask;
+        if (!$this->user) {
+            throw new Exception('No user specified for account');
         }
+
+        $isNew = empty($this->code);
+        if ($isNew && !$create) {
+            throw new Exception('Creating new account is not permitted - ' . $this->user->username);
+        }
+
+        $this->setProperties(
+            array(
+                'code' => $this->getAccountCode($this->user),
+                'username'=> $this->user->username,
+                'email' => $this->user->email,
+                'firstname' => $this->user->firstname,
+                'lastname' => $this->user->lastname
+            )
+        );
+
+        $newValues = $this->imp->save($this, $isNew);
+        $this->setProperties($newValues);
+        return $this;
+    }
+
+    public function getCodeMask()
+    {
+        return $this->codeMask;
+    }
+
+    public function setCodeMask($mask)
+    {
+        $oldMask = $this->codeMask;
 
         switch (substr_count($mask, '%s') == 1) {
             case 1:
@@ -129,14 +170,8 @@ class Account extends AbstractApiBase
                 $mask  = substr($mask, 0, $start);
                 break;
         }
+        $this->codeMask = $mask;
 
-        return $mask;
-    }
-
-    public function setCodeMask($mask)
-    {
-        $oldMask        = $this->codeMask;
-        $this->codeMask = $this->getCodeMask($mask);
         return $oldMask;
     }
 

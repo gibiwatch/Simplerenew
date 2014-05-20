@@ -14,57 +14,29 @@ defined('_JEXEC') or die();
 FOFTemplateUtils::addCSS('media://com_simplerenew/css/backend.css');
 
 try {
-    $config = array(
-        'account' => array(
-            'codeMask' => 'OS_%s'
-        ),
-
-        'user' => array(
-            'adapter' => 'joomla'
-        ),
-
-        'gateway' => array(
-            'name' => 'recurly',
-            'mode' => 'live',
-            'test' => array(
-                'apikey' => '6d00ae5e11894d1581830bcc8deb8778',
-                'private' => '699d2b94ab364f9594e41a7d2e5ee1c7'
-            ),
-            'live' => array(
-                'apikey' => '808896419fd94121ba4bbcb0f32f460b',
-                'private' => 'f284ad043e784180b97661881fb459da'
-            )
-        )
-    );
+    $path = SIMPLERENEW_LIBRARY . '/configuration.json';
+    $config = json_decode(file_get_contents($path), true);
 
     $sr = new \Simplerenew\Factory($config);
 
-    $user = $sr->getUser();
-    $user->id = 31350;
+    $user = $sr->getUser()->load();
 
     // Get the account object
     $account = $sr->getAccount()->load($user);
+    $account->company = 'Grumpy Engineering';
+    $account->save();
 
     // Get the billing object
-    $billing = $sr->getBilling();
-    $billing->load($account);
+    //$billing = $sr->getBilling();
+    //$billing->load($account);
 
     echo '<pre>';
-    print_r(
-        array(
-            'Status'   => (int)$account->status,
-            'User ID'  => $account->user->id,
-            'Code'     => $account->code,
-            'Username' => $account->username,
-            'Name'     => trim($account->firstname . ' ' . $account->lastname),
-            'Billing'  => array(
-                'Name'    => trim($billing->firstname . ' ' . $billing->lastname),
-                'Country' => $billing->country
-            )
-        )
-    );
+    echo str_pad(' User ', 40, '*', STR_PAD_BOTH) . '<br/>';
+    print_r($user->getProperties());
 
-    print_r($billing->getProperties());
+    echo str_pad(' Account ', 40, '*', STR_PAD_BOTH) . '<br/>';
+    print_r($account->getProperties());
+
     echo '</pre>';
 
 } catch (Exception $e) {
