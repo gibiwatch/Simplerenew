@@ -9,20 +9,18 @@
 namespace Simplerenew\User\Adapter;
 
 use Simplerenew\Exception;
+use Simplerenew\User\User;
 
 defined('_JEXEC') or die();
 
 class Joomla implements UserInterface
 {
-    /**
-     * @var array Joomla user name split into first/last
-     */
-    private $splitName = null;
-
-    /**
-     * @var \JUser
-     */
-    private $juser = null;
+    protected $fieldMap = array(
+        'password'  => null,
+        'firstname' => null,
+        'lastname'  => null,
+        'enabled'   => 'block'
+    );
 
     public function __construct()
     {
@@ -30,209 +28,134 @@ class Joomla implements UserInterface
 
         $lang = \JFactory::getLanguage();
         $lang->load('com_users', JPATH_SITE);
-
-        $this->juser = new \JUser();
     }
 
     /**
      * @param string $username
+     * @param User   $parent
      *
-     * @return UserInterface
+     * @return void
      * @throws Exception
      */
-    public function loadByUsername($username)
+    public function loadByUsername($username, User $parent)
     {
         if ($id = \JUserHelper::getUserId($username)) {
-            $this->load($id);
-            return $this;
+            $this->load($id, $parent);
+            return;
         }
 
-        throw new Exception('Username not found - '. $username);
+        throw new Exception('Username not found - ' . $username);
     }
 
     /**
-     * @param int $id
+     * @param int  $id
+     * @param User $parent
      *
-     * @return UserInterface
+     * @return void
      * @throws Exception
      */
-    public function load($id = null)
+    public function load($id, User $parent)
     {
-        $this->splitName = null;
-        $this->juser = clone(\JFactory::getUser($id));
-        if (!$this->juser || $this->juser->id <= 0) {
+        $user = \JFactory::getUser($id);
+        if (!$user || $user->id <= 0) {
             throw new Exception('User ID not found - ' . $id);
         }
 
-        return $this;
+        $keys = array_keys(get_object_vars($parent));
+        $data = array_merge(
+            $parent->map($user, $keys, $this->fieldMap),
+            $this->getName($user->name)
+        );
+
+        $data['enabled'] = !$user->block && empty($user->activation);
+        $parent->setProperties($data);
     }
 
     /**
+     * Parse and return a string as a first/last name string
+     *
      * @param string $name
      *
-     * @return mixed
+     * @return array
      */
-    public function get($name)
+    protected function getName($name)
     {
-        switch ($name) {
-            case 'firstname':
-                return $this->getFirstname();
-                break;
+        $name = preg_split('/\s/', $name);
 
-            case 'lastname':
-                return $this->getLastname();
-                break;
-
-            case 'fullname':
-                return $this->juser->get('name');
-                break;
-
-            default:
-                return $this->juser->get($name);
-        }
-    }
-
-    /**
-     * Get the first name as parsed from the Joomla User name field
-     *
-     * @return string
-     */
-    protected function getFirstname()
-    {
-        return $this->getName('firstname');
-    }
-
-    /**
-     * Parse and return the selected first/last name field from
-     * the Joomla User name field
-     *
-     * @param $field ['firstname'|'lastname']
-     *
-     * @return string
-     */
-    protected function getName($field = null)
-    {
-        if ($this->splitName === null) {
-            $name = preg_split('/\s/', $this->juser->name);
-
-            if (count($name) == 1) {
-                $firstname = $name[0];
-                $lastname  = '';
-            } elseif (count($name) > 1) {
-                $lastname  = array_pop($name);
-                $firstname = join(' ', $name);
-            } else {
-                $firstname = '';
-                $lastname  = '';
-            }
-
-            $this->splitName = array(
-                'firstname' => $firstname,
-                'lastname'  => $lastname
-            );
+        if (count($name) == 1) {
+            $firstname = $name[0];
+            $lastname  = '';
+        } elseif (count($name) > 1) {
+            $lastname  = array_pop($name);
+            $firstname = join(' ', $name);
+        } else {
+            $firstname = '';
+            $lastname  = '';
         }
 
-        if (empty($field)) {
-            return join(' ', $this->splitName);
-        } elseif (!empty($this->splitName[$field])) {
-            return $this->splitName[$field];
-        }
-        return '';
+        return array(
+            'firstname' => $firstname,
+            'lastname'  => $lastname
+        );
     }
 
     /**
-     * Get the lastname as parsed from the Joomla User name field
+     * @param User $parent
      *
-     * @return string
-     */
-    protected function getLastname()
-    {
-        return $this->getName('lastname');
-    }
-
-    /**
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return mixed
-     */
-    public function set($name, $value)
-    {
-        switch ($name) {
-            case 'firstname':
-                $return                       = $this->getName('firstname');
-                $this->splitName['firstname'] = trim($value);
-                $this->juser->name            = trim(join(' ', $this->splitName));
-                break;
-
-            case 'lastname':
-                $return                      = $this->getName('lastname');
-                $this->splitName['lastname'] = trim($value);
-                $this->juser->name           = trim(join(' ', $this->splitName));
-                break;
-
-            case 'fullname':
-                $return            = $this->juser->name;
-                $this->juser->name = $value;
-                break;
-
-
-            case 'password':
-                $return                      = null;
-                $this->juser->password_clear = $value;
-                break;
-
-            default:
-                $return = $this->juser->get($name);
-                $this->juser->set($name, $value);
-                $this->splitName = null;
-                break;
-        }
-
-        return $return;
-    }
-
-    /**
-     * @return UserInterface
+     * @return void
      * @throws Exception
      */
-    public function create()
+    public function create(User $parent)
     {
         /** @var \UsersModelRegistration $model */
         $model = \JModelLegacy::getInstance('Registration', 'UsersModel');
 
         $data = array(
-            'email1'    => $this->juser->email,
-            'username'  => $this->juser->username,
-            'name'      => $this->juser->name,
-            'password1' => $this->juser->password_clear
+            'email1'    => $parent->email,
+            'username'  => $parent->username,
+            'name'      => trim($parent->firstname . ' ' . $parent->lastname),
+            'password1' => $parent->password
         );
 
         if ($id = $model->register($data)) {
-            return $this->load($id);
+            $parent->loadByUsername($parent->username);
+            return;
         }
 
         throw new Exception('<br/>' . join('<br/>', $model->getErrors()));
     }
 
     /**
-     * @return UserInterface
+     * @param User $parent
+     *
+     * @return void
      * @throws Exception
      */
-    public function update()
+    public function update(User $parent)
     {
-        if ($this->juser->password_clear) {
+        $user = \JUser::getInstance($parent->id);
+
+        if ($user->id == $parent->id) {
             $data = array(
-                'password'  => $this->juser->password_clear,
-                'password2' => $this->juser->password_clear
+                'name'     => trim($parent->firstname . ' ' . $parent->lastname),
+                'email'    => $parent->email,
+                'username' => $parent->username
             );
-            $this->juser->bind($data);
+
+            if (!empty($parent->password)) {
+                $data['password']  = $parent->password;
+                $data['password2'] = $parent->password;
+            }
+
+            $user->bind($data);
+            if ($user->save(true)) {
+                $this->load($parent->id, $parent);
+                return;
+            }
+
+            throw new Exception('<br/>' . join('<br/>', $user->getErrors()));
         }
 
-        if (!$this->juser->save(true)) {
-            throw new Exception('<br/>' . join('<br/>', $this->juser->getErrors()));
-        }
-
-        return $this;
+        throw new Exception('Unable to update user ID #' . ($parent->id ? $parent->id : 'NULL'));
     }
 }

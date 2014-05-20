@@ -18,35 +18,48 @@ try {
     $sr     = new \Simplerenew\Factory(json_decode($config, true));
 
     // Get the user object and load current user
-    //$user = $sr->getUser()->load();
-    $user     = $sr->getUser();
-    $user->id = 31350;
-
-    // Get the account object
-    $account = $sr->getAccount()->load($user);
-
-    // Get the billing object
-    $billing = $sr->getBilling();
-    $billing->load($account);
+    $user = $sr->getUser()->load();
 
     echo '<pre>';
     print_r(
         array(
-            'Status'   => (int)$account->status,
-            'User ID'  => $account->user->id,
-            'Code'     => $account->code,
-            'Username' => $account->username,
-            'Name'     => trim($account->firstname . ' ' . $account->lastname),
-            'Billing'  => array(
-                'Name'    => trim($billing->firstname . ' ' . $billing->lastname),
-                'Country' => $billing->country
-            )
+            'ID'       => $user->id,
+            'First'    => $user->firstname,
+            'Last'     => $user->lastname,
+            'Username' => $user->username,
+            'Email'    => $user->email,
+            'Enabled'  => (int)$user->enabled
         )
     );
 
-    print_r($billing->getProperties());
-    echo '</pre>';
+    /*
+        $user->id = 31350;
 
+        // Get the account object
+        $account = $sr->getAccount()->load($user);
+
+        // Get the billing object
+        $billing = $sr->getBilling();
+        $billing->load($account);
+
+        echo '<pre>';
+        print_r(
+            array(
+                'Status'   => (int)$account->status,
+                'User ID'  => $account->user->id,
+                'Code'     => $account->code,
+                'Username' => $account->username,
+                'Name'     => trim($account->firstname . ' ' . $account->lastname),
+                'Billing'  => array(
+                    'Name'    => trim($billing->firstname . ' ' . $billing->lastname),
+                    'Country' => $billing->country
+                )
+            )
+        );
+
+        print_r($billing->getProperties());
+        echo '</pre>';
+    */
 } catch (Exception $e) {
     echo 'ERROR: ' . $e->getMessage();
     if ($e instanceof Simplerenew\Exception) {

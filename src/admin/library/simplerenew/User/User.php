@@ -9,6 +9,7 @@
 namespace Simplerenew\User;
 
 use Simplerenew\Exception;
+use Simplerenew\Object;
 
 defined('_JEXEC') or die();
 
@@ -17,17 +18,49 @@ defined('_JEXEC') or die();
  *
  * @package Simplerenew
  *
- * @property int    $id
- * @property string $username
- * @property string $email
- * @property string $password
- * @property string $firstname
- * @property string $lastname
- * @property string $fullname
- * @property array  $groups
  */
-class User
+class User extends Object
 {
+    /**
+     * @var int
+     */
+    public $id = null;
+
+    /**
+     * @var string
+     */
+    public $username = null;
+
+    /**
+     * @var string
+     */
+    public $email = null;
+
+    /**
+     * @var string
+     */
+    public $password = null;
+
+    /**
+     * @var string
+     */
+    public $firstname = null;
+
+    /**
+     * @var string
+     */
+    public $lastname = null;
+
+    /**
+     * @var array
+     */
+    public $groups = array();
+
+    /**
+     * @var bool
+     */
+    public $enabled = null;
+
     /**
      * @var Adapter\UserInterface
      */
@@ -48,7 +81,7 @@ class User
      */
     public function load($id = null)
     {
-        $this->adapter->load($id);
+        $this->adapter->load($id, $this);
         return $this;
     }
 
@@ -62,78 +95,13 @@ class User
      */
     public function loadByUsername($username)
     {
-        $this->adapter->loadByUsername($username);
+        $this->adapter->loadByUsername($username, $this);
         return $this;
-    }
-
-    /**
-     * Expose user properties as local properties
-     *
-     * @param $name
-     *
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        return $this->adapter->get($name);
-    }
-
-    public function __set($name, $value)
-    {
-        return $this->adapter->set($name, $value);
     }
 
     public function __toString()
     {
         return get_class($this->adapter);
-    }
-
-    /**
-     * Get a user property
-     *
-     * @param string $name
-     *
-     * @return mixed
-     */
-    public function get($name)
-    {
-        return $this->adapter->get($name);
-    }
-
-    /**
-     * Set a user property
-     *
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return mixed
-     */
-    public function set($name, $value = null)
-    {
-        return $this->adapter->set($name, $value);
-    }
-
-    /**
-     * Set multiple user properties
-     *
-     * @param array|object $data
-     *
-     * @return void
-     * @throws Exception
-     *
-     */
-    public function setProperties($data)
-    {
-        if (is_object($data)) {
-            $data = get_object_vars($data);
-        }
-        if (!is_array($data)) {
-            throw new Exception('Expecting object or array. Received ' . gettype($data) . '.');
-        }
-
-        foreach ($data as $k => $v) {
-            $this->adapter->set($k, $v);
-        }
     }
 
     /**
@@ -144,9 +112,8 @@ class User
      */
     public function create()
     {
-        $id = $this->adapter->get('id');
-        if (empty($id)) {
-            $this->adapter->create();
+        if (empty($this->id)) {
+            $this->adapter->create($this);
             return $this;
         }
 
@@ -161,9 +128,8 @@ class User
      */
     public function update()
     {
-        $id = $this->adapter->get('id');
-        if (!empty($id)) {
-            $this->adapter->update();
+        if (!empty($this->id)) {
+            $this->adapter->update($this);
             return $this;
         }
 
