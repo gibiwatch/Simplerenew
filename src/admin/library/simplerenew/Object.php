@@ -43,20 +43,23 @@ class Object
      * Set the public properties from the passed array/object
      *
      * @param mixed $data Associative array or object with properties to copy to $this
+     * @param array $map  Use fields from $data translated using a field map
      *
      * @return void
      * @throws Exception
      */
-    public function setProperties($data)
+    public function setProperties($data, array $map = null)
     {
-        if (is_object($data)) {
+        $properties = $this->getProperties();
+        if ($map !== null) {
+            $data = $this->map($data, array_keys($properties), $map);
+        } elseif (is_object($data)) {
             $data = get_object_vars($data);
         }
         if (!is_array($data)) {
             throw new Exception('Invalid argument given - ' . gettype($data));
         }
 
-        $properties = $this->getProperties();
         foreach ($data as $k => $v) {
             if (array_key_exists($k, $properties)) {
                 $this->$k = $data[$k];
