@@ -8,7 +8,7 @@ class Recurly_Transaction extends Recurly_Resource
   public static function init()
   {
     Recurly_Transaction::$_writeableAttributes = array(
-      'account','amount_in_cents','currency','description'
+      'account','amount_in_cents','currency','description','accounting_code'
     );
     Recurly_Transaction::$_nestedAttributes = array('account');
   }
@@ -25,10 +25,11 @@ class Recurly_Transaction extends Recurly_Resource
    * Refund a previous, successful transaction
    */
   public function refund($amountInCents = null) {
-    if (is_null($amountInCents))
-      $this->_delete($this->uri());
-    else
-      $this->_delete($this->uri() . '?amount_in_cents=' . strval(intval($amountInCents)));
+    $uri = $this->uri();
+    if (!is_null($amountInCents)) {
+      $uri .= '?amount_in_cents=' . strval(intval($amountInCents));
+    }
+    $this->_save(Recurly_Client::DELETE, $uri);
   }
 
   /**

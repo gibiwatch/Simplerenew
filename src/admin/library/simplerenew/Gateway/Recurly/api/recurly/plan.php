@@ -6,6 +6,7 @@ class Recurly_Plan extends Recurly_Resource
   protected static $_nestedAttributes;
 
   function __construct() {
+    parent::__construct();
     $this->setup_fee_in_cents = new Recurly_CurrencyList('setup_fee_in_cents');
     $this->unit_amount_in_cents = new Recurly_CurrencyList('unit_amount_in_cents');
   }
@@ -18,7 +19,7 @@ class Recurly_Plan extends Recurly_Resource
       'bypass_hosted_confirmation','unit_name','payment_page_tos_link',
       'plan_interval_length','plan_interval_unit','trial_interval_length',
       'trial_interval_unit','unit_amount_in_cents','setup_fee_in_cents',
-      'total_billing_cycles','accounting_code'
+      'total_billing_cycles','accounting_code','tax_exempt'
     );
     Recurly_Plan::$_nestedAttributes = array(
       'add_ons'
@@ -37,10 +38,10 @@ class Recurly_Plan extends Recurly_Resource
   }
 
   public function delete() {
-    return Recurly_Resource::_delete($this->uri());
+    return Recurly_Base::_delete($this->uri(), $this->_client);
   }
-  public static function deletePlan($planCode) {
-    return Recurly_Resource::_delete(Recurly_Plan::uriForPlan($planCode));
+  public static function deletePlan($planCode, $client = null) {
+    return Recurly_Base::_delete(Recurly_Plan::uriForPlan($planCode), $client);
   }
 
   protected function uri() {

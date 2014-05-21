@@ -60,26 +60,11 @@ abstract class Recurly_Resource extends Recurly_Base
       $this->_client = new Recurly_Client();
 
     $response = $this->_client->request($method, $uri, $this->xml());
-    Recurly_Resource::__parseXmlToUpdateObject($response->body);
-    $response->assertSuccessResponse($this);
-  }
-
-  /**
-   * Delete the object at the given URI.
-   * @param string URI of the object to delete
-   * @param array Additional parameters for the delete
-   */
-  protected function _delete($uri)
-  {
-    if (is_null($this->_client))
-      $this->_client = new Recurly_Client();
-
-    $response = $this->_client->request(Recurly_Client::DELETE, $uri);
-    if($response->body) {
+    $response->assertValidResponse();
+    if (isset($response->body)) {
       Recurly_Resource::__parseXmlToUpdateObject($response->body);
     }
     $response->assertSuccessResponse($this);
-    return true;
   }
 
 
@@ -88,7 +73,9 @@ abstract class Recurly_Resource extends Recurly_Base
     $doc = new DOMDocument("1.0");
     $root = $doc->appendChild($doc->createElement($this->getNodeName()));
     $this->populateXmlDoc($doc, $root, $this);
-    return $doc->saveXML();
+    // To be able to consistently run tests across different XML libraries,
+    // favor `<foo></foo>` over `<foo/>`.
+    return $doc->saveXML(null, LIBXML_NOEMPTYTAG);
   }
 
   protected function populateXmlDoc(&$doc, &$node, &$obj, $nested = false)
@@ -102,9 +89,7 @@ abstract class Recurly_Resource extends Recurly_Base
         $attribute_node = $node->appendChild($doc->createElement($key));
         $this->populateXmlDoc($doc, $attribute_node, $val, true);
       } else if (is_array($val)) {
-        if (empty($val))
-          continue;
-      	$attribute_node = $node->appendChild($doc->createElement($key));
+        $attribute_node = $node->appendChild($doc->createElement($key));
         foreach ($val as $child => $childValue) {
           if (is_null($child) || is_null($childValue)) {
             continue;
@@ -123,7 +108,13 @@ abstract class Recurly_Resource extends Recurly_Base
               $attribute_node->appendChild($doc->createElement(substr($key, 0, -1), $childValue));
             }
           }
-      	}
+        }
+      } else if (is_null($val)) {
+        $domAttribute = $doc->createAttribute('nil');
+        $domAttribute->value = 'nil';
+        $attribute_node = $doc->createElement($key, null);
+        $attribute_node->appendChild($domAttribute);
+        $node->appendChild($attribute_node);
       } else {
         if ($val instanceof DateTime) {
           $val = $val->format('c');
@@ -142,13 +133,20 @@ abstract class Recurly_Resource extends Recurly_Base
     $requiredAttributes = $this->getRequiredAttributes();
 
     foreach($writableAttributes as $attr) {
-      if(!isset($this->_values[$attr])) { continue; }
+      if(!array_key_exists($attr, $this->_values)) { continue; }
 
       if(isset($this->_unsavedKeys[$attr]) ||
          $nested && in_array($attr, $requiredAttributes) ||
          (is_array($this->_values[$attr]) || $this->_values[$attr] instanceof ArrayAccess))
       {
         $attributes[$attr] = $this->$attr;
+      }
+
+      // Check for nested objects.
+      if ($this->_values[$attr] instanceof Recurly_Resource) {
+        if ($this->_values[$attr]->getChangedAttributes()) {
+          $attributes[$attr] = $this->$attr;
+        }
       }
     }
 

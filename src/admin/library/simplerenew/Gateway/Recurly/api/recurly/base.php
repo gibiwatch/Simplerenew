@@ -21,7 +21,6 @@ abstract class Recurly_Base
   }
 
 
-
   /**
    * Request the URI, validate the response and return the object.
    * @param string Resource URI, if not fully qualified, the base URL will be appended
@@ -51,6 +50,42 @@ abstract class Recurly_Base
     $object = Recurly_Base::__parseXmlToNewObject($response->body, $client);
     $response->assertSuccessResponse($object);
     return $object;
+  }
+
+  /**
+   * Put to the URI, validate the response and return the object.
+   * @param string Resource URI, if not fully qualified, the base URL will be appended
+   * @param string Optional client for the request, useful for mocking the client
+   */
+  protected static function _put($uri, $client = null)
+  {
+    if (is_null($client))
+      $client = new Recurly_Client();
+    $response = $client->request(Recurly_Client::PUT, $uri);
+    $response->assertValidResponse();
+    if ($response->body) {
+      $object = Recurly_Base::__parseXmlToNewObject($response->body, $client);
+    }
+    $response->assertSuccessResponse($object);
+    return $object;
+  }
+
+  /**
+   * Delete the URI, validate the response and return the object.
+   * @param string Resource URI, if not fully qualified, the base URL will be appended
+   * @param string Data to post to the URI
+   * @param string Optional client for the request, useful for mocking the client
+   */
+  protected static function _delete($uri, $client = null)
+  {
+    if (is_null($client))
+      $client = new Recurly_Client();
+    $response = $client->request(Recurly_Client::DELETE, $uri);
+    $response->assertValidResponse();
+    if ($response->body) {
+      return Recurly_Base::__parseXmlToNewObject($response->body, $client);
+    }
+    return null;
   }
 
   /**
@@ -112,8 +147,11 @@ abstract class Recurly_Base
   static $class_map = array(
     'account' => 'Recurly_Account',
     'accounts' => 'Recurly_AccountList',
-    'add_on' => 'Recurly_AddOn',
-    'add_ons' => 'Recurly_AddOnList',
+    'address' => 'Recurly_Address',
+    'add_on' => 'Recurly_Addon',
+    'add_ons' => 'Recurly_AddonList',
+    'balance_in_cents_invoiced' => 'Recurly_CurrencyList',
+    'balance_in_cents_uninvoiced' => 'Recurly_CurrencyList',
     'billing_info' => 'Recurly_BillingInfo',
     'adjustment' => 'Recurly_Adjustment',
     'adjustments' => 'Recurly_AdjustmentList',
@@ -126,6 +164,8 @@ abstract class Recurly_Base
     'invoice' => 'Recurly_Invoice',
     'invoices' => 'Recurly_InvoiceList',
     'line_items' => 'array',
+    'note' => 'Recurly_Note',
+    'notes' => 'Recurly_NoteList',
     'plan' => 'Recurly_Plan',
     'plans' => 'Recurly_PlanList',
     'plan_code' => 'string',
@@ -137,15 +177,17 @@ abstract class Recurly_Base
     'subscriptions' => 'Recurly_SubscriptionList',
     'subscription_add_ons' => 'array',
     'subscription_add_on' => 'Recurly_SubscriptionAddOn',
+    'tax_detail' => 'Recurly_Tax_Detail',
+    'tax_details' => 'array',
     'transaction' => 'Recurly_Transaction',
     'transactions' => 'Recurly_TransactionList',
     'transaction_error' => 'Recurly_TransactionError',
-    'unit_amount_in_cents' => 'Recurly_CurrencyList'
+    'unit_amount_in_cents' => 'Recurly_CurrencyList',
   );
 
   protected static function __parseXmlToNewObject($xml, $client=null) {
-		$dom = new DOMDocument();
-    if (!$dom->loadXML($xml, LIBXML_NOBLANKS)) return null;
+    $dom = new DOMDocument();
+    if (empty($xml) || !$dom->loadXML($xml, LIBXML_NOBLANKS)) return null;
 
     $rootNode = $dom->documentElement;
 
@@ -158,8 +200,8 @@ abstract class Recurly_Base
 
   protected function __parseXmlToUpdateObject($xml)
   {
-		$dom = new DOMDocument();
-		if (!$dom->loadXML($xml, LIBXML_NOBLANKS)) return null;
+    $dom = new DOMDocument();
+    if (empty($xml) || !$dom->loadXML($xml, LIBXML_NOBLANKS)) return null;
 
     $rootNode = $dom->documentElement;
 
