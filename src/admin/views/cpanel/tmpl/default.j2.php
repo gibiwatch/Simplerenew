@@ -23,8 +23,7 @@ try {
 
     // Get the account object
     $account = $sr->getAccount()->load($user);
-    $account->company = 'Grumpy Engineering';
-    $account->save();
+    $account->reopen();
 
     // Get the billing object
     //$billing = $sr->getBilling();

@@ -55,16 +55,20 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
      * @param Account $parent
      * @param bool    $isNew
      *
-     * @return array
+     * @return void
      * @throws Exception
      */
     public function save(Account $parent, $isNew)
     {
         try {
-            \Recurly_Client::$apiKey = $this->client->apiKey();
-            $account                 = new \Recurly_Account();
+            if ($isNew) {
+                \Recurly_Client::$apiKey = $this->client->apiKey();
+                $account                 = new \Recurly_Account();
+                $account->account_code   = $parent->code;
+            } else {
+                $account = \Recurly_Account::get($parent->code, $this->client);
+            }
 
-            $account->account_code = $parent->code;
             $account->username     = $parent->username;
             $account->email        = $parent->email;
             $account->first_name   = $parent->firstname;
@@ -80,7 +84,40 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
 
-        $keys = array_keys($parent->getProperties());
-        return $this->map($account, $keys, $this->fieldMap);
+        $parent->setProperties($account, $this->fieldMap);
+    }
+
+    /**
+     * @param Account $parent
+     *
+     * @return void
+     */
+    public function close(Account $parent)
+    {
+        $account = $this->getAccount($parent->code);
+        $account->close();
+        $parent->setProperties($account, $this->fieldMap);
+    }
+
+    /**
+     * @param Account $parent
+     *
+     * @return void
+     */
+    public function reopen(Account $parent)
+    {
+        $account = $this->getAccount($parent->code);
+        $account->reopen();
+        $parent->setProperties($account, $this->fieldMap);
+    }
+
+    /**
+     * @param $code
+     *
+     * @return \Recurly_Account
+     */
+    protected function getAccount($code)
+    {
+        return \Recurly_Account::get($code, $this->client);
     }
 }

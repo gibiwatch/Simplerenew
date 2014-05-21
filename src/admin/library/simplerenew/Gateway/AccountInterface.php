@@ -35,8 +35,28 @@ interface AccountInterface
      * @param Account $parent
      * @param bool    $isNew
      *
-     * @return array
+     * @return void
      * @throws Exception
      */
     public function save(Account $parent, $isNew);
+
+    /**
+     * Close/Inactivate the account
+     *
+     * @param Account $parent
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function close(Account $parent);
+
+    /**
+     * Reopen the previously closed account
+     *
+     * @param Account $parent
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function reopen(Account $parent);
 }

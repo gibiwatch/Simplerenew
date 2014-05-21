@@ -130,16 +130,25 @@ class Account extends AbstractApiBase
         $this->setProperties(
             array(
                 'code'      => $this->getAccountCode($this->user),
-                'username'  => $this->user->username,
-                'email'     => $this->user->email,
-                'firstname' => $this->user->firstname,
-                'lastname'  => $this->user->lastname
+                'username'  => $this->username  ? $this->username  : $this->user->username,
+                'email'     => $this->email     ? $this->email     : $this->user->email,
+                'firstname' => $this->firstname ? $this->firstname : $this->user->firstname,
+                'lastname'  => $this->lastname  ? $this->lastname  : $this->user->lastname
             )
         );
 
-        $newValues = $this->imp->save($this, $isNew);
-        $this->setProperties($newValues);
+        $this->imp->save($this, $isNew);
         return $this;
+    }
+
+    public function close()
+    {
+        $this->imp->close($this);
+    }
+
+    public function reopen()
+    {
+        $this->imp->reopen($this);
     }
 
     /**
