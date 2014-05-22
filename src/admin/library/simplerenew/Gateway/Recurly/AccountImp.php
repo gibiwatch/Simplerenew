@@ -95,7 +95,10 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
     public function close(Account $parent)
     {
         $account = $this->getAccount($parent->code);
-        $account->close();
+
+        if ($account->state != 'closed') {
+            $account->close();
+        }
         $parent->setProperties($account, $this->fieldMap);
     }
 
@@ -107,7 +110,10 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
     public function reopen(Account $parent)
     {
         $account = $this->getAccount($parent->code);
-        $account->reopen();
+
+        if ($account->state != 'active') {
+            $account->reopen();
+        }
         $parent->setProperties($account, $this->fieldMap);
     }
 
