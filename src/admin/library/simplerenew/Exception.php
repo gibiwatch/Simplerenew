@@ -32,4 +32,24 @@ class Exception extends \Exception
 
         return trim($result . ' ' . $this->message);
     }
+
+    public function getCallStack()
+    {
+        $trace = $this->getTrace();
+        $stack = array();
+
+        foreach ($trace as $caller) {
+            $row = 'Line ' . $caller['line'] . ' - ';
+            if (!empty($caller['class'])) {
+                $row .= $caller['class'] . '::';
+            }
+            if (!empty($caller['function'])) {
+                $row .= $caller['function'] . '()';
+            }
+
+            $stack[] = $row . ' [' . $caller['file'] . ']';
+        }
+
+        return $stack;
+    }
 }

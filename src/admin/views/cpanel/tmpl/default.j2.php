@@ -23,7 +23,7 @@ try {
 
     // Get the account object
     $account = $sr->getAccount()->load($user);
-    $account->reopen();
+    $account->close();
 
     // Get the billing object
     //$billing = $sr->getBilling();
@@ -38,9 +38,16 @@ try {
 
     echo '</pre>';
 
+} catch (Simplerenew\Exception $e) {
+    echo '<br/>SIMPLERENEW: ' . $e->getTraceMessage() . '<br/>';
+
+    echo '<pre>';
+    print_r($e->getCallStack());
+    echo '</pre>';
+
+} catch (\Recurly_Error $e) {
+    echo '<br/>' . get_class($e) . ': ' . $e->getMessage();
+
 } catch (Exception $e) {
     echo 'ERROR: ' . $e->getMessage();
-    if ($e instanceof Simplerenew\Exception) {
-        echo '<br/>SIMPLERENEW: ' . $e->getTraceMessage();
-    }
 }
