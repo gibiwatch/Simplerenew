@@ -91,30 +91,40 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
      * @param Account $parent
      *
      * @return void
+     * @throws Exception
      */
     public function close(Account $parent)
     {
-        $account = $this->getAccount($parent->code);
+        try {
+            $account = $this->getAccount($parent->code);
 
-        if ($account->state != 'closed') {
-            $account->close();
+            if ($account->state != 'closed') {
+                $account->close();
+            }
+            $parent->setProperties($account, $this->fieldMap);
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
-        $parent->setProperties($account, $this->fieldMap);
     }
 
     /**
      * @param Account $parent
      *
      * @return void
+     * @throws Exception
      */
     public function reopen(Account $parent)
     {
-        $account = $this->getAccount($parent->code);
+        try {
+            $account = $this->getAccount($parent->code);
 
-        if ($account->state != 'active') {
-            $account->reopen();
+            if ($account->state != 'active') {
+                $account->reopen();
+            }
+            $parent->setProperties($account, $this->fieldMap);
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
-        $parent->setProperties($account, $this->fieldMap);
     }
 
     /**
