@@ -25,8 +25,8 @@ try {
     $account = $sr->getAccount()->load($user);
 
     // Get the billing object
-    //$billing = $sr->getBilling();
-    //$billing->load($account);
+    $billing = $sr->getBilling();
+    $billing->load($account);
 
     echo '<pre>';
     echo str_pad(' User ', 40, '*', STR_PAD_BOTH) . '<br/>';
@@ -35,10 +35,18 @@ try {
     echo str_pad(' Account ', 40, '*', STR_PAD_BOTH) . '<br/>';
     print_r($account->getProperties());
     print_r($account->address->getProperties());
+
+    echo str_pad(' Billing ', 40, '*', STR_PAD_BOTH) . '<br/>';
+    print_r($billing->getProperties());
+    print_r($billing->address->getProperties());
+
     echo '</pre>';
+
+
 
 } catch (Simplerenew\Exception $e) {
     echo '<br/>SIMPLERENEW: ' . $e->getTraceMessage() . '<br/>';
+    echo 'Previous: ' . get_class($e->getPrevious()) . '<br/>';
 
     echo '<pre>';
     print_r($e->getCallStack());

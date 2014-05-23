@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Gateway;
 
+use Simplerenew\Api\Billing;
 use Simplerenew\Exception;
 
 defined('_JEXEC') or die();
@@ -15,13 +16,10 @@ defined('_JEXEC') or die();
 interface BillingInterface
 {
     /**
-     * Retrieve billing information for the specified account
+     * @param Billing $parent
      *
-     * @param string $accountCode
-     * @param array  $keys
-     *
-     * @return array
+     * @return void
      * @throws Exception
      */
-    public function load($accountCode, array $keys);
+    public function load(Billing $parent);
 }

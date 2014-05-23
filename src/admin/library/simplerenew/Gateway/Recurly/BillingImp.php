@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Gateway\Recurly;
 
+use Simplerenew\Api\Billing;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\BillingInterface;
 
@@ -24,20 +25,52 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
     );
 
     /**
-     * @param string $accountCode
-     * @param array  $keys
+     * @var array Associative array of \Recurly_BillingInfo objects already loaded
+     */
+    protected $accountsLoaded = array();
+
+    /**
+     * @param Billing $parent
      *
-     * @return array
+     * @return void
      * @throws Exception
      */
-    public function load($accountCode, array $keys)
+    public function load(Billing $parent)
+    {
+        $billing = $this->getBilling($parent->account->code);
+        $parent->setProperties($billing, $this->fieldMap);
+
+        if ($parent->address instanceof Address) {
+            $parent->address->setProperties(
+                $billing->address,
+                array(
+                    'region' => 'state',
+                    'postal' => 'zip'
+                )
+            );
+        }
+    }
+
+    /**
+     * @param $accountCode
+     *
+     * @return \Recurly_BillingInfo
+     * @throws \Simplerenew\Exception
+     */
+    protected function getBilling($accountCode)
     {
         try {
-            $billing = \Recurly_BillingInfo::get($accountCode, $this->client);
+            if (empty($this->accountsLoaded[$accountCode])) {
+                $this->accountsLoaded[$accountCode] = \Recurly_BillingInfo::get($accountCode, $this->client);
+            }
+
+        } catch (\Recurly_NotFoundError $e) {
+            return new \Recurly_BillingInfo();
+
         } catch (\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
 
-        return $this->map($billing, $keys, $this->fieldMap);
+        return $this->accountsLoaded[$accountCode];
     }
 }
