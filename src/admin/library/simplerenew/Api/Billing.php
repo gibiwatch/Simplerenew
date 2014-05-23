@@ -90,9 +90,9 @@ class Billing extends AbstractApiBase
     {
         $this->clearProperties();
         $this->address->clearProperties();
+        $this->payment = null;
 
         $this->account = $account;
-
         $this->imp->load($this);
 
         return $this;
@@ -107,7 +107,7 @@ class Billing extends AbstractApiBase
         $this->setProperties(
             array(
                 'firstname' => $this->firstname ? : $this->account->firstname,
-                'lastname'  => $this->lastname ? : $this->account->lastname,
+                'lastname'  => $this->lastname  ? : $this->account->lastname,
                 'ipaddress' => filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP)
             )
         );

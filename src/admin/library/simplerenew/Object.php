@@ -8,6 +8,8 @@
 
 namespace Simplerenew;
 
+use Simplerenew\Exception;
+
 defined('_JEXEC') or die();
 
 class Object
@@ -40,7 +42,7 @@ class Object
             );
         }
 
-        $data   = array();
+        $data = array();
         foreach ($properties as $property) {
             $name        = $property->name;
             $data[$name] = $this->$name;
@@ -52,8 +54,8 @@ class Object
     /**
      * Set the public properties from the passed array/object
      *
-     * @param mixed $data Associative array or object with properties to copy to $this
-     * @param array $map  Use fields from $data translated using a field map
+     * @param array|object $data Values to copy to $this
+     * @param array        $map  Use properties from $data translated using a field map
      *
      * @return void
      * @throws Exception
@@ -111,9 +113,9 @@ class Object
      * the unknown value.
      *
      *
-     * @param mixed $source Object or associative array of source data to be mapped
-     * @param array $keys   Simplerenew keys for which values are being requested
-     * @param array $map    Associative array where key=Simplerenew Key, value=Source Key
+     * @param array|object $source Source data to be mapped
+     * @param array        $keys   Simplerenew keys for which values are being requested
+     * @param array        $map    Associative array where key=Simplerenew Key, value=Source Key
      *
      * @return array An array of all specified keys with values filled in based on map
      * @throws \Simplerenew\Exception

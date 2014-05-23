@@ -67,8 +67,7 @@ class Psr4AutoloaderClass
      *
      * @param string $class The fully-qualified class name.
      *
-     * @return mixed The mapped file name on success, or boolean false on
-     * failure.
+     * @return null|string The mapped file name on success, or boolean false on failure.
      */
     public function loadClass($class)
     {

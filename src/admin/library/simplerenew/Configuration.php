@@ -33,8 +33,8 @@ class Configuration
     /**
      * Load configuration settings. Will completely overwrite any existing configuration data
      *
-     * @param mixed $data object, JSON string or path to a .json type file
-     * @param bool  $isFile
+     * @param object|string $data object, JSON string or path to a .json type file
+     * @param bool          $isFile
      *
      * @return $this
      */

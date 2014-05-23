@@ -30,16 +30,17 @@ try {
 
 
     echo '<pre>';
-    echo str_pad(' User ', 40, '*', STR_PAD_BOTH) . '<br/>';
-    print_r($user->getProperties());
+    //echo str_pad(' User ', 40, '*', STR_PAD_BOTH) . '<br/>';
+    //print_r($user->getProperties());
 
-    echo str_pad(' Account ', 40, '*', STR_PAD_BOTH) . '<br/>';
-    print_r($account->getProperties());
-    print_r($account->address->getProperties());
+    //echo str_pad(' Account ', 40, '*', STR_PAD_BOTH) . '<br/>';
+    //print_r($account->getProperties());
+    //print_r($account->address->getProperties());
 
     echo str_pad(' Billing ', 40, '*', STR_PAD_BOTH) . '<br/>';
     print_r($billing->getProperties());
     print_r($billing->address->getProperties());
+    print_r($billing->getPayment()->getProperties());
 
     echo '</pre>';
 

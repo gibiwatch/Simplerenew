@@ -36,9 +36,4 @@ class CreditCard extends AbstractPrimitive
      * @var string
      */
     public $cvv = null;
-
-    /**
-     * @var Address
-     */
-    protected $address = null;
 }

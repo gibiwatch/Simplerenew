@@ -12,7 +12,7 @@ use Simplerenew\Object;
 
 defined('_JEXEC') or die();
 
-class AbstractPrimitive extends Object
+abstract class AbstractPrimitive extends Object
 {
     public function __construct($data = null)
     {
