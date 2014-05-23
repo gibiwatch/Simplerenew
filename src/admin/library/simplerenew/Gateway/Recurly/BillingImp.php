@@ -11,6 +11,7 @@ namespace Simplerenew\Gateway\Recurly;
 use Simplerenew\Api\Billing;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\BillingInterface;
+use Simplerenew\Primitive\Address;
 
 defined('_JEXEC') or die();
 
@@ -40,7 +41,7 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
         $billing = $this->getBilling($parent->account->code);
         $parent->setProperties($billing, $this->fieldMap);
 
-        if ($parent->address instanceof Address) {
+        if ($billing->address && $parent->address instanceof Address) {
             $parent->address->setProperties(
                 $billing->address,
                 array(

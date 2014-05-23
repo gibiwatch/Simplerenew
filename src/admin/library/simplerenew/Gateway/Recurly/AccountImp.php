@@ -11,7 +11,7 @@ namespace Simplerenew\Gateway\Recurly;
 use Simplerenew\Api\Account;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\AccountInterface;
-use Simplerenew\Prototype\Address;
+use Simplerenew\Primitive\Address;
 
 defined('_JEXEC') or die();
 

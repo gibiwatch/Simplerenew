@@ -6,39 +6,37 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\Prototype;
+namespace Simplerenew\Primitive;
+
+use Simplerenew\Object;
+use Simplerenew\Primitive\Address;
 
 defined('_JEXEC') or die();
 
-class Address extends AbstractPrototype
+class CreditCard extends Object
 {
     /**
      * @var string
      */
-    public $address1 = null;
+    public $number = null;
 
     /**
      * @var string
      */
-    public $address2 = null;
+    public $month = null;
 
     /**
      * @var string
      */
-    public $city = null;
-
-    /**
-     * @var string State/Province/Region
-     */
-    public $region = null;
-
-    /**
-     * @var string 2-letter ISO country code
-     */
-    public $country = null;
+    public $year = null;
 
     /**
      * @var string
      */
-    public $postal = null;
+    public $cvv = null;
+
+    /**
+     * @var Address
+     */
+    protected $address = null;
 }

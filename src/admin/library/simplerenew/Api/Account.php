@@ -10,7 +10,7 @@ namespace Simplerenew\Api;
 
 use Simplerenew\Exception;
 use Simplerenew\Gateway\AccountInterface;
-use Simplerenew\Prototype\Address;
+use Simplerenew\Primitive\Address;
 use Simplerenew\User\User;
 
 defined('_JEXEC') or die();
@@ -96,7 +96,7 @@ class Account extends AbstractApiBase
         }
 
         if (!empty($config['address']) && $config['address'] instanceof Address) {
-            $this->address = clone $config['address'];
+            $this->address = $config['address'];
         } else {
             $this->address = new Address();
         }

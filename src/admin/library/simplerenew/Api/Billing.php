@@ -8,8 +8,9 @@
 
 namespace Simplerenew\Api;
 
+use Simplerenew\Exception;
 use Simplerenew\Gateway\BillingInterface;
-use Simplerenew\Prototype\Address;
+use Simplerenew\Primitive\Address;
 
 defined('_JEXEC') or die();
 
@@ -66,7 +67,7 @@ class Billing extends AbstractApiBase
         $this->imp = $imp;
 
         if (!empty($config['address']) && $config['address'] instanceof Address) {
-            $this->address = clone $config['address'];
+            $this->address = $config['address'];
         } else {
             $this->address = new Address();
         }
@@ -87,6 +88,19 @@ class Billing extends AbstractApiBase
         $this->imp->load($this);
 
         return $this;
+    }
+
+    public function save($create = true)
+    {
+        if (!$this->account || empty($this->account->code)) {
+            throw new Exception('No account specified for Billing Info');
+        }
+
+        $this->setProperties(
+            array(
+
+            )
+        );
     }
 
     /**
