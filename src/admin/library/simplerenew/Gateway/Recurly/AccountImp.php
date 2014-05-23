@@ -70,11 +70,7 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
      */
     public function save(Account $parent, $isNew)
     {
-        if ($isNew) {
-            $account = new \Recurly_Account($parent->code, $this->client);
-        } else {
-            $account = $this->getAccount($parent->code);
-        }
+        $account = $this->getAccount($parent->code);
 
         $account->username     = $parent->username;
         $account->email        = $parent->email;
@@ -143,16 +139,16 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
      */
     protected function getAccount($code)
     {
-        try {
-            if (empty($this->accountsLoaded[$code])) {
+        if (empty($this->accountsLoaded[$code])) {
+            try {
                 $this->accountsLoaded[$code] = \Recurly_Account::get($code, $this->client);
+
+            } catch (\Recurly_NotFoundError $e) {
+                $this->accountsLoaded[$code] = new \Recurly_Account($code, $this->client);
+
+            } catch (\Exception $e) {
+                throw new Exception($e->getMessage(), $e->getCode(), $e);
             }
-
-        } catch (\Recurly_NotFoundError $e) {
-            return new \Recurly_Account();
-
-        } catch (\Exception $e) {
-            throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
 
         return $this->accountsLoaded[$code];
