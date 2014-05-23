@@ -36,4 +36,9 @@ class CreditCard extends AbstractPrimitive
      * @var string
      */
     public $cvv = null;
+
+    /**
+     * @var string
+     */
+    public $lastFour = null;
 }

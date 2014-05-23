@@ -59,9 +59,10 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
                 $parent->setCreditcard(
                     new CreditCard(
                         array(
-                            'month' => $billing->month,
-                            'year'  => $billing->year,
-                            'type'  => $billing->card_type
+                            'month'    => $billing->month,
+                            'year'     => $billing->year,
+                            'type'     => $billing->card_type,
+                            'lastFour' => $billing->last_four
                         )
                     )
                 );
@@ -78,16 +79,16 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
         $billing->phone      = $parent->phone;
         $billing->ip_address = $parent->ipaddress;
 
-        $billing->address1   = $parent->address->address1;
-        $billing->address2   = $parent->address->address2;
-        $billing->city       = $parent->address->city;
-        $billing->state      = $parent->address->region;
-        $billing->country    = $parent->address->country;
-        $billing->zip        = $parent->address->postal;
+        $billing->address1 = $parent->address->address1;
+        $billing->address2 = $parent->address->address2;
+        $billing->city     = $parent->address->city;
+        $billing->state    = $parent->address->region;
+        $billing->country  = $parent->address->country;
+        $billing->zip      = $parent->address->postal;
 
         if ($parent->payment instanceof CreditCard) {
             /** @var CreditCard $cc */
-            $cc = $parent->payment;
+            $cc              = $parent->payment;
             $billing->number = $cc->number;
             $billing->month  = $cc->month;
             $billing->year   = $cc->year;
@@ -109,8 +110,8 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
             }
 
         } catch (\Recurly_NotFoundError $e) {
-            $newBilling = new \Recurly_BillingInfo(null, $this->client);
-            $newBilling->account_code = $accountCode;
+            $newBilling                         = new \Recurly_BillingInfo(null, $this->client);
+            $newBilling->account_code           = $accountCode;
             $this->accountsLoaded[$accountCode] = $newBilling;
 
         } catch (\Exception $e) {
