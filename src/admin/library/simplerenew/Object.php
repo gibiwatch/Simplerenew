@@ -79,6 +79,21 @@ class Object
     }
 
     /**
+     * Set all properties to null
+     *
+     * @param bool $publicOnly Pass false to include protected properties as well
+     *
+     * @return void
+     */
+    public function clearProperties($publicOnly = true)
+    {
+        $properties = array_keys($this->getProperties($publicOnly));
+        foreach ($properties as $property) {
+            $this->$property = null;
+        }
+    }
+
+    /**
      * Map values in a source object/array to Simplerenew keys using a map
      * of key equivalences. Any fields in $keys not present in $map will be
      * mapped name to name. Map fields mapped to null will be ignored.

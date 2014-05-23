@@ -8,7 +8,6 @@
 
 namespace Simplerenew\Gateway\Recurly;
 
-use Simplerenew\Configuration;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\AbstractGatewayBase;
 

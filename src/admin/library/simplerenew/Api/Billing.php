@@ -8,7 +8,6 @@
 
 namespace Simplerenew\Api;
 
-use Simplerenew\Configuration;
 use Simplerenew\Gateway\BillingInterface;
 
 defined('_JEXEC') or die();

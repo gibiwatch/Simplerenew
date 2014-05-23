@@ -17,22 +17,19 @@ interface AccountInterface
 {
     /**
      * Retrieve basic account information from the subscription gateway.
-     * Fields to retrieve and their new values are passed through $data
+     * The parent Account class properties will be set on success
      *
-     * @param string $accountCode
-     * @param array  $keys
+     * @param Account $parent
      *
-     * @return array
+     * @return void
      * @throws Exception
      */
-    public function load($accountCode, array $keys);
-
-    public function getAddress($accountCode, array $keys);
+    public function load(Account $parent);
 
     /**
      * Save account data using current settings.
      * Expected to handle creation and updating of accounts
-     * and return all account values for updated/created account.
+     * and reset account values for updated/created account.
      *
      * @param Account $parent
      * @param bool    $isNew

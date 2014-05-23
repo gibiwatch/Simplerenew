@@ -11,6 +11,7 @@ namespace Simplerenew\Gateway\Recurly;
 use Simplerenew\Api\Account;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\AccountInterface;
+use Simplerenew\Prototype\Address;
 
 defined('_JEXEC') or die();
 
@@ -39,29 +40,25 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
     protected $accountsLoaded = array();
 
     /**
-     * @param string $accountCode
-     * @param array  $keys
+     * @param Account $parent
      *
      * @return array
      * @throws Exception
      */
-    public function load($accountCode, array $keys)
+    public function load(Account $parent)
     {
-        $account = $this->getAccount($accountCode);
-        return $this->map($account, $keys, $this->fieldMap);
-    }
+        $account = $this->getAccount($parent->code);
+        $parent->setProperties($account, $this->fieldMap);
 
-    public function getAddress($accountCode, array $keys)
-    {
-        $account = $this->getAccount($accountCode);
-        return $this->map(
-            $account->address,
-            $keys,
-            array(
-                'region' => 'state',
-                'postal' => 'zip'
-            )
-        );
+        if ($parent->address instanceof Address) {
+            $parent->address->setProperties(
+                $account->address,
+                array(
+                    'region' => 'state',
+                    'postal' => 'zip'
+                )
+            );
+        }
     }
 
     /**

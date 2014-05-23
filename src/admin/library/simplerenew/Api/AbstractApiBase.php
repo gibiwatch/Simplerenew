@@ -8,7 +8,6 @@
 
 namespace Simplerenew\Api;
 
-use Simplerenew\Configuration;
 use Simplerenew\Object;
 
 defined('_JEXEC') or die();

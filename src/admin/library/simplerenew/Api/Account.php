@@ -107,22 +107,13 @@ class Account extends AbstractApiBase
      */
     public function load(User $user)
     {
-        $keys    = array_keys($this->getProperties());
-        $address = array_keys($this->address->getProperties());
-
-        try {
-            $accountCode = $this->getAccountCode($user);
-            $newValues   = $this->imp->load($accountCode, $keys);
-            $newAddress  = $this->imp->getAddress($accountCode, $address);
-
-        } catch (Exception $e) {
-            $newValues  = array_fill_keys($keys, null);
-            $newAddress = array_fill_keys($address, null);
-        }
+        $this->clearProperties();
+        $this->address->clearProperties();
 
         $this->user = $user;
-        $this->setProperties($newValues);
-        $this->address->setProperties($newAddress);
+        $this->code = $this->getAccountCode($user);
+
+        $this->imp->load($this);
 
         return $this;
     }
@@ -238,11 +229,17 @@ class Account extends AbstractApiBase
         return null;
     }
 
+    /**
+     * @return User
+     */
     public function getUser()
     {
         return $this->user;
     }
 
+    /**
+     * @return Address
+     */
     public function getAddress()
     {
         return $this->address;

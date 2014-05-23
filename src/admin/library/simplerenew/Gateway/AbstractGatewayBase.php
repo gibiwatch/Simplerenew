@@ -8,9 +8,6 @@
 
 namespace Simplerenew\Gateway;
 
-use Simplerenew\Api\Account;
-use Simplerenew\Configuration;
-use Simplerenew\Exception;
 use Simplerenew\Object;
 
 defined('_JEXEC') or die();
