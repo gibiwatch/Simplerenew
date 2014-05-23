@@ -130,7 +130,7 @@ class Account extends AbstractApiBase
      */
     public function save($create = true)
     {
-        if (!$this->user) {
+        if (!$this->user || empty($this->user->id)) {
             throw new Exception('No user specified for account');
         }
 
