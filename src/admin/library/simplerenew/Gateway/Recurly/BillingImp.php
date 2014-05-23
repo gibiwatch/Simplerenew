@@ -45,12 +45,24 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
         if ($billing) {
             $parent->setProperties($billing, $this->fieldMap);
 
-            if ($billing->address && $parent->address instanceof Address) {
+            if ($parent->address instanceof Address) {
                 $parent->address->setProperties(
-                    $billing->address,
+                    $billing,
                     array(
                         'region' => 'state',
                         'postal' => 'zip'
+                    )
+                );
+            }
+
+            if ($billing->first_six && $billing->last_four) {
+                $parent->setCreditcard(
+                    new CreditCard(
+                        array(
+                            'month' => $billing->month,
+                            'year'  => $billing->year,
+                            'type'  => $billing->card_type
+                        )
                     )
                 );
             }
