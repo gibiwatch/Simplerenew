@@ -10,6 +10,7 @@ namespace Simplerenew\Api;
 
 use Simplerenew\Exception;
 use Simplerenew\Gateway\AccountInterface;
+use Simplerenew\Prototype\Address;
 use Simplerenew\User\User;
 
 defined('_JEXEC') or die();
@@ -18,7 +19,8 @@ defined('_JEXEC') or die();
  * Class Account
  * @package Simplerenew\Api
  *
- * @property-read User $user
+ * @property-read User    $user
+ * @property-read Address $address
  */
 class Account extends AbstractApiBase
 {
@@ -62,6 +64,11 @@ class Account extends AbstractApiBase
     public $company = null;
 
     /**
+     * @var Address
+     */
+    protected $address = null;
+
+    /**
      * @var User
      */
     protected $user = null;
@@ -83,6 +90,12 @@ class Account extends AbstractApiBase
         if (!empty($config['codeMask'])) {
             $this->setCodeMask($config['codeMask']);
         }
+
+        if (!empty($config['address']) && $config['address'] instanceof Address) {
+            $this->address = clone $config['address'];
+        } else {
+            $this->address = new Address();
+        }
     }
 
     /**
@@ -94,18 +107,22 @@ class Account extends AbstractApiBase
      */
     public function load(User $user)
     {
-        $keys = array_keys($this->getProperties());
+        $keys    = array_keys($this->getProperties());
+        $address = array_keys($this->address->getProperties());
 
         try {
             $accountCode = $this->getAccountCode($user);
             $newValues   = $this->imp->load($accountCode, $keys);
+            $newAddress  = $this->imp->getAddress($accountCode, $address);
 
         } catch (Exception $e) {
-            $newValues = array_fill_keys($keys, null);
+            $newValues  = array_fill_keys($keys, null);
+            $newAddress = array_fill_keys($address, null);
         }
 
         $this->user = $user;
         $this->setProperties($newValues);
+        $this->address->setProperties($newAddress);
 
         return $this;
     }
@@ -219,5 +236,15 @@ class Account extends AbstractApiBase
         }
 
         return null;
+    }
+
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    public function getAddress()
+    {
+        return $this->address;
     }
 }

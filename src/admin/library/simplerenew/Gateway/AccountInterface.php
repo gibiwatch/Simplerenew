@@ -27,6 +27,8 @@ interface AccountInterface
      */
     public function load($accountCode, array $keys);
 
+    public function getAddress($accountCode, array $keys);
+
     /**
      * Save account data using current settings.
      * Expected to handle creation and updating of accounts

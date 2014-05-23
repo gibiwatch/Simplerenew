@@ -34,6 +34,11 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
     );
 
     /**
+     * @var array associative array of \Recurly_Account object previously loaded
+     */
+    protected $accountsLoaded = array();
+
+    /**
      * @param string $accountCode
      * @param array  $keys
      *
@@ -42,13 +47,21 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
      */
     public function load($accountCode, array $keys)
     {
-        try {
-            $result = \Recurly_Account::get($accountCode, $this->client);
-        } catch (\Exception $e) {
-            throw new Exception($e->getMessage(), $e->getCode(), $e);
-        }
+        $account = $this->getAccount($accountCode);
+        return $this->map($account, $keys, $this->fieldMap);
+    }
 
-        return $this->map($result, $keys, $this->fieldMap);
+    public function getAddress($accountCode, array $keys)
+    {
+        $account = $this->getAccount($accountCode);
+        return $this->map(
+            $account->address,
+            $keys,
+            array(
+                'region' => 'state',
+                'postal' => 'zip'
+            )
+        );
     }
 
     /**
@@ -60,21 +73,19 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
      */
     public function save(Account $parent, $isNew)
     {
+        if ($isNew) {
+            $account = new \Recurly_Account($parent->code, $this->client);
+        } else {
+            $account = $this->getAccount($parent->code);
+        }
+
+        $account->username     = $parent->username;
+        $account->email        = $parent->email;
+        $account->first_name   = $parent->firstname;
+        $account->last_name    = $parent->lastname;
+        $account->company_name = $parent->company;
+
         try {
-            if ($isNew) {
-                \Recurly_Client::$apiKey = $this->client->apiKey();
-                $account                 = new \Recurly_Account();
-                $account->account_code   = $parent->code;
-            } else {
-                $account = \Recurly_Account::get($parent->code, $this->client);
-            }
-
-            $account->username     = $parent->username;
-            $account->email        = $parent->email;
-            $account->first_name   = $parent->firstname;
-            $account->last_name    = $parent->lastname;
-            $account->company_name = $parent->company;
-
             if ($isNew) {
                 $account->create();
             } else {
@@ -131,9 +142,18 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
      * @param $code
      *
      * @return \Recurly_Account
+     * @throws Exception
      */
     protected function getAccount($code)
     {
-        return \Recurly_Account::get($code, $this->client);
+        try {
+            if (empty($this->accountsLoaded[$code])) {
+                $this->accountsLoaded[$code] = \Recurly_Account::get($code, $this->client);
+            }
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
+        }
+
+        return $this->accountsLoaded[$code];
     }
 }

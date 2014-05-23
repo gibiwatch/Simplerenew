@@ -26,16 +26,27 @@ class Object
      * facing properties will not change in the lifetime
      * of the object
      *
+     * @param bool $publicOnly
+     *
      * @return array
      */
-    public function getProperties()
+    public function getProperties($publicOnly = true)
     {
-        $properties = $this->getReflection()->getProperties(\ReflectionProperty::IS_PUBLIC);
-        $data       = array();
-        foreach ($properties as $property) {
+        $public = $this->getReflection()->getProperties(\ReflectionProperty::IS_PUBLIC);
+        $data   = array();
+        foreach ($public as $property) {
             $name        = $property->name;
             $data[$name] = $this->$name;
         }
+
+        if (!$publicOnly) {
+            $protected = $this->reflection->getProperties(\ReflectionProperty::IS_PROTECTED);
+            foreach ($protected as $property) {
+                $name = $property->name;
+                $data[$name] = $this->$name;
+            }
+        }
+
         return $data;
     }
 
@@ -93,7 +104,7 @@ class Object
      * @return array An array of all specified keys with values filled in based on map
      * @throws \Simplerenew\Exception
      */
-    public function map($source, array $keys, array $map)
+    public function map($source, array $keys, array $map = array())
     {
         if (!is_object($source) && !is_array($source)) {
             throw new Exception('Expected array or object for source argument');

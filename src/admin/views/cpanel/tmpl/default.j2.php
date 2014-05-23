@@ -23,7 +23,7 @@ try {
 
     // Get the account object
     $account = $sr->getAccount()->load($user);
-    $account->close();
+    $account->reopen();
 
     // Get the billing object
     //$billing = $sr->getBilling();
@@ -34,8 +34,7 @@ try {
     print_r($user->getProperties());
 
     echo str_pad(' Account ', 40, '*', STR_PAD_BOTH) . '<br/>';
-    print_r($account->getProperties());
-
+    print_r($account->address->getProperties());
     echo '</pre>';
 
 } catch (Simplerenew\Exception $e) {

@@ -16,8 +16,7 @@ defined('_JEXEC') or die();
 abstract class AbstractApiBase extends Object
 {
     /**
-     * Allow protected properties to be exposed for use. Private properties
-     * in subclasses will not be exposed.
+     * Expose properties with defined getters for direct use
      *
      * @param $name
      *
@@ -25,8 +24,9 @@ abstract class AbstractApiBase extends Object
      */
     public function __get($name)
     {
-        if (isset($this->$name)) {
-            return $this->$name;
+        $method = 'get' . ucfirst($name);
+        if (method_exists($this, $method)) {
+            return $this->$method();
         }
         return null;
     }

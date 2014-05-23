@@ -34,36 +34,6 @@ class Billing extends AbstractApiBase
     /**
      * @var string
      */
-    public $address1 = null;
-
-    /**
-     * @var string
-     */
-    public $address2 = null;
-
-    /**
-     * @var string
-     */
-    public $city = null;
-
-    /**
-     * @var string State/Province/Region
-     */
-    public $region = null;
-
-    /**
-     * @var string 2-letter ISO country code
-     */
-    public $country = null;
-
-    /**
-     * @var string
-     */
-    public $postal = null;
-
-    /**
-     * @var string
-     */
     public $phone = null;
 
     /**
