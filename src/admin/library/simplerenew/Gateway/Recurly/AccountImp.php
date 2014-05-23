@@ -35,7 +35,7 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
     );
 
     /**
-     * @var array associative array of \Recurly_Account object previously loaded
+     * @var array associative array of \Recurly_Account objects previously loaded
      */
     protected $accountsLoaded = array();
 
@@ -147,6 +147,10 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
             if (empty($this->accountsLoaded[$code])) {
                 $this->accountsLoaded[$code] = \Recurly_Account::get($code, $this->client);
             }
+
+        } catch (\Recurly_NotFoundError $e) {
+            return new \Recurly_Account();
+
         } catch (\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }

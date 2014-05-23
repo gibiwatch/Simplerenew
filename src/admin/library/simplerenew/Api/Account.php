@@ -83,6 +83,10 @@ class Account extends AbstractApiBase
      */
     private $codeMask = '%s';
 
+    /**
+     * @param AccountInterface $imp
+     * @param array            $config
+     */
     public function __construct(AccountInterface $imp, array $config = array())
     {
         $this->imp = $imp;
