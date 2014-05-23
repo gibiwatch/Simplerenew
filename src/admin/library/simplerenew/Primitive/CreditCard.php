@@ -8,13 +8,15 @@
 
 namespace Simplerenew\Primitive;
 
-use Simplerenew\Object;
-use Simplerenew\Primitive\Address;
-
 defined('_JEXEC') or die();
 
-class CreditCard extends Object
+class CreditCard extends AbstractPrimitive
 {
+    /**
+     * @var string
+     */
+    public $type = null;
+
     /**
      * @var string
      */

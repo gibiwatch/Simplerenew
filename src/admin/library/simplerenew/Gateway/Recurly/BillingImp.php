@@ -12,6 +12,7 @@ use Simplerenew\Api\Billing;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\BillingInterface;
 use Simplerenew\Primitive\Address;
+use Simplerenew\Primitive\CreditCard;
 
 defined('_JEXEC') or die();
 
@@ -38,18 +39,48 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
      */
     public function load(Billing $parent)
     {
-        $billing = $this->getBilling($parent->account->code);
-        $parent->setProperties($billing, $this->fieldMap);
+        $parent->clearProperties();
 
-        if ($billing->address && $parent->address instanceof Address) {
-            $parent->address->setProperties(
-                $billing->address,
-                array(
-                    'region' => 'state',
-                    'postal' => 'zip'
-                )
-            );
+        $billing = $this->getBilling($parent->account->code);
+        if ($billing) {
+            $parent->setProperties($billing, $this->fieldMap);
+
+            if ($billing->address && $parent->address instanceof Address) {
+                $parent->address->setProperties(
+                    $billing->address,
+                    array(
+                        'region' => 'state',
+                        'postal' => 'zip'
+                    )
+                );
+            }
         }
+    }
+
+    public function save(Billing $parent)
+    {
+        $billing = $this->getBilling($parent->account->code);
+
+        $billing->first_name = $parent->firstname;
+        $billing->last_name  = $parent->lastname;
+        $billing->phone      = $parent->phone;
+        $billing->ip_address = $parent->ipaddress;
+
+        $billing->address1   = $parent->address->address1;
+        $billing->address2   = $parent->address->address2;
+        $billing->city       = $parent->address->city;
+        $billing->state      = $parent->address->region;
+        $billing->country    = $parent->address->country;
+        $billing->zip        = $parent->address->postal;
+
+        if ($parent->payment instanceof CreditCard) {
+            /** @var CreditCard $cc */
+            $cc = $parent->payment;
+            $billing->number = $cc->number;
+            $billing->month  = $cc->month;
+            $billing->year   = $cc->year;
+        }
+        $billing->update();
     }
 
     /**
@@ -66,7 +97,9 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
             }
 
         } catch (\Recurly_NotFoundError $e) {
-            return new \Recurly_BillingInfo();
+            $newBilling = new \Recurly_BillingInfo(null, $this->client);
+            $newBilling->account_code = $accountCode;
+            $this->accountsLoaded[$accountCode] = $newBilling;
 
         } catch (\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);

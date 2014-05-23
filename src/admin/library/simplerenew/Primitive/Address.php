@@ -12,7 +12,7 @@ use Simplerenew\Object;
 
 defined('_JEXEC') or die();
 
-class Address extends Object
+class Address extends AbstractPrimitive
 {
     /**
      * @var string

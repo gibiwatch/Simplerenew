@@ -28,6 +28,7 @@ try {
     $billing = $sr->getBilling();
     $billing->load($account);
 
+
     echo '<pre>';
     echo str_pad(' User ', 40, '*', STR_PAD_BOTH) . '<br/>';
     print_r($user->getProperties());

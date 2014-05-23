@@ -22,4 +22,12 @@ interface BillingInterface
      * @throws Exception
      */
     public function load(Billing $parent);
+
+    /**
+     * @param Billing $parent
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function save(Billing $parent);
 }

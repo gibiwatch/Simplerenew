@@ -10,7 +10,9 @@ namespace Simplerenew\Api;
 
 use Simplerenew\Exception;
 use Simplerenew\Gateway\BillingInterface;
+use Simplerenew\Primitive\AbstractPayment;
 use Simplerenew\Primitive\Address;
+use Simplerenew\Primitive\CreditCard;
 
 defined('_JEXEC') or die();
 
@@ -18,8 +20,9 @@ defined('_JEXEC') or die();
  * Class Billing
  * @package Simplerenew\Api
  *
- * @property-read Account $account
- * @property-read Address $address
+ * @property-read Account         $account
+ * @property-read Address         $address
+ * @property-read AbstractPayment $payment
  */
 class Billing extends AbstractApiBase
 {
@@ -52,6 +55,11 @@ class Billing extends AbstractApiBase
      * @var Address
      */
     protected $address = null;
+
+    /**
+     * @var AbstractPayment
+     */
+    protected $payment = null;
 
     /**
      * @var BillingInterface
@@ -98,9 +106,19 @@ class Billing extends AbstractApiBase
 
         $this->setProperties(
             array(
-
+                'firstname' => $this->firstname ? : $this->account->firstname,
+                'lastname'  => $this->lastname ? : $this->account->lastname,
+                'ipaddress' => filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP)
             )
         );
+
+        // Copy account address if billing address is empty
+        if (!array_filter($this->address->getProperties())) {
+            $address = $this->account->address->getProperties();
+            $this->address->setProperties($address);
+        }
+
+        $this->imp->save($this);
     }
 
     /**
@@ -117,5 +135,25 @@ class Billing extends AbstractApiBase
     public function getAddress()
     {
         return $this->address;
+    }
+
+    /**
+     * @return AbstractPayment
+     */
+    public function getPayment()
+    {
+        return $this->payment;
+    }
+
+    public function setCreditCard(CreditCard $cc)
+    {
+        $this->payment = $cc;
+    }
+
+    public function clearProperties()
+    {
+        parent::clearProperties();
+        $this->address->clearProperties();
+        $this->payment = null;
     }
 }
