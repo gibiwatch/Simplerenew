@@ -32,19 +32,18 @@ class Object
      */
     public function getProperties($publicOnly = true)
     {
-        $public = $this->getReflection()->getProperties(\ReflectionProperty::IS_PUBLIC);
-        $data   = array();
-        foreach ($public as $property) {
-            $name        = $property->name;
-            $data[$name] = $this->$name;
+        $properties = $this->getReflection()->getProperties(\ReflectionProperty::IS_PUBLIC);
+        if (!$publicOnly) {
+            $properties = array_merge(
+                $properties,
+                $this->reflection->getProperties(\ReflectionProperty::IS_PROTECTED)
+            );
         }
 
-        if (!$publicOnly) {
-            $protected = $this->reflection->getProperties(\ReflectionProperty::IS_PROTECTED);
-            foreach ($protected as $property) {
-                $name = $property->name;
-                $data[$name] = $this->$name;
-            }
+        $data   = array();
+        foreach ($properties as $property) {
+            $name        = $property->name;
+            $data[$name] = $this->$name;
         }
 
         return $data;
