@@ -30,4 +30,6 @@ interface BillingInterface
      * @throws Exception
      */
     public function save(Billing $parent);
+
+    public function delete(Billing $parent);
 }

@@ -10,6 +10,7 @@ namespace Simplerenew\Api;
 
 use Simplerenew\Exception;
 use Simplerenew\Gateway\BillingInterface;
+use Simplerenew\Object;
 use Simplerenew\Primitive\AbstractPayment;
 use Simplerenew\Primitive\Address;
 use Simplerenew\Primitive\CreditCard;
@@ -84,7 +85,7 @@ class Billing extends AbstractApiBase
     /**
      * @param Account $account
      *
-     * @return $this
+     * @return Billing
      */
     public function load(Account $account)
     {
@@ -98,7 +99,13 @@ class Billing extends AbstractApiBase
         return $this;
     }
 
-    public function save($create = true)
+    /**
+     * Save the current billing information.
+     *
+     * @return Billing
+     * @throws Exception
+     */
+    public function save()
     {
         if (!$this->account || empty($this->account->code)) {
             throw new Exception('No account specified for Billing Info');
@@ -119,6 +126,20 @@ class Billing extends AbstractApiBase
         }
 
         $this->imp->save($this);
+        $this->imp->load($this);
+        return $this;
+    }
+
+    /**
+     * Clear all billing information
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function delete()
+    {
+        $this->imp->delete($this);
+        $this->imp->load($this);
     }
 
     /**
@@ -142,12 +163,23 @@ class Billing extends AbstractApiBase
      */
     public function getPayment()
     {
+        if (!$this->payment) {
+            $this->payment = new CreditCard();
+        }
         return $this->payment;
     }
 
+    /**
+     * Set the payment information to a credit card
+     *
+     * @param CreditCard $cc
+     *
+     * @return Billing
+     */
     public function setCreditCard(CreditCard $cc)
     {
         $this->payment = $cc;
+        return $this;
     }
 
     public function clearProperties()

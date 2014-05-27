@@ -96,6 +96,26 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
         $billing->update();
     }
 
+    public function delete(Billing $parent)
+    {
+        $accountCode = $parent->account->code;
+
+        try {
+            $billing = $this->getBilling($accountCode);
+            $billing->delete();
+
+        } catch (\Recurly_NotFoundError $e) {
+            // Perfectly fine - no billing info to delete
+
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
+        }
+
+        if (isset($this->accountsLoaded[$accountCode])) {
+            unset($this->accountsLoaded[$accountCode]);
+        }
+    }
+
     /**
      * @param $accountCode
      *

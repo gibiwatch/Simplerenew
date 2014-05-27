@@ -22,26 +22,42 @@ try {
     $user = $sr->getUser()->load();
 
     // Get the account object
-    $account = $sr->getAccount()->load($user);
+    $account = $sr->getAccount()->load($user)->reopen();
 
     // Get the billing object
     $billing = $sr->getBilling();
     $billing->load($account);
+    if (false) {
+        $billing->phone = '123.123.1234';
+        $billing->setCreditCard(
+            new \Simplerenew\Primitive\CreditCard(
+                array(
+                    'number' => '4111111111111111',
+                    'month'  => 1,
+                    'year'   => 2016,
+                    'ccv'    => 123
+                )
+            )
+        );
+        $billing->save();
+    } else {
+        //$billing->delete();
+    }
 
 
     echo '<pre>';
     //echo str_pad(' User ', 40, '*', STR_PAD_BOTH) . '<br/>';
     //print_r($user->getProperties());
 
-    //echo str_pad(' Account ', 40, '*', STR_PAD_BOTH) . '<br/>';
-    //print_r($account->getProperties());
-    //print_r($account->address->getProperties());
+    echo str_pad(' Account ', 40, '*', STR_PAD_BOTH) . '<br/>';
+    print_r($account->getProperties());
+    echo $account->address . "\n\n";
 
     echo str_pad(' Billing ', 40, '*', STR_PAD_BOTH) . '<br/>';
     echo $billing->address;
     print_r($billing->getProperties());
-    print_r($billing->address->getProperties());
-    print_r($billing->getPayment()->getProperties());
+    print_r($billing->payment->getProperties());
+    echo $billing->address . "\n\n";
     echo '</pre>';
 
 
