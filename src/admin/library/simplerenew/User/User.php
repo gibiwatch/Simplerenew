@@ -99,7 +99,7 @@ class User extends Object
         return $this;
     }
 
-    public function __toString()
+    public function asString()
     {
         return get_class($this->adapter);
     }
