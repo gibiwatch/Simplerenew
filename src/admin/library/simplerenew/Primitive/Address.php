@@ -59,9 +59,11 @@ class Address extends AbstractPrimitive
             default:
                 $lines[] = trim(
                     $this->city
-                    . ($this->city && $this->region) ? ',' : ''
+                    . (($this->city && $this->region) ? ',' : '')
+                    . ' ' . $this->region
                     . ' ' . $this->postal
                 );
+                break;
         }
 
         if ($this->country) {

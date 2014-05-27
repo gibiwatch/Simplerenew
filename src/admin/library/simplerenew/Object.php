@@ -168,19 +168,19 @@ class Object
         return $this->reflection;
     }
 
-    public function asString()
-    {
-        return $this->__toString();
-    }
-
     /**
      * Default string rendering for the object. Subclasses should feel
      * free to override as desired.
      *
      * @return string
      */
-    public function __toString()
+    public function asString()
     {
         return get_class($this);
+    }
+
+    public function __toString()
+    {
+        return $this->asString();
     }
 }

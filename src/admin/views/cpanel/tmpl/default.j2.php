@@ -38,10 +38,10 @@ try {
     //print_r($account->address->getProperties());
 
     echo str_pad(' Billing ', 40, '*', STR_PAD_BOTH) . '<br/>';
+    echo $billing->address;
     print_r($billing->getProperties());
     print_r($billing->address->getProperties());
     print_r($billing->getPayment()->getProperties());
-
     echo '</pre>';
 
 
