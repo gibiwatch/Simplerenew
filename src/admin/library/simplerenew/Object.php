@@ -168,6 +168,11 @@ class Object
         return $this->reflection;
     }
 
+    public function asString()
+    {
+        return $this->__toString();
+    }
+
     /**
      * Default string rendering for the object. Subclasses should feel
      * free to override as desired.

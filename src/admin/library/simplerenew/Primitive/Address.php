@@ -43,4 +43,31 @@ class Address extends AbstractPrimitive
      * @var string
      */
     public $postal = null;
+
+    public function asString($br="\n")
+    {
+        $lines = array_filter(
+            array(
+                $this->address1,
+                $this->address2
+            )
+        );
+
+        switch ($this->country) {
+            case 'US':
+                // pass through
+            default:
+                $lines[] = trim(
+                    $this->city
+                    . ($this->city && $this->region) ? ',' : ''
+                    . ' ' . $this->postal
+                );
+        }
+
+        if ($this->country) {
+            $lines[] = $this->country;
+        }
+
+        return join($br, $lines);
+    }
 }
