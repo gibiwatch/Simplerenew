@@ -118,7 +118,7 @@ class Object
      * @param array        $map    Associative array where key=Simplerenew Key, value=Source Key
      *
      * @return array An array of all specified keys with values filled in based on map
-     * @throws \Simplerenew\Exception
+     * @throws Exception
      */
     public function map($source, array $keys, array $map = array())
     {

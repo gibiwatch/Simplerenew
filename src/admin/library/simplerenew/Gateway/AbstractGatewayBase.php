@@ -14,4 +14,13 @@ defined('_JEXEC') or die();
 
 abstract class AbstractGatewayBase extends Object
 {
+    /**
+     * @var array
+     */
+    protected $gatewayConfig = array();
+
+    public function __construct(array $config = array())
+    {
+        $this->gatewayConfig = $config;
+    }
 }

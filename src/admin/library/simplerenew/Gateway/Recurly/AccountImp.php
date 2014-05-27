@@ -122,7 +122,7 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
             if ($account->state != 'active') {
                 $account->reopen();
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
     }

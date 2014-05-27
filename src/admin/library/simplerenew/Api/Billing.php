@@ -10,7 +10,6 @@ namespace Simplerenew\Api;
 
 use Simplerenew\Exception;
 use Simplerenew\Gateway\BillingInterface;
-use Simplerenew\Object;
 use Simplerenew\Primitive\AbstractPayment;
 use Simplerenew\Primitive\Address;
 use Simplerenew\Primitive\CreditCard;

@@ -8,8 +8,6 @@
 
 namespace Simplerenew\Primitive;
 
-use Simplerenew\Object;
-
 defined('_JEXEC') or die();
 
 class Address extends AbstractPrimitive
@@ -44,7 +42,7 @@ class Address extends AbstractPrimitive
      */
     public $postal = null;
 
-    public function asString($br="\n")
+    public function asString($br = "\n")
     {
         $lines = array_filter(
             array(
