@@ -87,8 +87,6 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
         } catch (\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
-
-        $parent->setProperties($account, $this->fieldMap);
     }
 
     /**
@@ -105,7 +103,6 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
             if ($account->state != 'closed') {
                 $account->close();
             }
-            $parent->setProperties($account, $this->fieldMap);
         } catch (\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
@@ -125,7 +122,6 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
             if ($account->state != 'active') {
                 $account->reopen();
             }
-            $parent->setProperties($account, $this->fieldMap);
         } catch (Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }

@@ -150,17 +150,33 @@ class Account extends AbstractApiBase
         );
 
         $this->imp->save($this, $isNew);
+        $this->imp->load($this);
         return $this;
     }
 
+    /**
+     * Close an account.
+     *
+     * @return Account
+     */
     public function close()
     {
         $this->imp->close($this);
+        $this->imp->load($this);
+
+        return $this;
     }
 
+    /**
+     * Reopen a closed account, or leave account open
+     *
+     * @return Account
+     */
     public function reopen()
     {
         $this->imp->reopen($this);
+        $this->imp->load($this);
+        return $this;
     }
 
     /**
