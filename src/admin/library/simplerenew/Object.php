@@ -179,6 +179,22 @@ class Object
         return get_class($this);
     }
 
+    /**
+     * Expose properties with defined getters for direct use
+     *
+     * @param $name
+     *
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        $method = 'get' . ucfirst($name);
+        if (method_exists($this, $method)) {
+            return $this->$method();
+        }
+        return null;
+    }
+
     public function __toString()
     {
         return $this->asString();
