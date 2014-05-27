@@ -13,6 +13,7 @@ use Simplerenew\Exception;
 use Simplerenew\Gateway\BillingInterface;
 use Simplerenew\Primitive\Address;
 use Simplerenew\Primitive\CreditCard;
+use Simplerenew\Primitive\PayPal;
 
 defined('_JEXEC') or die();
 
@@ -56,17 +57,21 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
             }
 
             if ($billing->first_six && $billing->last_four) {
-                $parent->setCreditcard(
-                    new CreditCard(
-                        array(
-                            'month'    => $billing->month,
-                            'year'     => $billing->year,
-                            'type'     => $billing->card_type,
-                            'lastFour' => $billing->last_four
-                        )
+                $payment = new CreditCard(
+                    array(
+                        'month'    => $billing->month,
+                        'year'     => $billing->year,
+                        'type'     => $billing->card_type,
+                        'lastFour' => $billing->last_four
                     )
                 );
+            } elseif ($billing->paypal_billing_agreement_id) {
+                $payment = new PayPal();
+                $payment->agreementId = $billing->paypal_billing_agreement_id;
+            } else {
+                $payment = null;
             }
+            $parent->setPayment($payment);
         }
     }
 

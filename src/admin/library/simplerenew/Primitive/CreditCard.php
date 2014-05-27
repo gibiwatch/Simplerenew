@@ -10,7 +10,7 @@ namespace Simplerenew\Primitive;
 
 defined('_JEXEC') or die();
 
-class CreditCard extends AbstractPrimitive
+class CreditCard extends AbstractPayment
 {
     /**
      * @var string

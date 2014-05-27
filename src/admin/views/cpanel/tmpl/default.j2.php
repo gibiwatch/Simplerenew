@@ -42,6 +42,7 @@ try {
         $billing->save();
     } else {
         //$billing->delete();
+        //$billing->setPayment(null);
     }
 
 

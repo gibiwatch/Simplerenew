@@ -10,7 +10,7 @@ namespace Simplerenew\Primitive;
 
 defined('_JEXEC') or die();
 
-class PayPal extends AbtractPrimitive
+class PayPal extends AbstractPayment
 {
     /**
      * @var string

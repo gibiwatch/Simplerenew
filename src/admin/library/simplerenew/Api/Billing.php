@@ -170,15 +170,15 @@ class Billing extends AbstractApiBase
     }
 
     /**
-     * Set the payment information to a credit card
+     * Set the payment information
      *
-     * @param CreditCard $cc
+     * @param AbstractPayment|null $payment
      *
      * @return Billing
      */
-    public function setCreditCard(CreditCard $cc)
+    public function setPayment(AbstractPayment $payment = null)
     {
-        $this->payment = $cc;
+        $this->payment = $payment;
         return $this;
     }
 
