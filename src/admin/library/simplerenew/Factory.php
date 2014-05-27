@@ -8,6 +8,10 @@
 
 namespace Simplerenew;
 
+use Simplerenew\Api\Account;
+use Simplerenew\Gateway\AccountInterface;
+use Simplerenew\Gateway\BillingInterface;
+use Simplerenew\Gateway\PlanInterface;
 use Simplerenew\User\Adapter\UserInterface;
 
 defined('_JEXEC') or die();
@@ -21,7 +25,7 @@ defined('_JEXEC') or die();
 class Factory
 {
     /**
-     * @var User\Adapter\UserInterface
+     * @var UserInterface
      */
     protected $userAdapter = null;
 
@@ -81,12 +85,12 @@ class Factory
     /**
      * Create a new user object
      *
-     * @param User\Adapter\UserInterface
+     * @param UserInterface $adapter
      *
      * @return User\User
      * @throws Exception
      */
-    public function getUser(User\Adapter\UserInterface $adapter = null)
+    public function getUser(UserInterface $adapter = null)
     {
         if (!$adapter) {
             $adapter = $this->userAdapter;
@@ -100,28 +104,27 @@ class Factory
      *
      * @param Gateway\AccountInterface
      *
-     * @return Api\Account
+     * @return Account
      * @throws Exception
      */
-    public function getAccount(Gateway\AccountInterface $imp = null)
+    public function getAccount(AccountInterface $imp = null)
     {
         if (!$imp) {
             $className = $this->gatewayNamespace . '\\AccountImp';
             $imp       = new $className($this->gatewayConfig);
         }
 
-        $account = new Api\Account($imp, $this->accountConfig);
+        $account = new Account($imp, $this->accountConfig);
         return $account;
     }
 
     /**
-     * @param Gateway\BillingInterface $imp
+     * @param BillingInterface $imp
      *
      * @return Api\Billing
      */
-    public function getBilling(Gateway\BillingInterface $imp = null)
+    public function getBilling(BillingInterface $imp = null)
     {
-
         if (!$imp) {
             $className = $this->gatewayNamespace . '\\BillingImp';
             $imp       = new $className($this->gatewayConfig);
@@ -129,5 +132,21 @@ class Factory
 
         $billing = new Api\Billing($imp);
         return $billing;
+    }
+
+    /**
+     * @param PlanInterface $imp
+     *
+     * @return Api\Plan
+     */
+    public function getPlan(PlanInterface $imp = null)
+    {
+        if (!$imp) {
+            $className = $this->gatewayNamespace . '\\PlanImp';
+            $imp = new $className($this->gatewayConfig);
+        }
+
+        $plan = new Api\Plan($imp);
+        return $plan;
     }
 }
