@@ -133,7 +133,7 @@ class Joomla implements UserInterface
      */
     public function update(User $parent)
     {
-        $user = \JUser::getInstance($parent->id);
+        $user = new \JUser($parent->id);
 
         if ($user->id == $parent->id) {
             $data = array(
@@ -149,6 +149,13 @@ class Joomla implements UserInterface
 
             $user->bind($data);
             if ($user->save(true)) {
+                // If the current user, refresh the session data
+                if ($user->id == \JFactory::getUser()->id) {
+                    $session = \JFactory::getSession();
+                    $session->set('user', $user);
+                    \JFactory::getUser();
+                }
+
                 $this->load($parent->id, $parent);
                 return;
             }

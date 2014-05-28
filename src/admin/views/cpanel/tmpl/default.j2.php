@@ -16,13 +16,23 @@ try {
 
     $sr = new \Simplerenew\Factory($config);
 
-    $plan = $sr->getPlan();
-    $plan->load('plan-2');
+    $user = $sr->getUser()->load();
+    $user->firstname = 'Bill';
+    $user->update();
 
+//    $account = $sr->getAccount()->load($user);
+//    $billing = $sr->getBilling()->load($account);
 
     echo '<pre>';
-    echo str_pad(' Plan ', 40, '*', STR_PAD_BOTH) . '<br/>';
-    print_r($plan->getProperties());
+    echo str_pad(' User ', 40, '*', STR_PAD_BOTH) . '<br/>';
+    print_r($user->getProperties());
+
+//    echo str_pad(' Account ', 40, '*', STR_PAD_BOTH) . '<br/>';
+//    print_r($account->getProperties());
+
+//    echo str_pad(' Billing ', 40, '*', STR_PAD_BOTH) . '<br/>';
+//    print_r($billing->getProperties());
+//    print_r($billing->payment->getProperties());
 
     echo '</pre>';
 
