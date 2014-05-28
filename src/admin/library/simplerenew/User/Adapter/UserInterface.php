@@ -18,24 +18,22 @@ interface UserInterface
     /**
      * Load the selected User ID
      *
-     * @param int  $id
      * @param User $parent
      *
-     * @return UserInterface
+     * @return void
      * @throws Exception
      */
-    public function load($id, User $parent);
+    public function load(User $parent);
 
     /**
      * Load a user from the username
      *
-     * @param string $username
-     * @param User   $parent
+     * @param User $parent
      *
-     * @return UserInterface
+     * @return void
      * @throws Exception
      */
-    public function loadByUsername($username, User $parent);
+    public function loadByUsername(User $parent);
 
     /**
      * Create a new user. It is up to the system instances to perform
@@ -43,7 +41,7 @@ interface UserInterface
      *
      * @param User $parent
      *
-     * @return UserInterface
+     * @return void
      * @throws Exception
      */
     public function create(User $parent);
@@ -53,7 +51,7 @@ interface UserInterface
      *
      * @param User $parent
      *
-     * @return UserInterface
+     * @return void
      * @throws Exception
      */
     public function update(User $parent);

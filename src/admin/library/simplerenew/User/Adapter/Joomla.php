@@ -31,16 +31,19 @@ class Joomla implements UserInterface
     }
 
     /**
-     * @param string $username
-     * @param User   $parent
+     * @param User $parent
      *
      * @return void
      * @throws Exception
      */
-    public function loadByUsername($username, User $parent)
+    public function loadByUsername(User $parent)
     {
+        $username = $parent->username;
+        $parent->clearProperties();
+
         if ($id = \JUserHelper::getUserId($username)) {
-            $this->load($id, $parent);
+            $parent->id = $id;
+            $this->load($parent);
             return;
         }
 
@@ -48,14 +51,16 @@ class Joomla implements UserInterface
     }
 
     /**
-     * @param int  $id
      * @param User $parent
      *
      * @return void
      * @throws Exception
      */
-    public function load($id, User $parent)
+    public function load(User $parent)
     {
+        $id = $parent->id;
+        $parent->clearProperties();
+
         $user = \JFactory::getUser($id);
         if (!$user || $user->id <= 0) {
             throw new Exception('User ID not found - ' . $id);
@@ -134,35 +139,31 @@ class Joomla implements UserInterface
     public function update(User $parent)
     {
         $user = new \JUser($parent->id);
+        if ($user->id != $parent->id) {
+            throw new Exception('Unable to update user ID #' . ($parent->id ? $parent->id : 'NULL'));
+        }
 
-        if ($user->id == $parent->id) {
-            $data = array(
-                'name'     => trim($parent->firstname . ' ' . $parent->lastname),
-                'email'    => $parent->email,
-                'username' => $parent->username
-            );
+        $data = array(
+            'name'     => trim($parent->firstname . ' ' . $parent->lastname),
+            'email'    => $parent->email,
+            'username' => $parent->username
+        );
 
-            if (!empty($parent->password)) {
-                $data['password']  = $parent->password;
-                $data['password2'] = $parent->password;
-            }
+        if (!empty($parent->password)) {
+            $data['password']  = $parent->password;
+            $data['password2'] = $parent->password;
+        }
 
-            $user->bind($data);
-            if ($user->save(true)) {
-                // If the current user, refresh the session data
-                if ($user->id == \JFactory::getUser()->id) {
-                    $session = \JFactory::getSession();
-                    $session->set('user', $user);
-                    \JFactory::getUser();
-                }
-
-                $this->load($parent->id, $parent);
-                return;
-            }
-
+        $user->bind($data);
+        if (!$user->save(true)) {
             throw new Exception('<br/>' . join('<br/>', $user->getErrors()));
         }
 
-        throw new Exception('Unable to update user ID #' . ($parent->id ? $parent->id : 'NULL'));
+        // If current user, refresh the session data
+        if ($user->id == \JFactory::getUser()->id) {
+            $session = \JFactory::getSession();
+            $session->set('user', $user);
+            \JFactory::getUser();
+        }
     }
 }

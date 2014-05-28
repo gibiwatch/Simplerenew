@@ -81,7 +81,10 @@ class User extends Object
      */
     public function load($id = null)
     {
-        $this->adapter->load($id, $this);
+        $this->clearProperties();
+        $this->id = $id;
+        $this->adapter->load($this);
+
         return $this;
     }
 
@@ -95,7 +98,8 @@ class User extends Object
      */
     public function loadByUsername($username)
     {
-        $this->adapter->loadByUsername($username, $this);
+        $this->username = $username;
+        $this->adapter->loadByUsername($this);
         return $this;
     }
 
