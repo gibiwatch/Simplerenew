@@ -45,6 +45,14 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
         }
     }
 
+    /**
+     * Get the desired currency amount from a Recurly currency object
+     *
+     * @param \Recurly_CurrencyList $amounts
+     * @param string                $currency
+     *
+     * @return float
+     */
     protected function getCurrency(\Recurly_CurrencyList $amounts, $currency = null)
     {
         $currency = $currency ? : $this->currency;
@@ -54,6 +62,6 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
             return $amount;
         }
 
-        return 0;
+        return 0.0;
     }
 }

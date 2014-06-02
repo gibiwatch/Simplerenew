@@ -101,4 +101,18 @@ class Plan extends AbstractApiBase
         $this->imp->load($this);
 
     }
+
+    /**
+     * Get list of defined plans on the Gateway
+     *
+     * @return array Associative array of plans keyed on plan code
+     */
+    public function getList()
+    {
+        $template = clone $this;
+        $template->clearProperties();
+
+        $plans = $this->imp->getList($template);
+        return $plans;
+    }
 }
