@@ -21,8 +21,7 @@ if (!defined('SIMPLERENEW_LOADED')) {
 
     $loader->register();
     $loader->addNamespace('Simplerenew', SIMPLERENEW_LIBRARY . '/simplerenew');
-}
 
-if (!defined('FOF_INCLUDED')) {
-    require_once JPATH_LIBRARIES . '/fof/include.php';
+    // Set the Joomla overrides loader
+    require_once SIMPLERENEW_LIBRARY . '/joomla/loader.php';
 }
