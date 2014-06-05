@@ -68,7 +68,7 @@ require_once JPATH_CONFIGURATION . '/configuration.php';
 JFactory::getApplication('site');
 
 // Bootstrap Simple Renew
-define('SIMPLERENEW_SRC', realpath(__DIR__ . '/../src'));
+define('SIMPLERENEW_SRC', realpath(__DIR__ . '/../../src'));
 if (!is_dir(SIMPLERENEW_SRC)) {
     throw new Exception('Could not find the Simple Renew folder: ' . SIMPLERENEW_SRC);
 }
