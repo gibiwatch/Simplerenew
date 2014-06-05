@@ -11,7 +11,7 @@
  */
 
 // Load local installation configurations
-$configPath = __DIR__ . '/config.php';
+$configPath = __DIR__ . '/../config.php';
 if (!file_exists($configPath)) {
     throw new Exception('Local configuration was not found: ' . $configPath);
 }
@@ -65,8 +65,7 @@ require_once JPATH_LIBRARIES.'/cms.php';
 JFactory::getApplication('site');
 
 // Bootstrap Simple Renew
-define('SIMPLERENEW_TEST', realpath(__DIR__ . '/../src'));
-
+define('SIMPLERENEW_TEST', realpath(__DIR__ . '/../../src'));
 if (!is_dir(SIMPLERENEW_TEST)) {
     throw new Exception('Could not find the Simple Renew folder: ' . SIMPLERENEW_TEST);
 }
