@@ -29,13 +29,13 @@ define('_JEXEC', 1);
 if (!defined('JPATH_BASE')) {
     define('JPATH_BASE', realpath($pathToJoomla));
 }
-require_once JPATH_BASE.'/includes/defines.php';
+require_once JPATH_BASE . '/includes/defines.php';
 
 // Copied from /includes/framework.php
 @ini_set('magic_quotes_runtime', 0);
 @ini_set('zend.ze1_compatibility_mode', '0');
 
-require_once JPATH_LIBRARIES.'/import.php';
+require_once JPATH_LIBRARIES . '/import.php';
 
 error_reporting(E_ALL & ~E_STRICT);
 ini_set('display_errors', 1);
