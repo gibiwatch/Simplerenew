@@ -61,6 +61,9 @@ if (!defined('JDEBUG')) {
 }
 require_once JPATH_LIBRARIES.'/cms.php';
 
+// Load the configuration
+require_once JPATH_CONFIGURATION . '/configuration.php';
+
 // Instantiate some needed objects
 JFactory::getApplication('site');
 
