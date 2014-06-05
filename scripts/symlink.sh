@@ -59,7 +59,6 @@ create_symlink admin administrator/components/$EXTENSION_NAME
 create_symlink media media/$EXTENSION_NAME
 create_symlink admin/language/en-GB/en-GB.$EXTENSION_NAME.sys.ini administrator/language/en-GB/en-GB.$EXTENSION_NAME.sys.ini
 create_symlink admin/language/en-GB/en-GB.$EXTENSION_NAME.ini administrator/language/en-GB/en-GB.$EXTENSION_NAME.ini
-create_symlink assets/fof libraries/fof
 create_symlink module/srmyaccount modules/mod_srmyaccount
 create_symlink module/srmyaccount/language/en-GB/en-GB.mod_srmyaccount.ini language/en-GB/en-GB.mod_srmyaccount.ini
 create_symlink module/srmyaccount/language/en-GB/en-GB.mod_srmyaccount.sys.ini language/en-GB/en-GB.mod_srmyaccount.sys.ini
