@@ -72,6 +72,18 @@ if (!is_dir(SIMPLERENEW_TEST)) {
 }
 
 // Specialized initialisation for Simple Renew testing
+define('SIMPLERENEW_LOADED', 1);
 define('SIMPLERENEW_ADMIN', SIMPLERENEW_TEST . '/admin');
 define('SIMPLERENEW_SITE', SIMPLERENEW_TEST . '/site');
-require_once SIMPLERENEW_ADMIN . '/helpers/initialise.php';
+define('SIMPLERENEW_MEDIA', SIMPLERENEW_TEST . '/media');
+define('SIMPLERENEW_LIBRARY', SIMPLERENEW_ADMIN . '/library');
+
+// Setup autoloaded libraries
+require_once SIMPLERENEW_LIBRARY . '/psr4autoloader.php';
+$loader = new Psr4AutoloaderClass();
+
+$loader->register();
+$loader->addNamespace('Simplerenew', SIMPLERENEW_LIBRARY . '/simplerenew');
+
+// Set the Joomla overrides loader
+require_once SIMPLERENEW_LIBRARY . '/joomla/loader.php';
