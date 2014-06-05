@@ -43,17 +43,16 @@
     </files>
 
     <administration>
-        <menu img="../media/com_simplerenew/images/simplerenew-16.png">COM_SIMPLERENEW_ADMINMENU</menu>
+        <menu img="../media/com_simplerenew/images/icon-16-simplerenew.png">COM_SIMPLERENEW_ADMINMENU</menu>
 
         <files folder="admin">
-            <folder>controllers</folder>
             <folder>language</folder>
             <folder>library</folder>
             <folder>sql</folder>
             <folder>views</folder>
             <filename>access.xml</filename>
             <filename>config.xml</filename>
-            <filename>fof.xml</filename>
+            <filename>controller.php</filename>
             <filename>include.php</filename>
             <filename>simplerenew.php</filename>
         </files>

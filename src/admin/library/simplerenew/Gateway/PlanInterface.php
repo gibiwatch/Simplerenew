@@ -26,22 +26,11 @@ interface PlanInterface
     public function load(Plan $parent);
 
     /**
-     * Create/Update using current subscription plan settings
+     * Get a list of defined plans from the gateway
      *
-     * @param Plan $parent
+     * @param Plan $template
      *
-     * @return void
-     * @throws Exception
+     * @return array
      */
-    public function save(Plan $parent);
-
-    /**
-     * Delete the current plan if possible
-     *
-     * @param Plan $parent
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function delete(Plan $parent);
+    public function getList(Plan $template);
 }
