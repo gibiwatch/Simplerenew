@@ -65,16 +65,16 @@ require_once JPATH_LIBRARIES.'/cms.php';
 JFactory::getApplication('site');
 
 // Bootstrap Simple Renew
-define('SIMPLERENEW_TEST', realpath(__DIR__ . '/../src'));
-if (!is_dir(SIMPLERENEW_TEST)) {
-    throw new Exception('Could not find the Simple Renew folder: ' . SIMPLERENEW_TEST);
+define('SIMPLERENEW_SRC', realpath(__DIR__ . '/../src'));
+if (!is_dir(SIMPLERENEW_SRC)) {
+    throw new Exception('Could not find the Simple Renew folder: ' . SIMPLERENEW_SRC);
 }
 
 // Specialized initialisation for Simple Renew testing
 define('SIMPLERENEW_LOADED', 1);
-define('SIMPLERENEW_ADMIN', SIMPLERENEW_TEST . '/admin');
-define('SIMPLERENEW_SITE', SIMPLERENEW_TEST . '/site');
-define('SIMPLERENEW_MEDIA', SIMPLERENEW_TEST . '/media');
+define('SIMPLERENEW_ADMIN', SIMPLERENEW_SRC . '/admin');
+define('SIMPLERENEW_SITE', SIMPLERENEW_SRC . '/site');
+define('SIMPLERENEW_MEDIA', SIMPLERENEW_SRC . '/media');
 define('SIMPLERENEW_LIBRARY', SIMPLERENEW_ADMIN . '/library');
 
 // Setup autoloaded libraries
