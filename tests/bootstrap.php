@@ -71,16 +71,6 @@ if (!is_dir(SIMPLERENEW_TEST)) {
     throw new Exception('Could not find the Simple Renew folder: ' . SIMPLERENEW_TEST);
 }
 
-// Check to make sure FOF is loaded
-$pathToFOF = $testPaths['fof'];
-if (empty($pathToFOF)) {
-    $pathToFOF = JPATH_LIBRARIES . '/fof/include.php';
-}
-if (!file_exists($pathToFOF)) {
-    $pathToFOF = SIMPLERENEW_TEST . '/assets/fof/include.php';
-}
-require_once $pathToFOF;
-
 // Specialized initialisation for Simple Renew testing
 define('SIMPLERENEW_ADMIN', SIMPLERENEW_TEST . '/admin');
 define('SIMPLERENEW_SITE', SIMPLERENEW_TEST . '/site');

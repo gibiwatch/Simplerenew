@@ -14,11 +14,9 @@
  * Paths to test libraries and assets.
  *
  * joomla: Must point to a locally installed version of joomla
- * fof   : If not set, will use fof from joomla installation or assets folder here
  */
 $testPaths = array(
-    'joomla' => 'd:/www/j25',
-    'fof'    => null
+    'joomla' => 'd:/www/j25'
 );
 
 // It isn't clear if this is needed. But it was recommended. We'll figure it out later
