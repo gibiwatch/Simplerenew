@@ -12,6 +12,10 @@ class User extends Base
 {
     public $id;
 
+    public $firstname;
+
+    public $lastname;
+
     public $name;
 
     public $email;
@@ -25,7 +29,9 @@ class User extends Base
         $uid = uniqid();
 
         $this->id = 0;
-        $this->name = 'Mock User ' . $uid;
+        $this->firstname = 'Mock';
+        $this->lastname = 'User' . $uid;
+        $this->name = $this->firstname . ' ' . $this->lastname;
         $this->email    = 'user' . $uid . '@immock.me';
         $this->username = 'mock' . $uid;
         $this->password = 'mock';
