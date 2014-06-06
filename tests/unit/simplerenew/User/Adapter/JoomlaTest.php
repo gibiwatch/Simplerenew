@@ -30,7 +30,7 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->userAdapter = new Simplerenew\User\Adapter\Joomla;
-        $this->mockUser          = new \Tests\Mock\User;
+        $this->mockUser    = new \Tests\Mock\User;
 
         $this->createJoomlaUserForTest();
     }
