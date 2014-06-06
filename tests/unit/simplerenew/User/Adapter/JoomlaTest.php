@@ -13,10 +13,10 @@ use \Simplerenew;
 class JoomlaTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * The Joomla User Adapter
+     * The User Adapter
      * @var Simplerenew\User\Adapter\Joomla
      */
-    protected $joomlaUserAdapter;
+    protected $userAdapter;
 
     /**
      * The Mock User
@@ -29,7 +29,7 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->joomlaUserAdapter = new Simplerenew\User\Adapter\Joomla;
+        $this->userAdapter = new Simplerenew\User\Adapter\Joomla;
         $this->mockUser          = new \Tests\Mock\User;
 
         $this->createJoomlaUserForTest();
@@ -42,7 +42,7 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
     {
         $this->deleteJoomlaUsers();
 
-        unset($this->joomlaUserAdapter);
+        unset($this->userAdapter);
         unset($this->mockUser);
     }
 
@@ -149,9 +149,9 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAdapter()
     {
-        $user = new Simplerenew\User\User($this->joomlaUserAdapter);
+        $user = new Simplerenew\User\User($this->userAdapter);
 
-        $this->assertEquals($this->joomlaUserAdapter, \PHPUnit_Framework_Assert::readAttribute($user, 'adapter'));
+        $this->assertEquals($this->userAdapter, \PHPUnit_Framework_Assert::readAttribute($user, 'adapter'));
     }
 
     /**
@@ -159,7 +159,7 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadValid()
     {
-        $user = new Simplerenew\User\User($this->joomlaUserAdapter);
+        $user = new Simplerenew\User\User($this->userAdapter);
         $user = $user->load($this->mockUser->id);
 
         $this->assertEquals($this->mockUser->username, $user->username);
@@ -172,7 +172,7 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadInvalid()
     {
-        $user = new Simplerenew\User\User($this->joomlaUserAdapter);
+        $user = new Simplerenew\User\User($this->userAdapter);
         $user = $user->load(-9999);
     }
 
@@ -183,7 +183,7 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadNoParam()
     {
-        $user = new Simplerenew\User\User($this->joomlaUserAdapter);
+        $user = new Simplerenew\User\User($this->userAdapter);
         $user = $user->load();
     }
 
@@ -192,7 +192,7 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadByUsernameValid()
     {
-        $user = new Simplerenew\User\User($this->joomlaUserAdapter);
+        $user = new Simplerenew\User\User($this->userAdapter);
         $user = $user->loadByUsername($this->mockUser->username);
 
         $this->assertEquals($this->mockUser->id, $user->id);
@@ -205,7 +205,7 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadByUsernameInvalid()
     {
-        $user = new Simplerenew\User\User($this->joomlaUserAdapter);
+        $user = new Simplerenew\User\User($this->userAdapter);
         $user = $user->loadByUsername((string) microtime());
     }
 
@@ -216,7 +216,7 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadByUsernameNoParam()
     {
-        $user = new Simplerenew\User\User($this->joomlaUserAdapter);
+        $user = new Simplerenew\User\User($this->userAdapter);
         $user = $user->loadByUsername();
     }
 
@@ -225,7 +225,7 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
      */
     public function testAsString()
     {
-        $user = new Simplerenew\User\User($this->joomlaUserAdapter);
+        $user = new Simplerenew\User\User($this->userAdapter);
 
         $this->assertEquals('Simplerenew\User\Adapter\Joomla', (string) $user);
     }
@@ -237,7 +237,7 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateNotEmptyId()
     {
-        $user = new Simplerenew\User\User($this->joomlaUserAdapter);
+        $user = new Simplerenew\User\User($this->userAdapter);
         $user->id = 999999;
 
         $user->create();
@@ -251,7 +251,7 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
         // Create a new mock user to avoid conflict with the current one
         $mockUser = new \Tests\Mock\User;
 
-        $user = new Simplerenew\User\User($this->joomlaUserAdapter);
+        $user = new Simplerenew\User\User($this->userAdapter);
         $user->firstname = $mockUser->firstname;
         $user->lastname = $mockUser->lastname;
         $user->username = $mockUser->username;
@@ -271,7 +271,7 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
         // Create a new mock user to avoid conflict with the current one
         $mockUser = new \Tests\Mock\User;
 
-        $user = new Simplerenew\User\User($this->joomlaUserAdapter);
+        $user = new Simplerenew\User\User($this->userAdapter);
         $user->firstname = $mockUser->firstname;
         $user->lastname = $mockUser->lastname;
         $user->username = $mockUser->username;
@@ -296,7 +296,7 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateEmptyId()
     {
-        $user = new Simplerenew\User\User($this->joomlaUserAdapter);
+        $user = new Simplerenew\User\User($this->userAdapter);
         $user->loadByUsername($this->mockUser->username);
 
         $user->id = 0;
@@ -311,7 +311,7 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateInvalidId()
     {
-        $user = new Simplerenew\User\User($this->joomlaUserAdapter);
+        $user = new Simplerenew\User\User($this->userAdapter);
         $user->loadByUsername($this->mockUser->username);
 
         $user->id = -99999;
@@ -324,7 +324,7 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdate()
     {
-        $user = new Simplerenew\User\User($this->joomlaUserAdapter);
+        $user = new Simplerenew\User\User($this->userAdapter);
         $user->loadByUsername($this->mockUser->username);
 
         $uid = uniqid();
@@ -382,7 +382,7 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
         $password  = 'updatedpassword' . $uid;
 
         // Update the user
-        $user = new Simplerenew\User\User($this->joomlaUserAdapter);
+        $user = new Simplerenew\User\User($this->userAdapter);
         $user->loadByUsername($this->mockUser->username);
 
         $user->firstname = $firstname;
@@ -411,7 +411,7 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
         $password  = 'updatedpassword' . $uid;
 
         // Update the user
-        $user = new Simplerenew\User\User($this->joomlaUserAdapter);
+        $user = new Simplerenew\User\User($this->userAdapter);
         $user->loadByUsername($this->mockUser->username);
 
         $user->username  = $username;
