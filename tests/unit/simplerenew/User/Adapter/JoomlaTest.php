@@ -145,16 +145,6 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test the setAdapter method
-     */
-    public function testSetAdapter()
-    {
-        $user = new Simplerenew\User\User($this->userAdapter);
-
-        $this->assertEquals($this->userAdapter, \PHPUnit_Framework_Assert::readAttribute($user, 'adapter'));
-    }
-
-    /**
      * Test the load method for a valid user
      */
     public function testLoadValid()
