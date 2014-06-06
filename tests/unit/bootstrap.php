@@ -86,6 +86,7 @@ $loader = new Psr4AutoloaderClass();
 
 $loader->register();
 $loader->addNamespace('Simplerenew', SIMPLERENEW_LIBRARY . '/simplerenew');
+$loader->addNamespace('Tests', __DIR__);
 
 // Set the Joomla overrides loader
 require_once SIMPLERENEW_LIBRARY . '/joomla/loader.php';
