@@ -342,4 +342,34 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($email, $sessionUser->email, "The email wasn't updated successfully on session");
         $this->assertEquals($username, $sessionUser->username, "The username wasn't updated successfully on session");
     }
+
+    /**
+     * Test the user update changing credentials
+     */
+    public function testUpdateCredentials()
+    {
+        // The new data
+        $uid = uniqid();
+        $username  = 'newusername' . $uid;
+        $password  = 'mynewpassword' . $uid;
+
+        // Update the user
+        $user = new Simplerenew\User\User($this->joomlaUserAdapter);
+        $user->loadByUsername($this->mockUser->username);
+
+        $user->username  = $username;
+        $user->password  = $password;
+        $user->update();
+
+        // Log in the mock user with the new credentials
+        $credentials = array();
+        $credentials['username'] = $username;
+        $credentials['password'] = $password;
+        \JFactory::getApplication('site')->login($credentials);
+
+        // Get the logged in user
+        $user = \JFactory::getUser();
+
+        $this->assertEquals($this->mockUser->id, $user->id, "Failed to login with new credentials after update");
+    }
 }
