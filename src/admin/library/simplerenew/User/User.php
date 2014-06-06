@@ -100,6 +100,7 @@ class User extends Object
     {
         $this->username = $username;
         $this->adapter->loadByUsername($this);
+
         return $this;
     }
 
@@ -118,6 +119,7 @@ class User extends Object
     {
         if (empty($this->id)) {
             $this->adapter->create($this);
+
             return $this;
         }
 
@@ -134,6 +136,7 @@ class User extends Object
     {
         if (!empty($this->id)) {
             $this->adapter->update($this);
+
             return $this;
         }
 
