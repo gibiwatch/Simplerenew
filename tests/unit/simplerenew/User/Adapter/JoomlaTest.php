@@ -6,11 +6,11 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Tests\Simplerenew\User;
+namespace Tests\Simplerenew\User\Adapter;
 
 use \Simplerenew;
 
-class UserTest extends \PHPUnit_Framework_TestCase
+class JoomlaTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * The Joomla User Adapter
