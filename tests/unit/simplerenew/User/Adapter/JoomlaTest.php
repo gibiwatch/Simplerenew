@@ -415,4 +415,20 @@ class JoomlaTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->mockUser->id, $user->id, "Failed to login with new credentials after update");
     }
+
+    /**
+     * Test the getName method
+     */
+    public function testGetName()
+    {
+        $reflection = new \ReflectionClass('Simplerenew\User\Adapter\Joomla');
+        $method = $reflection->getMethod('getName');
+        $method->setAccessible(true);
+
+        $fullname = $this->mockUser->firstname . ' ' . $this->mockUser->lastname;
+        $result = $method->invokeArgs($this->userAdapter, array($fullname));
+
+        $this->assertEquals($this->mockUser->firstname, $result['firstname'], "Failed to retrieve the firstname");
+        $this->assertEquals($this->mockUser->lastname, $result['lastname'], "Failed to retrieve the lastname");
+    }
 }
