@@ -69,6 +69,44 @@ class UserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Unblock a user
+     *
+     * @param  int $id The user id
+     */
+    protected function unblockUser($id)
+    {
+        $db = \JFactory::getDBO();
+
+        $query = $db->getQuery(true)
+            ->set('block = 0')
+            ->update('#__users')
+            ->where('id = ' . $db->quote($id));
+        $db->setQuery($query);
+
+        $db->execute();
+    }
+
+    /**
+     * Log in a user
+     *
+     * @param  string $username The user's username
+     * @param  string $password The user's password
+     *
+     * @return boolean True if success on login
+     */
+    protected function loginUser($username, $password)
+    {
+        $credentials = array(
+            'username' => $username,
+            'password' => $password
+        );
+
+        $result = \JFactory::getApplication('site')->login($credentials);
+
+        return $result;
+    }
+
+    /**
      * This will insert the dummy user to the database
      */
     protected function createJoomlaUserForTest()
@@ -85,14 +123,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         if ($id = $model->register($data)) {
             $this->mockUser->id = $this->getUserIdByUsername($this->mockUser->username);
 
-            // Activate the user
-            $db = \JFactory::getDBO();
-            $query = $db->getQuery(true)
-                ->set('block = 0')
-                ->update('#__users')
-                ->where('id = ' . $db->quote($this->mockUser->id));
-            $db->setQuery($query);
-            $db->query();
+            $this->unblockUser($this->mockUser->id);
 
             return;
         }
@@ -233,6 +264,32 @@ class UserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test the user login
+     */
+    public function testLoginAfterCreate()
+    {
+        // Create a new mock user to avoid conflict with the current one
+        $mockUser = new \Tests\Mock\User;
+
+        $user = new Simplerenew\User\User($this->joomlaUserAdapter);
+        $user->firstname = $mockUser->firstname;
+        $user->lastname = $mockUser->lastname;
+        $user->username = $mockUser->username;
+        $user->email = $mockUser->email;
+        $user->password = $mockUser->password;
+
+        $user->create();
+
+        $this->unblockUser($user->id);
+
+        $this->loginUser($mockUser->username, $mockUser->password);
+
+        $sessionUser = \JFactory::getUser();
+
+        $this->assertEquals($user->id, $sessionUser->id, "Could not log in with the new user credentials");
+    }
+
+    /**
      * Test the user update without id
      *
      * @expectedException Simplerenew\Exception
@@ -276,9 +333,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $firstname = 'Updated Mock';
         $lastname  = 'User' . $uid;
         $name      = $firstname . ' ' . $lastname;
-        $email     = 'newemail' . $uid . '@immock.me';
-        $username  = 'newusername' . $uid;
-        $password  = 'mynewpassword' . $uid;
+        $email     = 'updatedemail' . $uid . '@immock.me';
+        $username  = 'updatedusername' . $uid;
+        $password  = 'updatedpassword' . $uid;
 
         // Update the user
         $user->firstname = $firstname;
@@ -320,9 +377,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $firstname = 'Updated Mock';
         $lastname  = 'User' . $uid;
         $name      = $firstname . ' ' . $lastname;
-        $email     = 'newemail' . $uid . '@immock.me';
-        $username  = 'newusername' . $uid;
-        $password  = 'mynewpassword' . $uid;
+        $email     = 'updatedemail' . $uid . '@immock.me';
+        $username  = 'updatedusername' . $uid;
+        $password  = 'updatedpassword' . $uid;
 
         // Update the user
         $user = new Simplerenew\User\User($this->joomlaUserAdapter);
@@ -346,12 +403,12 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /**
      * Test the user update changing credentials
      */
-    public function testUpdateCredentials()
+    public function testLoginAfterUpdateCredentials()
     {
         // The new data
         $uid = uniqid();
-        $username  = 'newusername' . $uid;
-        $password  = 'mynewpassword' . $uid;
+        $username  = 'updatedusername' . $uid;
+        $password  = 'updatedpassword' . $uid;
 
         // Update the user
         $user = new Simplerenew\User\User($this->joomlaUserAdapter);
@@ -361,11 +418,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $user->password  = $password;
         $user->update();
 
-        // Log in the mock user with the new credentials
-        $credentials = array();
-        $credentials['username'] = $username;
-        $credentials['password'] = $password;
-        \JFactory::getApplication('site')->login($credentials);
+        $this->loginUser($username, $password);
 
         // Get the logged in user
         $user = \JFactory::getUser();
