@@ -10,6 +10,18 @@ defined('_JEXEC') or die();
 
 abstract class SimplerenewAdminView extends JViewLegacy
 {
+    public function __construct($config = array())
+    {
+        if (empty($config['layout'])) {
+            $config['layout'] = 'default';
+        }
+        if (version_compare(JVERSION, '3.0', 'ge')) {
+            $config['layout'] .= '.j3';
+        }
+
+        parent::__construct($config);
+    }
+
     protected function setTitle($sub = null, $icon = 'simplerenew')
     {
         $img = JHtml::_('image', "com_simplerenew/icon-48-{$icon}.png", null, null, true, true);

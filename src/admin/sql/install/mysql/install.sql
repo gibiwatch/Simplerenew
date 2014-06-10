@@ -1,23 +1,6 @@
-CREATE TABLE IF NOT EXISTS `#__simplerenew_groups` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `group_id` int(11) NOT NULL,
-  `plan_code` varchar(100) NOT NULL,
-  `title` varchar(100) NOT NULL,
-  `alias` varchar(100) NOT NULL,
-  `published` tinyint(4) DEFAULT NULL,
-  `ordering` int(11) DEFAULT NULL,
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `created_by` int(10) unsigned NOT NULL DEFAULT '0',
-  `created_by_alias` varchar(255) NOT NULL DEFAULT '',
-  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified_by` int(10) unsigned NOT NULL DEFAULT '0',
-  `checked_out` int(10) unsigned NOT NULL DEFAULT '0',
-  `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
 CREATE TABLE `#__simplerenew_plans` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) NOT NULL,
   `code` varchar(45) NOT NULL,
   `title` varchar(45) NOT NULL,
   `slug` varchar(45) NOT NULL,
