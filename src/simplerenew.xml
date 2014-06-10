@@ -27,9 +27,6 @@
     <update>
         <schemas>
             <schemapath type="mysql" charset="utf8">sql/updates/mysql</schemapath>
-            <schemapath type="mysqli" charset="utf8">sql/updates/mysql</schemapath>
-            <schemapath type="mysql">sql/updates/mysql</schemapath>
-            <schemapath type="mysqli">sql/updates/mysql</schemapath>
         </schemas>
     </update>
 
@@ -48,6 +45,7 @@
         <files folder="admin">
             <folder>language</folder>
             <folder>library</folder>
+            <folder>models</folder>
             <folder>sql</folder>
             <folder>views</folder>
             <filename>access.xml</filename>
