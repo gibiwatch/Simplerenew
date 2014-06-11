@@ -10,18 +10,48 @@ defined('_JEXEC') or die();
 
 abstract class SimplerenewAdminView extends JViewLegacy
 {
-    public function __construct($config = array())
+    public function display($tpl = null)
     {
-        if (empty($config['layout'])) {
-            $config['layout'] = 'default';
-        }
-        if (version_compare(JVERSION, '3.0', 'ge')) {
-            $config['layout'] .= '.j3';
+        $sidebar = $this->renderSidebar();
+        if (version_compare(JVERSION, '3.0', 'ge') && $sidebar) {
+            $start = array(
+                '<div id="j-sidebar-container" class="span2">',
+                $sidebar,
+                '</div>',
+                '<div id="j-main-container" class="span10">'
+            );
+        } else {
+            $start = array(
+                '<div id="j-main-container">'
+            );
         }
 
-        parent::__construct($config);
+        echo join("\n", $start);
+        parent::display($tpl);
+        echo '</div>';
     }
 
+    /**
+     * Provide a method that can be overridden by subclasses for additional logic
+     *
+     * @return string
+     */
+    protected function renderSidebar()
+    {
+        if (version_compare(JVERSION, '3.0', 'ge')) {
+            return JHtmlSidebar::render();
+        }
+        return '';
+    }
+
+    /**
+     * Default admin screen title
+     *
+     * @param string $sub
+     * @param string $icon
+     *
+     * @return void
+     */
     protected function setTitle($sub = null, $icon = 'simplerenew')
     {
         $img = JHtml::_('image', "com_simplerenew/icon-48-{$icon}.png", null, null, true, true);
@@ -38,6 +68,13 @@ abstract class SimplerenewAdminView extends JViewLegacy
         JToolbarHelper::title($title, $icon);
     }
 
+    /**
+     * Render the admin screen toolbar buttons
+     *
+     * @param bool $addDivider
+     *
+     * @return void
+     */
     protected function setToolBar($addDivider = true)
     {
         $user = JFactory::getUser();

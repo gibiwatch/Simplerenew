@@ -13,9 +13,7 @@ class SimplerenewViewDashboard extends SimplerenewAdminView
     public function display($tpl = null)
     {
         $this->setToolBar();
-
-        echo 'Under Construction';
-        //parent::display($tpl);
+        parent::display($tpl);
     }
 
     protected function setToolbar()
