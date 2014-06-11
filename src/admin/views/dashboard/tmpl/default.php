@@ -8,4 +8,5 @@
 
 defined('_JEXEC') or die();
 ?>
-Under Construction
+<p>Under Construction</p>
+<p><a href="index.php?option=com_simplerenew&view=dashboard&layout=tests">Run tests</a></p>
