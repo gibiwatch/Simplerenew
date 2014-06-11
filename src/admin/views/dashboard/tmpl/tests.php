@@ -9,10 +9,7 @@
 defined('_JEXEC') or die();
 
 try {
-    $path = SIMPLERENEW_LIBRARY . '/configuration.json';
-    $config = json_decode(file_get_contents($path), true);
-
-    $sr = new \Simplerenew\Factory($config);
+    $sr = SimplerenewHelper::getSimplerenew();
 
     $plan = $sr->getPlan();
 //    $user = $sr->getUser()->loadByUsername('bill');
@@ -21,9 +18,9 @@ try {
 //    $account = $sr->getAccount()->load($user);
 //    $billing = $sr->getBilling()->load($account);
 
-    echo '<pre>';
-    echo str_pad(' Plan List ', 40, '*', STR_PAD_BOTH) . '<br/>';
-    print_r($plan->getList());
+        echo '<pre>';
+        echo str_pad(' Plan List ', 40, '*', STR_PAD_BOTH) . '<br/>';
+        print_r($plan->getList());
 
 //    echo str_pad(' User ', 40, '*', STR_PAD_BOTH) . '<br/>';
 //    print_r($user->getProperties());
@@ -36,7 +33,7 @@ try {
 //    print_r($billing->getProperties());
 //    print_r($billing->payment->getProperties());
 
-    echo '</pre>';
+        echo '</pre>';
 
 } catch (Simplerenew\Exception $e) {
     echo '<br/>SIMPLERENEW: ' . $e->getTraceMessage() . '<br/>';

@@ -10,6 +10,11 @@ defined('_JEXEC') or die();
 
 abstract class SimplerenewHelper
 {
+    /**
+     * @var \Simplerenew\Factory
+     */
+    protected static $simplerenew = null;
+
     public static function addSubmenu($vName)
     {
         self::addMenuEntry(
@@ -23,6 +28,25 @@ abstract class SimplerenewHelper
             'index.php?option=com_simplerenew&view=plans',
             $vName == 'plans'
         );
+    }
+
+    /**
+     * Get the Simplerenew Factory class
+     *
+     * @TODO: Review Factory/DI pattern for possible improvement
+     *
+     * @return \Simplerenew\Factory
+     */
+    public static function getSimplerenew()
+    {
+        if (!self::$simplerenew instanceof \Simplerenew\Factory) {
+            $params = JComponentHelper::getParams('com_simplerenew');
+
+            $config = json_decode($params->toString(), true);
+            $config['user']['adapter'] = 'joomla';
+            self::$simplerenew = new \Simplerenew\Factory($config);
+        }
+        return self::$simplerenew;
     }
 
     /**
