@@ -34,15 +34,13 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
         // Initialise the native Recurly API
         $mode = empty($this->gatewayConfig['mode']) ? 'test' : $this->gatewayConfig['mode'];
 
-        if (!empty($this->gatewayConfig[$mode]['apikey'])) {
-            $this->client = new \Recurly_Client($this->gatewayConfig[$mode]['apikey']);
+        if (!empty($this->gatewayConfig[$mode . 'Apikey'])) {
+            $this->client = new \Recurly_Client($this->gatewayConfig[$mode . 'Apikey']);
         } else {
             throw new Exception('Recurly API requires an api key');
         }
 
-        if (!empty($this->gatewayConfig['currency'])) {
-            $this->currency = $this->gatewayConfig['currency'];
-        }
+        $this->currency = empty($this->gatewayConfig['currency']) ? 'USD' : $this->gatewayConfig['currency'];
     }
 
     /**

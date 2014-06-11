@@ -69,7 +69,9 @@ class Factory
         if (!empty($config['gateway'])) {
             $gateway = $config['gateway'];
 
-            $gatewayNamespace = empty($gateway['name']) ? 'recurly' : $gateway['name'];
+            $gatewayNamespace = key($gateway);
+            $gateway = $gateway[$gatewayNamespace];
+
             if (strpos($gatewayNamespace, '\\') === false) {
                 $gatewayNamespace = '\\Simplerenew\\Gateway\\' . ucfirst(strtolower($gatewayNamespace));
             }
