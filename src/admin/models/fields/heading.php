@@ -18,10 +18,11 @@ class JFormFieldHeading extends JFormField
     public function getLabel()
     {
         $tag = $this->element['tag'] ? (string)$this->element['tag'] : 'p';
+        $text = JText::_((string)$this->element['label']);
 
         return '<' . $tag
             . ' style="clear: both; padding: 10px 0px; margin: 0;">'
-            . $this->element['label']
+            . $text
             . '</' . $tag . '>';
     }
 }
