@@ -31,7 +31,6 @@
     </update>
 
     <media destination="com_simplerenew" folder="media">
-        <folder>css</folder>
         <folder>images</folder>
     </media>
 
@@ -43,6 +42,7 @@
         <menu img="../media/com_simplerenew/images/icon-16-simplerenew.png">COM_SIMPLERENEW_ADMINMENU</menu>
 
         <files folder="admin">
+            <folder>controllers</folder>
             <folder>language</folder>
             <folder>library</folder>
             <folder>models</folder>

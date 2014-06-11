@@ -43,9 +43,13 @@ class SimplerenewViewPlans extends SimplerenewAdminView
     {
         $this->setTitle('COM_SIMPLERENEW_SUBMENU_PLANS');
 
-        JToolBarHelper::addNew('instructor.add');
-        JToolBarHelper::editList('instructor.edit');
-        JToolBarHelper::deleteList(null, 'instructors.delete');
+        SimplerenewToolbarHelper::custom(
+            'plans.sync',
+            'sync',
+            null,
+            JText::_('COM_SIMPLERENEW_SYNCRONIZE'),
+            false
+        );
 
         parent::setToolBar();
     }

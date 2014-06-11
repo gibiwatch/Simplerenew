@@ -33,7 +33,12 @@ class SimplerenewModelPlans extends SimplerenewModellist
         $query->from('#__simplerenew_plans plan');
 
         if ($search = $this->getState('filter.search')) {
-            //$query->where('ins.title like ' . $db->q('%' . $search . '%'));
+            $search = $db->q('%' . $search . '%');
+            $ors = array(
+                'plan.title like ' . $search,
+                'plan.code like ' . $search
+            );
+            $query->where('(' . join(' OR ', $ors) . ')');
         }
 
         $listOrder = $this->getState('list.ordering');
