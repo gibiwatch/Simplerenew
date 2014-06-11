@@ -1,6 +1,76 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<config>
-    <fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
+<config addfieldpath="/administrator/components/com_simplerenew/models/fields">
+    <fieldset
+            name="basic"
+            label="COM_SIMPLERENEW_CONFIG_BASIC_LABEL">
+        <fields name="account">
+            <field
+                    name="codeMask"
+                    label="COM_SIMPLERENEW_ACCOUNT_CODEMASK_LABEL"
+                    description="COM_SIMPLERENEW_ACCOUNT_CODEMASK_DESC"
+                    type="text"
+                    default="%s"/>
+        </fields>
+    </fieldset>
+
+    <fieldset
+            name="recurly"
+            label="COM_SIMPLERENEW_CONFIG_RECURLY_LABEL"
+            description="COM_SIMPLERENEW_CONFIG_RECURLY_DESC">
+        <fields name="gateway">
+            <fields name="recurly">
+                <field
+                        name="mode"
+                        label="COM_SIMPLERENEW_GATEWAY_MODE_LABEL"
+                        type="list">
+                    <option value="test">COM_SIMPLERENEW_GATEWAY_MODE_TEST</option>
+                    <option value="live">COM_SIMPLERENEW_GATEWAY_MODE_LIVE</option>
+                </field>
+
+
+                <fields name="test">
+                    <field
+                            name="head1"
+                            label="COM_SIMPLERENEW_GATEWAY_HEAD_TEST"
+                            type="heading"
+                            tag="h4"/>
+
+                    <field
+                            name="apikey"
+                            label="COM_SIMPLERENEW_GATEWAY_APIKEY_LABEL"
+                            type="text"/>
+
+                    <field
+                            name="private"
+                            label="COM_SIMPLERENEW_RECURLY_PRIVATE_LABEL"
+                            type="text"/>
+                </fields>
+
+                <fields name="live">
+                    <field
+                            name="head1"
+                            label="COM_SIMPLERENEW_GATEWAY_HEAD_LIVE"
+                            type="heading"
+                            tag="h4"/>
+
+                    <field
+                            name="apikey"
+                            label="COM_SIMPLERENEW_GATEWAY_APIKEY_LABEL"
+                            type="text"/>
+
+                    <field
+                            name="private"
+                            label="COM_SIMPLERENEW_RECURLY_PRIVATE_LABEL"
+                            type="text"/>
+                </fields>
+            </fields>
+        </fields>
+    </fieldset>
+
+    <fieldset
+            name="permissions"
+            label="JCONFIG_PERMISSIONS_LABEL"
+            description="JCONFIG_PERMISSIONS_DESC">
         <field
                 name="rules"
                 type="rules"
