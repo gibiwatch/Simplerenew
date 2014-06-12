@@ -2,78 +2,78 @@
 <config addfieldpath="/administrator/components/com_simplerenew/models/fields">
     <fields name="account">
         <fieldset
-                name="basic"
-                label="COM_SIMPLERENEW_CONFIG_BASIC_LABEL">
+            name="basic"
+            label="COM_SIMPLERENEW_CONFIG_BASIC_LABEL">
             <field
-                    name="codeMask"
-                    label="COM_SIMPLERENEW_ACCOUNT_CODEMASK_LABEL"
-                    description="COM_SIMPLERENEW_ACCOUNT_CODEMASK_DESC"
-                    type="text"
-                    default="%s"/>
+                name="codeMask"
+                label="COM_SIMPLERENEW_ACCOUNT_CODEMASK_LABEL"
+                description="COM_SIMPLERENEW_ACCOUNT_CODEMASK_DESC"
+                type="text"
+                default="%s"/>
         </fieldset>
     </fields>
 
     <fields name="gateway">
         <fields name="recurly">
             <fieldset
-                    name="recurly"
-                    label="COM_SIMPLERENEW_CONFIG_RECURLY_LABEL"
-                    description="COM_SIMPLERENEW_CONFIG_RECURLY_DESC">
+                name="recurly"
+                label="COM_SIMPLERENEW_CONFIG_RECURLY_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_RECURLY_DESC">
                 <field
-                        name="mode"
-                        label="COM_SIMPLERENEW_GATEWAY_MODE_LABEL"
-                        type="list">
+                    name="mode"
+                    label="COM_SIMPLERENEW_GATEWAY_MODE_LABEL"
+                    type="list">
                     <option value="test">COM_SIMPLERENEW_GATEWAY_MODE_TEST</option>
                     <option value="live">COM_SIMPLERENEW_GATEWAY_MODE_LIVE</option>
                 </field>
 
                 <field
-                        name="testHead"
-                        label="COM_SIMPLERENEW_GATEWAY_HEAD_TEST"
-                        type="heading"
-                        tag="h4"/>
+                    name="testHead"
+                    label="COM_SIMPLERENEW_GATEWAY_HEAD_TEST"
+                    type="heading"
+                    tag="h4"/>
 
                 <field
-                        name="testApikey"
-                        label="COM_SIMPLERENEW_RECURLY_APIKEY_LABEL"
-                        type="text"/>
+                    name="testApikey"
+                    label="COM_SIMPLERENEW_RECURLY_APIKEY_LABEL"
+                    type="text"/>
 
                 <field
-                        name="testPrivate"
-                        label="COM_SIMPLERENEW_RECURLY_PRIVATE_LABEL"
-                        type="text"/>
+                    name="testPrivate"
+                    label="COM_SIMPLERENEW_RECURLY_PRIVATE_LABEL"
+                    type="text"/>
 
                 <field
-                        name="LiveHead"
-                        label="COM_SIMPLERENEW_GATEWAY_HEAD_LIVE"
-                        type="heading"
-                        tag="h4"/>
+                    name="LiveHead"
+                    label="COM_SIMPLERENEW_GATEWAY_HEAD_LIVE"
+                    type="heading"
+                    tag="h4"/>
 
                 <field
-                        name="liveApikey"
-                        label="COM_SIMPLERENEW_RECURLY_APIKEY_LABEL"
-                        type="text"/>
+                    name="liveApikey"
+                    label="COM_SIMPLERENEW_RECURLY_APIKEY_LABEL"
+                    type="text"/>
 
                 <field
-                        name="livePrivate"
-                        label="COM_SIMPLERENEW_RECURLY_PRIVATE_LABEL"
-                        type="text"/>
+                    name="livePrivate"
+                    label="COM_SIMPLERENEW_RECURLY_PRIVATE_LABEL"
+                    type="text"/>
             </fieldset>
         </fields>
     </fields>
 
     <fieldset
-            name="permissions"
-            label="JCONFIG_PERMISSIONS_LABEL"
-            description="JCONFIG_PERMISSIONS_DESC">
+        name="permissions"
+        label="JCONFIG_PERMISSIONS_LABEL"
+        description="JCONFIG_PERMISSIONS_DESC">
         <field
-                name="rules"
-                type="rules"
-                label="JCONFIG_PERMISSIONS_LABEL"
-                class="inputbox"
-                filter="rules"
-                validate="rules"
-                component="com_simplerenew"
-                section="component"/>
+            name="rules"
+            type="rules"
+            label="JCONFIG_PERMISSIONS_LABEL"
+            class="inputbox"
+            filter="rules"
+            validate="rules"
+            component="com_simplerenew"
+            section="component"/>
     </fieldset>
 </config>
