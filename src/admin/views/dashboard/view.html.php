@@ -16,9 +16,9 @@ class SimplerenewViewDashboard extends SimplerenewAdminView
         parent::display($tpl);
     }
 
-    protected function setToolbar()
+    protected function setToolbar($addDivider = false)
     {
         $this->setTitle();
-        parent::setToolBar(false);
+        parent::setToolBar($addDivider);
     }
 }

@@ -53,6 +53,6 @@ class SimplerenewViewPlans extends SimplerenewAdminView
             false
         );
 
-        parent::setToolBar();
+        parent::setToolBar($addDivider);
     }
 }
