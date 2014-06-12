@@ -41,7 +41,7 @@ class SimplerenewViewPlans extends SimplerenewAdminView
         parent::display($tpl);
     }
 
-    protected function setToolbar()
+    protected function setToolbar($addDivider = true)
     {
         $this->setTitle('COM_SIMPLERENEW_SUBMENU_PLANS');
 
