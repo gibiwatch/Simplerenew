@@ -85,4 +85,9 @@ abstract class SimplerenewAdminView extends JViewLegacy
             JToolBarHelper::preferences('com_simplerenew');
         }
     }
+
+    protected function getSortFields()
+    {
+        return array();
+    }
 }
