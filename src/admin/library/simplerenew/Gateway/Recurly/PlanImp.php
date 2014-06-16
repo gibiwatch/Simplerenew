@@ -11,6 +11,7 @@ namespace Simplerenew\Gateway\Recurly;
 use Simplerenew\Api\Plan;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\PlanInterface;
+use Simplerenew\Object;
 
 defined('_JEXEC') or die();
 
@@ -22,17 +23,17 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
         'length'      => 'plan_interval_length',
         'unit'        => array(
             'plan_interval_unit' => array(
-                'months' => Plan::INTERVAL_MONTHS,
-                'days'   => Plan::INTERVAL_DAYS,
-                '::'     => Plan::INTERVAL_UNKNOWN
+                'months'              => Plan::INTERVAL_MONTHS,
+                'days'                => Plan::INTERVAL_DAYS,
+                Object::MAP_UNDEFINED => Plan::INTERVAL_UNKNOWN
             )
         ),
         'trialLength' => 'trial_interval_length',
         'trialUnit'   => array(
             'trial_interval_unit' => array(
-                'months' => Plan::INTERVAL_MONTHS,
-                'days'   => Plan::INTERVAL_DAYS,
-                '::'     => Plan::INTERVAL_UNKNOWN
+                'months'              => Plan::INTERVAL_MONTHS,
+                'days'                => Plan::INTERVAL_DAYS,
+                Object::MAP_UNDEFINED => Plan::INTERVAL_UNKNOWN
             )
         ),
         'created'     => 'created_at'
@@ -68,7 +69,7 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
 
     public function getList(Plan $template)
     {
-        $plans = array();
+        $plans      = array();
         $rawObjects = \Recurly_PlanList::get(null, $this->client);
 
         foreach ($rawObjects as $plan) {

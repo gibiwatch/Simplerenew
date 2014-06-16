@@ -14,6 +14,8 @@ defined('_JEXEC') or die();
 
 class Object
 {
+    const MAP_UNDEFINED = 'undefined';
+
     /**
      * @var \ReflectionObject
      */
@@ -103,14 +105,14 @@ class Object
      *
      * $map['status'] = array(
      *     'state' => array(
-     *         'active' => 1,
-     *         'closed' => 0,
-     *         '::'     => -1
+     *         'active'              => 1,
+     *         'closed'              => 0,
+     *         Object::MAP_UNDEFINED => -1
      *     )
      * )
      * Will map the Simplerenew field 'status' to the source field 'state' and
-     * set status based on the value in the state field. If no match, '::' will be used for
-     * the unknown value.
+     * set status based on the value in the state field. If no match, Object::MAP_UNDEFINED
+     * will be used forthe unknown value.
      *
      *
      * @param array|object $source Source data to be mapped
@@ -136,8 +138,8 @@ class Object
                     $selected = is_object($source) ? $source->$field : $source[$field];
                     if (isset($values[$selected])) {
                         $value = $values[$selected];
-                    } elseif (isset($values['::'])) {
-                        $value = $values['::'];
+                    } elseif (isset($values[self::MAP_UNDEFINED])) {
+                        $value = $values[self::MAP_UNDEFINED];
                     }
                 } elseif ($map[$srKey] === null) {
                     $value = null;

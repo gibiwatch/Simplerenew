@@ -11,6 +11,7 @@ namespace Simplerenew\Gateway\Recurly;
 use Simplerenew\Api\Account;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\AccountInterface;
+use Simplerenew\Object;
 use Simplerenew\Primitive\Address;
 
 defined('_JEXEC') or die();
@@ -27,9 +28,9 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
         'company'   => 'company_name',
         'status'    => array(
             'state' => array(
-                'active' => Account::STATUS_ACTIVE,
-                'closed' => Account::STATUS_CLOSED,
-                '::'     => Account::STATUS_UNKNOWN
+                'active'              => Account::STATUS_ACTIVE,
+                'closed'              => Account::STATUS_CLOSED,
+                Object::MAP_UNDEFINED => Account::STATUS_UNKNOWN
             )
         )
     );
