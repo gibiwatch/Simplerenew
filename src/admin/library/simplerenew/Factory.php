@@ -66,7 +66,9 @@ class Factory
         $this->userAdapter = $userAdapter;
 
         // Get and verify Gateway configurations
-        if (!empty($config['gateway'])) {
+        if (empty($config['gateway'])) {
+            throw new Exception('No gateway has been defined');
+        } else {
             $gateway = $config['gateway'];
 
             $gatewayNamespace = key($gateway);
