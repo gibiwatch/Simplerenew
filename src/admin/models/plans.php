@@ -14,7 +14,7 @@ class SimplerenewModelPlans extends SimplerenewModellist
     {
         $config['filter_fields'] = array(
             'plan.code',
-            'plan.title',
+            'plan.name',
             'plan.amount',
             'plan.setup',
             'plan.published',

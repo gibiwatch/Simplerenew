@@ -61,7 +61,7 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
         $parent->setProperties(
             array(
                 'currency' => $this->currency,
-                'price'    => $this->getCurrency($plan->unit_amount_in_cents),
+                'amount'    => $this->getCurrency($plan->unit_amount_in_cents),
                 'setup'    => $this->getCurrency($plan->setup_fee_in_cents)
             )
         );

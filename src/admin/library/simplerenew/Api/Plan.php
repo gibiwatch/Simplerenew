@@ -43,7 +43,7 @@ class Plan extends AbstractApiBase
     /**
      * @var float
      */
-    public $price = null;
+    public $amount = null;
 
     /**
      * @var float

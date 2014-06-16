@@ -25,7 +25,6 @@ if ($saveOrder) {
 }
 
 $sortFields = $this->getSortFields();
-$assoc = JLanguageAssociations::isEnabled();
 ?>
 <script type="text/javascript">
     Joomla.orderTable = function () {
@@ -56,10 +55,10 @@ if (empty($this->items)): ?>
 <?php
 else:
     ?>
-    <table class="table table-striped" id="articleList">
+    <table class="table table-striped" id="planList">
     <thead>
         <tr>
-            <th width="1%" class="nowrap center hidden-phone">
+            <th width="1%">
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
@@ -75,7 +74,7 @@ else:
                 ?>
             </th>
 
-            <th width="1%" class="hidden-phone">
+            <th width="1%">
                 <?php echo JHtml::_('grid.checkall'); ?>
             </th>
 
@@ -103,19 +102,19 @@ else:
                 ?>
             </th>
 
-            <th class="nowrap hidden-phone">
+            <th>
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
-                    'COM_SIMPLERENEW_PLAN_TITLE',
-                    'plan.title',
+                    'COM_SIMPLERENEW_PLAN_NAME',
+                    'plan.name',
                     $listDir,
                     $listOrder
                 );
                 ?>
             </th>
 
-            <th class="nowrap hidden-phone">
+            <th>
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
@@ -127,7 +126,7 @@ else:
                 ?>
             </th>
 
-            <th class="nowrap hidden-phone">
+            <th width="5%">
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
@@ -139,7 +138,7 @@ else:
                 ?>
             </th>
 
-            <th class="nowrap hidden-phone">
+            <th width="5%">
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
@@ -151,7 +150,7 @@ else:
                 ?>
             </th>
 
-            <th width="1%" class="nowrap hidden-phone">
+            <th width="1%">
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
@@ -169,7 +168,7 @@ else:
     <?php
     foreach ($this->items as $i => $item):
         $ordering = ($listOrder == 'plan.ordering');
-        $editLink = 'index.php?option=com_content&task=article.edit&id=' . $item->id;
+        $editLink = 'index.php?option=com_simplerenew&task=plan.edit&id=' . $item->id;
         $editTitle = JText::_('JACTION_EDIT');
         ?>
         <tr class="<?php echo 'row' . ($i % 2); ?>">
@@ -216,36 +215,36 @@ else:
                     }
                     echo JHtml::_(
                         'link',
+                        JRoute::_($editLink),
                         $this->escape($item->code),
-                        JRoute::_('link', $editLink),
                         array('title' => $editTitle)
                     );
                     ?>
                 </td>
 
-                <td class="nowrap hidden-phone">
+                <td>
                     <?php
                     echo JHtml::link(
-                        $editLink,
-                        $this->escape($item->title),
+                        JRoute::_($editLink),
+                        $this->escape($item->name),
                         array('title' => $editTitle)
                     );
                     ?>
                 </td>
 
-                <td class="hidden-phone">
+                <td>
                     <?php echo $this->escape($item->group); ?>
                 </td>
 
-                <td class="right hidden-phone">
-                    <?php echo '$' . number_format($this->amount, 2) ?>
+                <td style="text-align: right;">
+                    <?php echo '$' . number_format($item->amount, 2) ?>
                 </td>
 
-                <td class="right hidden-phone">
-                    <?php echo '$' . number_format($this->setup, 2); ?>
+                <td style="text-align: right;">
+                    <?php echo '$' . number_format($item->setup, 2); ?>
                 </td>
 
-                <td class="right hidden-phone">
+                <td>
                     <?php echo (int)$item->id; ?>
                 </td>
             </tr>

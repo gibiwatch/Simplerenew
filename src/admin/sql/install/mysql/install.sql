@@ -2,7 +2,7 @@ CREATE TABLE `#__simplerenew_plans` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_id` int(11) NOT NULL,
   `code` varchar(45) NOT NULL,
-  `title` varchar(45) NOT NULL,
+  `name` varchar(45) NOT NULL,
   `slug` varchar(45) NOT NULL,
   `description` text NOT NULL,
   `interval_length` int(11) NOT NULL,
