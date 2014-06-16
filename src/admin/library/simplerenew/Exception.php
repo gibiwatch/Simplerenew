@@ -20,7 +20,8 @@ class Exception extends \Exception
      */
     public function getTraceMessage()
     {
-        $caller = array_shift($this->getTrace());
+        $trace  = $this->getTrace();
+        $caller = array_shift($trace);
 
         $result = '';
         if (!empty($caller['class'])) {
