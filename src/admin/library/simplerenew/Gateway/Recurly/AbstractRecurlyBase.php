@@ -43,8 +43,8 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
             $this->client = new \Recurly_Client($this->gatewayConfig[$mode . 'Apikey']);
         }
 
-        if (!empty($this->gatewayConfig['apiDomain'])) {
-            $this->transparentUrl .= $this->gatewayConfig['apiDomain'];
+        if (!empty($this->gatewayConfig[$mode . 'Subdomain'])) {
+            $this->transparentUrl .= $this->gatewayConfig[$mode . 'Subdomain'];
         }
 
         $this->currency = empty($this->gatewayConfig['currency']) ? 'USD' : $this->gatewayConfig['currency'];

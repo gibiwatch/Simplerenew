@@ -28,12 +28,6 @@
                 </field>
 
                 <field
-                    name="apiSubdomain"
-                    label="COM_SIMPLERENEW_RECURLY_APISUBDOMAIN_LABEL"
-                    description="COM_SIMPLERENEW_RECURLY_APISUBDOMAIN_DESC"
-                    type="text"/>
-
-                <field
                     name="testHead"
                     label="COM_SIMPLERENEW_GATEWAY_HEAD_TEST"
                     type="heading"
@@ -50,6 +44,12 @@
                     type="text"/>
 
                 <field
+                        name="testSubdomain"
+                        label="COM_SIMPLERENEW_RECURLY_SUBDOMAIN_LABEL"
+                        description="COM_SIMPLERENEW_RECURLY_SUBDOMAIN_DESC"
+                        type="text"/>
+
+                <field
                     name="LiveHead"
                     label="COM_SIMPLERENEW_GATEWAY_HEAD_LIVE"
                     type="heading"
@@ -64,6 +64,12 @@
                     name="livePrivate"
                     label="COM_SIMPLERENEW_RECURLY_PRIVATE_LABEL"
                     type="text"/>
+
+                <field
+                        name="liveSubdomain"
+                        label="COM_SIMPLERENEW_RECURLY_SUBDOMAIN_LABEL"
+                        description="COM_SIMPLERENEW_RECURLY_SUBDOMAIN_DESC"
+                        type="text"/>
             </fieldset>
         </fields>
     </fields>
