@@ -27,6 +27,11 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
      */
     protected $currency = 'USD';
 
+    /**
+     * @var string
+     */
+    protected $transparentUrl = 'https://api.recurly.com/transparent/';
+
     public function __construct(array $config = array())
     {
         parent::__construct($config);
@@ -36,8 +41,10 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
 
         if (!empty($this->gatewayConfig[$mode . 'Apikey'])) {
             $this->client = new \Recurly_Client($this->gatewayConfig[$mode . 'Apikey']);
-        } else {
-            throw new Exception('Recurly API requires an api key');
+        }
+
+        if (!empty($this->gatewayConfig['apiDomain'])) {
+            $this->transparentUrl .= $this->gatewayConfig['apiDomain'];
         }
 
         $this->currency = empty($this->gatewayConfig['currency']) ? 'USD' : $this->gatewayConfig['currency'];
@@ -61,5 +68,13 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
         }
 
         return 0.0;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransparentUrl()
+    {
+        return $this->transparentUrl;
     }
 }

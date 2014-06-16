@@ -28,6 +28,12 @@
                 </field>
 
                 <field
+                    name="apiSubdomain"
+                    label="COM_SIMPLERENEW_RECURLY_APISUBDOMAIN_LABEL"
+                    description="COM_SIMPLERENEW_RECURLY_APISUBDOMAIN_DESC"
+                    type="text"/>
+
+                <field
                     name="testHead"
                     label="COM_SIMPLERENEW_GATEWAY_HEAD_TEST"
                     type="heading"
