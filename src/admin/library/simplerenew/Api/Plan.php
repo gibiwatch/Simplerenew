@@ -63,17 +63,17 @@ class Plan extends AbstractApiBase
     /**
      * @var int
      */
-    public $trialLength = null;
+    public $trial_length = null;
 
     /**
      * @var string
      */
-    public $trialUnit = null;
+    public $trial_unit = null;
 
     /**
      * @var string
      */
-    public $accountCode = null;
+    public $account_code = null;
 
     /**
      * @var \DateTime

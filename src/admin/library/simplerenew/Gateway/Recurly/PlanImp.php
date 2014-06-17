@@ -18,25 +18,24 @@ defined('_JEXEC') or die();
 class PlanImp extends AbstractRecurlyBase implements PlanInterface
 {
     protected $fieldMap = array(
-        'code'        => 'plan_code',
-        'accountCode' => 'account_code',
-        'length'      => 'plan_interval_length',
-        'unit'        => array(
+        'code'         => 'plan_code',
+        'length'       => 'plan_interval_length',
+        'unit'         => array(
             'plan_interval_unit' => array(
                 'months'              => Plan::INTERVAL_MONTHS,
                 'days'                => Plan::INTERVAL_DAYS,
                 Object::MAP_UNDEFINED => Plan::INTERVAL_UNKNOWN
             )
         ),
-        'trialLength' => 'trial_interval_length',
-        'trialUnit'   => array(
+        'trial_length' => 'trial_interval_length',
+        'trial_unit'   => array(
             'trial_interval_unit' => array(
                 'months'              => Plan::INTERVAL_MONTHS,
                 'days'                => Plan::INTERVAL_DAYS,
                 Object::MAP_UNDEFINED => Plan::INTERVAL_UNKNOWN
             )
         ),
-        'created'     => 'created_at'
+        'created'      => 'created_at'
     );
 
     protected $plansLoaded = array();
@@ -61,7 +60,7 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
         $parent->setProperties(
             array(
                 'currency' => $this->currency,
-                'amount'    => $this->getCurrency($plan->unit_amount_in_cents),
+                'amount'   => $this->getCurrency($plan->unit_amount_in_cents),
                 'setup'    => $this->getCurrency($plan->setup_fee_in_cents)
             )
         );

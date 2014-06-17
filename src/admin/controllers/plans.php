@@ -22,6 +22,9 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
     {
         JSession::checkToken() or die(JText::_('JINVALID_TOKEN'));
 
+        $params    = JComponentHelper::getParams('com_simplerenew');
+        $returnUrl = 'index.php?option=com_simplerenew&view=plans';
+
         /** @var SimplerenewModelPlans $plansModel */
         $plansModel = SimplerenewModel::getInstance('Plans', null, array('ignore_request' => true));
         $plansLocal = $plansModel->getItems();
@@ -29,13 +32,13 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
         $plansGateway = SimplerenewHelper::getSimplerenew()->getPlan();
         $plansRemote  = $plansGateway->getList();
 
-        $plansTable  = SimplerenewTable::getInstance('Plans');
+        $plansTable = SimplerenewTable::getInstance('Plans');
 
+        // Identify local plans not on the gateway
         $plansDisable = array();
         $plansUpdate  = array();
         foreach ($plansLocal as $plan) {
             if (!array_key_exists($plan->code, $plansRemote)) {
-                // Disable any plans not on the gateway
                 if ($plan->published) {
                     $plansDisable[] = $plan->id;
                 }
@@ -44,14 +47,27 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
             }
         }
 
+        // Unpublish any plans not on the gateway
         if ($plansDisable) {
             /** @var SimplerenewModelPlan $planModel */
             $planModel = SimplerenewModel::getInstance('Plan');
             $planModel->publish($plansDisable, 0);
         }
 
-        $errors = array();
+        // Load the default group in case we add plans from the gateway
+        $defaultGroup = $params->get('defaultGroup');
+        if ($defaultGroup <= 0) {
+            $error = JText::_('COM_SIMPLERENEW_ERROR_DEFAULTGROUP');
+            $this->setRedirect(
+                $returnUrl,
+                JText::sprintf('COM_SIMPLERENEW_ERROR_CONFIGURATION', $error),
+                'error'
+            );
+            return;
+        }
 
+        // Update/Add plans found on the gateway
+        $errors = array();
         /** @var Simplerenew\Api\Plan $plan */
         foreach ($plansRemote as $code => $plan) {
             $plansTable->bind($plan->getProperties());
@@ -62,6 +78,11 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
                 // Add new plan
                 $plansTable->id        = null;
                 $plansTable->published = 1;
+                $plansTable->alias     = JApplicationHelper::stringURLSafe($plansTable->code);
+            }
+
+            if ($plansTable->group_id <= 0) {
+                $plansTable->group_id = $defaultGroup;
             }
 
             if (!$plansTable->store()) {
@@ -91,6 +112,6 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
             }
             $type = null;
         }
-        $this->setRedirect('index.php?option=com_simplerenew&view=plans', $message, $type);
+        $this->setRedirect($returnUrl, $message, $type);
     }
 }
