@@ -13,13 +13,13 @@ class SimplerenewModelPlans extends SimplerenewModelList
     public function __construct($config = array())
     {
         $config['filter_fields'] = array(
-            'plan.code',
-            'plan.name',
-            'plan.amount',
-            'plan.setup',
-            'plan.published',
-            'plan.id',
-            'plan.created'
+            'code', 'plan.code',
+            'name', 'plan.name',
+            'amount', 'plan.amount',
+            'setup', 'plan.setup',
+            'published', 'plan.published',
+            'id', 'plan.id',
+            'created', 'plan.created'
         );
 
         parent::__construct($config);
@@ -36,11 +36,16 @@ class SimplerenewModelPlans extends SimplerenewModelList
 
         if ($search = $this->getState('filter.search')) {
             $search = $db->q('%' . $search . '%');
-            $ors = array(
+            $ors    = array(
                 'plan.name like ' . $search,
                 'plan.code like ' . $search
             );
             $query->where('(' . join(' OR ', $ors) . ')');
+        }
+
+        $published = $this->getState('filter.published');
+        if ($published != '') {
+            $query->where('plan.published = ' . $db->quote($published));
         }
 
         $listOrder = $this->getState('list.ordering', 'plan.id');
@@ -54,6 +59,14 @@ class SimplerenewModelPlans extends SimplerenewModelList
     {
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search', null, 'string');
         $this->setState('filter.search', $search);
+
+        $published = $this->getUserStateFromRequest(
+            $this->context . '.filter.published',
+            'filter_published',
+            null,
+            'string'
+        );
+        $this->setState('filter.published', $published);
 
         parent::populateState('plan.code', 'ASC');
     }

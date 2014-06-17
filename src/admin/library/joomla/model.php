@@ -10,8 +10,11 @@ defined('_JEXEC') or die();
 
 abstract class SimplerenewModel extends JModelLegacy
 {
-    public static function getInstance($type, $prefix = 'SimplerenewModel', $config = array())
+    public static function getInstance($type, $prefix = null, $config = array())
     {
+        if (empty($prefix)) {
+            $prefix = 'SimplerenewModel';
+        }
         return parent::getInstance($type, $prefix, $config);
     }
 }

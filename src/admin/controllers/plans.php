@@ -15,7 +15,6 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
     public function getModel($name = 'Plan', $prefix = 'SimplerenewModel', $config = array('ignore_request' => true))
     {
         $model = parent::getModel($name, $prefix, $config);
-
         return $model;
     }
 
@@ -24,19 +23,13 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
         JSession::checkToken() or die(JText::_('JINVALID_TOKEN'));
 
         /** @var SimplerenewModelPlans $plansModel */
-        $plansModel = SimplerenewModel::getInstance('Plans');
-        $plansModel->getState()->setProperties(
-            array(
-                'list.start'    => 0,
-                'list.limit'    => 0,
-                'filter.search' => ''
-            )
-        );
+        $plansModel = SimplerenewModel::getInstance('Plans', null, array('ignore_request' => true));
+        $plansLocal = $plansModel->getItems();
 
         $plansGateway = SimplerenewHelper::getSimplerenew()->getPlan();
+        $plansRemote  = $plansGateway->getList();
 
-        $plansLocal  = $plansModel->getItems();
-        $plansRemote = $plansGateway->getList();
+        $plansTable  = SimplerenewTable::getInstance('Plans');
 
         $plansDisable = array();
         $plansUpdate  = array();
@@ -57,24 +50,26 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
             $planModel->publish($plansDisable, 0);
         }
 
-        $table  = SimplerenewTable::getInstance('Plans');
         $errors = array();
 
         /** @var Simplerenew\Api\Plan $plan */
         foreach ($plansRemote as $code => $plan) {
-            $table->bind($plan->getProperties());
-            if (array_key_exists($plan->code, $plansUpdate)) {
-                $table->id = $plansUpdate[$plan->code];
+            $plansTable->bind($plan->getProperties());
+            if (array_key_exists($code, $plansUpdate)) {
+                // Refresh old plan
+                $plansTable->id = $plansUpdate[$code];
             } else {
-                $table->id        = null;
-                $table->published = 1;
+                // Add new plan
+                $plansTable->id        = null;
+                $plansTable->published = 1;
             }
 
-            if (!$table->store()) {
-                $errors = array_merge($errors, $table->getErrors());
+            if (!$plansTable->store()) {
+                $errors = array_merge($errors, $plansTable->getErrors());
             }
         }
 
+        // Set messaging for return
         if ($errors) {
             $message = join("\n", $errors);
             $type    = 'warning';
@@ -94,7 +89,7 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
             } else {
                 $message = JText::_('COM_SIMPLERENEW_PLANS_NOSYNC');
             }
-            $type     = null;
+            $type = null;
         }
         $this->setRedirect('index.php?option=com_simplerenew&view=plans', $message, $type);
     }

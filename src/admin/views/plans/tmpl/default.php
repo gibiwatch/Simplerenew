@@ -90,7 +90,7 @@ else:
                 ?>
             </th>
 
-            <th width="10%">
+            <th width="10%" class="nowrap">
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
@@ -102,7 +102,7 @@ else:
                 ?>
             </th>
 
-            <th>
+            <th class="nowrap">
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
@@ -114,7 +114,7 @@ else:
                 ?>
             </th>
 
-            <th>
+            <th class="nowrap">
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
@@ -126,7 +126,7 @@ else:
                 ?>
             </th>
 
-            <th width="5%">
+            <th width="5%" class="nowrap">
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
@@ -138,7 +138,7 @@ else:
                 ?>
             </th>
 
-            <th width="5%">
+            <th width="5%" class="nowrap">
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
@@ -150,7 +150,7 @@ else:
                 ?>
             </th>
 
-            <th>
+            <th class="nowrap">
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
@@ -162,7 +162,7 @@ else:
                 ?>
             </th>
 
-            <th width="1%">
+            <th width="1%" class="nowrap">
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
