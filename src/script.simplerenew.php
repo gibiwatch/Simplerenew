@@ -54,7 +54,7 @@ class Com_SimplerenewInstallerScript
     protected $messages = array();
 
     /**
-     * @param JAdapterComponent $parent
+     * @param JInstallerAdapterComponent $parent
      *
      * @return void
      */
@@ -71,7 +71,7 @@ class Com_SimplerenewInstallerScript
     }
 
     /**
-     * @param JAdapterComponent $parent
+     * @param JInstallerAdapterComponent $parent
      *
      * @return bool
      */
@@ -81,7 +81,7 @@ class Com_SimplerenewInstallerScript
     }
 
     /**
-     * @param JAdapterComponent $parent
+     * @param JInstallerAdapterComponent $parent
      *
      * @return bool
      */
@@ -91,7 +91,7 @@ class Com_SimplerenewInstallerScript
     }
 
     /**
-     * @param JAdapterComponent $parent
+     * @param JInstallerAdapterComponent $parent
      *
      * @return void
      */
@@ -103,7 +103,7 @@ class Com_SimplerenewInstallerScript
     }
 
     /**
-     * @param JAdapterComponent $parent
+     * @param JInstallerAdapterComponent $parent
      *
      * @return bool
      */
@@ -114,7 +114,7 @@ class Com_SimplerenewInstallerScript
 
     /**
      * @param string            $type
-     * @param JAdapterComponent $parent
+     * @param JInstallerAdapterComponent $parent
      *
      * @return bool
      */
@@ -126,12 +126,13 @@ class Com_SimplerenewInstallerScript
 
     /**
      * @param string            $type
-     * @param JAdapterComponent $parent
+     * @param JInstallerAdapterComponent $parent
      *
      * @return void
      */
     public function postFlight($type, $parent)
     {
+        $this->setDefaultParams();
         $this->installRelated();
         $this->showMessages();
     }
@@ -371,5 +372,26 @@ class Com_SimplerenewInstallerScript
                 }
             }
         }
+    }
+
+    /**
+     * @return void
+     */
+    protected function setDefaultParams()
+    {
+        /** @var JTableExtension $table */
+        $table = JTable::getInstance('Extension');
+        $table->load(array('element' => 'com_simplerenew'));
+
+        $params = new JRegistry($table->params);
+
+        // Must have the default plan group set
+        if ($params->get('defaultGroup') == '') {
+            $defaultGroup = JComponentHelper::getParams('com_users')->get('new_usertype');
+            $params->set('defaultGroup', $defaultGroup);
+            $table->params = $params->toString();
+            $table->store();
+        }
+
     }
 }

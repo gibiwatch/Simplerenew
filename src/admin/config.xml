@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <config addfieldpath="/administrator/components/com_simplerenew/models/fields">
+    <fieldset
+        name="basic"
+        label="COM_SIMPLERENEW_CONFIG_BASIC_LABEL">
+        <field
+            name="defaultGroup"
+            label="COM_SIMPLERENEW_DEFAULT_GROUP_LABEL"
+            description="COM_SIMPLERENEW_DEFAULT_GROUP_DESC"
+            type="usergrouplist"/>
+    </fieldset>
+
     <fields name="account">
         <fieldset
-            name="basic"
-            label="COM_SIMPLERENEW_CONFIG_BASIC_LABEL">
+            name="account"
+            label="COM_SIMPLERENEW_CONFIG_ACCOUNT_LABEL">
             <field
                 name="codeMask"
                 label="COM_SIMPLERENEW_ACCOUNT_CODEMASK_LABEL"
