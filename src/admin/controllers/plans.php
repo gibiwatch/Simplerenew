@@ -10,6 +10,8 @@ defined('_JEXEC') or die();
 
 class SimplerenewControllerPlans extends SimplerenewControllerAdmin
 {
+    protected $text_prefix = 'COM_SIMPLERENEW_PLANS';
+
     public function getModel($name = 'Plan', $prefix = 'SimplerenewModel', $config = array('ignore_request' => true))
     {
         $model = parent::getModel($name, $prefix, $config);
@@ -77,10 +79,21 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
             $message = join("\n", $errors);
             $type    = 'warning';
         } else {
-            $updated  = count($plansUpdate);
-            $added    = count($plansRemote) - $updated;
-            $disabled = count($plansDisable);
-            $message  = JText::sprintf('COM_SIMPLERENEW_PLANS_SYNCED', $added, $updated, $disabled);
+            $message = array();
+            if ($updated = count($plansUpdate)) {
+                $message[] = JText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_UPDATED', $updated);
+            }
+            if ($added = count($plansRemote) - $updated) {
+                $message[] = JText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_ADDED', $added);
+            }
+            if ($disabled = count($plansDisable)) {
+                $message[] = JText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_DISABLED', $disabled);
+            }
+            if ($message) {
+                $message = join("\n", $message);
+            } else {
+                $message = JText::_('COM_SIMPLERENEW_PLANS_NOSYNC');
+            }
             $type     = null;
         }
         $this->setRedirect('index.php?option=com_simplerenew&view=plans', $message, $type);

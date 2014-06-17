@@ -29,8 +29,9 @@ class SimplerenewModelPlans extends SimplerenewModelList
         $db = $this->getDbo();
 
         $query = $db->getQuery(true);
-        $query->select('*');
+        $query->select('plan.*, editor.name as editor');
         $query->from('#__simplerenew_plans plan');
+        $query->leftJoin('#__users editor ON plan.checked_out = editor.id');
 
         if ($search = $this->getState('filter.search')) {
             $search = $db->q('%' . $search . '%');

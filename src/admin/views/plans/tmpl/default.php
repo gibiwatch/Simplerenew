@@ -150,6 +150,18 @@ else:
                 ?>
             </th>
 
+            <th>
+                <?php
+                echo JHtml::_(
+                    'searchtools.sort',
+                    'COM_SIMPLERENEW_MODIFIED',
+                    'plan.modified',
+                    $listDir,
+                    $listOrder
+                );
+                ?>
+            </th>
+
             <th width="1%">
                 <?php
                 echo JHtml::_(
@@ -233,7 +245,7 @@ else:
                 </td>
 
                 <td>
-                    <?php echo $this->escape($item->group); ?>
+                    <?php echo $item->group_id; ?>
                 </td>
 
                 <td style="text-align: right;">
@@ -242,6 +254,10 @@ else:
 
                 <td style="text-align: right;">
                     <?php echo '$' . number_format($item->setup, 2); ?>
+                </td>
+
+                <td>
+                    <?php echo $item->modified; ?>
                 </td>
 
                 <td>
