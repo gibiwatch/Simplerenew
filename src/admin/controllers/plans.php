@@ -55,15 +55,16 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
             $planModel->publish($plansDisable, 0);
         }
 
-        $table = SimplerenewTable::getInstance('Plans');
+        $table  = SimplerenewTable::getInstance('Plans');
         $errors = array();
+
         /** @var Simplerenew\Api\Plan $plan */
         foreach ($plansRemote as $code => $plan) {
             $table->bind($plan->getProperties());
             if (array_key_exists($plan->code, $plansUpdate)) {
                 $table->id = $plansUpdate[$plan->code];
             } else {
-                $table->id = null;
+                $table->id        = null;
                 $table->published = 1;
             }
 
@@ -74,10 +75,13 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
 
         if ($errors) {
             $message = join("\n", $errors);
-            $type = 'warning';
+            $type    = 'warning';
         } else {
-            $message = 'Cool!';
-            $type = null;
+            $updated  = count($plansUpdate);
+            $added    = count($plansRemote) - $updated;
+            $disabled = count($plansDisable);
+            $message  = JText::sprintf('COM_SIMPLERENEW_PLANS_SYNCED', $added, $updated, $disabled);
+            $type     = null;
         }
         $this->setRedirect('index.php?option=com_simplerenew&view=plans', $message, $type);
     }
