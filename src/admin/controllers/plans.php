@@ -33,13 +33,52 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
 
         $plansGateway = SimplerenewHelper::getSimplerenew()->getPlan();
 
-        $plansLocal = $plansModel->getItems();
+        $plansLocal  = $plansModel->getItems();
         $plansRemote = $plansGateway->getList();
 
-        // Add new plans from the gateway
-        foreach ($plansRemote as $code => $plan) {
-
+        $plansDisable = array();
+        $plansUpdate  = array();
+        foreach ($plansLocal as $plan) {
+            if (!array_key_exists($plan->code, $plansRemote)) {
+                // Disable any plans not on the gateway
+                if ($plan->published) {
+                    $plansDisable[] = $plan->id;
+                }
+            } else {
+                $plansUpdate[$plan->code] = $plan->id;
+            }
         }
 
+        if ($plansDisable) {
+            /** @var SimplerenewModelPlan $planModel */
+            $planModel = SimplerenewModel::getInstance('Plan');
+            $planModel->publish($plansDisable, 0);
+        }
+
+        $table = SimplerenewTable::getInstance('Plans');
+        $errors = array();
+        /** @var Simplerenew\Api\Plan $plan */
+        foreach ($plansRemote as $code => $plan) {
+            $table->bind($plan->getProperties());
+            if (array_key_exists($plan->code, $plansUpdate)) {
+                $table->id = $plansUpdate[$plan->code];
+            } else {
+                $table->id = null;
+                $table->published = 1;
+            }
+
+            if (!$table->store()) {
+                $errors = array_merge($errors, $table->getErrors());
+            }
+        }
+
+        if ($errors) {
+            $message = join("\n", $errors);
+            $type = 'warning';
+        } else {
+            $message = 'Cool!';
+            $type = null;
+        }
+        $this->setRedirect('index.php?option=com_simplerenew&view=plans', $message, $type);
     }
 }

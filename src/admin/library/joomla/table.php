@@ -10,5 +10,15 @@ defined('_JEXEC') or die();
 
 abstract class SimplerenewTable extends JTable
 {
-
+    /**
+     * @param string $type
+     * @param string $prefix
+     * @param array  $config
+     *
+     * @return SimplerenewTable
+     */
+    public static function getInstance($type, $prefix = 'SimplerenewTable', $config = array())
+    {
+        return parent::getInstance($type, $prefix, $config);
+    }
 }
