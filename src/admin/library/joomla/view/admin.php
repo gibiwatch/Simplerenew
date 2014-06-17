@@ -8,12 +8,13 @@
 
 defined('_JEXEC') or die();
 
-abstract class SimplerenewAdminView extends JViewLegacy
+abstract class SimplerenewViewAdmin extends JViewLegacy
 {
     public function display($tpl = null)
     {
+        $hide    = JFactory::getApplication()->input->getBool('hidemainmenu', false);
         $sidebar = $this->renderSidebar();
-        if (version_compare(JVERSION, '3.0', 'ge') && $sidebar) {
+        if (!$hide && version_compare(JVERSION, '3.0', 'ge') && $sidebar) {
             $start = array(
                 '<div id="j-sidebar-container" class="span2">',
                 $sidebar,

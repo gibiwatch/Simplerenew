@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 
 jimport('joomla.application.component.modellist');
 
-abstract class SimplerenewModellist extends JModelList
+abstract class SimplerenewModelList extends JModelList
 {
 
 }

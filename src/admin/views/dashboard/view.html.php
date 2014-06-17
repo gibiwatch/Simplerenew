@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die();
 
-class SimplerenewViewDashboard extends SimplerenewAdminView
+class SimplerenewViewDashboard extends SimplerenewViewAdmin
 {
     public function display($tpl = null)
     {
@@ -18,6 +18,8 @@ class SimplerenewViewDashboard extends SimplerenewAdminView
 
     protected function setToolbar($addDivider = false)
     {
+        SimplerenewHelper::addSubmenu('dashboard');
+
         $this->setTitle();
         parent::setToolBar($addDivider);
     }

@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die();
 
-class SimplerenewModelPlans extends SimplerenewModellist
+class SimplerenewModelPlans extends SimplerenewModelList
 {
     public function __construct($config = array())
     {

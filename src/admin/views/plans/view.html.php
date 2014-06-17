@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die();
 
-class SimplerenewViewPlans extends SimplerenewAdminView
+class SimplerenewViewPlans extends SimplerenewViewAdmin
 {
     /**
      * @var JObject
@@ -43,7 +43,15 @@ class SimplerenewViewPlans extends SimplerenewAdminView
 
     protected function setToolbar($addDivider = true)
     {
+        SimplerenewHelper::addSubmenu('plans');
+
         $this->setTitle('COM_SIMPLERENEW_SUBMENU_PLANS');
+
+        SimplerenewToolbarHelper::addNew('plan.add');
+        SimplerenewToolbarHelper::editList('plan.edit');
+        SimplerenewToolbarHelper::publish('plans.publish', 'JTOOLBAR_PUBLISH', true);
+        SimplerenewToolbarHelper::unpublish('plans.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+        SimplerenewToolbarHelper::deleteList('', 'plans.delete');
 
         SimplerenewToolbarHelper::custom(
             'plans.sync',

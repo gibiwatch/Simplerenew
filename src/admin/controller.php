@@ -11,14 +11,4 @@ defined('_JEXEC') or die();
 class SimplerenewController extends JControllerLegacy
 {
     protected $default_view = 'dashboard';
-
-    public function display($cachable = false, $urlparams = array())
-    {
-        $input = JFactory::getApplication()->input;
-
-        $view = $input->getCmd('view', $this->default_view);
-        SimplerenewHelper::addSubmenu($view);
-
-        parent::display($cachable, $urlparams);
-    }
 }
