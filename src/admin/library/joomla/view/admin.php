@@ -12,37 +12,36 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
 {
     public function display($tpl = null)
     {
-        $hide    = JFactory::getApplication()->input->getBool('hidemainmenu', false);
-        $sidebar = $this->renderSidebar();
-        if (!$hide && version_compare(JVERSION, '3.0', 'ge') && $sidebar) {
-            $start = array(
-                '<div id="j-sidebar-container" class="span2">',
-                $sidebar,
-                '</div>',
-                '<div id="j-main-container" class="span10">'
-            );
-        } else {
-            $start = array(
-                '<div id="j-main-container">'
-            );
-        }
+        if (version_compare(JVERSION, '3.0', 'ge')) {
+            $hide = JFactory::getApplication()->input->getBool('hidemainmenu', false);
+            if (!$hide && $sidebar = JHtmlSidebar::render()) {
+                $start = array(
+                    '<div id="j-sidebar-container" class="span2">',
+                    $sidebar,
+                    '</div>',
+                    '<div id="j-main-container" class="span10">'
+                );
+            } else {
+                $start = array(
+                    '<div id="j-main-container">'
+                );
+            }
 
-        echo join("\n", $start);
-        parent::display($tpl);
-        echo '</div>';
+            echo join("\n", $start) . "\n";
+            parent::display($tpl);
+            echo "\n</div>";
+        } else {
+            parent::display($tpl);
+        }
     }
 
-    /**
-     * Provide a method that can be overridden by subclasses for additional logic
-     *
-     * @return string
-     */
-    protected function renderSidebar()
+    public function getLayout()
     {
-        if (version_compare(JVERSION, '3.0', 'ge')) {
-            return JHtmlSidebar::render();
+        $layout = parent::getLayout();
+        if (version_compare(JVERSION, '3.0', 'lt')) {
+            $layout .= '.j2';
         }
-        return '';
+        return $layout;
     }
 
     /**

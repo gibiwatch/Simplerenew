@@ -71,8 +71,8 @@ window.addEvent('domready', function() {
                     <?php
                     echo JHtml::_(
                         'grid.sort',
-                        'COM_SIMPLERENEW_PLAN_TITLE',
-                        'plan.title',
+                        'COM_SIMPLERENEW_PLAN_NAME',
+                        'plan.name',
                         $listDir,
                         $listOrder
                     );
@@ -151,7 +151,7 @@ window.addEvent('domready', function() {
                     <td><?php echo $this->pagination->getRowOffset($i); ?></td>
                     <td class="center"><?php echo JHtml::_('grid.id', $i, $item->id); ?></td>
                     <td><?php echo JHtml::_('link', $link, htmlspecialchars($item->code)); ?></td>
-                    <td><?php echo JHtml::_('link', $link, htmlspecialchars($item->title)); ?></td>
+                    <td><?php echo JHtml::_('link', $link, htmlspecialchars($item->name)); ?></td>
                     <td><?php echo $item->group; ?></td>
                     <td><?php echo '$' . number_format($item->amount, 2); ?></td>
                     <td><?php echo '$' . number_format($item->setup, 2); ?></td>
