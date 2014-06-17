@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter">
+        <field
+            name="search"
+            type="text"
+            label="COM_SIMPLERENEW_FILTER_SEARCH_DESC"
+            hint="JSEARCH_FILTER"/>
+
+        <field
+            name="published"
+            type="status"
+            label="COM_SIMPLERENEW_FILTER_PUBLISHED"
+            description="COM_SIMPLERENEW_FILTER_PUBLISHED_DESC"
+            onchange="this.form.submit();"
+            filter="0,1,*">
+            <option value="">JOPTION_SELECT_PUBLISHED</option>
+        </field>
+    </fields>
+
+    <fields name="list">
+        <field
+            name="fullordering"
+            type="list"
+            label="COM_SIMPLERENEW_LIST_FULL_ORDERING"
+            description="COM_SIMPLERENEW_LIST_FULL_ORDERING_DESC"
+            onchange="this.form.submit();"
+            default="plan.ordering DESC">
+            <option value="">JGLOBAL_SORT_BY</option>
+            <option value="plan.ordering ASC">COM_SIMPLERENEW_GRID_ORDERING_ASC</option>
+            <option value="plan.ordering DESC">COM_SIMPLERENEW_GRID_ORDERING_DESC</option>
+            <option value="plan.published ASC">COM_SIMPLERENEW_GRID_PUBLISHED_ASC</option>
+            <option value="plan.published DESC">COM_SIMPLERENEW_GRID_PUBLISHED_DESC</option>
+            <option value="plan.code ASC">COM_SIMPLERENEW_GRID_PLAN_CODE_ASC</option>
+            <option value="plan.code DESC">COM_SIMPLERENEW_GRID_PLAN_CODE_DESC</option>
+            <option value="plan.name ASC">COM_SIMPLERENEW_GRID_PLAN_NAME_ASC</option>
+            <option value="plan.name DESC">COM_SIMPLERENEW_GRID_PLAN_NAME_DESC</option>
+            <option value="group.title ASC">COM_SIMPLERENEW_GRID_PLAN_GROUP_ASC</option>
+            <option value="group.title DESC">COM_SIMPLERENEW_GRID_PLAN_GROUP_DESC</option>
+            <option value="plan.amount ASC">COM_SIMPLERENEW_GRID_PLAN_AMOUNT_ASC</option>
+            <option value="plan.amount DESC">COM_SIMPLERENEW_GRID_PLAN_AMOUNT_DESC</option>
+            <option value="plan.setup ASC">COM_SIMPLERENEW_GRID_PLAN_SETUP_ASC</option>
+            <option value="plan.setup DESC">COM_SIMPLERENEW_GRID_PLAN_SETUP_DESC</option>
+            <option value="plan.created ASC">COM_SIMPLERENEW_GRID_PLAN_CREATED_ASC</option>
+            <option value="plan.created DESC">COM_SIMPLERENEW_GRID_PLAN_CREATED_DESC</option>
+            <option value="plan.id ASC">COM_SIMPLERENEW_GRID_ID_ASC</option>
+            <option value="plan.id DESC">COM_SIMPLERENEW_GRID_ID_DESC</option>
+        </field>
+
+        <field
+            name="limit"
+            type="limitbox"
+            class="inputbox input-mini"
+            default="25"
+            label="COM_SIMPLERENEW_LIST_LIMIT"
+            description="COM_SIMPLERENEW_LIST_LIMIT_DESC"
+            onchange="this.form.submit();"/>
+    </fields>
+</form>

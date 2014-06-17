@@ -18,7 +18,8 @@ class SimplerenewModelPlans extends SimplerenewModelList
             'plan.amount',
             'plan.setup',
             'plan.published',
-            'plan.id'
+            'plan.id',
+            'plan.created'
         );
 
         parent::__construct($config);
@@ -36,14 +37,14 @@ class SimplerenewModelPlans extends SimplerenewModelList
         if ($search = $this->getState('filter.search')) {
             $search = $db->q('%' . $search . '%');
             $ors = array(
-                'plan.title like ' . $search,
+                'plan.name like ' . $search,
                 'plan.code like ' . $search
             );
             $query->where('(' . join(' OR ', $ors) . ')');
         }
 
-        $listOrder = $this->getState('list.ordering');
-        $listDir   = $this->getState('list.direction');
+        $listOrder = $this->getState('list.ordering', 'plan.id');
+        $listDir   = $this->getState('list.direction', 'ASC');
         $query->order($listOrder . ' ' . $listDir);
 
         return $query;
@@ -54,6 +55,6 @@ class SimplerenewModelPlans extends SimplerenewModelList
         $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search', null, 'string');
         $this->setState('filter.search', $search);
 
-        parent::populateState('code', 'ASC');
+        parent::populateState('plan.code', 'ASC');
     }
 }

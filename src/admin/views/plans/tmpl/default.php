@@ -47,7 +47,7 @@ $sortFields = $this->getSortFields();
     id="adminForm">
 
 <?php
-//echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this));
+echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this));
 if (empty($this->items)): ?>
     <div class="alert alert-no-items">
         <?php echo JText::_('JGLOBAL_NO_MATCHING_RESULTS'); ?>
@@ -154,8 +154,8 @@ else:
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
-                    'COM_SIMPLERENEW_MODIFIED',
-                    'plan.modified',
+                    'COM_SIMPLERENEW_CREATED',
+                    'plan.created',
                     $listDir,
                     $listOrder
                 );
@@ -222,7 +222,8 @@ else:
                             $i,
                             $item->editor,
                             $item->checked_out_time,
-                            'plans.'
+                            'plans.',
+                            true
                         );
                     }
                     echo JHtml::_(
@@ -257,7 +258,7 @@ else:
                 </td>
 
                 <td>
-                    <?php echo $item->modified; ?>
+                    <?php echo $item->created; ?>
                 </td>
 
                 <td>

@@ -20,7 +20,7 @@ class SimplerenewViewPlans extends SimplerenewViewAdmin
      */
     protected $items = array();
 
-    protected $filterForm = null;
+    public $filterForm = null;
     /**
      * @var JPagination
      */
@@ -28,9 +28,9 @@ class SimplerenewViewPlans extends SimplerenewViewAdmin
 
     public function display($tpl = null)
     {
-        $this->state = $this->get('State');
-        $this->items = $this->get('Items');
-        //$this->filterForm = $this->get('FilterForm');
+        $this->state      = $this->get('State');
+        $this->items      = $this->get('Items');
+        $this->filterForm = $this->get('FilterForm');
         $this->pagination = $this->get('Pagination');
 
         if (count($errors = $this->get('Errors'))) {
