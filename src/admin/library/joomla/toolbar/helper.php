@@ -15,6 +15,7 @@ abstract class SimplerenewToolbarHelper extends JToolbarHelper
         $img = JHtml::_('image', "com_simplerenew/icon-32-{$icon}.png", null, null, true, true);
         if ($img) {
             $doc = JFactory::getDocument();
+            /* The first style declaration is for Joomla 2.5 and the second is for Joomla 3 */
             $doc->addStyleDeclaration(".icon-32-{$icon} { background-image: url({$img}); background-repeat: no-repeat; }");
             $doc->addStyleDeclaration(".icon-{$icon} { background-image: url({$img}); background-repeat: no-repeat; background-size: 16px auto; }");
         }
