@@ -8,55 +8,63 @@
 
 defined('_JEXEC') or die();
 
+/**
+ * @var JForm      $form
+ * @var JFormField $field
+ */
+$form      = $this->form;
+$fieldSets = $form->getFieldsets();
+
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
 //JHtml::_('formbehavior.chosen', 'select');
-
-//$this->hiddenFieldsets = array();
-//$this->hiddenFieldsets[0] = 'basic-limited';
-//$this->configFieldsets = array();
-//$this->configFieldsets[0] = 'editorConfig';
-
-// Create shortcut to parameters.
-//$params = $this->state->get('params');
 
 $app = JFactory::getApplication();
 $input = $app->input;
 ?>
 <script type="text/javascript">
-    Joomla.submitbutton = function(task)
-    {
-        if (task == 'plan.cancel' || document.formvalidator.isValid(document.id('item-form')))
-        {
-            <?php //echo $this->form->getField('articletext')->save(); ?>
+    Joomla.submitbutton = function (task) {
+        if (task == 'plan.cancel' || document.formvalidator.isValid(document.id('item-form'))) {
+            <?php echo $this->form->getField('description')->save(); ?>
             Joomla.submitform(task, document.getElementById('item-form'));
         }
     }
 </script>
 
 <form
-    action="<?php echo JRoute::_('index.php?option=com_simplerenew&layout=edit&id=' . (int) @$this->item->id); ?>"
+    action="<?php echo JRoute::_('index.php?option=com_simplerenew&layout=edit&id=' . (int)@$this->item->id); ?>"
     method="post"
     name="adminForm"
     id="item-form"
     class="form-validate">
 
-    <?php //echo JLayoutHelper::render('joomla.edit.title_alias', $this); ?>
+    <div class="form-inline form-inline-header">
+        <?php
+        $fields = $form->getFieldset('header');
+        foreach ($fields as $field) {
+            echo $field->renderField();
+        }
+        ?>
+    </div>
 
     <div class="form-horizontal">
-        <div class="row-fluid">
-            <div class="span9">
-                <fieldset class="adminform">
-                    main part<?php //echo $this->form->getInput('articletext'); ?>
-                </fieldset>
-            </div>
-            <div class="span3">
-                side part<?php //echo JLayoutHelper::render('joomla.edit.global', $this); ?>
-            </div>
-        </div>
+        <?php
+        echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'main'));
 
-        <input type="hidden" name="task" value="" />
-        <input type="hidden" name="return" value="<?php echo $input->getCmd('return'); ?>" />
-        <?php echo JHtml::_('form.token'); ?>
+        echo $this->renderFieldset('main');
+        ?>
+
+        <?php
+        echo JHtml::_('bootstrap.addTab', 'myTab', 'description', JText::_('COM_SIMPLERENEW_PLAN_DESCRIPTION_LABEL')); ?>
+        <div class="row-fluid">
+            <fieldset class="adminform">
+                <?php echo $this->form->getInput('description'); ?>
+            </fieldset>
+        </div >
+        <?php echo JHtml::_('bootstrap.endTab'); ?>
     </div>
+
+    <input type="hidden" name="task" value="" />
+    <input type="hidden" name="return" value="<?php echo $input->getCmd('return'); ?>" />
+    <?php echo JHtml::_('form.token'); ?>
 </form>

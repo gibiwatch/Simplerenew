@@ -86,8 +86,27 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
         }
     }
 
-    protected function getSortFields()
+    protected function renderFieldset($fieldSet, $options = array())
     {
-        return array();
+        $html = array();
+        if (!empty($this->form) && $this->form instanceof JForm) {
+            $fieldSets = $this->form->getFieldsets();
+
+            if (!empty($fieldSets[$fieldSet])) {
+                $name = $fieldSets[$fieldSet]->name;
+                $label = $fieldSets[$fieldSet]->label ?: 'COM_SIMPLERENEW_ADMIN_PAGE_' . $name;
+
+                $html = array(
+                    JHtml::_('bootstrap.addTab', 'myTab', $name, JText::_($label)),
+                    '<div class="row-fluid">',
+                    '<fieldset class="adminform">',
+                    $this->form->renderFieldset($name, $options),
+                    '</fieldset>',
+                    '</div>',
+                    JHtml::_('bootstrap.endTab')
+                );
+            }
+        }
+        return join("\n", $html);
     }
 }

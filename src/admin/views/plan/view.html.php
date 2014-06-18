@@ -10,10 +10,16 @@ defined('_JEXEC') or die();
 
 class SimplerenewViewPlan extends SimplerenewViewAdmin
 {
+    /**
+     * @var JForm
+     */
+    public $form = null;
+
     public function display($tpl = null)
     {
-        $this->setToolBar();
+        $this->form = $this->getForm();
 
+        $this->setToolBar();
         parent::display($tpl);
     }
 

@@ -57,7 +57,7 @@ else:
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
-                    'COM_SIMPLERENEW_PLAN_CODE',
+                    'COM_SIMPLERENEW_PLAN_CODE_LABEL',
                     'plan.code',
                     $listDir,
                     $listOrder
@@ -69,7 +69,7 @@ else:
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
-                    'COM_SIMPLERENEW_PLAN_NAME',
+                    'COM_SIMPLERENEW_PLAN_NAME_LABEL',
                     'plan.name',
                     $listDir,
                     $listOrder
@@ -81,7 +81,7 @@ else:
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
-                    'COM_SIMPLERENEW_PLAN_GROUP',
+                    'COM_SIMPLERENEW_PLAN_GROUP_ID_LABEL',
                     'ug.title',
                     $listDir,
                     $listOrder
@@ -93,7 +93,7 @@ else:
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
-                    'COM_SIMPLERENEW_PLAN_AMOUNT',
+                    'COM_SIMPLERENEW_PLAN_AMOUNT_LABEL',
                     'plan.amount',
                     $listDir,
                     $listOrder
@@ -105,7 +105,7 @@ else:
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
-                    'COM_SIMPLERENEW_PLAN_SETUP',
+                    'COM_SIMPLERENEW_PLAN_SETUP_LABEL',
                     'plan.setup',
                     $listDir,
                     $listOrder
@@ -129,7 +129,7 @@ else:
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
-                    'COM_SIMPLERENEW_ID',
+                    'COM_SIMPLERENEW_ID_LABEL',
                     'plan.id',
                     $listDir,
                     $listOrder

@@ -60,7 +60,7 @@ window.addEvent('domready', function() {
                     <?php
                     echo JHtml::_(
                         'grid.sort',
-                        'COM_SIMPLERENEW_PLAN_CODE',
+                        'COM_SIMPLERENEW_PLAN_CODE_LABEL',
                         'plan.code',
                         $listDir,
                         $listOrder
@@ -71,7 +71,7 @@ window.addEvent('domready', function() {
                     <?php
                     echo JHtml::_(
                         'grid.sort',
-                        'COM_SIMPLERENEW_PLAN_NAME',
+                        'COM_SIMPLERENEW_PLAN_NAME_LABEL',
                         'plan.name',
                         $listDir,
                         $listOrder
@@ -82,7 +82,7 @@ window.addEvent('domready', function() {
                     <?php
                     echo JHtml::_(
                         'grid.sort',
-                        'COM_SIMPLERENEW_PLAN_GROUP',
+                        'COM_SIMPLERENEW_PLAN_GROUP_ID_LABEL',
                         'ug.title',
                         $listDir,
                         $listOrder
@@ -93,7 +93,7 @@ window.addEvent('domready', function() {
                     <?php
                     echo JHtml::_(
                         'grid.sort',
-                        'COM_SIMPLERENEW_PLAN_AMOUNT',
+                        'COM_SIMPLERENEW_PLAN_AMOUNT_LABEL',
                         'plan.amount',
                         $listDir,
                         $listOrder
@@ -104,7 +104,7 @@ window.addEvent('domready', function() {
                     <?php
                     echo JHtml::_(
                         'grid.sort',
-                        'COM_SIMPLERENEW_PLAN_SETUP',
+                        'COM_SIMPLERENEW_PLAN_SETUP_LABEL',
                         'plan.setup',
                         $listDir,
                         $listOrder
@@ -126,7 +126,7 @@ window.addEvent('domready', function() {
                     <?php
                     echo JHtml::_(
                         'grid.sort',
-                        'COM_SIMPLERENEW_ID',
+                        'COM_SIMPLERENEW_ID_LABEL',
                         'plan.id',
                         $listDir,
                         $listOrder
