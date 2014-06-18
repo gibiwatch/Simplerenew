@@ -19,7 +19,8 @@ class SimplerenewModelPlans extends SimplerenewModelList
             'setup', 'plan.setup',
             'published', 'plan.published',
             'id', 'plan.id',
-            'created', 'plan.created'
+            'created', 'plan.created',
+            'group', 'ug.title'
         );
 
         parent::__construct($config);
@@ -30,9 +31,10 @@ class SimplerenewModelPlans extends SimplerenewModelList
         $db = $this->getDbo();
 
         $query = $db->getQuery(true);
-        $query->select('plan.*, editor.name as editor');
+        $query->select('plan.*, ug.title usergroup, editor.name as editor');
         $query->from('#__simplerenew_plans plan');
         $query->leftJoin('#__users editor ON plan.checked_out = editor.id');
+        $query->leftJoin('#__usergroups ug ON ug.id = plan.group_id');
 
         if ($search = $this->getState('filter.search')) {
             $search = $db->q('%' . $search . '%');
@@ -48,6 +50,11 @@ class SimplerenewModelPlans extends SimplerenewModelList
             $query->where('plan.published = ' . $db->quote($published));
         }
 
+        $group = $this->getState('filter.group');
+        if ($group > 0) {
+            $query->where('ug.id = ' . $db->quote($group));
+        }
+
         $listOrder = $this->getState('list.ordering', 'plan.id');
         $listDir   = $this->getState('list.direction', 'ASC');
         $query->order($listOrder . ' ' . $listDir);
@@ -57,16 +64,14 @@ class SimplerenewModelPlans extends SimplerenewModelList
 
     protected function populateState($ordering = null, $direction = null)
     {
-        $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search', null, 'string');
+        $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
         $this->setState('filter.search', $search);
 
-        $published = $this->getUserStateFromRequest(
-            $this->context . '.filter.published',
-            'filter_published',
-            null,
-            'string'
-        );
+        $published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published');
         $this->setState('filter.published', $published);
+
+        $group = $this->getUserStateFromRequest($this->context . '.filter.group', 'filter_group');
+        $this->setState('filter.group', $group);
 
         parent::populateState('plan.code', 'ASC');
     }

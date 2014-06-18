@@ -3,19 +3,23 @@
     <fields name="filter">
         <field
             name="search"
-            type="text"
-            label="COM_SIMPLERENEW_FILTER_SEARCH_DESC"
-            hint="JSEARCH_FILTER"/>
+            type="text"/>
 
         <field
             name="published"
             type="status"
-            label="COM_SIMPLERENEW_FILTER_PUBLISHED"
-            description="COM_SIMPLERENEW_FILTER_PUBLISHED_DESC"
             onchange="this.form.submit();"
             filter="0,1,*">
-            <option value="">JOPTION_SELECT_PUBLISHED</option>
+            <option value="">COM_SIMPLERENEW_OPTION_SELECT_PUBLISHED</option>
         </field>
+
+        <field
+            name="group"
+            type="usergrouplist"
+            onchange="this.form.submit();">
+            <option value="">COM_SIMPLERENEW_OPTION_SELECT_GROUP</option>
+        </field>
+
     </fields>
 
     <fields name="list">
@@ -35,8 +39,8 @@
             <option value="plan.code DESC">COM_SIMPLERENEW_GRID_PLAN_CODE_DESC</option>
             <option value="plan.name ASC">COM_SIMPLERENEW_GRID_PLAN_NAME_ASC</option>
             <option value="plan.name DESC">COM_SIMPLERENEW_GRID_PLAN_NAME_DESC</option>
-            <option value="group.title ASC">COM_SIMPLERENEW_GRID_PLAN_GROUP_ASC</option>
-            <option value="group.title DESC">COM_SIMPLERENEW_GRID_PLAN_GROUP_DESC</option>
+            <option value="ug.title ASC">COM_SIMPLERENEW_GRID_PLAN_GROUP_ASC</option>
+            <option value="ug.title DESC">COM_SIMPLERENEW_GRID_PLAN_GROUP_DESC</option>
             <option value="plan.amount ASC">COM_SIMPLERENEW_GRID_PLAN_AMOUNT_ASC</option>
             <option value="plan.amount DESC">COM_SIMPLERENEW_GRID_PLAN_AMOUNT_DESC</option>
             <option value="plan.setup ASC">COM_SIMPLERENEW_GRID_PLAN_SETUP_ASC</option>

@@ -90,7 +90,7 @@ else:
                 ?>
             </th>
 
-            <th width="10%" class="nowrap">
+            <th class="nowrap">
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
@@ -119,7 +119,7 @@ else:
                 echo JHtml::_(
                     'searchtools.sort',
                     'COM_SIMPLERENEW_PLAN_GROUP',
-                    'group.title',
+                    'ug.title',
                     $listDir,
                     $listOrder
                 );
@@ -246,7 +246,7 @@ else:
                 </td>
 
                 <td>
-                    <?php echo $item->group_id; ?>
+                    <?php echo $item->usergroup; ?>
                 </td>
 
                 <td style="text-align: right;">
