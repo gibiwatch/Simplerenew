@@ -17,29 +17,8 @@ $user      = JFactory::getUser();
 $userId    = $user->get('id');
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDir   = $this->escape($this->state->get('list.direction'));
-$saveOrder = $listOrder == 'plan.ordering';
 
-if ($saveOrder) {
-    $saveOrderingUrl = 'index.php?option=com_simplerenew&task=plans.saveOrderAjax&tmpl=component';
-    JHtml::_('sortablelist.sortable', 'planList', 'adminForm', strtolower($listDir), $saveOrderingUrl);
-}
-
-$sortFields = $this->getSortFields();
 ?>
-<script type="text/javascript">
-    Joomla.orderTable = function () {
-        var table = document.getElementById('sortTable');
-        var direction = document.getElementById('directionTable');
-        var order = table.options[table.selectedIndex].value;
-        if (order != '<?php echo $listOrder; ?>') {
-            var dir = 'asc';
-        } else {
-            dir = direction.options[direction.selectedIndex].value;
-        }
-        Joomla.tableOrdering(order, dir, '');
-    }
-</script>
-
 <form
     action="<?php echo JRoute::_('index.php?option=com_simplerenew&view=plans'); ?>"
     method="post"
@@ -58,22 +37,6 @@ else:
     <table class="table table-striped" id="planList">
     <thead>
         <tr>
-            <th width="1%">
-                <?php
-                echo JHtml::_(
-                    'searchtools.sort',
-                    '',
-                    'plan.ordering',
-                    $listDir,
-                    $listOrder,
-                    null,
-                    'asc',
-                    'JGRID_HEADING_ORDERING',
-                    'icon-menu-2'
-                );
-                ?>
-            </th>
-
             <th width="1%">
                 <?php echo JHtml::_('grid.checkall'); ?>
             </th>
@@ -184,19 +147,6 @@ else:
         $editTitle = JText::_('JACTION_EDIT');
         ?>
         <tr class="<?php echo 'row' . ($i % 2); ?>">
-            <td class="order nowrap center hidden-phone">
-                <span class="sortable-handler">
-                    <i class="icon-menu"></i>
-                </span>
-                <?php if ($saveOrder): ?>
-                <input
-                    type="text"
-                    style="display:none" name="order[]" size="5"
-                    value="<?php echo $item->ordering; ?>"
-                    class="width-20 text-area-order "/>
-                <?php endif; ?>
-            </td>
-
             <td class="center hidden-phone">
                 <?php echo JHtml::_('grid.id', $i, $item->id); ?>
             </td>
