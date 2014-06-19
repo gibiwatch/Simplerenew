@@ -65,7 +65,8 @@ class SimplerenewViewPlans extends SimplerenewViewAdmin
 
         SimplerenewToolbarHelper::custom(
             'plans.sync',
-            'sync',
+            'loop',
+            '#2f96b4',
             null,
             JText::_('COM_SIMPLERENEW_SYNCRONIZE'),
             false
