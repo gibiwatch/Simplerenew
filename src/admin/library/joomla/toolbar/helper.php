@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 
 abstract class SimplerenewToolbarHelper extends JToolbarHelper
 {
-    public static function custom($task = '', $icon = '', $iconColor = '#333', $iconOver = '', $alt = '', $listSelect = true)
+    public static function custom($task = '', $icon = '', $iconOver = '', $alt = '', $listSelect = true, $iconColor = '#333')
     {
         $img = JHtml::_('image', "com_simplerenew/icon-32-{$icon}.png", null, null, true, true);
         if ($img) {
@@ -19,6 +19,6 @@ abstract class SimplerenewToolbarHelper extends JToolbarHelper
             $doc->addStyleDeclaration(".icon-32-{$icon} { background-image: url({$img}); background-repeat: no-repeat; }");
             $doc->addStyleDeclaration(".icon-{$icon}:before { color: {$iconColor}; }");
         }
-        parent::custom($task, $icon, $iconColor, $iconOver, $alt, $listSelect);
+        parent::custom($task, $icon, $iconOver, $alt, $listSelect, $iconColor);
     }
 }
