@@ -32,7 +32,7 @@ $input = $app->input;
 </script>
 
 <form
-    action="<?php echo JRoute::_('index.php?option=com_simplerenew&layout=edit&id=' . (int)@$this->item->id); ?>"
+    action="<?php echo JRoute::_('index.php?option=com_simplerenew&layout=edit&id=' . (int)$this->item->id); ?>"
     method="post"
     name="adminForm"
     id="item-form"
