@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form>
+<form addfieldpath="/administrator/components/com_simplerenew/models/fields">
     <fieldset name="heading">
         <field
             name="code"
@@ -44,19 +44,22 @@
             name="name"
             type="text"
             label="COM_SIMPLERENEW_PLAN_NAME_LABEL"
-            description="COM_SIMPLERENEW_PLAN_NAME_DESC"/>
+            description="COM_SIMPLERENEW_PLAN_NAME_DESC"
+            required="true"/>
 
         <field
             name="length"
             type="text"
             label="COM_SIMPLERENEW_PLAN_LENGTH_LABEL"
-            description="COM_SIMPLERENEW_PLAN_LENGTH_DESC"/>
+            description="COM_SIMPLERENEW_PLAN_LENGTH_DESC"
+            required="true"/>
 
         <field
             name="unit"
-            type="text"
+            type="planunits"
             label="COM_SIMPLERENEW_PLAN_UNIT_LABEL"
-            description="COM_SIMPLERENEW_PLAN_UNIT_DESC"/>
+            description="COM_SIMPLERENEW_PLAN_UNIT_DESC"
+            required="true"/>
 
         <field
             name="trial_length"
@@ -66,15 +69,18 @@
 
         <field
             name="trial_unit"
-            type="text"
+            type="planunits"
             label="COM_SIMPLERENEW_PLAN_TRIAL_UNIT_LABEL"
-            description="COM_SIMPLERENEW_PLAN_TRIAL_UNIT_DESC"/>
+            description="COM_SIMPLERENEW_PLAN_TRIAL_UNIT_DESC">
+            <option value="">COM_SIMPLERENEW_OPTION_SELECT_UNIT</option>
+        </field>
 
         <field
             name="amount"
             type="text"
             label="COM_SIMPLERENEW_PLAN_AMOUNT_LABEL"
-            description="COM_SIMPLERENEW_PLAN_AMOUNT_DESC"/>
+            description="COM_SIMPLERENEW_PLAN_AMOUNT_DESC"
+            required="true"/>
 
         <field
             name="setup"
