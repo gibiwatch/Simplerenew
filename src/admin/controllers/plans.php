@@ -93,7 +93,7 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
 
         // Set messaging for return
         if ($errors) {
-            $message = join("\n", $errors);
+            $message = join('<br/>', $errors);
             $type    = 'warning';
         } else {
             $message = array();
@@ -107,7 +107,7 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
                 $message[] = JText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_DISABLED', $disabled);
             }
             if ($message) {
-                $message = join("\n", $message);
+                $message = join('<br/>', $message);
             } else {
                 $message = JText::_('COM_SIMPLERENEW_PLANS_NOSYNC');
             }
