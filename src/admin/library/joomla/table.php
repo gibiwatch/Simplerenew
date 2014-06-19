@@ -46,8 +46,8 @@ abstract class SimplerenewTable extends JTable
             && property_exists($this, 'created_by')
             && property_exists($this, 'created_by_alias')
         ) {
-            $this->created_by = $user->id;
-            $this->created_by_alias = $user->name;
+            $this->created_by       = $this->created_by ? : $user->id;
+            $this->created_by_alias = $this->created_by_alias ? : $user->name;
         }
 
         if (property_exists($this, 'modified')) {
