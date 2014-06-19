@@ -200,11 +200,11 @@ else:
                 </td>
 
                 <td style="text-align: right;">
-                    <?php echo '$' . number_format($item->amount, 2) ?>
+                    <?php echo number_format($item->amount, 2) ?>
                 </td>
 
                 <td style="text-align: right;">
-                    <?php echo '$' . number_format($item->setup, 2); ?>
+                    <?php echo number_format($item->setup, 2); ?>
                 </td>
 
                 <td>
