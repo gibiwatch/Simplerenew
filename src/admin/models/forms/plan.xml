@@ -117,6 +117,7 @@
             description="COM_SIMPLERENEW_COMMON_CREATED_DESC"
             class="inputbox"
             size="22"
+            readonly="true"
             format="%Y-%m-%d %H:%M:%S"
             filter="user_utc"/>
 
