@@ -70,10 +70,9 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
         $errors = array();
         /** @var Simplerenew\Api\Plan $plan */
         foreach ($plansRemote as $code => $plan) {
-            $plansTable->bind($plan->getProperties());
             if (array_key_exists($code, $plansUpdate)) {
                 // Refresh old plan
-                $plansTable->id = $plansUpdate[$code];
+                $plansTable->load($plansUpdate[$code]);
             } else {
                 // Add new plan
                 $plansTable->id        = null;
@@ -81,6 +80,7 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
                 $plansTable->alias     = JApplicationHelper::stringURLSafe($plansTable->code);
                 $plansTable->created_by_alias = JText::_('COM_SIMPLERENEW_PLAN_SYNC_IMPORTED');
             }
+            $plansTable->bind($plan->getProperties());
 
             if ($plansTable->group_id <= 0) {
                 $plansTable->group_id = $defaultGroup;
