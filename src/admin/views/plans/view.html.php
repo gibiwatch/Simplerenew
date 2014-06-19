@@ -65,10 +65,11 @@ class SimplerenewViewPlans extends SimplerenewViewAdmin
 
         SimplerenewToolbarHelper::custom(
             'plans.sync',
-            'sync',
+            'loop',
             null,
             JText::_('COM_SIMPLERENEW_SYNCRONIZE'),
-            false
+            false,
+            '#2f96b4'
         );
 
         parent::setToolBar($addDivider);
