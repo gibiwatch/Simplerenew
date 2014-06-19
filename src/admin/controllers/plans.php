@@ -79,6 +79,7 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
                 $plansTable->id        = null;
                 $plansTable->published = 1;
                 $plansTable->alias     = JApplicationHelper::stringURLSafe($plansTable->code);
+                $plansTable->created_by_alias = JText::_('COM_SIMPLERENEW_PLAN_SYNC_IMPORTED');
             }
 
             if ($plansTable->group_id <= 0) {
