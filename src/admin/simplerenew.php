@@ -17,9 +17,6 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_simplerenew')) {
 
 require_once JPATH_COMPONENT . '/include.php';
 
-// Load dependencies
-jimport('joomla.application.component.controller');
-
 $input      = JFactory::getApplication()->input;
 $controller = JControllerLegacy::getInstance('Simplerenew');
 
