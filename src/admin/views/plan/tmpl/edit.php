@@ -40,7 +40,7 @@ $input = $app->input;
 
     <div class="form-inline form-inline-header">
         <?php
-        $fields = $form->getFieldset('header');
+        $fields = $form->getFieldset('heading');
         foreach ($fields as $field) {
             echo $field->renderField();
         }
