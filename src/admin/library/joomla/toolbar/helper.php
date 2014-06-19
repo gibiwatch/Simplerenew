@@ -19,6 +19,6 @@ abstract class SimplerenewToolbarHelper extends JToolbarHelper
             $doc->addStyleDeclaration(".icon-32-{$icon} { background-image: url({$img}); background-repeat: no-repeat; }");
             $doc->addStyleDeclaration(".icon-{$icon}:before { color: {$iconColor}; }");
         }
-        parent::custom($task, $icon, $iconOver, $alt, $listSelect);
+        parent::custom($task, $icon, $iconColor, $iconOver, $alt, $listSelect);
     }
 }
