@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die();
 
-$user = JFactory::getUser();
+$user = SimplerenewFactory::getUser();
 $userId = $user->get('id');
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDir = $this->escape($this->state->get('list.direction'));
@@ -30,7 +30,7 @@ window.addEvent('domready', function() {
     <fieldset id="filter-bar">
         <div class="filter-search fltlft">
             <label class="filter-search-lbl" for="filter_search">
-                <?php echo JText::_('JSEARCH_FILTER_LABEL'); ?>
+                <?php echo SimplerenewText::_('JSEARCH_FILTER_LABEL'); ?>
             </label>
 
             <input
@@ -38,13 +38,13 @@ window.addEvent('domready', function() {
                 name="filter_search"
                 id="filter_search"
                 value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
-                title="<?php echo JText::_('COM_SIMPLERENEW_FILTER_SEARCH_DESC'); ?>"/>
+                title="<?php echo SimplerenewText::_('COM_SIMPLERENEW_FILTER_SEARCH_DESC'); ?>"/>
 
             <button type="submit" class="btn">
-                <?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>
+                <?php echo SimplerenewText::_('JSEARCH_FILTER_SUBMIT'); ?>
             </button>
             <button type="button" id="clear_form">
-                <?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>
+                <?php echo SimplerenewText::_('JSEARCH_FILTER_CLEAR'); ?>
             </button>
         </div>
         <div class="filter-select fltrt"></div>

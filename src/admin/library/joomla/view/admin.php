@@ -60,9 +60,9 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
             $doc->addStyleDeclaration(".icon-48-{$icon} { background-image: url({$img}); }");
         }
 
-        $title = JText::_('COM_SIMPLERENEW');
+        $title = SimplerenewText::_('COM_SIMPLERENEW');
         if ($sub) {
-            $title .= ': ' . JText::_($sub);
+            $title .= ': ' . SimplerenewText::_($sub);
         }
 
         JToolbarHelper::title($title, $icon);
@@ -97,7 +97,7 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
                 $label = $fieldSets[$fieldSet]->label ?: 'COM_SIMPLERENEW_ADMIN_PAGE_' . $name;
 
                 $html = array(
-                    JHtml::_('bootstrap.addTab', 'myTab', $name, JText::_($label)),
+                    JHtml::_('bootstrap.addTab', 'myTab', $name, SimplerenewText::_($label)),
                     '<div class="row-fluid">',
                     '<fieldset class="adminform">',
                     $this->form->renderFieldset($name, $options),

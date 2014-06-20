@@ -12,7 +12,7 @@ class SimplerenewModelPlan extends SimplerenewModelAdmin
 {
     public function getTable($type = 'Plans', $prefix = 'SimplerenewTable', $config = array())
     {
-        return JTable::getInstance($type, $prefix, $config);
+        return SimplerenewTable::getInstance($type, $prefix, $config);
     }
 
     public function getForm($data = array(), $loadData = true)
@@ -27,7 +27,7 @@ class SimplerenewModelPlan extends SimplerenewModelAdmin
 
     protected function loadFormData()
     {
-        $data = JFactory::getApplication()->getUserState('com_simplerenew.edit.plan.data', array());
+        $data = SimplerenewFactory::getApplication()->getUserState('com_simplerenew.edit.plan.data', array());
 
         if (empty($data)) {
             $data = $this->getItem();

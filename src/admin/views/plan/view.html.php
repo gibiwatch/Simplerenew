@@ -32,7 +32,7 @@ class SimplerenewViewPlan extends SimplerenewViewAdmin
     protected function setToolBar($addDivider = true)
     {
         $isNew = ($this->item->id == 0);
-        JFactory::getApplication()->input->set('hidemainmenu', true);
+        SimplerenewFactory::getApplication()->input->set('hidemainmenu', true);
 
         $this->setTitle('Plan');
 

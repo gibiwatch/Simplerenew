@@ -18,14 +18,13 @@ standard. It is used to register /library/simplerenew as the base *Simplerenew* 
 
 CMS Abstracting/Autoloading
 ===========================
-The /library folder is also used to abstract any classes used from the hosting CMS. These folders
+The /library folder is also used to abstract classes used from the hosting CMS. These folders
 will use idiosyncratic autoloading structures suitable to the hosting CMS.
 
 All subclass names MUST begin with Simplerenew.
 
-
-If you wish to use a class from the CMS, be sure to subclass it first in the corresponding library
-directory.
+With few exceptions, classes used from the CMS should be first subclassed in the appropriate directory and
+used via the new subclass
 
 #### Joomla classes
 Joomla uses a camelCase standard for it's classes. The autoloading structure uses each uppercase
@@ -33,4 +32,11 @@ character after the Simplerenew prefix to determine the directory tree. Some exa
 
 + SimplerenewModel : model.php (in the root directory) - inherits from JModelLegacy
 + SimplerenewModelAdmin : model/admin.php - inherits from JModelAdmin
+
+
++ Current known Exceptions
+    + JHtml
+    + JHtmlSidebar
+    + JSubMenuHelper
+    + JRoute
 

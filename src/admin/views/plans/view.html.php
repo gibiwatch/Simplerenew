@@ -67,7 +67,7 @@ class SimplerenewViewPlans extends SimplerenewViewAdmin
             'plans.sync',
             'loop',
             null,
-            JText::_('COM_SIMPLERENEW_SYNCRONIZE'),
+            SimplerenewText::_('COM_SIMPLERENEW_SYNCRONIZE'),
             false,
             '#2f96b4'
         );

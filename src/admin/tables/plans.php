@@ -17,4 +17,15 @@ class SimplerenewTablePlans extends SimplerenewTable
     {
         parent::__construct('#__simplerenew_plans', 'id', $db);
     }
+
+    public function check()
+    {
+        if (trim($this->alias) == '') {
+            $this->alias = $this->code;
+        }
+
+        $this->alias = SimplerenewApplicationHelper::stringURLSafe($this->alias);
+
+        return true;
+    }
 }

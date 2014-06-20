@@ -162,7 +162,7 @@ class Com_SimplerenewInstallerScript
 
                             $text = 'COM_SIMPLERENEW_RELATED_' . ($isNew ? 'INSTALL' : 'UPDATE');
                             if ($installer->install($path)) {
-                                $this->setMessage(JText::sprintf($text, $type, $element));
+                                $this->setMessage(SimplerenewText::sprintf($text, $type, $element));
                                 if ($isNew) {
                                     $current = $this->findExtension($type, $element, $folder);
                                     if ($settings[0]) {
@@ -173,7 +173,7 @@ class Com_SimplerenewInstallerScript
                                     }
                                 }
                             } else {
-                                $this->setMessage(JText::sprintf($text . '_FAIL', $type, $element), 'error');
+                                $this->setMessage(SimplerenewText::sprintf($text . '_FAIL', $type, $element), 'error');
                             }
                         }
                     }
@@ -201,7 +201,7 @@ class Com_SimplerenewInstallerScript
                                     $msg .= '_FAIL';
                                     $msgtype = 'error';
                                 }
-                                $this->setMessage(JText::sprintf($msg, $type, $element), $msgtype);
+                                $this->setMessage(SimplerenewText::sprintf($msg, $type, $element), $msgtype);
                             }
                         }
                     }

@@ -24,7 +24,7 @@ class Joomla implements UserInterface
 
     public function __construct()
     {
-        \JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_users/models');
+        \SimplerenewModel::addIncludePath(JPATH_SITE . '/components/com_users/models');
 
         $lang = \JFactory::getLanguage();
         $lang->load('com_users', JPATH_SITE);
@@ -41,7 +41,7 @@ class Joomla implements UserInterface
         $username = $parent->username;
         $parent->clearProperties();
 
-        if ($id = \JUserHelper::getUserId($username)) {
+        if ($id = \SimplerenewUserHelper::getUserId($username)) {
             $parent->id = $id;
             $this->load($parent);
             return;
@@ -61,7 +61,7 @@ class Joomla implements UserInterface
         $id = $parent->id;
         $parent->clearProperties();
 
-        $user = \JFactory::getUser($id);
+        $user = \SimplerenewFactory::getUser($id);
         if (!$user || $user->id <= 0) {
             throw new Exception('User ID not found - ' . $id);
         }
@@ -113,7 +113,7 @@ class Joomla implements UserInterface
     public function create(User $parent)
     {
         /** @var \UsersModelRegistration $model */
-        $model = \JModelLegacy::getInstance('Registration', 'UsersModel');
+        $model = \SimplerenewModel::getInstance('Registration', 'UsersModel');
 
         $data = array(
             'email1'    => $parent->email,
@@ -138,7 +138,7 @@ class Joomla implements UserInterface
      */
     public function update(User $parent)
     {
-        $user = new \JUser($parent->id);
+        $user = new \SimplerenewUser($parent->id);
         if ($user->id != $parent->id) {
             throw new Exception('Unable to update user ID #' . ($parent->id ? $parent->id : 'NULL'));
         }
@@ -160,10 +160,10 @@ class Joomla implements UserInterface
         }
 
         // If current user, refresh the session data
-        if ($user->id == \JFactory::getUser()->id) {
-            $session = \JFactory::getSession();
+        if ($user->id == \SimplerenewFactory::getUser()->id) {
+            $session = \SimplerenewFactory::getSession();
             $session->set('user', $user);
-            \JFactory::getUser();
+            \SimplerenewFactory::getUser();
         }
     }
 }

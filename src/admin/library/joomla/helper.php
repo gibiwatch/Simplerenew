@@ -18,13 +18,13 @@ abstract class SimplerenewHelper
     public static function addSubmenu($vName)
     {
         self::addMenuEntry(
-            JText::_('COM_SIMPLERENEW_SUBMENU_DASHBOARD'),
+            SimplerenewText::_('COM_SIMPLERENEW_SUBMENU_DASHBOARD'),
             'index.php?option=com_simplerenew&view=dashboard',
             $vName == 'dashboard'
         );
 
         self::addMenuEntry(
-            JText::_('COM_SIMPLERENEW_SUBMENU_PLANS'),
+            SimplerenewText::_('COM_SIMPLERENEW_SUBMENU_PLANS'),
             'index.php?option=com_simplerenew&view=plans',
             $vName == 'plans'
         );
@@ -41,13 +41,13 @@ abstract class SimplerenewHelper
     {
         if (!self::$simplerenew instanceof \Simplerenew\Factory) {
             try {
-                $params = JComponentHelper::getParams('com_simplerenew');
+                $params = SimplerenewComponentHelper::getParams('com_simplerenew');
 
                 $config = json_decode($params->toString(), true);
                 $config['user']['adapter'] = 'joomla';
                 self::$simplerenew = new \Simplerenew\Factory($config);
             } catch (Exception $e) {
-                $app = JFactory::getApplication();
+                $app = SimplerenewFactory::getApplication();
                 if ($app->isAdmin()) {
                     $link = 'index.php?option=com_simplerenew';
                 } else {
@@ -55,7 +55,7 @@ abstract class SimplerenewHelper
                 }
                 $app->redirect(
                     $link,
-                    JText::sprintf('COM_SIMPLERENEW_ERROR_CONFIGURATION', $e->getMessage()),
+                    SimplerenewText::sprintf('COM_SIMPLERENEW_ERROR_CONFIGURATION', $e->getMessage()),
                     'error'
                 );
             }

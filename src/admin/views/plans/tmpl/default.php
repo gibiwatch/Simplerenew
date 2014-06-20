@@ -29,7 +29,7 @@ $listDir   = $this->escape($this->state->get('list.direction'));
 echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this));
 if (empty($this->items)): ?>
     <div class="alert alert-no-items">
-        <?php echo JText::_('JGLOBAL_NO_MATCHING_RESULTS'); ?>
+        <?php echo SimplerenewText::_('JGLOBAL_NO_MATCHING_RESULTS'); ?>
     </div>
 <?php
 else:
@@ -144,7 +144,7 @@ else:
     foreach ($this->items as $i => $item):
         $ordering = ($listOrder == 'plan.ordering');
         $editLink = 'index.php?option=com_simplerenew&task=plan.edit&id=' . $item->id;
-        $editTitle = JText::_('JACTION_EDIT');
+        $editTitle = SimplerenewText::_('JACTION_EDIT');
         ?>
         <tr class="<?php echo 'row' . ($i % 2); ?>">
             <td class="center hidden-phone">
