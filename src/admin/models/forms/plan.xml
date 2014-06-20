@@ -5,13 +5,15 @@
             name="code"
             type="text"
             label="COM_SIMPLERENEW_PLAN_CODE_LABEL"
-            description="COM_SIMPLERENEW_PLAN_CODE_DESC"/>
+            description="COM_SIMPLERENEW_PLAN_CODE_DESC"
+            required="true"/>
 
         <field
             name="alias"
             type="text"
             label="COM_SIMPLERENEW_PLAN_ALIAS_LABEL"
-            description="COM_SIMPLERENEW_PLAN_ALIAS_DESC"/>
+            description="COM_SIMPLERENEW_PLAN_ALIAS_DESC"
+            hint="COM_SIMPLERENEW_PLAN_ALIAS_PLACEHOLDER"/>
 
     </fieldset>
 
