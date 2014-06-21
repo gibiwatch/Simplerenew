@@ -77,7 +77,7 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
                 // Add new plan
                 $plansTable->id        = null;
                 $plansTable->published = 1;
-                $plansTable->alias     = SimplerenewApplicationHelper::stringURLSafe($plansTable->code);
+                $plansTable->alias     = SimplerenewApplicationHelper::stringURLSafe($plan->code);
                 $plansTable->created_by_alias = JText::_('COM_SIMPLERENEW_PLAN_SYNC_IMPORTED');
             }
             $plansTable->bind($plan->getProperties());
