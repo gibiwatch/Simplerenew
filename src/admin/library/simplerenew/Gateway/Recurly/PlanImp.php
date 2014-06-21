@@ -66,15 +66,28 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
         );
     }
 
+    /**
+     * Get the list of all plans on the gateway
+     *
+     * @param Plan $template
+     *
+     * @return array
+     */
     public function getList(Plan $template)
     {
-        $plans      = array();
-        $rawObjects = \Recurly_PlanList::get(null, $this->client);
+        $cacheKey = 'plan.list';
 
-        foreach ($rawObjects as $plan) {
-            $nextPlan = clone $template;
-            $this->bindToParent($plan, $nextPlan);
-            $plans[$plan->plan_code] = $nextPlan;
+        $plans = $this->cache->retrieve($cacheKey);
+        if (!$plans) {
+            $plans      = array();
+            $rawObjects = \Recurly_PlanList::get(null, $this->client);
+
+            foreach ($rawObjects as $plan) {
+                $nextPlan = clone $template;
+                $this->bindToParent($plan, $nextPlan);
+                $plans[$plan->plan_code] = $nextPlan;
+            }
+            $this->cache->store($cacheKey, $plans);
         }
 
         return $plans;
