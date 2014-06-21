@@ -12,7 +12,7 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . '/include.php';
 
 // Access check.
 if (!SimplerenewFactory::getUser()->authorise('core.manage', 'com_simplerenew')) {
-    throw new Exception(SimplerenewText::_('JERROR_ALERTNOAUTHOR'), 404);
+    throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
 }
 
 require_once JPATH_COMPONENT . '/include.php';

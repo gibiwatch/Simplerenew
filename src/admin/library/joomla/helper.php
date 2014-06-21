@@ -18,13 +18,13 @@ abstract class SimplerenewHelper
     public static function addSubmenu($vName)
     {
         self::addMenuEntry(
-            SimplerenewText::_('COM_SIMPLERENEW_SUBMENU_DASHBOARD'),
+            JText::_('COM_SIMPLERENEW_SUBMENU_DASHBOARD'),
             'index.php?option=com_simplerenew&view=dashboard',
             $vName == 'dashboard'
         );
 
         self::addMenuEntry(
-            SimplerenewText::_('COM_SIMPLERENEW_SUBMENU_PLANS'),
+            JText::_('COM_SIMPLERENEW_SUBMENU_PLANS'),
             'index.php?option=com_simplerenew&view=plans',
             $vName == 'plans'
         );
@@ -55,7 +55,7 @@ abstract class SimplerenewHelper
                 }
                 $app->redirect(
                     $link,
-                    SimplerenewText::sprintf('COM_SIMPLERENEW_ERROR_CONFIGURATION', $e->getMessage()),
+                    JText::sprintf('COM_SIMPLERENEW_ERROR_CONFIGURATION', $e->getMessage()),
                     'error'
                 );
             }

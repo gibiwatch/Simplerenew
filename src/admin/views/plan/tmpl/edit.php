@@ -55,7 +55,7 @@ $input = $app->input;
         ?>
 
         <?php
-        echo JHtml::_('bootstrap.addTab', 'myTab', 'description', SimplerenewText::_('COM_SIMPLERENEW_PLAN_DESCRIPTION_LABEL')); ?>
+        echo JHtml::_('bootstrap.addTab', 'myTab', 'description', JText::_('COM_SIMPLERENEW_PLAN_DESCRIPTION_LABEL')); ?>
         <div class="row-fluid">
             <fieldset class="adminform">
                 <?php echo $this->form->getInput('description'); ?>

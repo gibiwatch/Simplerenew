@@ -23,7 +23,7 @@ will use idiosyncratic autoloading structures suitable to the hosting CMS.
 
 All subclass names MUST begin with Simplerenew.
 
-With few exceptions, classes used from the CMS should be first subclassed in the appropriate directory and
+Whenever possible, classes used from the CMS should be first subclassed in the appropriate directory and
 used via the new subclass
 
 #### Joomla classes
@@ -37,6 +37,7 @@ character after the Simplerenew prefix to determine the directory tree. Some exa
 + Current known Exceptions
     + JHtml
     + JHtmlSidebar
-    + JSubMenuHelper
     + JRoute
+    + JSubMenuHelper
+    + JText
 

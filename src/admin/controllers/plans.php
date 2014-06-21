@@ -20,7 +20,7 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
 
     public function sync()
     {
-        SimplerenewSession::checkToken() or die(SimplerenewText::_('JINVALID_TOKEN'));
+        SimplerenewSession::checkToken() or die(JText::_('JINVALID_TOKEN'));
 
         $params    = SimplerenewComponentHelper::getParams('com_simplerenew');
         $returnUrl = 'index.php?option=com_simplerenew&view=plans';
@@ -57,10 +57,10 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
         // Load the default group in case we add plans from the gateway
         $defaultGroup = $params->get('defaultGroup');
         if ($defaultGroup <= 0) {
-            $error = SimplerenewText::_('COM_SIMPLERENEW_ERROR_DEFAULTGROUP');
+            $error = JText::_('COM_SIMPLERENEW_ERROR_DEFAULTGROUP');
             $this->setRedirect(
                 $returnUrl,
-                SimplerenewText::sprintf('COM_SIMPLERENEW_ERROR_CONFIGURATION', $error),
+                JText::sprintf('COM_SIMPLERENEW_ERROR_CONFIGURATION', $error),
                 'error'
             );
             return;
@@ -78,7 +78,7 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
                 $plansTable->id        = null;
                 $plansTable->published = 1;
                 $plansTable->alias     = SimplerenewApplicationHelper::stringURLSafe($plansTable->code);
-                $plansTable->created_by_alias = SimplerenewText::_('COM_SIMPLERENEW_PLAN_SYNC_IMPORTED');
+                $plansTable->created_by_alias = JText::_('COM_SIMPLERENEW_PLAN_SYNC_IMPORTED');
             }
             $plansTable->bind($plan->getProperties());
 
@@ -98,18 +98,18 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
         } else {
             $message = array();
             if ($updated = count($plansUpdate)) {
-                $message[] = SimplerenewText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_UPDATED', $updated);
+                $message[] = JText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_UPDATED', $updated);
             }
             if ($added = count($plansRemote) - $updated) {
-                $message[] = SimplerenewText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_ADDED', $added);
+                $message[] = JText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_ADDED', $added);
             }
             if ($disabled = count($plansDisable)) {
-                $message[] = SimplerenewText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_DISABLED', $disabled);
+                $message[] = JText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_DISABLED', $disabled);
             }
             if ($message) {
                 $message = join('<br/>', $message);
             } else {
-                $message = SimplerenewText::_('COM_SIMPLERENEW_PLANS_NOSYNC');
+                $message = JText::_('COM_SIMPLERENEW_PLANS_NOSYNC');
             }
             $type = null;
         }

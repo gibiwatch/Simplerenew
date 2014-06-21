@@ -10,9 +10,9 @@ use Simplerenew\Api\Plan;
 
 defined('_JEXEC') or die();
 
-JFormHelper::loadFieldClass('PredefinedList');
+JFormHelper::loadFieldClass('List');
 
-class JFormFieldPlanunits extends JFormFieldPredefinedList
+class JFormFieldPlanunits extends JFormFieldList
 {
     protected $predefinedOptions = array(
         Plan::INTERVAL_DAYS   => 'COM_SIMPLERENEW_OPTION_DAYS',
@@ -20,6 +20,17 @@ class JFormFieldPlanunits extends JFormFieldPredefinedList
         Plan::INTERVAL_MONTHS => 'COM_SIMPLERENEW_OPTION_MONTHS',
         Plan::INTERVAL_YEARS  => 'COM_SIMPLERENEW_OPTION_YEARS'
     );
+
+    public function getOptions()
+    {
+        $options = parent::getOptions();
+
+        foreach ($this->predefinedOptions as $value => $text) {
+            $options[] = JHtml::_('select.option', $value, JText::_($text));
+        }
+
+        return $options;
+    }
 
 
 }

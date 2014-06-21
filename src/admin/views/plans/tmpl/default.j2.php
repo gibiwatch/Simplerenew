@@ -30,7 +30,7 @@ window.addEvent('domready', function() {
     <fieldset id="filter-bar">
         <div class="filter-search fltlft">
             <label class="filter-search-lbl" for="filter_search">
-                <?php echo SimplerenewText::_('JSEARCH_FILTER_LABEL'); ?>
+                <?php echo JText::_('JSEARCH_FILTER_LABEL'); ?>
             </label>
 
             <input
@@ -38,13 +38,13 @@ window.addEvent('domready', function() {
                 name="filter_search"
                 id="filter_search"
                 value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
-                title="<?php echo SimplerenewText::_('COM_SIMPLERENEW_FILTER_SEARCH_DESC'); ?>"/>
+                title="<?php echo JText::_('COM_SIMPLERENEW_FILTER_SEARCH_DESC'); ?>"/>
 
             <button type="submit" class="btn">
-                <?php echo SimplerenewText::_('JSEARCH_FILTER_SUBMIT'); ?>
+                <?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>
             </button>
             <button type="button" id="clear_form">
-                <?php echo SimplerenewText::_('JSEARCH_FILTER_CLEAR'); ?>
+                <?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>
             </button>
         </div>
         <div class="filter-select fltrt"></div>
