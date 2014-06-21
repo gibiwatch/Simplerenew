@@ -30,13 +30,17 @@ class Cache
     protected $expiration = 1800;
 
     /**
+     * @var string
+     */
+    protected $domain = 'simplerenew';
+
+    /**
      * @param array $config
      */
     public function __construct(array $config = array())
     {
-        if (!empty($config['path'])) {
-            $this->setPath($config['path']);
-        }
+        $path = empty($config['path']) ? $this->path : $config['path'];
+        $this->setPath($path);
         $this->checkPath();
 
         if (!empty($config['extension'])) {
@@ -45,6 +49,14 @@ class Cache
         if (!empty($config['expiration'])) {
             $this->setExpiration($config['expiration']);
         }
+        if (!empty($config['domain'])) {
+            $this->setDomain($config['domain']);
+        }
+    }
+
+    public function __clone()
+    {
+        $this->domain = 'simplerenew';
     }
 
     /**
@@ -59,7 +71,7 @@ class Cache
     {
         $path = $this->getDataPath($key);
         try {
-            file_put_contents($path, json_encode($data));
+            file_put_contents($path, serialize($data));
         } catch (Exception $e) {
             return false;
         }
@@ -78,7 +90,7 @@ class Cache
     {
         if ($this->expiration && !$this->isExpired($key)) {
             $path = $this->getDataPath($key);
-            return json_decode(file_get_contents($path));
+            return unserialize(file_get_contents($path));
         }
         return null;
     }
@@ -167,7 +179,7 @@ class Cache
     protected function checkPath()
     {
         if (!is_dir($this->path)) {
-            if (!mkdir($this->path, 0664, true)) {
+            if (!mkdir($this->path, 0755, true)) {
                 throw new Exception('Unable to create cache directory ' . $this->path);
             }
             $htaccess = array(
@@ -179,7 +191,7 @@ class Cache
             file_put_contents($this->path . '.htaccess', join("\n", $htaccess));
 
         } elseif (!is_readable($this->path) || !is_writable($this->path)) {
-            if (!chmod($this->path, 0664)) {
+            if (!chmod($this->path, 0755)) {
                 throw new Exception($this->path . ' must be readable and writable');
             }
         }
@@ -196,12 +208,16 @@ class Cache
 
     /**
      * @param string $path
+     * @param bool   $relative $path is relative to the Cache class path
      *
      * @return Cache
      */
-    public function setPath($path)
+    public function setPath($path, $relative = true)
     {
-        $this->path = $path;
+        if (is_string($path)) {
+            $path = ($relative ? __DIR__ . '/' : '') . $path;
+            $this->path = $path;
+        }
         return $this;
     }
 
@@ -220,7 +236,9 @@ class Cache
      */
     public function setExtension($extension)
     {
-        $this->extension = '.' . trim($extension, ' .');
+        if (preg_match('/^[a-zA-Z0-9\.]+$/', $extension)) {
+            $this->extension = '.' . str_replace('.', '', trim(strtolower($extension)));
+        }
         return $this;
     }
 
@@ -239,7 +257,30 @@ class Cache
      */
     public function setExpiration($expiration)
     {
-        $this->expiration = (int)$expiration;
+        if (is_numeric($expiration)) {
+            $this->expiration = (int)$expiration;
+        }
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDomain()
+    {
+        return $this->domain;
+    }
+
+    /**
+     * @param string $domain
+     *
+     * @return Cache
+     */
+    public function setDomain($domain)
+    {
+        if (preg_match('/^[a-zA-Z0-9\.\\\]+$/', $domain)) {
+            $this->domain = strtolower(str_replace('\\', '.', $domain));
+        }
         return $this;
     }
 
@@ -252,6 +293,7 @@ class Cache
      */
     protected function getDataPath($key)
     {
-        return $this->path . $key . $this->getExtension();
+        $path = $this->path . $this->domain . '.' . $key . $this->getExtension();
+        return $path;
     }
 }
