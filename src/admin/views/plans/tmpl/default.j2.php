@@ -104,7 +104,7 @@ window.addEvent('domready', function() {
                     <?php
                     echo JHtml::_(
                         'grid.sort',
-                        'COM_SIMPLERENEW_PLAN_SETUP_LABEL',
+                        'COM_SIMPLERENEW_PLAN_SETUP_COST_LABEL',
                         'plan.setup',
                         $listDir,
                         $listOrder
