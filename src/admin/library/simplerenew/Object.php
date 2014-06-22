@@ -17,18 +17,10 @@ class Object
     const MAP_UNDEFINED = 'undefined';
 
     /**
-     * @var \ReflectionObject
-     */
-    private $reflection = null;
-
-    /**
      * Retrieve all public properties and their values
      * Although this duplicates get_object_vars(), it
      * is mostly useful for internal calls when we need
-     * to filter out the non-public properties. Note
-     * we cache the property names assuming the public
-     * facing properties will not change in the lifetime
-     * of the object
+     * to filter out the non-public properties.
      *
      * @param bool $publicOnly
      *
@@ -36,11 +28,12 @@ class Object
      */
     public function getProperties($publicOnly = true)
     {
-        $properties = $this->getReflection()->getProperties(\ReflectionProperty::IS_PUBLIC);
+        $reflection = new \ReflectionObject($this);
+        $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
         if (!$publicOnly) {
             $properties = array_merge(
                 $properties,
-                $this->reflection->getProperties(\ReflectionProperty::IS_PROTECTED)
+                $reflection->getProperties(\ReflectionProperty::IS_PROTECTED)
             );
         }
 
@@ -112,7 +105,7 @@ class Object
      * )
      * Will map the Simplerenew field 'status' to the source field 'state' and
      * set status based on the value in the state field. If no match, Object::MAP_UNDEFINED
-     * will be used forthe unknown value.
+     * will be used for the unknown value.
      *
      *
      * @param array|object $source Source data to be mapped
@@ -155,19 +148,6 @@ class Object
         }
 
         return $result;
-    }
-
-    /**
-     * Get the reflection object for $this
-     *
-     * @return \ReflectionObject
-     */
-    private function getReflection()
-    {
-        if ($this->reflection === null) {
-            $this->reflection = new \ReflectionObject($this);
-        }
-        return $this->reflection;
     }
 
     /**
