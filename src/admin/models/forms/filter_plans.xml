@@ -43,8 +43,8 @@
             <option value="ug.title DESC">COM_SIMPLERENEW_GRID_PLAN_GROUP_DESC</option>
             <option value="plan.amount ASC">COM_SIMPLERENEW_GRID_PLAN_AMOUNT_ASC</option>
             <option value="plan.amount DESC">COM_SIMPLERENEW_GRID_PLAN_AMOUNT_DESC</option>
-            <option value="plan.setup ASC">COM_SIMPLERENEW_GRID_PLAN_SETUP_ASC</option>
-            <option value="plan.setup DESC">COM_SIMPLERENEW_GRID_PLAN_SETUP_DESC</option>
+            <option value="plan.setup_cost ASC">COM_SIMPLERENEW_GRID_PLAN_SETUP_COST_ASC</option>
+            <option value="plan.setup_cost DESC">COM_SIMPLERENEW_GRID_PLAN_SETUP_COST_DESC</option>
             <option value="plan.created ASC">COM_SIMPLERENEW_GRID_PLAN_CREATED_ASC</option>
             <option value="plan.created DESC">COM_SIMPLERENEW_GRID_PLAN_CREATED_DESC</option>
             <option value="plan.id ASC">COM_SIMPLERENEW_GRID_ID_ASC</option>

@@ -16,7 +16,7 @@ class SimplerenewModelPlans extends SimplerenewModelList
             'code', 'plan.code',
             'name', 'plan.name',
             'amount', 'plan.amount',
-            'setup', 'plan.setup',
+            'setup_cost', 'plan.setup_cost',
             'published', 'plan.published',
             'id', 'plan.id',
             'created', 'plan.created',

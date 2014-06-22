@@ -11,7 +11,7 @@ CREATE TABLE `#__simplerenew_plans` (
   `trial_length` int(11) NOT NULL,
   `trial_unit` varchar(45) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
-  `setup` decimal(10,2) NOT NULL,
+  `setup_cost` decimal(10,2) NOT NULL,
   `published` tinyint(4) DEFAULT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `created_by` int(10) unsigned NOT NULL DEFAULT '0',

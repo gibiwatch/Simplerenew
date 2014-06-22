@@ -106,7 +106,7 @@ else:
                 echo JHtml::_(
                     'searchtools.sort',
                     'COM_SIMPLERENEW_PLAN_SETUP_COST_LABEL',
-                    'plan.setup',
+                    'plan.setup_cost',
                     $listDir,
                     $listOrder
                 );
@@ -204,7 +204,7 @@ else:
                 </td>
 
                 <td style="text-align: right;">
-                    <?php echo number_format($item->setup, 2); ?>
+                    <?php echo number_format($item->setup_cost, 2); ?>
                 </td>
 
                 <td>

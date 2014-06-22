@@ -105,7 +105,7 @@ window.addEvent('domready', function() {
                     echo JHtml::_(
                         'grid.sort',
                         'COM_SIMPLERENEW_PLAN_SETUP_COST_LABEL',
-                        'plan.setup',
+                        'plan.setup_cost',
                         $listDir,
                         $listOrder
                     );
@@ -154,7 +154,7 @@ window.addEvent('domready', function() {
                     <td><?php echo JHtml::_('link', $link, htmlspecialchars($item->name)); ?></td>
                     <td><?php echo $item->usergroup; ?></td>
                     <td><?php echo '$' . number_format($item->amount, 2); ?></td>
-                    <td><?php echo '$' . number_format($item->setup, 2); ?></td>
+                    <td><?php echo '$' . number_format($item->setup_cost, 2); ?></td>
                     <td><?php JHtml::_('jgrid.published', $item->published, $i, 'simplerenew.', true) ?></td>
                     <td class="right"><?php echo $item->id; ?></td>
                 </tr>
