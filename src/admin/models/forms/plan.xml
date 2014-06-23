@@ -150,6 +150,7 @@
             name="description"
             type="editor"
             label="COM_SIMPLERENEW_PLAN_DESCRIPTION_LABEL"
-            description="COM_SIMPLERENEW_PLAN_DESCRIPTION_DESC"/>
+            description="COM_SIMPLERENEW_PLAN_DESCRIPTION_DESC"
+            filter="JComponentHelper::filterText"/>
     </fieldset>
 </form>
