@@ -49,7 +49,7 @@ class Plan extends AbstractApiBase
     /**
      * @var float
      */
-    public $setup = null;
+    public $setup_cost = null;
 
     /**
      * @var int
@@ -74,7 +74,7 @@ class Plan extends AbstractApiBase
     /**
      * @var string
      */
-    public $account_code = null;
+    public $accounting_code = null;
 
     /**
      * @var \DateTime
@@ -95,12 +95,18 @@ class Plan extends AbstractApiBase
         $this->imp = $imp;
     }
 
+    /**
+     * @param $code
+     *
+     * @return Plan
+     */
     public function load($code)
     {
         $this->clearProperties();
         $this->code = $code;
         $this->imp->load($this);
 
+        return $this;
     }
 
     /**
