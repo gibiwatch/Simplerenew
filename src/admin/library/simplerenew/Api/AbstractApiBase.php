@@ -8,10 +8,27 @@
 
 namespace Simplerenew\Api;
 
+use Simplerenew\Exception;
 use Simplerenew\Object;
 
 defined('_JEXEC') or die();
 
 abstract class AbstractApiBase extends Object
 {
+    /**
+     * @throws Exception
+     */
+    public function save()
+    {
+        throw new Exception('Saving to gateway is not supported');
+    }
+
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public function delete()
+    {
+        throw new Exception('Deleting from gateway is not supported');
+    }
 }

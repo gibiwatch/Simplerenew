@@ -31,5 +31,11 @@ interface BillingInterface
      */
     public function save(Billing $parent);
 
+    /**
+     * @param Billing $parent
+     *
+     * @return void
+     * @throws Exception
+     */
     public function delete(Billing $parent);
 }
