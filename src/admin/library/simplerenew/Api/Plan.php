@@ -123,6 +123,12 @@ class Plan extends AbstractApiBase
         return $plans;
     }
 
+    /**
+     * @param bool $create
+     *
+     * @return $this
+     * @throws Exception
+     */
     public function save($create = false)
     {
         $isNew = ($this->id <= 0);
@@ -136,6 +142,10 @@ class Plan extends AbstractApiBase
         return $this;
     }
 
+    /**
+     * @return void
+     * @throws Exception
+     */
     public function delete()
     {
         $this->imp->delete($this);
