@@ -88,19 +88,24 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
      */
     protected function getPlan($code)
     {
+        if (!$code) {
+            return new \Recurly_Plan(null, $this->client);
+        }
+
         if (!isset($this->plansLoaded[$code])) {
             try {
-                $plan                     = \Recurly_Plan::get($code, $this->client);
-                $this->plansLoaded[$code] = $plan;
+                $plan = \Recurly_Plan::get($code, $this->client);
 
             } catch (\Recurly_NotFoundError $e) {
-                return null;
+                $plan = new \Recurly_Plan(null, $this->client);
+                $plan->plan_code = $code;
 
             } catch (\Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode(), $e);
             }
-        }
 
+            $this->plansLoaded[$plan->code] = $plan;
+        }
         return $this->plansLoaded[$code];
     }
 
@@ -112,7 +117,30 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
      */
     public function save(Plan $parent)
     {
-        throw new Exception('Under Construction');
+        $plan  = $this->getPlan($parent->code);
+        $isNew = !(bool)$plan->created_at;
+
+        $plan->name                  = $parent->name;
+        $plan->description           = $parent->description;
+        $plan->plan_interval_length  = $parent->length;
+        $plan->plan_interval_unit    = $parent->unit;
+        $plan->trial_interval_length = $parent->trial_length;
+        $plan->trial_interval_unit   = $parent->trial_unit;
+        $plan->accounting_code       = $parent->accounting_code;
+
+        $amount     = $parent->amount * 100;
+        $setup_cost = $parent->setup_cost * 100;
+        if ($isNew) {
+            $plan->unit_amount_in_cents->addCurrency($parent->currency, $amount);
+            $plan->setup_fee_in_cents->addCurrency($parent->currency, $setup_cost);
+
+            $plan->create();
+        } else {
+            $plan->unit_amount_in_cents[$parent->currency] = $amount;
+            $plan->setup_fee_in_cents[$parent->currency]   = $setup_cost;
+
+            $plan->update();
+        }
     }
 
     /**
@@ -123,6 +151,7 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
      */
     public function delete(Plan $parent)
     {
-        throw new Exception('Under Construction');
+        $plan = $this->getPlan($parent->code);
+        $plan->delete();
     }
 }

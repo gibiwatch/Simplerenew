@@ -35,6 +35,11 @@ class SimplerenewTablePlans extends SimplerenewTable
         if (!$this->_gateway instanceof Plan) {
             $this->_gateway = SimplerenewHelper::getSimplerenew()->getPlan();
         }
+
+        $this->_gateway
+            ->load($this->code)
+            ->setProperties($this->getProperties());
+
         return $this->_gateway->save(true);
     }
 
