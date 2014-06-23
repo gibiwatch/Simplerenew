@@ -43,7 +43,7 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
     public function load(Plan $parent)
     {
         if ($plan = $this->getPlan($parent->code)) {
-            $this->bindToParent($plan, $parent);
+            $this->bindToPlan($plan, $parent);
         }
     }
 
@@ -51,13 +51,13 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
      * Set the API object properties from the native Recurly object
      *
      * @param string $plan
-     * @param Plan   $parent
+     * @param Plan   $target
      */
-    protected function bindToParent($plan, Plan $parent)
+    protected function bindToPlan($plan, Plan $target)
     {
-        $parent->setProperties($plan, $this->fieldMap);
+        $target->setProperties($plan, $this->fieldMap);
 
-        $parent->setProperties(
+        $target->setProperties(
             array(
                 'currency' => $this->currency,
                 'amount'   => $this->getCurrency($plan->unit_amount_in_cents),
@@ -68,16 +68,16 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
 
     public function getList(Plan $template)
     {
-        $plans      = array();
-        $rawObjects = \Recurly_PlanList::get(null, $this->client);
+        $this->plansLoaded = array();
+        $rawObjects        = \Recurly_PlanList::get(null, $this->client);
 
         foreach ($rawObjects as $plan) {
             $nextPlan = clone $template;
-            $this->bindToParent($plan, $nextPlan);
-            $plans[$plan->plan_code] = $nextPlan;
+            $this->bindToPlan($plan, $nextPlan);
+            $this->plansLoaded[$plan->plan_code] = $nextPlan;
         }
 
-        return $plans;
+        return $this->plansLoaded;
     }
 
     /**
