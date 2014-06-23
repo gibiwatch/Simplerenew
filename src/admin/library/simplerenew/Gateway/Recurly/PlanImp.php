@@ -103,4 +103,26 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
 
         return $this->plansLoaded[$code];
     }
+
+    /**
+     * @param Plan $parent
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function save(Plan $parent)
+    {
+        throw new Exception('Under Construction');
+    }
+
+    /**
+     * @param Plan $parent
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function delete(Plan $parent)
+    {
+        throw new Exception('Under Construction');
+    }
 }

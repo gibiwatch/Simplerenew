@@ -26,6 +26,22 @@ interface PlanInterface
     public function load(Plan $parent);
 
     /**
+     * @param Plan $parent
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function save(Plan $parent);
+
+    /**
+     * @param Plan $parent
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function delete(Plan $parent);
+
+    /**
      * Get a list of defined plans from the gateway
      *
      * @param Plan $template

@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Api;
 
+use Simplerenew\Exception;
 use Simplerenew\Gateway\PlanInterface;
 
 defined('_JEXEC') or die();
@@ -114,5 +115,24 @@ class Plan extends AbstractApiBase
 
         $plans = $this->imp->getList($template);
         return $plans;
+    }
+
+    public function save($create = false)
+    {
+        $isNew = ($this->id <= 0);
+        if ($isNew && !$create) {
+            throw new Exception('Creating a new plan is not permitted in this context - ' . $this->code);
+        }
+
+        $this->imp->save($this);
+        $this->imp->load($this);
+
+        return $this;
+    }
+
+    public function delete()
+    {
+        $this->imp->delete($this);
+        $this->imp->load($this);
     }
 }
