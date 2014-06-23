@@ -18,9 +18,17 @@ try {
 //    $account = $sr->getAccount()->load($user);
 //    $billing = $sr->getBilling()->load($account);
 
+    echo '<pre>';
+    echo str_pad(' Plan List ', 40, '*', STR_PAD_BOTH) . '<br/>';
+
+    /** @var Simplerenew\Api\Plan $item */
+    $planList = $plan->getList();
+    foreach ($planList as $code => $item) {
+        echo '<br/>**' . $code . '<br/>';
         echo '<pre>';
-        echo str_pad(' Plan List ', 40, '*', STR_PAD_BOTH) . '<br/>';
-        print_r($plan->getList());
+        print_r($item->getProperties());
+        echo '</pre>';
+    }
 
 //    echo str_pad(' User ', 40, '*', STR_PAD_BOTH) . '<br/>';
 //    print_r($user->getProperties());
