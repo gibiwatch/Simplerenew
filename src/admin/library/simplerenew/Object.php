@@ -52,7 +52,7 @@ class Object
      * @param array|object $data Values to copy to $this
      * @param array        $map  Use properties from $data translated using a field map
      *
-     * @return void
+     * @return $this
      * @throws Exception
      */
     public function setProperties($data, array $map = null)
@@ -72,6 +72,8 @@ class Object
                 $this->$k = $data[$k];
             }
         }
+
+        return $this;
     }
 
     /**
