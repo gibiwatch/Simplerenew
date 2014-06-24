@@ -118,7 +118,6 @@ class Account extends AbstractApiBase
         $this->code = $this->getAccountCode($user);
 
         $this->imp->load($this);
-
         return $this;
     }
 

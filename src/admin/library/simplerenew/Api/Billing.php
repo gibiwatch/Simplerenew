@@ -91,10 +91,9 @@ class Billing extends AbstractApiBase
         $this->clearProperties();
         $this->address->clearProperties();
         $this->payment = null;
-
         $this->account = $account;
-        $this->imp->load($this);
 
+        $this->imp->load($this);
         return $this;
     }
 
@@ -181,10 +180,10 @@ class Billing extends AbstractApiBase
         return $this;
     }
 
-    public function clearProperties()
+    public function clearProperties($publicOnly = true)
     {
-        parent::clearProperties();
-        $this->address->clearProperties();
+        parent::clearProperties($publicOnly);
+        $this->address->clearProperties($publicOnly);
         $this->payment = null;
     }
 }
