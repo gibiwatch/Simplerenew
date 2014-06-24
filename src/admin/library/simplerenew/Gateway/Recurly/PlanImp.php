@@ -61,7 +61,7 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
             array(
                 'currency' => $this->currency,
                 'amount'   => $this->getCurrency($plan->unit_amount_in_cents),
-                'setup'    => $this->getCurrency($plan->setup_fee_in_cents)
+                'setup_cost'    => $this->getCurrency($plan->setup_fee_in_cents)
             )
         );
     }
