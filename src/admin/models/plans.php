@@ -20,7 +20,8 @@ class SimplerenewModelPlans extends SimplerenewModelList
             'published', 'plan.published',
             'id', 'plan.id',
             'created', 'plan.created',
-            'group', 'ug.title'
+            'group', 'ug.title',
+            'trial'
         );
 
         parent::__construct($config);
@@ -30,8 +31,18 @@ class SimplerenewModelPlans extends SimplerenewModelList
     {
         $db = $this->getDbo();
 
+        $space   = $db->quote(' ');
+        $noTrial = $db->quote(JText::_('COM_SIMPLERENEW_NO_TRIAL'));
+
         $query = $db->getQuery(true);
-        $query->select('plan.*, ug.title usergroup, editor.name as editor');
+        $query->select(
+            array(
+                'plan.*',
+                "IF(plan.trial_length, CONCAT(plan.trial_length,{$space},plan.trial_unit), {$noTrial}) trial_period",
+                'ug.title usergroup',
+                'editor.name as editor'
+            )
+        );
         $query->from('#__simplerenew_plans plan');
         $query->leftJoin('#__users editor ON plan.checked_out = editor.id');
         $query->leftJoin('#__usergroups ug ON ug.id = plan.group_id');
@@ -55,6 +66,12 @@ class SimplerenewModelPlans extends SimplerenewModelList
             $query->where('ug.id = ' . $db->quote($group));
         }
 
+        $trial = $this->getState('filter.trial');
+        if ($trial != '') {
+            $operator = $trial ? '>' : '=';
+            $query->where("plan.trial_length {$operator} 0");
+        }
+
         $listOrder = $this->getState('list.ordering', 'plan.id');
         $listDir   = $this->getState('list.direction', 'ASC');
         $query->order($listOrder . ' ' . $listDir);
@@ -72,6 +89,9 @@ class SimplerenewModelPlans extends SimplerenewModelList
 
         $group = $this->getUserStateFromRequest($this->context . '.filter.group', 'filter_group');
         $this->setState('filter.group', $group);
+
+        $trial = $this->getUserStateFromRequest($this->context . '.filter.trial', 'filter_trial');
+        $this->setState('filter.trial', $trial);
 
         parent::populateState('plan.code', 'ASC');
     }

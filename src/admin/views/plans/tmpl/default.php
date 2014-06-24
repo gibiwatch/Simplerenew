@@ -114,6 +114,10 @@ else:
             </th>
 
             <th class="nowrap">
+                <?php echo JText::_('COM_SIMPLERENEW_PLAN_TRIAL_PERIOD_LABEL'); ?>
+            </th>
+
+            <th class="nowrap">
                 <?php
                 echo JHtml::_(
                     'searchtools.sort',
@@ -205,6 +209,10 @@ else:
 
                 <td style="text-align: right;">
                     <?php echo number_format($item->setup_cost, 2); ?>
+                </td>
+
+                <td>
+                    <?php echo $item->trial_period; ?>
                 </td>
 
                 <td>

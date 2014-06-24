@@ -14,6 +14,15 @@
         </field>
 
         <field
+            name="trial"
+            type="list"
+            onchange="this.form.submit();">
+            <option value="">COM_SIMPLERENEW_OPTION_SELECT_TRIAL</option>
+            <option value="0">COM_SIMPLERENEW_OPTION_NO_TRIAL</option>
+            <option value="1">COM_SIMPLERENEW_OPTION_HAS_TRIAL</option>
+        </field>
+
+        <field
             name="group"
             type="usergrouplist"
             onchange="this.form.submit();">
