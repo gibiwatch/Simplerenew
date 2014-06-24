@@ -104,7 +104,7 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
                 throw new Exception($e->getMessage(), $e->getCode(), $e);
             }
 
-            $this->plansLoaded[$plan->code] = $plan;
+            $this->plansLoaded[$plan->plan_code] = $plan;
         }
         return $this->plansLoaded[$code];
     }
@@ -151,7 +151,15 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
      */
     public function delete(Plan $parent)
     {
-        $plan = $this->getPlan($parent->code);
-        $plan->delete();
+        try {
+            $plan = $this->getPlan($parent->code);
+            $plan->delete();
+        } catch (Exception $e) {
+            echo '<pre>';
+            print_r($e->getTraceMessage());
+            echo '</pre>';
+        }
+
+        die('done');
     }
 }

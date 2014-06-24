@@ -29,10 +29,8 @@
             label="COM_SIMPLERENEW_LIST_FULL_ORDERING"
             description="COM_SIMPLERENEW_LIST_FULL_ORDERING_DESC"
             onchange="this.form.submit();"
-            default="plan.ordering DESC">
+            default="plan.id DESC">
             <option value="">JGLOBAL_SORT_BY</option>
-            <option value="plan.ordering ASC">COM_SIMPLERENEW_GRID_ORDERING_ASC</option>
-            <option value="plan.ordering DESC">COM_SIMPLERENEW_GRID_ORDERING_DESC</option>
             <option value="plan.published ASC">COM_SIMPLERENEW_GRID_PUBLISHED_ASC</option>
             <option value="plan.published DESC">COM_SIMPLERENEW_GRID_PUBLISHED_DESC</option>
             <option value="plan.code ASC">COM_SIMPLERENEW_GRID_PLAN_CODE_ASC</option>

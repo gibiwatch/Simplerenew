@@ -129,7 +129,7 @@ class Plan extends AbstractApiBase
      * @return $this
      * @throws Exception
      */
-    public function save($create = false)
+    public function save($create = true)
     {
         $isNew = ($this->id <= 0);
         if ($isNew && !$create) {
