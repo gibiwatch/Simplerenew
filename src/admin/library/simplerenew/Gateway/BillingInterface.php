@@ -19,7 +19,6 @@ interface BillingInterface
      * @param Billing $parent
      *
      * @return void
-     * @throws Exception
      */
     public function load(Billing $parent);
 

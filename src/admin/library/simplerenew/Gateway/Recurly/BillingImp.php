@@ -10,6 +10,7 @@ namespace Simplerenew\Gateway\Recurly;
 
 use Simplerenew\Api\Billing;
 use Simplerenew\Exception;
+use Simplerenew\Exception\NotFound;
 use Simplerenew\Gateway\BillingInterface;
 use Simplerenew\Primitive\Address;
 use Simplerenew\Primitive\CreditCard;
@@ -66,7 +67,7 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
                     )
                 );
             } elseif ($billing->paypal_billing_agreement_id) {
-                $payment = new PayPal();
+                $payment              = new PayPal();
                 $payment->agreementId = $billing->paypal_billing_agreement_id;
             } else {
                 $payment = null;
@@ -98,7 +99,12 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
             $billing->month  = $cc->month;
             $billing->year   = $cc->year;
         }
-        $billing->update();
+
+        try {
+            $billing->update();
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     public function delete(Billing $parent)
@@ -107,13 +113,14 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
 
         try {
             $billing = $this->getBilling($accountCode);
-            $billing->delete();
 
-        } catch (\Recurly_NotFoundError $e) {
+            try {
+                $billing->delete();
+            } catch (\Exception $e) {
+                throw new Exception($e->getMessage(), $e->getCode(), $e);
+            }
+        } catch (NotFound $e) {
             // Perfectly fine - no billing info to delete
-
-        } catch (\Exception $e) {
-            throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
 
         if (isset($this->accountsLoaded[$accountCode])) {
@@ -135,6 +142,7 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
             }
 
         } catch (\Recurly_NotFoundError $e) {
+            // Need to have blank/default billing for an existing account
             $newBilling                         = new \Recurly_BillingInfo(null, $this->client);
             $newBilling->account_code           = $accountCode;
             $this->accountsLoaded[$accountCode] = $newBilling;

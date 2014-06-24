@@ -10,6 +10,7 @@ namespace Simplerenew\Gateway\Recurly;
 
 use Simplerenew\Api\Account;
 use Simplerenew\Exception;
+use Simplerenew\Exception\NotFound;
 use Simplerenew\Gateway\AccountInterface;
 use Simplerenew\Object;
 use Simplerenew\Primitive\Address;
@@ -71,7 +72,14 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
      */
     public function save(Account $parent, $isNew)
     {
-        $account = $this->getAccount($parent->code);
+        $isNew = false;
+        try {
+            $account = $this->getAccount($parent->code);
+
+        } catch (NotFound $e) {
+            $account = new \Recurly_Account($parent->code, $this->client);
+            $isNew   = true;
+        }
 
         $account->username     = $parent->username;
         $account->email        = $parent->email;
@@ -98,9 +106,8 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
      */
     public function close(Account $parent)
     {
+        $account = $this->getAccount($parent->code);
         try {
-            $account = $this->getAccount($parent->code);
-
             if ($account->state != 'closed') {
                 $account->close();
             }
@@ -117,9 +124,8 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
      */
     public function reopen(Account $parent)
     {
+        $account = $this->getAccount($parent->code);
         try {
-            $account = $this->getAccount($parent->code);
-
             if ($account->state != 'active') {
                 $account->reopen();
             }
@@ -141,7 +147,7 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
                 $this->accountsLoaded[$code] = \Recurly_Account::get($code, $this->client);
 
             } catch (\Recurly_NotFoundError $e) {
-                $this->accountsLoaded[$code] = new \Recurly_Account($code, $this->client);
+                throw new NotFound($e->getMessage(), $e->getCode(), $e);
 
             } catch (\Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode(), $e);

@@ -10,6 +10,7 @@ namespace Simplerenew\Gateway\Recurly;
 
 use Simplerenew\Api\Plan;
 use Simplerenew\Exception;
+use Simplerenew\Exception\NotFound;
 use Simplerenew\Gateway\PlanInterface;
 use Simplerenew\Object;
 
@@ -59,9 +60,9 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
 
         $target->setProperties(
             array(
-                'currency' => $this->currency,
-                'amount'   => $this->getCurrency($plan->unit_amount_in_cents),
-                'setup_cost'    => $this->getCurrency($plan->setup_fee_in_cents)
+                'currency'   => $this->currency,
+                'amount'     => $this->getCurrency($plan->unit_amount_in_cents),
+                'setup_cost' => $this->getCurrency($plan->setup_fee_in_cents)
             )
         );
     }
@@ -69,7 +70,12 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
     public function getList(Plan $template)
     {
         $this->plansLoaded = array();
-        $rawObjects        = \Recurly_PlanList::get(null, $this->client);
+        try {
+            $rawObjects = \Recurly_PlanList::get(null, $this->client);
+
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
+        }
 
         foreach ($rawObjects as $plan) {
             $nextPlan = clone $template;
@@ -89,7 +95,7 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
     protected function getPlan($code)
     {
         if (!$code) {
-            return new \Recurly_Plan(null, $this->client);
+            throw new Exception('No plan code selected');
         }
 
         if (!isset($this->plansLoaded[$code])) {
@@ -97,8 +103,7 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
                 $plan = \Recurly_Plan::get($code, $this->client);
 
             } catch (\Recurly_NotFoundError $e) {
-                $plan = new \Recurly_Plan(null, $this->client);
-                $plan->plan_code = $code;
+                throw new NotFound($e->getMessage(), $e->getCode(), $e);
 
             } catch (\Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode(), $e);
@@ -117,8 +122,14 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
      */
     public function save(Plan $parent)
     {
-        $plan  = $this->getPlan($parent->code);
-        $isNew = !(bool)$plan->created_at;
+        try {
+            $plan  = $this->getPlan($parent->code);
+            $isNew = false;
+        } catch (NotFound $e) {
+            $plan            = new \Recurly_Plan(null, $this->client);
+            $plan->plan_code = $parent->code;
+            $isNew           = true;
+        }
 
         $plan->name                  = $parent->name;
         $plan->description           = $parent->description;
@@ -131,8 +142,8 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
         $amount     = $parent->amount * 100;
         $setup_cost = $parent->setup_cost * 100;
         if ($isNew) {
-            $plan->unit_amount_in_cents->addCurrency($parent->currency, $amount);
-            $plan->setup_fee_in_cents->addCurrency($parent->currency, $setup_cost);
+            $plan->unit_amount_in_cents->addCurrency($this->currency, $amount);
+            $plan->setup_fee_in_cents->addCurrency($this->currency, $setup_cost);
 
             $plan->create();
         } else {
@@ -153,13 +164,16 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
     {
         try {
             $plan = $this->getPlan($parent->code);
-            $plan->delete();
-        } catch (Exception $e) {
-            echo '<pre>';
-            print_r($e->getTraceMessage());
-            echo '</pre>';
-        }
 
-        die('done');
+            try {
+                $plan->delete();
+
+            } catch (\Exception $e) {
+                throw new Exception($e->getMessage(), $e->getCode(), $e);
+            }
+
+        } catch (NotFound $e) {
+            // No worries, nothing to delete
+        }
     }
 }
