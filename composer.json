@@ -13,22 +13,8 @@
             "email": "bill@ostraining.com"
         }
     ],
-    "repositories"     : [
-        {
-            "type"   : "package",
-            "package": {
-                "name"   : "akeeba/fof",
-                "version": "2.2.1",
-                "dist"   : {
-                    "url" : "https://github.com/akeeba/fof/archive/master.zip",
-                    "type": "zip"
-                }
-            }
-        }
-    ],
     "require"          : {
         "php"       : ">= 5.3",
-        "ext-curl"  : "*",
-        "akeeba/fof": ">=2.2"
+        "ext-curl"  : "*"
     }
 }
