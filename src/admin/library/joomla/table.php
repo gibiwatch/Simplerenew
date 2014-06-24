@@ -19,6 +19,7 @@ abstract class SimplerenewTable extends JTable
      */
     public static function getInstance($type, $prefix = 'SimplerenewTable', $config = array())
     {
+        JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_simplerenew/tables');
         return parent::getInstance($type, $prefix, $config);
     }
 
