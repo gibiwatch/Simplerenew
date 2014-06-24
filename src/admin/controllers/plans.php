@@ -25,25 +25,27 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
         $params    = SimplerenewComponentHelper::getParams('com_simplerenew');
         $returnUrl = 'index.php?option=com_simplerenew&view=plans';
 
-        /** @var SimplerenewModelPlans $plansModel */
-        $plansModel = SimplerenewModel::getInstance('Plans', null, array('ignore_request' => true));
-        $plansLocal = $plansModel->getItems();
-
         $plansGateway = SimplerenewHelper::getSimplerenew()->getPlan();
         $plansRemote  = $plansGateway->getList();
 
         $plansTable = SimplerenewTable::getInstance('Plans');
 
+        $db         = SimplerenewFactory::getDbo();
+        $query      = $db->getQuery(true)
+            ->select('*')
+            ->from('#__simplerenew_plans');
+        $plansLocal = $db->setQuery($query)->loadAssocList('code');
+
         // Identify local plans not on the gateway
         $plansDisable = array();
         $plansUpdate  = array();
-        foreach ($plansLocal as $plan) {
-            if (!array_key_exists($plan->code, $plansRemote)) {
-                if ($plan->published) {
-                    $plansDisable[] = $plan->id;
+        foreach ($plansLocal as $code => $plan) {
+            if (!array_key_exists($code, $plansRemote)) {
+                if ($plan['published']) {
+                    $plansDisable[] = $plan['id'];
                 }
             } else {
-                $plansUpdate[$plan->code] = $plan->id;
+                $plansUpdate[$code] = $plan;
             }
         }
 
@@ -71,14 +73,21 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
         /** @var Simplerenew\Api\Plan $plan */
         foreach ($plansRemote as $code => $plan) {
             if (array_key_exists($code, $plansUpdate)) {
-                // Refresh old plan
-                $plansTable->load($plansUpdate[$code]);
+                // Refresh old plan if changes found
+                if ($plan->equals($plansUpdate[$code])) {
+                    continue;
+                }
+                $plansTable->bind($plansUpdate[$code]);
             } else {
                 // Add new plan
-                $plansTable->id        = null;
-                $plansTable->published = 1;
-                $plansTable->alias     = SimplerenewApplicationHelper::stringURLSafe($plan->code);
-                $plansTable->created_by_alias = JText::_('COM_SIMPLERENEW_PLAN_SYNC_IMPORTED');
+                $plansTable->setProperties(
+                    array(
+                        'id'               => null,
+                        'published'        => 1,
+                        'alias'            => SimplerenewApplicationHelper::stringURLSafe($plan->code),
+                        'created_by_alias' => JText::_('COM_SIMPLERENEW_PLAN_SYNC_IMPORTED')
+                    )
+                );
             }
             $plansTable->bind($plan->getProperties());
 
