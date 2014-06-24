@@ -63,7 +63,7 @@ class SimplerenewTablePlans extends SimplerenewTable
             $localPlan = $db->setQuery($query)->loadObject();
         }
 
-        $success = true; //parent::delete($pk);
+        $success = parent::delete($pk);
         if ($success && $localPlan) {
             $remotePlan = $this->getGateway()->load($localPlan->code);
             try {
@@ -79,12 +79,13 @@ class SimplerenewTablePlans extends SimplerenewTable
                 return false;
 
             } catch (Exception $e) {
-                $this->setError(
+                SimplerenewFactory::getApplication()->enqueueMessage(
                     JText::sprintf(
                         'COM_SIMPLERENEW_ERROR_PLAN_GATEWAY_REMOVE',
                         $localPlan->code,
                         $e->getMessage()
-                    )
+                    ),
+                    'error'
                 );
                 return false;
             }
@@ -116,8 +117,10 @@ class SimplerenewTablePlans extends SimplerenewTable
             if (!empty($localPlans)) {
                 $remotePlan = $this->getGateway();
                 foreach ($localPlans as $plan) {
-                    $remotePlan->load($plan->code);
-                    if (!$remotePlan->created) {
+                    try {
+                        $remotePlan->load($plan->code);
+                    } catch (Exception $e) {
+                        // Plan doesn't exist on gateway, we'll just create it
                         try {
                             $remotePlan->setProperties($plan)->save();
 
@@ -130,12 +133,13 @@ class SimplerenewTablePlans extends SimplerenewTable
                                 );
 
                         } catch (Exception $e) {
-                            $this->setError(
+                            SimplerenewFactory::getApplication()->enqueueMessage(
                                 JText::sprintf(
                                     'COM_SIMPLERENEW_ERROR_PLAN_GATEWAY_CREATE',
                                     $plan->code,
                                     $e->getMessage()
-                                )
+                                ),
+                                'error'
                             );
                             return false;
                         }
