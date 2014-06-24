@@ -1,5 +1,12 @@
 <?php
 /**
+ * @package   tests_simplerenew
+ * @contact   www.ostraining.com, support@ostraining.com
+ * @copyright 2014 Open Source Training, LLC. All rights reserved
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
+ */
+
+/**
  * Set variables below as needed for your installation
  */
 
@@ -7,11 +14,9 @@
  * Paths to test libraries and assets.
  *
  * joomla: Must point to a locally installed version of joomla
- * fof   : If not set, will use fof from joomla installation or assets folder here
  */
 $testPaths = array(
-    'joomla' => 'd:/www/j25',
-    'fof'    => null
+    'joomla' => '/Users/anderson/WebServer/joomla-2/'
 );
 
 // It isn't clear if this is needed. But it was recommended. We'll figure it out later
