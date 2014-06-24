@@ -151,4 +151,32 @@ class Plan extends AbstractApiBase
         $this->imp->delete($this);
         $this->imp->load($this);
     }
+
+    /**
+     * Compare this plan's data to the passed data
+     *
+     * @param array|object $data
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function equals($data)
+    {
+        if (is_object($data)) {
+            $data = get_object_vars($data);
+        }
+        if (!is_array($data)) {
+            throw new Exception('Incorrect argument passed');
+        }
+        $baseData = $this->getProperties();
+        unset($baseData['created']);
+
+        $data             = array_intersect_key($data, $baseData);
+        $data['currency'] = @$data['currency'] ? : $this->currency;
+        if (!empty($data['created'])) {
+            unset($data['created']);
+        }
+
+        return ($baseData == $data);
+    }
 }
