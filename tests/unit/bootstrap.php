@@ -81,8 +81,10 @@ define('SIMPLERENEW_MEDIA', SIMPLERENEW_SRC . '/media');
 define('SIMPLERENEW_LIBRARY', SIMPLERENEW_ADMIN . '/library');
 
 // Setup autoloaded libraries
+require_once SIMPLERENEW_LIBRARY . '/joomla/loader.php';
 require_once SIMPLERENEW_LIBRARY . '/psr4autoloader.php';
 $loader = new Psr4AutoloaderClass();
+
 
 $loader->register();
 $loader->addNamespace('Simplerenew', SIMPLERENEW_LIBRARY . '/simplerenew');
