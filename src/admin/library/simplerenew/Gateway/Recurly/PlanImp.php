@@ -67,6 +67,14 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
         );
     }
 
+    /**
+     * Get the list of all plans on the gateway
+     *
+     * @param Plan $template
+     *
+     * @return array
+     * @throws Exception
+     */
     public function getList(Plan $template)
     {
         $this->plansLoaded = array();
