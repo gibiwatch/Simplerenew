@@ -20,8 +20,7 @@ class SimplerenewModelPlans extends SimplerenewModelList
             'published', 'plan.published',
             'id', 'plan.id',
             'created', 'plan.created',
-            'group', 'ug.title',
-            'trial'
+            'group', 'ug.title'
         );
 
         parent::__construct($config);
@@ -38,7 +37,6 @@ class SimplerenewModelPlans extends SimplerenewModelList
         $query->select(
             array(
                 'plan.*',
-                "IF(plan.trial_length, CONCAT(plan.trial_length,{$space},plan.trial_unit), {$noTrial}) trial_period",
                 'ug.title usergroup',
                 'editor.name as editor'
             )

@@ -212,7 +212,12 @@ else:
                 </td>
 
                 <td>
-                    <?php echo $item->trial_period; ?>
+                    <?php
+                    echo JText::plural(
+                        'COM_SIMPLERENEW_CALENDAR_N_PERIOD_'.$item->trial_unit,
+                        $item->trial_length
+                    );
+                    ?>
                 </td>
 
                 <td>
