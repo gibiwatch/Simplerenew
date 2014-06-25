@@ -42,10 +42,13 @@ class SimplerenewTablePlans extends SimplerenewTable
     {
         $plan = $this->getGateway();
 
-        $plan
-            ->load($this->code)
-            ->setProperties($this->getProperties());
+        try {
+            $plan->load($this->code);
+        } catch (Simplerenew\Exception\NotFound $e) {
+            // This is fine, we'll just create it
+        }
 
+        $plan->setProperties($this->getProperties());
         return $plan->save();
     }
 
