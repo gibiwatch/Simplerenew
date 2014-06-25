@@ -41,3 +41,14 @@ character after the Simplerenew prefix to determine the directory tree. Some exa
     + JSubMenuHelper
     + JText
 
+Built-in style sheets
+=====================
+We are providing a defined set of front-end styles for selection. The default are in the top level css
+media folder. Additional styles can be defined in subfolders named so that their main feature is understood.
+e.g. 'blue'. These styles can be turned off entirely allowing the template full control. Note that this might
+also require template overrides for all Simplerenew views.
+
++ Joomla
+    + You only need add the sub-folder to add a new style to the configuration dropdown
+    + You must also add a language string for a new style/folder - COM_SIMPLERENEW_OPTION_STYLESHEET_&lt;foldername&gt;
+    + css files are loaded using standard Joomla media loading. Templates can therefore employ matching override files.

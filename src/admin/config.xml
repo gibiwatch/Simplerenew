@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <config addfieldpath="/administrator/components/com_simplerenew/models/fields">
-    <fieldset
-        name="basic"
-        label="COM_SIMPLERENEW_CONFIG_BASIC_LABEL">
-        <field
-            name="defaultGroup"
-            label="COM_SIMPLERENEW_DEFAULT_GROUP_LABEL"
-            description="COM_SIMPLERENEW_DEFAULT_GROUP_DESC"
-            type="usergrouplist"/>
+    <fields name="basic">
+        <fieldset
+            name="basic"
+            label="COM_SIMPLERENEW_CONFIG_BASIC_LABEL">
+            <field
+                name="defaultGroup"
+                label="COM_SIMPLERENEW_DEFAULT_GROUP_LABEL"
+                description="COM_SIMPLERENEW_DEFAULT_GROUP_DESC"
+                type="usergrouplist"/>
 
-        <field
-            name="codeMask"
-            label="COM_SIMPLERENEW_ACCOUNT_CODEMASK_LABEL"
-            description="COM_SIMPLERENEW_ACCOUNT_CODEMASK_DESC"
-            type="text"
-            default="%s"/>
-    </fieldset>
+            <field
+                name="codeMask"
+                label="COM_SIMPLERENEW_ACCOUNT_CODEMASK_LABEL"
+                description="COM_SIMPLERENEW_ACCOUNT_CODEMASK_DESC"
+                type="text"
+                default="%s"/>
+        </fieldset>
+    </fields>
 
     <fields name="gateway">
         <fields name="recurly">
@@ -92,4 +94,42 @@
             component="com_simplerenew"
             section="component"/>
     </fieldset>
+
+    <fields name="advanced">
+        <fieldset
+            name="advanced"
+            label="COM_SIMPLERENEW_CONFIG_ADVANCED_LABEL"
+            description="COM_SIMPLERENEW_CONFIG_ADVANCED_DESC">
+
+            <field
+                name="fontAwesome"
+                type="list"
+                default="cdn"
+                label="COM_SIMPLERENEW_ADVANCED_FONTAWESOME_LABEL"
+                description="COM_SIMPLERENEW_ADVANCED_FONTAWESOME_DESC">
+                <option value="cdn">COM_SIMPLERENEW_OPTION_YES_CDN</option>
+                <option value="local">COM_SIMPLERENEW_OPTION_YES_LOCAL</option>
+                <option value="">JNO</option>
+            </field>
+
+            <field
+                name="fontFamily"
+                type="list"
+                default="Open Sans:400,300,400italic,600,700"
+                label="COM_SIMPLERENEW_ADVANCED_FONTFAMILY_LABEL"
+                description="COM_SIMPLERENEW_ADVANCED_FONTFAMILY_DESC">
+                <option value="">COM_SIMPELRENEW_OPTION_FONT_NONE</option>
+                <option value="Open Sans:400,300,400italic,600,700">COM_SIMPLERENEW_OPTION_FONT_OPEN_SANS</option>
+            </field>
+
+            <field
+                name="stylesheet"
+                type="customstyles"
+                default="default"
+                label="COM_SIMPLERENEW_ADVANCED_STYLESHEET_LABEL"
+                description="COM_SIMPLERENEW_STYLESHEET_DESC">
+            </field>
+
+        </fieldset>
+    </fields>
 </config>

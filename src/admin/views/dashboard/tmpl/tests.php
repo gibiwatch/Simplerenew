@@ -12,12 +12,12 @@ try {
     $sr = SimplerenewHelper::getSimplerenew();
 
     echo '<pre>';
-
+/*
     echo str_pad(' Plan ', 40, '*', STR_PAD_BOTH) . '<br/>';
     $plan = $sr->getPlan()->load('plan-apeforest');
 
     print_r($plan->getProperties());
-
+*/
 
     /** @var Simplerenew\Api\Plan $item */
 /*
@@ -41,15 +41,13 @@ try {
     print_r($user2->getProperties());
 */
 
-/*
     echo str_pad(' Account ', 40, '*', STR_PAD_BOTH) . '<br/>';
     $user = $sr->getUser()->loadByUsername('bill');
     $user->id = 976;
     $account = $sr->getAccount()->load($user);
 
     print_r($account->getProperties());
-
-
+/*
     echo str_pad(' Billing ', 40, '*', STR_PAD_BOTH) . '<br/>';
 //    $user = $sr->getUser()->loadByUsername('bill');
 //    $account = $sr->getAccount()->load($user);

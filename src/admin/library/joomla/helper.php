@@ -51,7 +51,7 @@ abstract class SimplerenewHelper
                         'recurly' => (array)$params->get('gateway.recurly')
                     ),
                     'account' => array(
-                        'codeMask' => $params->get('codeMask', '%s')
+                        'codeMask' => $params->get('basic.codeMask', '%s')
                     )
                 );
 
