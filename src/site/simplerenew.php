@@ -9,6 +9,7 @@
 defined('_JEXEC') or die();
 
 require_once JPATH_COMPONENT_ADMINISTRATOR . '/include.php';
-?>
-Under Construction
 
+$controller = JControllerLegacy::getInstance('Simplerenew');
+$controller->execute(JFactory::getApplication()->input->get('task'));
+$controller->redirect();
