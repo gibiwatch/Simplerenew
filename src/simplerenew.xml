@@ -31,10 +31,15 @@
     </update>
 
     <media destination="com_simplerenew" folder="media">
+        <folder>css</folder>
+        <folder>fonts</folder>
         <folder>images</folder>
     </media>
 
     <files folder="site">
+        <folder>language</folder>
+        <folder>views</folder>
+        <filename>controller.php</filename>
         <filename>simplerenew.php</filename>
     </files>
 

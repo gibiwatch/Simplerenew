@@ -4,6 +4,7 @@
 *.bak
 *~
 !.gitignore
+!.htaccess
 
 # Icon must ends with two \r.
 Icon
