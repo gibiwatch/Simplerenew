@@ -79,7 +79,7 @@ class SimplerenewTablePlans extends SimplerenewTable
                             $localPlan->code
                         )
                     );
-                return false;
+                return true;
 
             } catch (Exception $e) {
                 SimplerenewFactory::getApplication()->enqueueMessage(
@@ -90,7 +90,7 @@ class SimplerenewTablePlans extends SimplerenewTable
                     ),
                     'error'
                 );
-                return false;
+                return true;
             }
 
 
