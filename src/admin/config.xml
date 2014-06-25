@@ -8,20 +8,14 @@
             label="COM_SIMPLERENEW_DEFAULT_GROUP_LABEL"
             description="COM_SIMPLERENEW_DEFAULT_GROUP_DESC"
             type="usergrouplist"/>
-    </fieldset>
 
-    <fields name="account">
-        <fieldset
-            name="account"
-            label="COM_SIMPLERENEW_CONFIG_ACCOUNT_LABEL">
-            <field
-                name="codeMask"
-                label="COM_SIMPLERENEW_ACCOUNT_CODEMASK_LABEL"
-                description="COM_SIMPLERENEW_ACCOUNT_CODEMASK_DESC"
-                type="text"
-                default="%s"/>
-        </fieldset>
-    </fields>
+        <field
+            name="codeMask"
+            label="COM_SIMPLERENEW_ACCOUNT_CODEMASK_LABEL"
+            description="COM_SIMPLERENEW_ACCOUNT_CODEMASK_DESC"
+            type="text"
+            default="%s"/>
+    </fieldset>
 
     <fields name="gateway">
         <fields name="recurly">
@@ -54,10 +48,10 @@
                     type="text"/>
 
                 <field
-                        name="testSubdomain"
-                        label="COM_SIMPLERENEW_RECURLY_SUBDOMAIN_LABEL"
-                        description="COM_SIMPLERENEW_RECURLY_SUBDOMAIN_DESC"
-                        type="text"/>
+                    name="testSubdomain"
+                    label="COM_SIMPLERENEW_RECURLY_SUBDOMAIN_LABEL"
+                    description="COM_SIMPLERENEW_RECURLY_SUBDOMAIN_DESC"
+                    type="text"/>
 
                 <field
                     name="LiveHead"
@@ -76,10 +70,10 @@
                     type="text"/>
 
                 <field
-                        name="liveSubdomain"
-                        label="COM_SIMPLERENEW_RECURLY_SUBDOMAIN_LABEL"
-                        description="COM_SIMPLERENEW_RECURLY_SUBDOMAIN_DESC"
-                        type="text"/>
+                    name="liveSubdomain"
+                    label="COM_SIMPLERENEW_RECURLY_SUBDOMAIN_LABEL"
+                    description="COM_SIMPLERENEW_RECURLY_SUBDOMAIN_DESC"
+                    type="text"/>
             </fieldset>
         </fields>
     </fields>
