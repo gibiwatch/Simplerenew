@@ -24,4 +24,7 @@ if (!defined('SIMPLERENEW_LOADED')) {
 
     // Set the Joomla overrides loader
     require_once SIMPLERENEW_LIBRARY . '/joomla/loader.php';
+
+    // Any additional helper paths
+    JHtml::addIncludePath(SIMPLERENEW_LIBRARY . '/html');
 }
