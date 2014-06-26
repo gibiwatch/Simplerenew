@@ -43,10 +43,8 @@ abstract class SimplerenewHelperSite
         $params = self::getParams();
 
         // Load the selected font
-        $font     = $params->get('advanced.fontFamily', self::$defaultFont);
-        $loadFont = ($font != 'none');
-
-        if ($loadFont) {
+        $font = $params->get('advanced.fontFamily', self::$defaultFont);
+        if ($font != 'none') {
             $href = 'http://fonts.googleapis.com/css?family=' . $font;
             JHtml::stylesheet($href);
         }
@@ -73,13 +71,3 @@ abstract class SimplerenewHelperSite
         }
     }
 }
-
-/*
-
-	<!-- elements -->
-	<link href="css/styles.css" rel="stylesheet">
-
-	<!-- grid -->
-	<link href="css/grid.css" rel="stylesheet">
-	<link href="css/grid-responsive.css" rel="stylesheet">
- */
