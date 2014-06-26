@@ -16,13 +16,32 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
     protected $plans = array();
 
     /**
-     * @var \Simplerenew\User
+     * @var Simplerenew\User\User
      */
     protected $user = null;
 
+    /**
+     * @var Simplerenew\Api\Account
+     */
+    protected $account = null;
+
+    /**
+     * @var Simplerenew\Api\Billing
+     */
+    protected $billing = null;
+
     public function display($tpl = null)
     {
+        $container     = SimplerenewFactory::getContainer();
+        $this->user    = $container->getUser()->load();
+        $this->account = $container->getAccount();
+        $this->billing = $container->getBilling();
+
         $this->plans = $this->get('Plans');
+
+        foreach ($this->plans as $plan) {
+            $plan->selected = false;
+        }
 
         parent::display($tpl);
     }

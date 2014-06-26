@@ -16,6 +16,16 @@ JFormHelper::loadFieldClass('Checkboxes');
 
 class JFormFieldPlans extends JFormFieldCheckboxes
 {
+    public function __construct($form = null)
+    {
+        parent::__construct($form);
+
+        if (!SimplerenewFactory::getApplication()->isSite()) {
+            $lang = SimplerenewFactory::getLanguage();
+            $lang->load('com_simplerenew', SIMPLERENEW_SITE);
+        }
+    }
+
     public function getOptions()
     {
         SimplerenewFactory::getDocument()
@@ -25,13 +35,13 @@ class JFormFieldPlans extends JFormFieldCheckboxes
 
         $db = SimplerenewFactory::getDbo();
         $query = $db->getQuery(true)
-            ->select('code, name')
+            ->select('code, name, amount, trial_length, trial_unit')
             ->from('#__simplerenew_plans')
             ->order('code');
 
         $list = $db->setQuery($query)->loadObjectList();
         foreach ($list as $plan) {
-            $option = JHtml::_('select.option', $plan->code, $plan->code . ': ' . $plan->name);
+            $option = JHtml::_('select.option', $plan->code, JHtml::_('plan.name', $plan));
             $option->checked = false;
             $options[] = $option;
         }
