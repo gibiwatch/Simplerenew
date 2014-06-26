@@ -51,16 +51,6 @@ abstract class SimplerenewHelperSite
             JHtml::stylesheet($href);
         }
 
-        // Load the selected theme
-        if ($theme === null) {
-            $theme = $params->get('advanced.theme', 'default.css');
-        }
-        if ($theme != 'none') {
-            JHtml::stylesheet('com_simplerenew/themes/' . $theme, null, true);
-            JHtml::stylesheet('com_simplerenew/grid.css', null, true);
-            JHtml::stylesheet('com_simplerenew/grid-responsive.css', null, true);
-        }
-
         // Load font Awesome
         switch ($params->get('advanced.fontAwesome', 'local')) {
             case 'local':
@@ -70,6 +60,16 @@ abstract class SimplerenewHelperSite
             case 'cdn':
                 JHtml::stylesheet(self::$awesomeCDN);
                 break;
+        }
+
+        // Load the selected theme
+        if ($theme === null) {
+            $theme = $params->get('advanced.theme', 'default.css');
+        }
+        if ($theme != 'none') {
+            JHtml::stylesheet('com_simplerenew/grid.css', null, true);
+            JHtml::stylesheet('com_simplerenew/grid-responsive.css', null, true);
+            JHtml::stylesheet('com_simplerenew/themes/' . $theme, null, true);
         }
     }
 }
