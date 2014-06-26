@@ -9,6 +9,9 @@
 defined('_JEXEC') or die();
 
 $readonly = '';
+if ($this->user->id > 0) {
+    $readonly = ' readonly="true"';
+}
 ?>
 <div class="ost-container">
     <form>
@@ -79,5 +82,10 @@ $readonly = '';
             <?php echo JText::sprintf('COM_SIMPLERENEW_TERMS_OF_AGREEMENT', '#'); ?>
         </div>
 
+        <input
+            id="user_id"
+            name="user_id"
+            type="hidden"
+            value="<?php echo $this->user->id; ?>"/>
     </form>
 </div>
