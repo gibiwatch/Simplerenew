@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die();
 
-class SimplerenewViewRegister extends SimplerenewViewSite
+class SimplerenewViewSubscribe extends SimplerenewViewSite
 {
 
 }

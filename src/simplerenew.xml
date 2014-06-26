@@ -32,7 +32,6 @@
 
     <media destination="com_simplerenew" folder="media">
         <folder>css</folder>
-        <folder>fonts</folder>
         <folder>images</folder>
     </media>
 

@@ -8,4 +8,4 @@
 
 defined('_JEXEC') or die();
 ?>
-This is the registration view
+This is the subscribe view
