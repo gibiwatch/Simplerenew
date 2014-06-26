@@ -33,9 +33,17 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
     public function display($tpl = null)
     {
         $container     = SimplerenewFactory::getContainer();
-        $this->user    = $container->getUser()->load();
+        $this->user    = $container->getUser();
         $this->account = $container->getAccount();
         $this->billing = $container->getBilling();
+
+        try {
+            $this->user->load();
+            $this->account->load($this->user);
+            $this->billing->load($this->account);
+        } catch (Exception $e) {
+            // We don't care if they aren't logged in or don't have an account
+        }
 
         $this->plans = $this->get('Plans');
 

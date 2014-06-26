@@ -9,10 +9,6 @@
 defined('_JEXEC') or die();
 
 $readonly = '';
-if ($this->user->id > 0) {
-    $readonly = ' readonly="true"';
-}
-
 ?>
 <div class="ost-container">
     <form>
