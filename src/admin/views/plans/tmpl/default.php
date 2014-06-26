@@ -12,8 +12,8 @@ JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.multiselect');
 JHtml::_('formbehavior.chosen', 'select');
 
-$app       = JFactory::getApplication();
-$user      = JFactory::getUser();
+$app       = SimplerenewFactory::getApplication();
+$user      = SimplerenewFactory::getUser();
 $userId    = $user->get('id');
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDir   = $this->escape($this->state->get('list.direction'));

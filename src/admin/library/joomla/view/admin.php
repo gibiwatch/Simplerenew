@@ -13,7 +13,7 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
     public function display($tpl = null)
     {
         if (version_compare(JVERSION, '3.0', 'ge')) {
-            $hide = JFactory::getApplication()->input->getBool('hidemainmenu', false);
+            $hide = SimplerenewFactory::getApplication()->input->getBool('hidemainmenu', false);
             if (!$hide && $sidebar = JHtmlSidebar::render()) {
                 $start = array(
                     '<div id="j-sidebar-container" class="span2">',
@@ -56,7 +56,7 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
     {
         $img = JHtml::_('image', "com_simplerenew/icon-48-{$icon}.png", null, null, true, true);
         if ($img) {
-            $doc = JFactory::getDocument();
+            $doc = SimplerenewFactory::getDocument();
             $doc->addStyleDeclaration(".icon-48-{$icon} { background-image: url({$img}); }");
         }
 
@@ -77,7 +77,7 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
      */
     protected function setToolBar($addDivider = true)
     {
-        $user = JFactory::getUser();
+        $user = SimplerenewFactory::getUser();
         if ($user->authorise('core.admin', 'com_simplerenew')) {
             if ($addDivider) {
                 JToolBarHelper::divider();

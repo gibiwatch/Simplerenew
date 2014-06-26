@@ -10,11 +10,6 @@ defined('_JEXEC') or die();
 
 abstract class SimplerenewHelper
 {
-    /**
-     * @var \Simplerenew\Factory
-     */
-    protected static $simplerenew = null;
-
     public static function addSubmenu($vName)
     {
         self::addMenuEntry(
@@ -28,50 +23,6 @@ abstract class SimplerenewHelper
             'index.php?option=com_simplerenew&view=plans',
             $vName == 'plans'
         );
-    }
-
-    /**
-     * Get the Simplerenew Factory class
-     *
-     * @TODO: Review Factory/DI pattern for possible improvement
-     *
-     * @return \Simplerenew\Factory
-     */
-    public static function getSimplerenew()
-    {
-        if (!self::$simplerenew instanceof \Simplerenew\Factory) {
-            try {
-                $params = SimplerenewComponentHelper::getParams('com_simplerenew');
-
-                $config = array(
-                    'user'    => array(
-                        'adapter' => 'joomla'
-                    ),
-                    'gateway' => array(
-                        'recurly' => (array)$params->get('gateway.recurly')
-                    ),
-                    'account' => array(
-                        'codeMask' => $params->get('basic.codeMask', '%s')
-                    )
-                );
-
-                self::$simplerenew = new \Simplerenew\Factory($config);
-            } catch (Exception $e) {
-                $app = SimplerenewFactory::getApplication();
-                if ($app->isAdmin()) {
-                    $link = 'index.php?option=com_simplerenew';
-                } else {
-                    $link = JRoute::_('index.php');
-                }
-                $app->redirect(
-                    $link,
-                    JText::sprintf('COM_SIMPLERENEW_ERROR_CONFIGURATION', $e->getMessage()),
-                    'error'
-                );
-            }
-
-        }
-        return self::$simplerenew;
     }
 
     /**

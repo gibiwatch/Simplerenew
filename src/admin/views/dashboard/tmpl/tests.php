@@ -9,7 +9,7 @@
 defined('_JEXEC') or die();
 
 try {
-    $sr = SimplerenewHelper::getSimplerenew();
+    $sr = SimplerenewFactory::getContainer();
 
     echo '<pre>';
 /*
@@ -68,6 +68,7 @@ try {
 
 } catch (Simplerenew\Exception $e) {
     echo '<br/>SIMPLERENEW: ' . $e->getTraceMessage() . '<br/>';
+    echo 'Current: ' . get_class($e) . '<br/>';
     echo 'Previous: ' . get_class($e->getPrevious()) . '<br/>';
 
     echo '<pre>';

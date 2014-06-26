@@ -25,7 +25,7 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
         $params    = SimplerenewComponentHelper::getParams('com_simplerenew');
         $returnUrl = 'index.php?option=com_simplerenew&view=plans';
 
-        $plansGateway = SimplerenewHelper::getSimplerenew()->getPlan();
+        $plansGateway = SimplerenewFactory::getContainer()->getPlan();
         $plansRemote  = $plansGateway->getList();
 
         $plansTable = SimplerenewTable::getInstance('Plans');

@@ -19,7 +19,7 @@ JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
 //JHtml::_('formbehavior.chosen', 'select');
 
-$app = JFactory::getApplication();
+$app = SimplerenewFactory::getApplication();
 $input = $app->input;
 ?>
 <script type="text/javascript">

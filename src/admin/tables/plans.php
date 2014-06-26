@@ -28,7 +28,7 @@ class SimplerenewTablePlans extends SimplerenewTable
     public function getGateway()
     {
         if (!$this->_gateway instanceof Plan) {
-            $this->_gateway = SimplerenewHelper::getSimplerenew()->getPlan();
+            $this->_gateway = SimplerenewFactory::getContainer()->getPlan();
         }
         return $this->_gateway;
     }

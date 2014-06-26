@@ -17,12 +17,12 @@ use Simplerenew\User\Adapter\UserInterface;
 defined('_JEXEC') or die();
 
 /**
- * Class Factory
+ * Class Container
  * @package Simplerenew
  *
  * @TODO    : Investigate replacing with a proper DI container
  */
-class Factory
+class Container
 {
     /**
      * @var UserInterface
