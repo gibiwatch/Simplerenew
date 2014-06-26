@@ -30,9 +30,6 @@ class SimplerenewModelPlans extends SimplerenewModelList
     {
         $db = $this->getDbo();
 
-        $space   = $db->quote(' ');
-        $noTrial = $db->quote(JText::_('COM_SIMPLERENEW_NO_TRIAL'));
-
         $query = $db->getQuery(true);
         $query->select(
             array(
