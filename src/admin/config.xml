@@ -125,7 +125,7 @@
             <field
                 name="stylesheet"
                 type="customstyles"
-                default="default"
+                default="default.css"
                 label="COM_SIMPLERENEW_ADVANCED_STYLESHEET_LABEL"
                 description="COM_SIMPLERENEW_STYLESHEET_DESC">
             </field>

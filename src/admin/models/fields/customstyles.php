@@ -18,18 +18,21 @@ class JFormFieldCustomstyles extends JFormFieldList
     {
         $options = array(
             JHtml::_('select.option', '', JText::_('COM_SIMPLERENEW_OPTION_STYLESHEET_NONE')),
-            JHtml::_('select.option', 'default', JText::_('COM_SIMPLERENEW_OPTION_STYLESHEET_DEFAULT'))
+            JHtml::_('select.option', 'default.css', JText::_('COM_SIMPLERENEW_OPTION_STYLESHEET_DEFAULT'))
         );
 
-        $path = JPATH_SITE . '/' . dirname(JHtml::stylesheet('com_simplerenew/styles.css', null, true, true));
+        $path = JPATH_SITE . '/' . dirname(JHtml::stylesheet('com_simplerenew/themes/default.css', null, true, true));
 
-        $styles = JFolder::folders($path);
-        foreach ($styles as $name) {
-            $options[] = JHtml::_(
-                'select.option',
-                $name,
-                JText::_('COM_SIMPLERENEW_OPTION_STYLESHEET_' . strtoupper($name))
-            );
+        $styles = JFolder::files($path, '\.css$');
+        sort($styles);
+        foreach ($styles as $file) {
+            if ($file != 'default.css') {
+                $options[] = JHtml::_(
+                    'select.option',
+                    $file,
+                    JText::_('COM_SIMPLERENEW_OPTION_STYLESHEET_' . strtoupper(basename($file, '.css')))
+                );
+            }
         }
 
         return $options;

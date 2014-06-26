@@ -1,20 +1,20 @@
 /* general */
 
-.ost-container p, 
-.ost-container h1, 
-.ost-container h2, 
-.ost-container h3, 
-.ost-container div, 
-.ost-container ul, 
-.ost-container li, 
-.ost-container ol, 
-.ost-container span, 
-.ost-container tablet, 
-.ost-container tr, 
-.ost-container td, 
-.ost-container thead, 
-.ost-container input, 
-.ost-container textarea, 
+.ost-container p,
+.ost-container h1,
+.ost-container h2,
+.ost-container h3,
+.ost-container div,
+.ost-container ul,
+.ost-container li,
+.ost-container ol,
+.ost-container span,
+.ost-container tablet,
+.ost-container tr,
+.ost-container td,
+.ost-container thead,
+.ost-container input,
+.ost-container textarea,
 .ost-container select{
 	font-family: 'Open Sans', sans-serif;
 }
@@ -26,8 +26,8 @@
     margin: 0 0 20px;
 	font-weight:300;
 }
-.ost-container h1, 
-.ost-container h2, 
+.ost-container h1,
+.ost-container h2,
 .ost-container h3 {
     color: #333333;
 	line-height: 30px;
@@ -45,14 +45,14 @@
 .ost-container h3 {
     font-size: 22px;
 }
-.ost-container h1 span, 
-.ost-container h2 span, 
+.ost-container h1 span,
+.ost-container h2 span,
 .ost-container h3 span {
     color: #666666;
     font-weight: 300;
 }
-.ost-container .page-header h1, 
-.ost-container .page-header h2, 
+.ost-container .page-header h1,
+.ost-container .page-header h2,
 .ost-container .page-header h3{
 	background: #333333;
     color: #FFFFFF;
@@ -61,9 +61,9 @@
     padding-right: 10px;
 }
 .ost-container a{
-	-moz-transition: all 0.2s linear; 
-	-webkit-transition: all 0.2s linear; 
-	-o-transition: all 0.2s linear; 
+	-moz-transition: all 0.2s linear;
+	-webkit-transition: all 0.2s linear;
+	-o-transition: all 0.2s linear;
 	transition: all 0.2s linear;
 	text-decoration:underline;
 	color:#2184cd;
@@ -80,9 +80,9 @@
 .ost-container form{
 
 }
-.ost-container input[type="text"], 
-.ost-container input[type="email"], 
-.ost-container textarea, 
+.ost-container input[type="text"],
+.ost-container input[type="email"],
+.ost-container textarea,
 .ost-container select{
 	color:#666666;
 	font-size: 13px;
@@ -99,7 +99,7 @@
 .ost-container select{
 	min-width: 202px;
 }
-.ost-container input[type="submit"], 
+.ost-container input[type="submit"],
 .ost-container button{
 	background: #666666;
     border-radius: 2px;
@@ -128,8 +128,8 @@
 	margin-bottom:10px;
 }
 .ost-container input[type="submit"]:hover,
-.ost-container input[type="submit"]:focus, 
-.ost-container button:hover, 
+.ost-container input[type="submit"]:focus,
+.ost-container button:hover,
 .ost-container button:focus{
 	background: #999999;
     box-shadow: 0 2px 0 #666666;
@@ -137,7 +137,7 @@
 	-webkit-box-shadow: 0 2px 0 #666666;
 	-o-box-shadow: 0 2px 0 #666666;
 }
-.ost-container input[type="submit"].btn-main, 
+.ost-container input[type="submit"].btn-main,
 .ost-container button.btn-main{
 	background: #2184CD;
     box-shadow: 0 2px 0 #333333;
@@ -145,9 +145,9 @@
 	-webkit-box-shadow: 0 2px 0 #333333;
 	-o-box-shadow: 0 2px 0 #333333;
 }
-.ost-container input[type="submit"].btn-main:hover, 
-.ost-container input[type="submit"].btn-main:focus, 
-.ost-container button.btn-main:hover, 
+.ost-container input[type="submit"].btn-main:hover,
+.ost-container input[type="submit"].btn-main:focus,
+.ost-container button.btn-main:hover,
 .ost-container button.btn-main:focus{
 	background: #41A1D6;
     box-shadow: 0 2px 0 #2184CD;
@@ -156,7 +156,7 @@
 	-o-box-shadow: 0 2px 0 #2184CD;
 }
 .ost-container .required-field{
-	background:url(../images/required-field.png) no-repeat right top;
+	background:url(../../images/required-field.png) no-repeat right top;
 }
 
 /* specific classes */
