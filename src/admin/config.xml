@@ -104,12 +104,12 @@
             <field
                 name="fontAwesome"
                 type="list"
-                default="cdn"
+                default="local"
                 label="COM_SIMPLERENEW_ADVANCED_FONTAWESOME_LABEL"
                 description="COM_SIMPLERENEW_ADVANCED_FONTAWESOME_DESC">
                 <option value="cdn">COM_SIMPLERENEW_OPTION_YES_CDN</option>
                 <option value="local">COM_SIMPLERENEW_OPTION_YES_LOCAL</option>
-                <option value="">JNO</option>
+                <option value="no">JNO</option>
             </field>
 
             <field
@@ -118,16 +118,16 @@
                 default="Open Sans:400,300,400italic,600,700"
                 label="COM_SIMPLERENEW_ADVANCED_FONTFAMILY_LABEL"
                 description="COM_SIMPLERENEW_ADVANCED_FONTFAMILY_DESC">
-                <option value="">COM_SIMPELRENEW_OPTION_FONT_NONE</option>
+                <option value="none">COM_SIMPELRENEW_OPTION_FONT_NONE</option>
                 <option value="Open Sans:400,300,400italic,600,700">COM_SIMPLERENEW_OPTION_FONT_OPEN_SANS</option>
             </field>
 
             <field
-                name="stylesheet"
-                type="customstyles"
+                name="theme"
+                type="themes"
                 default="default.css"
-                label="COM_SIMPLERENEW_ADVANCED_STYLESHEET_LABEL"
-                description="COM_SIMPLERENEW_STYLESHEET_DESC">
+                label="COM_SIMPLERENEW_ADVANCED_THEME_LABEL"
+                description="COM_SIMPLERENEW_ADVANCED_THEME_DESC">
             </field>
 
         </fieldset>

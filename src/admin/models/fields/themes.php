@@ -12,12 +12,12 @@ jimport('joomla.filesystem.folder');
 
 JFormHelper::loadFieldClass('list');
 
-class JFormFieldCustomstyles extends JFormFieldList
+class JFormFieldThemes extends JFormFieldList
 {
     public function getOptions()
     {
         $options = array(
-            JHtml::_('select.option', '', JText::_('COM_SIMPLERENEW_OPTION_STYLESHEET_NONE')),
+            JHtml::_('select.option', 'none', JText::_('COM_SIMPLERENEW_OPTION_STYLESHEET_NONE')),
             JHtml::_('select.option', 'default.css', JText::_('COM_SIMPLERENEW_OPTION_STYLESHEET_DEFAULT'))
         );
 
