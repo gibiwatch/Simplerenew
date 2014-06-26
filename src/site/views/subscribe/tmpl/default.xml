@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<metadata>
+<metadata addfieldpath="/administrator/components/com_simplerenew/models/fields">
     <layout title="COM_SIMPLERENEW_VIEW_SUBSCRIBE_DEFAULT_TITLE">
         <message>
             <![CDATA[COM_SIMPLERENEW_VIEW_SUBSCRIBE_DEFAULT_DESC]]>
         </message>
     </layout>
+
+    <fields name="params">
+        <fieldset
+            name="basic"
+            label="COM_SIMPLERENEW_VIEW_SUBSCRIBE_PARAMS_BASIC_LABEL">
+
+            <field
+                name="plans"
+                type="plans"
+                label="COM_SIMPLERENEW_FIELD_PLANS_LABEL"
+                description="COM_SIMPLERENEW_FIELD_PLANS_DESC"/>
+
+        </fieldset>
+
+    </fields>
 </metadata>

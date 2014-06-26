@@ -35,6 +35,7 @@ character after the Simplerenew prefix to determine the directory tree. Some exa
 
 
 + Current known Exceptions
+    + JDocument
     + JHtml
     + JHtmlSidebar
     + JRoute

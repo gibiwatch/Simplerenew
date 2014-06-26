@@ -10,5 +10,8 @@ defined('_JEXEC') or die();
 
 abstract class SimplerenewComponentHelper extends JComponentHelper
 {
-
+    public static function getParams($option = 'com_simplerenew', $strict = false)
+    {
+        return parent::getParams($option, $strict);
+    }
 }

@@ -10,5 +10,12 @@ defined('_JEXEC') or die();
 
 class SimplerenewViewSubscribe extends SimplerenewViewSite
 {
+    protected $plans = array();
 
+    public function display($tpl = null)
+    {
+        $this->plans = $this->get('Plans');
+
+        parent::display($tpl);
+    }
 }
