@@ -138,7 +138,7 @@ class Joomla implements UserInterface
      */
     public function update(User $parent)
     {
-        $user = new \SimplerenewUser($parent->id);
+        $user = new \JUser($parent->id);
         if ($user->id != $parent->id) {
             throw new Exception('Unable to update user ID #' . ($parent->id ? $parent->id : 'NULL'));
         }
