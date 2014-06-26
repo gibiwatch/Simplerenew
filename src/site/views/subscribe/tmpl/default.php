@@ -8,4 +8,15 @@
 
 defined('_JEXEC') or die();
 ?>
-This is the subscribe view
+<div class="ost-container">
+    <form>
+        <ul>
+            <li>
+                <label><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
+                <input type="text"name="firstname" value=""<?php echo $this->user->firstname; ?>"/>
+            </li>
+
+        </ul>
+
+    </form>
+</div>

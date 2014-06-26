@@ -20,7 +20,7 @@ abstract class SimplerenewToolbarHelper extends JToolbarHelper
     ) {
         $img = JHtml::_('image', "com_simplerenew/icon-32-{$icon}.png", null, null, true, true);
         if ($img) {
-            $doc = JFactory::getDocument();
+            $doc = SimplerenewFactory::getDocument();
 
             if (version_compare(JVERSION, '3.0', 'ge')) {
                 $doc->addStyleDeclaration(".icon-{$icon}:before { color: {$iconColor}; }");

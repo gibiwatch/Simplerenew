@@ -10,7 +10,15 @@ defined('_JEXEC') or die();
 
 class SimplerenewViewSubscribe extends SimplerenewViewSite
 {
+    /**
+     * @var array
+     */
     protected $plans = array();
+
+    /**
+     * @var \Simplerenew\User
+     */
+    protected $user = null;
 
     public function display($tpl = null)
     {
