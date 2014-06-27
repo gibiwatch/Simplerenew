@@ -90,8 +90,8 @@ if ($this->user->id > 0) {
         </div>
 
         <input
-            id="user_id"
-            name="user_id"
+            id="userid"
+            name="userid"
             type="hidden"
             value="<?php echo $this->user->id; ?>"/>
 
