@@ -15,7 +15,7 @@ defined('_JEXEC') or die();
             id="billing_firstname"
             name="billing[firstname]"
             type="text"
-            value="<?php echo $this->billing->first_name; ?>"
+            value="<?php echo $this->billing->firstname; ?>"
             required="true"/>
     </li>
 
@@ -25,7 +25,7 @@ defined('_JEXEC') or die();
             id="billing_lastname"
             name="billing[lastname]"
             type="text"
-            value="<?php echo $this->billing->last_name; ?>"
+            value="<?php echo $this->billing->lastname; ?>"
             required="true"/>
     </li>
 
@@ -35,7 +35,7 @@ defined('_JEXEC') or die();
                 id="billing_email"
                 name="billing[email]"
                 type="text"
-                value="<?php echo $this->billing->email; ?>"
+                value="<?php echo $this->account->email; ?>"
                 require="true"/>
     </li>
 

@@ -45,10 +45,20 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
             // We don't care if they aren't logged in or don't have an account
         }
 
+        // Fill in data from previous form attempt if any
+        if ($formData = SimplerenewHelper::loadFormData('subscribe.create', false)) {
+            $this->user->setProperties($formData);
+            $this->account->setProperties($formData);
+            if (!empty($formData['billing'])) {
+                $this->billing->setProperties($formData['billing']);
+            }
+            $selectedPlan = $formData['planCode'];
+        }
+
         $this->plans = $this->get('Plans');
 
         foreach ($this->plans as $plan) {
-            $plan->selected = false;
+            $plan->selected = (!empty($selectedPlan) && $selectedPlan == $plan->code);
         }
 
         parent::display($tpl);

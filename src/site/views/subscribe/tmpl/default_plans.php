@@ -12,18 +12,18 @@ defined('_JEXEC') or die();
 
 <?php
 foreach ($this->plans as $code => $plan):
-    $plan_id = 'plan_code_' . $code;
-    $classes = 'plan_code ' . $plan_id;
+    $planId = 'plan_code_' . $code;
+    $classes = 'plan_code ' . $planId;
     $checked = $plan->selected ? ' checked="checked"' : '';
 ?>
 <div class="<?php echo join(' ', $classes); ?>">
     <input<?php echo $checked; ?>
         type="radio"
-        name="plan_code"
-        id="<?php echo $plan_id; ?>"
+        name="planCode"
+        id="<?php echo $planId; ?>"
         value="<?php echo $plan->code; ?>"/>
 
-    <label for="<?php echo $plan_id; ?>">
+    <label for="<?php echo $planId; ?>">
         <strong>
             <?php echo JHtml::_('plan.name', $plan); ?>
         </strong>

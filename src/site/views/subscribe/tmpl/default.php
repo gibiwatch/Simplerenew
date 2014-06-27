@@ -8,13 +8,20 @@
 
 defined('_JEXEC') or die();
 
+$input = SimplerenewFactory::getApplication()->input;
+
+$action = 'index.php?option=com_simplerenew&task=subscription.create';
+if ($itemid = $input->getInt('Itemid')) {
+    $action .= '&Itemid=' . $itemid;
+}
+
 $readonly = '';
 if ($this->user->id > 0) {
     $readonly = ' readonly="true"';
 }
 ?>
 <div class="ost-container">
-    <form>
+    <form action="<?php echo $action; ?>" method="post">
         <ul>
             <li>
                 <label for="firstname"><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
@@ -87,5 +94,9 @@ if ($this->user->id > 0) {
             name="user_id"
             type="hidden"
             value="<?php echo $this->user->id; ?>"/>
+
+        <input type="submit" value="<?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE'); ?>"/>
+
+        <?php echo JHtml::_('form.token'); ?>
     </form>
 </div>
