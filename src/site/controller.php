@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die();
 
-class SimplerenewController extends JControllerLegacy
+class SimplerenewController extends SimplerenewControllerBase
 {
     protected $default_view = 'register';
 }

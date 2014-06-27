@@ -12,6 +12,6 @@ require_once JPATH_COMPONENT_ADMINISTRATOR . '/include.php';
 
 SimplerenewHelperSite::loadTheme();
 
-$controller = JControllerLegacy::getInstance('Simplerenew');
+$controller = SimplerenewControllerBase::getInstance('Simplerenew');
 $controller->execute(JFactory::getApplication()->input->get('task'));
 $controller->redirect();
