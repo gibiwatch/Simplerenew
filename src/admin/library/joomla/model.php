@@ -10,6 +10,11 @@ defined('_JEXEC') or die();
 
 abstract class SimplerenewModel extends JModelLegacy
 {
+    public static function addIncludePath($path = '', $prefix = '')
+    {
+        return parent::addIncludePath($path, $prefix);
+    }
+
     public static function getInstance($type, $prefix = null, $config = array())
     {
         if (empty($prefix)) {
