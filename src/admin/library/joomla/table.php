@@ -32,8 +32,8 @@ abstract class SimplerenewTable extends JTable
      */
     public function store($updateNulls = false)
     {
-        $date = SimplerenewFactory::getDate()->toSql();
-        $user = SimplerenewFactory::getUser();
+        $date = JFactory::getDate()->toSql();
+        $user = JFactory::getUser();
 
         if (empty($this->id) && property_exists($this, 'created')) {
             if ($this->created instanceof DateTime) {
