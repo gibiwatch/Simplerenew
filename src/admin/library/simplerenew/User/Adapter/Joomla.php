@@ -9,6 +9,7 @@
 namespace Simplerenew\User\Adapter;
 
 use Simplerenew\Exception;
+use Simplerenew\Exception\NotFound;
 use Simplerenew\User\User;
 
 defined('_JEXEC') or die();
@@ -54,7 +55,7 @@ class Joomla implements UserInterface
      * @param User $parent
      *
      * @return void
-     * @throws Exception
+     * @throws NotFound
      */
     public function load(User $parent)
     {
@@ -63,7 +64,7 @@ class Joomla implements UserInterface
 
         $user = \SimplerenewFactory::getUser($id);
         if (!$user || $user->id <= 0) {
-            throw new Exception('User ID not found - ' . $id);
+            throw new NotFound('User ID not found - ' . $id);
         }
 
         $keys = array_keys(get_object_vars($parent));
