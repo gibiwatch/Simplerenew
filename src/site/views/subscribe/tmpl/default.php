@@ -20,7 +20,7 @@ if ($this->user->id > 0) {
     $readonly = ' readonly="true"';
 }
 ?>
-<div class="ost-container ost-simplerenew-subscribe">
+<div class="ost-container simplerenew-subscribe">
 
     <div class="page-header">
         <h1><?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE'); ?></h1>
@@ -74,7 +74,7 @@ if ($this->user->id > 0) {
                     required=""/>
             </div>
         </div>
-        <div class="ost-section m-bottom">
+        <div class="ost-section">
             <div class="block6">
                 <label for="password"><?php echo JText::_('COM_SIMPLERENEW_PASSWORD'); ?></label>
                 <input

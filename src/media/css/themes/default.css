@@ -1,5 +1,4 @@
 /* general */
-
 .ost-container p,
 .ost-container h1,
 .ost-container h2,
@@ -18,7 +17,6 @@
 .ost-container select{
 	font-family: 'Open Sans', sans-serif;
 }
-
 .ost-container p{
 	color: #333333;
     font-size: 13px;
@@ -32,8 +30,8 @@
     color: #333333;
 	line-height: 30px;
 	font-weight: 600;
-    margin: 0 0 20px;
-    padding: 5px 0 7px;
+    margin: 20px 0;
+    padding: 5px 0;
     text-transform: none;
 }
 .ost-container h1 {
@@ -51,14 +49,16 @@
     color: #666666;
     font-weight: 300;
 }
-.ost-container .page-header h1,
-.ost-container .page-header h2,
-.ost-container .page-header h3{
+.ost-container .page-header{
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+.ost-container .page-header h1{
 	background: #333333;
     color: #FFFFFF;
     display: inline-block;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 5px 10px 7px 10px;
 }
 .ost-container a{
 	-moz-transition: all 0.2s linear;
@@ -76,7 +76,6 @@
 }
 
 /* form elements */
-
 .ost-container form{
 
 }
@@ -159,6 +158,11 @@
 .ost-container .required-field{
 	background:url(../../images/required-field.png) no-repeat right top;
 }
+.ost-container label{
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
 
 /* help classes */
 .m-bottom{
@@ -169,7 +173,8 @@
 @media (min-width: 960px) {
 
 }
-@media (min-width: 768px) {
+@media (max-width: 768px) {
+    /* form elements */
     .ost-container input[type="text"],
     .ost-container input[type="email"],
     .ost-container input[type="password"],
@@ -178,6 +183,13 @@
         width: 80%;
     }
 }
-@media (min-width: 480px) {
-
+@media (max-width: 480px) {
+    /* form elements */
+    .ost-container input[type="text"],
+    .ost-container input[type="email"],
+    .ost-container input[type="password"],
+    .ost-container textarea,
+    .ost-container select{
+        width: 90%;
+    }
 }
