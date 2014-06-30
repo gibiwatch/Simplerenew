@@ -160,9 +160,9 @@
 	background:url(../../images/required-field.png) no-repeat right top;
 }
 
-/* specific classes */
+/* help classes */
 .m-bottom{
-	margin-bottom:60px;
+	margin-bottom:20px;
 }
 
 /* media queries */

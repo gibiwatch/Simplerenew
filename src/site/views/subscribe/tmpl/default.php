@@ -34,7 +34,7 @@ if ($this->user->id > 0) {
             </div>
         </div>
         <div class="ost-section">
-            <div class="block4">
+            <div class="block6">
                 <label for="firstname"><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
                 <input
                     id="firstname"
@@ -42,7 +42,7 @@ if ($this->user->id > 0) {
                     type="text"
                     value="<?php echo $this->user->firstname; ?>"/>
             </div>
-            <div class="block4">
+            <div class="block6">
                 <label for="lastname"><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
                 <input
                     id="lastname"
@@ -51,7 +51,11 @@ if ($this->user->id > 0) {
                     value="<?php echo $this->user->lastname; ?>"
                     required="true"/>
             </div>
-            <div class="block4">
+        </div>
+        <!-- /.ost-section -->
+
+        <div class="ost-section">
+            <div class="block6">
                 <label for="username"><?php echo JText::_('COM_SIMPLERENEW_USERNAME'); ?></label>
                 <input <?php echo $readonly; ?>
                     id="username"
@@ -60,11 +64,7 @@ if ($this->user->id > 0) {
                     value="<?php echo $this->user->username; ?>"
                     required="true"/>
             </div>
-        </div>
-        <!-- /.ost-section -->
-
-        <div class="ost-section m-bottom">
-             <div class="block6">
+            <div class="block6">
                 <label for="email"><?php echo JText::_('COM_SIMPLERENEW_EMAIL'); ?></label>
                 <input
                     id="email"
@@ -73,6 +73,8 @@ if ($this->user->id > 0) {
                     value="<?php echo $this->user->email; ?>"
                     required=""/>
             </div>
+        </div>
+        <div class="ost-section m-bottom">
             <div class="block6">
                 <label for="password"><?php echo JText::_('COM_SIMPLERENEW_PASSWORD'); ?></label>
                 <input
@@ -80,6 +82,8 @@ if ($this->user->id > 0) {
                     name="password"
                     type="password"
                     value=""/>
+            </div>
+            <div class="block6">
                 <label for="password2"><?php echo JText::_('COM_SIMPLERENEW_PASSWORD2'); ?></label>
                 <input
                     id="password2"
