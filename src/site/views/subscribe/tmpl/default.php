@@ -35,15 +35,16 @@ if ($this->user->id > 0) {
         </div>
         <div class="ost-section">
             <div class="block6">
-                <label for="firstname"><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
+                <label for="firstname"><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?> <span>*</span></label>
                 <input
                     id="firstname"
                     name="firstname"
                     type="text"
-                    value="<?php echo $this->user->firstname; ?>"/>
+                    value="<?php echo $this->user->firstname; ?>"
+                    equired="true"/>
             </div>
             <div class="block6">
-                <label for="lastname"><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
+                <label for="lastname"><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?> <span>*</span></label>
                 <input
                     id="lastname"
                     name="lastname"
@@ -56,7 +57,7 @@ if ($this->user->id > 0) {
 
         <div class="ost-section">
             <div class="block6">
-                <label for="username"><?php echo JText::_('COM_SIMPLERENEW_USERNAME'); ?></label>
+                <label for="username"><?php echo JText::_('COM_SIMPLERENEW_USERNAME'); ?> <span>*</span></label>
                 <input <?php echo $readonly; ?>
                     id="username"
                     name="username"
@@ -65,7 +66,7 @@ if ($this->user->id > 0) {
                     required="true"/>
             </div>
             <div class="block6">
-                <label for="email"><?php echo JText::_('COM_SIMPLERENEW_EMAIL'); ?></label>
+                <label for="email"><?php echo JText::_('COM_SIMPLERENEW_EMAIL'); ?> <span>*</span></label>
                 <input
                     id="email"
                     name="email"
@@ -76,20 +77,22 @@ if ($this->user->id > 0) {
         </div>
         <div class="ost-section">
             <div class="block6">
-                <label for="password"><?php echo JText::_('COM_SIMPLERENEW_PASSWORD'); ?></label>
+                <label for="password"><?php echo JText::_('COM_SIMPLERENEW_PASSWORD'); ?> <span>*</span></label>
                 <input
                     id="password"
                     name="password"
                     type="password"
-                    value=""/>
+                    value=""
+                    required="true"/>
             </div>
             <div class="block6">
-                <label for="password2"><?php echo JText::_('COM_SIMPLERENEW_PASSWORD2'); ?></label>
+                <label for="password2"><?php echo JText::_('COM_SIMPLERENEW_PASSWORD2'); ?> <span>*</span></label>
                 <input
                     id="password2"
                     name="password2"
                     type="password"
-                    value=""/>
+                    value=""
+                    required="true"/>
             </div>
         </div>
         <!-- /.ost-section -->

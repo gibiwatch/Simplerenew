@@ -160,6 +160,9 @@
     margin-bottom: 5px;
     font-weight: 600;
 }
+.ost-container label span{
+    color: #ff0000;
+}
 
 /* help classes */
 .m-bottom{
