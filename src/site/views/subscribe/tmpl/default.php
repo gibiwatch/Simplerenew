@@ -26,16 +26,23 @@ if ($this->user->id > 0) {
         <h1><?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE'); ?></h1>
     </div>
 
-    <div class="ost-section m-bottom">
+    <form action="<?php echo $action; ?>" method="post">
 
-        <div class="block12">
-            <form action="<?php echo $action; ?>" method="post">
+        <div class="ost-section">
+            <div class="block12">
+                <h3><?php echo JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'); ?></h3>
+            </div>
+        </div>
+        <div class="ost-section">
+            <div class="block4">
                 <label for="firstname"><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
                 <input
                     id="firstname"
                     name="firstname"
                     type="text"
                     value="<?php echo $this->user->firstname; ?>"/>
+            </div>
+            <div class="block4">
                 <label for="lastname"><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
                 <input
                     id="lastname"
@@ -43,6 +50,8 @@ if ($this->user->id > 0) {
                     type="text"
                     value="<?php echo $this->user->lastname; ?>"
                     required="true"/>
+            </div>
+            <div class="block4">
                 <label for="username"><?php echo JText::_('COM_SIMPLERENEW_USERNAME'); ?></label>
                 <input <?php echo $readonly; ?>
                     id="username"
@@ -50,6 +59,12 @@ if ($this->user->id > 0) {
                     type="text"
                     value="<?php echo $this->user->username; ?>"
                     required="true"/>
+            </div>
+        </div>
+        <!-- /.ost-section -->
+
+        <div class="ost-section m-bottom">
+             <div class="block6">
                 <label for="email"><?php echo JText::_('COM_SIMPLERENEW_EMAIL'); ?></label>
                 <input
                     id="email"
@@ -57,6 +72,8 @@ if ($this->user->id > 0) {
                     type="text"
                     value="<?php echo $this->user->email; ?>"
                     required=""/>
+            </div>
+            <div class="block6">
                 <label for="password"><?php echo JText::_('COM_SIMPLERENEW_PASSWORD'); ?></label>
                 <input
                     id="password"
@@ -69,7 +86,12 @@ if ($this->user->id > 0) {
                     name="password2"
                     type="password"
                     value=""/>
+            </div>
+        </div>
+        <!-- /.ost-section -->
 
+        <div class="ost-section m-bottom">
+            <div class="block12">
                 <?php echo $this->loadTemplate('plans'); ?>
 
                 <?php echo $this->loadtemplate('billing'); ?>
@@ -87,12 +109,14 @@ if ($this->user->id > 0) {
                 <input type="submit" value="<?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE'); ?>"/>
 
                 <?php echo JHtml::_('form.token'); ?>
-            </form>
-        </div>
-        <!-- /.block12 -->
 
-    </div>
-    <!-- /.ost-section -->
+            </div>
+            <!-- /.block12 -->
+
+        </div>
+        <!-- /.ost-section -->
+
+    </form>
 
 </div>
 <!-- /.ost-container -->

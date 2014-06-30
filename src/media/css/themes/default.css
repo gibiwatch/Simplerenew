@@ -95,7 +95,7 @@
 	-webkit-border-radius:2px;
 	-o-border-radius:2px;
 	padding: 9px 10px;
-	min-width: 180px;
+    width: 90%;
 }
 .ost-container select{
 	min-width: 202px;
@@ -161,8 +161,23 @@
 }
 
 /* specific classes */
-
 .m-bottom{
 	margin-bottom:60px;
 }
 
+/* media queries */
+@media (min-width: 960px) {
+
+}
+@media (min-width: 768px) {
+    .ost-container input[type="text"],
+    .ost-container input[type="email"],
+    .ost-container input[type="password"],
+    .ost-container textarea,
+    .ost-container select{
+        width: 80%;
+    }
+}
+@media (min-width: 480px) {
+
+}
