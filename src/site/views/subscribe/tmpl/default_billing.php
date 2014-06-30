@@ -30,16 +30,6 @@ defined('_JEXEC') or die();
     </li>
 
     <li>
-        <label for="billing_email"><?php echo JText::_('COM_SIMPLERENEW_EMAIL'); ?></label>
-            <input
-                id="billing_email"
-                name="billing[email]"
-                type="text"
-                value="<?php echo $this->account->email; ?>"
-                require="true"/>
-    </li>
-
-    <li>
         <label><?php echo JText::_('COM_SIMPLERENEW_CC_NUMBER'); ?></label>
             <input
                 id="billing_cc_number"
