@@ -155,9 +155,6 @@
 	-webkit-box-shadow: 0 2px 0 #2184CD;
 	-o-box-shadow: 0 2px 0 #2184CD;
 }
-.ost-container .required-field{
-	background:url(../../images/required-field.png) no-repeat right top;
-}
 .ost-container label{
     display: block;
     margin-bottom: 5px;
