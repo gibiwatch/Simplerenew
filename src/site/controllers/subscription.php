@@ -6,6 +6,8 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Exception\NotFound;
+
 defined('_JEXEC') or die();
 
 class SimplerenewControllerSubscription extends SimplerenewControllerBase
@@ -29,47 +31,85 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
     {
         $this->checktoken();
 
-        echo '<h4>New subscriptions under construction</h4>';
-
-        SimplerenewHelper::saveFormData('subscribe.create');
+        SimplerenewHelper::saveFormData(
+            'subscribe.create',
+            array(
+                'password',
+                'password2',
+                'billing.cc.number',
+                'billing.cc.cvv'
+            )
+        );
 
         $app       = SimplerenewFactory::getApplication();
         $container = SimplerenewFactory::getContainer();
         $user      = $container->getUser();
         $account   = $container->getAccount();
 
-        if ($userId = $app->input->getInt('user_id')) {
-            $user->load($userId);
-        } else {
-            $password = $app->input->getString('password');
-            $password2 = $app->input->getString('password2');
-            if (!$password) {
-                return $this->callerReturn(JText::_('COM_SIMPLERENEW_ERROR_PASSWORD_EMPTY'), 'error');
+        $app->enqueueMessage('New subscriptions under construction', 'notice');
 
-            } elseif ($password !== $password2) {
-                return $this->callerReturn(JText::_('COM_SIMPLERENEW_ERROR_PASSWORD_MISMATCH'), 'error');
-            }
+        // Create/Load the user
+        try {
+            if ($userId = $app->input->getInt('userid')) {
+                $user->load($userId);
+            } else {
+                $password  = $app->input->getString('password');
+                $password2 = $app->input->getString('password2');
+                if (!$password) {
+                    return $this->callerReturn(JText::_('COM_SIMPLERENEW_ERROR_PASSWORD_EMPTY'), 'error');
 
-            $user->setProperties(
-                array(
-                    'firstname' => $app->input->getString('firstname'),
-                    'lastname' => $app->input->getString('lastname'),
-                    'username' => $app->input->getUsername('username'),
-                    'email' => $app->input->getString('email'),
-                    'password' => $app->input->getString('password')
-                )
-            );
-            try {
+                } elseif ($password !== $password2) {
+                    return $this->callerReturn(JText::_('COM_SIMPLERENEW_ERROR_PASSWORD_MISMATCH'), 'error');
+                }
+
+                $user->setProperties(
+                    array(
+                        'firstname' => $app->input->getString('firstname'),
+                        'lastname'  => $app->input->getString('lastname'),
+                        'username'  => $app->input->getUsername('username'),
+                        'email'     => $app->input->getString('email'),
+                        'password'  => $app->input->getString('password')
+                    )
+                );
                 $user->create();
-            } catch (Exception $e) {
-                return $this->callerReturn($e->getMessage(), 'error');
+
+                // Store the user id to the form data in case something goes wrong
+                $formData = SimplerenewHelper::loadFormData('subscribe.create');
+
+                $formData['userid'] = $user->id;
+                SimplerenewHelper::saveFormData('subscribe.create', null, $formData);
             }
+
+        } catch (NotFound $e) {
+            return $this->callerReturn($e->getMessage(), 'error');
+
+        } catch (Exception $e) {
+            return $this->callerReturn($e->getMessage(), 'error');
         }
 
-        echo '<pre>';
-        print_r($user->getProperties());
-        echo '</pre>';
+        // Create the account
+        try {
+            try {
+                $account->load($user);
+            } catch (NotFound $e) {
+                // Create a new account
+            }
 
+            $account->setProperties(
+                array(
+                    'firstname' => $app->input->getString('firstname'),
+                    'lastname'  => $app->input->getString('lastname'),
+                    'username'  => $app->input->getString('username'),
+                    'email'     => $app->input->getString('email')
+                )
+            );
+            $account->save();
+
+        } catch (Exception $e) {
+            $this->callerReturn(JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIBE_ACCOUNT', $e->getMessage()), 'error');
+        }
+
+        return $this->callerReturn('User/Account Create - more to come');
     }
 
     /**

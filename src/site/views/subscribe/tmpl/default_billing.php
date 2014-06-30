@@ -61,8 +61,8 @@ defined('_JEXEC') or die();
 
     <li>
         <label><?php echo JText::_('COM_SIMPLERENEW_CC_EXPIRATION'); ?></label>
-        <?php echo JHtml::_('srselect.ccyear', 'billing_info[cc][year]', null, $this->billing->year, 'billing_cc_year'); ?>
-        <?php echo JHtml::_('srselect.ccmonth', 'billing_info[cc][month]', null, $this->billing->month, 'billing_cc_month'); ?>
+        <?php echo JHtml::_('srselect.ccyear', 'billing[cc][year]', null, $this->billing->year, 'billing_cc_year'); ?>
+        <?php echo JHtml::_('srselect.ccmonth', 'billing[cc][month]', null, $this->billing->month, 'billing_cc_month'); ?>
     </li>
 </ul>
 
