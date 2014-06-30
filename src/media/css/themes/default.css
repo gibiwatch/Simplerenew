@@ -9,7 +9,7 @@
 .ost-container li,
 .ost-container ol,
 .ost-container span,
-.ost-container tablet,
+.ost-container table,
 .ost-container tr,
 .ost-container td,
 .ost-container thead,
@@ -82,6 +82,7 @@
 }
 .ost-container input[type="text"],
 .ost-container input[type="email"],
+.ost-container input[type="password"],
 .ost-container textarea,
 .ost-container select{
 	color:#666666;

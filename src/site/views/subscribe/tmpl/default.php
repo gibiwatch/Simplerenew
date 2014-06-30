@@ -27,7 +27,7 @@ if ($this->user->id > 0) {
     </div>
 
     <div class="ost-section m-bottom">
-        
+
         <div class="block12">
             <form action="<?php echo $action; ?>" method="post">
                 <label for="firstname"><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>

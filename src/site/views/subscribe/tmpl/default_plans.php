@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die();
 ?>
-<h4><?php echo JText::_('COM_SIMPLERENEW_HEADING_PLANLIST'); ?></h4>
+<h3><?php echo JText::_('COM_SIMPLERENEW_HEADING_PLANLIST'); ?></h3>
 
 <?php
 foreach ($this->plans as $code => $plan):
