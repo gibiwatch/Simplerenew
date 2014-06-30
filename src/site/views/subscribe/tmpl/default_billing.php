@@ -30,16 +30,6 @@ defined('_JEXEC') or die();
     </li>
 
     <li>
-        <label for="billing_email"><?php echo JText::_('COM_SIMPLERENEW_EMAIL'); ?></label>
-            <input
-                id="billing_email"
-                name="billing[email]"
-                type="text"
-                value="<?php echo $this->account->email; ?>"
-                require="true"/>
-    </li>
-
-    <li>
         <label><?php echo JText::_('COM_SIMPLERENEW_CC_NUMBER'); ?></label>
             <input
                 id="billing_cc_number"
@@ -61,8 +51,8 @@ defined('_JEXEC') or die();
 
     <li>
         <label><?php echo JText::_('COM_SIMPLERENEW_CC_EXPIRATION'); ?></label>
-        <?php echo JHtml::_('srselect.ccyear', 'billing_info[cc][year]', null, $this->billing->year, 'billing_cc_year'); ?>
-        <?php echo JHtml::_('srselect.ccmonth', 'billing_info[cc][month]', null, $this->billing->month, 'billing_cc_month'); ?>
+        <?php echo JHtml::_('srselect.ccyear', 'billing[cc][year]', null, $this->billing->year, 'billing_cc_year'); ?>
+        <?php echo JHtml::_('srselect.ccmonth', 'billing[cc][month]', null, $this->billing->month, 'billing_cc_month'); ?>
     </li>
 </ul>
 

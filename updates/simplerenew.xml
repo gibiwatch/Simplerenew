@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<updates>
+    <update>
+        <name>Simplerenew</name>
+        <description>Simple Subscriptions</description>
+        <element>com_simplerenew</element>
+        <type>component</type>
+        <version>0.0.0</version>
+        <infourl title="OS Training">http://www.ostraining.com/</infourl>
+
+        <downloads>
+            <downloadurl type="full" format="zip">
+                http://updates.ostraining.com/packages/com_simplerenew/com_simplerenew.zip
+            </downloadurl>
+        </downloads>
+
+        <tags>
+            <tag>stable</tag>
+        </tags>
+
+        <maintainer>Bill Tomczak</maintainer>
+        <maintainerurl>http://ostraining.com</maintainerurl>
+        <targetplatform name="joomla" version="3.2"/>
+    </update>
+</updates>

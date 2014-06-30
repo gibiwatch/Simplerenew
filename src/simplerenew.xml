@@ -62,4 +62,14 @@
             <filename>simplerenew.php</filename>
         </files>
     </administration>
+
+    <updateservers>
+        <server
+            type="extension"
+            priority="1"
+            name="Simplerenew Updates">
+            <![CDATA[http://updates.ostraining.com/simplerenew.xml]]>
+        </server>
+    </updateservers>
+
 </extension>

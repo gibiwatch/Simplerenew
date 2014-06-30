@@ -32,6 +32,7 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
 
     public function display($tpl = null)
     {
+        $app = SimplerenewFactory::getApplication();
         $container     = SimplerenewFactory::getContainer();
         $this->user    = $container->getUser();
         $this->account = $container->getAccount();
@@ -48,6 +49,8 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
         // Fill in data from previous form attempt if any
         if ($formData = SimplerenewHelper::loadFormData('subscribe.create', false)) {
             $this->user->setProperties($formData);
+            $this->user->id = $formData['userid'];
+
             $this->account->setProperties($formData);
             if (!empty($formData['billing'])) {
                 $this->billing->setProperties($formData['billing']);
