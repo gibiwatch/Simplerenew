@@ -60,13 +60,15 @@ abstract class SimplerenewHelperSite
                 break;
         }
 
+        // Load responsive grids
+        JHtml::stylesheet('com_simplerenew/grid.css', null, true);
+        JHtml::stylesheet('com_simplerenew/grid-responsive.css', null, true);
+
         // Load the selected theme
         if ($theme === null) {
             $theme = $params->get('advanced.theme', 'default.css');
         }
         if ($theme != 'none') {
-            JHtml::stylesheet('com_simplerenew/grid.css', null, true);
-            JHtml::stylesheet('com_simplerenew/grid-responsive.css', null, true);
             JHtml::stylesheet('com_simplerenew/themes/' . $theme, null, true);
         }
     }
