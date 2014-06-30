@@ -99,6 +99,9 @@
 .ost-container select{
 	min-width: 202px;
 }
+.ost-container input[type="radio"]{
+    margin-bottom: 5px;
+}
 .ost-container input[type="submit"],
 .ost-container button{
 	background: #666666;
@@ -156,7 +159,7 @@
 	-o-box-shadow: 0 2px 0 #2184CD;
 }
 .ost-container label{
-    display: block;
+    display: inline-block;
     margin-bottom: 5px;
     font-weight: 600;
 }
