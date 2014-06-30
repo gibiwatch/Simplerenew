@@ -32,19 +32,39 @@ abstract class SimplerenewHelper
      * Avoid storing passwords and credit card data.
      *
      * @param string $domain
+     * @param array  $exclude
      * @param array  $source
      *
      * @return void
      */
-    public static function saveFormData($domain, array $source = null)
+    public static function saveFormData($domain, array $exclude = null, array $source = null)
     {
         $domain = 'simplerenew.' . $domain;
 
         if ($source === null) {
-            $source = $_REQUEST;
+            $source = $_POST;
         }
-        $app = SimplerenewFactory::getApplication();
 
+        if ($exclude) {
+            foreach ($exclude as $key) {
+                if (strpos($key, '.') === false) {
+                    if (isset($source[$key])) {
+                        unset($source[$key]);
+                    }
+                } else {
+                    $tree = explode('.', $key);
+                    $target = &$source[$tree[0]];
+                    for ($i=1; $i<count($tree)-1; $i++) {
+                        $target = &$target[$tree[$i]];
+                    }
+                    if (isset($target[$tree[$i]])) {
+                        unset($target[$tree[$i]]);
+                    }
+                }
+            }
+        }
+
+        $app = SimplerenewFactory::getApplication();
         $app->setUserState($domain, base64_encode(serialize($source)));
     }
 
@@ -58,8 +78,8 @@ abstract class SimplerenewHelper
      */
     public static function loadFormData($domain, $clear = true)
     {
-        $domain = 'simplerenew.' . $domain;
-        $app    = SimplerenewFactory::getApplication();
+        $domain   = 'simplerenew.' . $domain;
+        $app      = SimplerenewFactory::getApplication();
         $formData = unserialize(base64_decode($app->getUserState($domain)));
 
         if ($clear) {
