@@ -51,21 +51,23 @@ abstract class SimplerenewHelperSite
             JHtml::stylesheet($href);
 
             // Assign font-family to specific tags
-            $style = '.ost-container p,
-            .ost-container h1,
-            .ost-container h2,
-            .ost-container h3,
-            .ost-container div,
-            .ost-container li,
-            .ost-container span,
-            .ost-container label,
-            .ost-container td,
-            .ost-container input,
-            .ost-container textarea,
-            .ost-container select{
-                font-family: \'' . $font[0] . '\', ' . $font[2] .
-            '}';
-            JFactory::getDocument()->addStyleDeclaration($style);
+            $style = array(
+                '.ost-container p,',
+                '.ost-container h1,',
+                '.ost-container h2,',
+                '.ost-container h3,',
+                '.ost-container div,',
+                '.ost-container li,',
+                '.ost-container span,',
+                '.ost-container label,',
+                '.ost-container td,',
+                '.ost-container input,',
+                '.ost-container textarea,',
+                '.ost-container select {',
+                "   font-family: '" . $font[0] . "', " . $font[2],
+                '}'
+            );
+            JFactory::getDocument()->addStyleDeclaration(join("\n", $style));
         }
 
         // Load font Awesome

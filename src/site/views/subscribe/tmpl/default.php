@@ -106,11 +106,6 @@ if ($this->user->id > 0) {
 
             <div class="m-bottom">
                 <input
-                    id="userid"
-                    name="userid"
-                    type="hidden"
-                    value="<?php echo $this->user->id; ?>"/>
-                <input
                     type="submit"
                     value="<?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE'); ?>"
                     class="btn-main"/>
@@ -120,6 +115,11 @@ if ($this->user->id > 0) {
         </div>
         <!-- /.ost-section -->
 
+        <input
+            id="userid"
+            name="userid"
+            type="hidden"
+            value="<?php echo $this->user->id; ?>"/>
     </form>
 
 </div>
