@@ -1,22 +1,4 @@
 /* general */
-.ost-container p,
-.ost-container h1,
-.ost-container h2,
-.ost-container h3,
-.ost-container div,
-.ost-container ul,
-.ost-container li,
-.ost-container ol,
-.ost-container span,
-.ost-container table,
-.ost-container tr,
-.ost-container td,
-.ost-container thead,
-.ost-container input,
-.ost-container textarea,
-.ost-container select{
-	font-family: 'Open Sans', sans-serif;
-}
 .ost-container p{
 	color: #333333;
     font-size: 13px;
