@@ -1,22 +1,4 @@
 /* general */
-.ost-container p,
-.ost-container h1,
-.ost-container h2,
-.ost-container h3,
-.ost-container div,
-.ost-container ul,
-.ost-container li,
-.ost-container ol,
-.ost-container span,
-.ost-container table,
-.ost-container tr,
-.ost-container td,
-.ost-container thead,
-.ost-container input,
-.ost-container textarea,
-.ost-container select{
-	font-family: 'Open Sans', sans-serif;
-}
 .ost-container p{
 	color: #333333;
     font-size: 13px;
@@ -97,7 +79,17 @@
     width: 90%;
 }
 .ost-container select{
-	min-width: 202px;
+    height: 38px;
+}
+.ost-container select.small-width,
+.ost-container input.small-width,
+.ost-container textarea.small-width{
+    width: 75px;
+}
+.ost-container select.medium-width,
+.ost-container input.medium-width,
+.ost-container textarea.medium-width{
+    width: 125px;
 }
 .ost-container input[type="radio"]{
     margin-bottom: 5px;
@@ -109,10 +101,6 @@
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 	-o-border-radius: 2px;
-    box-shadow: 0 2px 0 #333333;
-	-moz-box-shadow: 0 2px 0 #333333;
-	-webkit-box-shadow: 0 2px 0 #333333;
-	-o-box-shadow: 0 2px 0 #333333;
     color: #FFFFFF;
     cursor: pointer;
     display: inline-block;
@@ -127,7 +115,7 @@
 	-o-transition: all 0.2s linear 0s;
     vertical-align: middle;
 	border:none;
-	padding:9px 10px;
+	padding:9px 15px;
 	margin-bottom:10px;
 }
 .ost-container input[type="submit"]:hover,
@@ -135,31 +123,19 @@
 .ost-container button:hover,
 .ost-container button:focus{
 	background: #999999;
-    box-shadow: 0 2px 0 #666666;
-	-moz-box-shadow: 0 2px 0 #666666;
-	-webkit-box-shadow: 0 2px 0 #666666;
-	-o-box-shadow: 0 2px 0 #666666;
 }
 .ost-container input[type="submit"].btn-main,
 .ost-container button.btn-main{
 	background: #2184CD;
-    box-shadow: 0 2px 0 #333333;
-	-moz-box-shadow: 0 2px 0 #333333;
-	-webkit-box-shadow: 0 2px 0 #333333;
-	-o-box-shadow: 0 2px 0 #333333;
 }
 .ost-container input[type="submit"].btn-main:hover,
 .ost-container input[type="submit"].btn-main:focus,
 .ost-container button.btn-main:hover,
 .ost-container button.btn-main:focus{
 	background: #41A1D6;
-    box-shadow: 0 2px 0 #2184CD;
-	-moz-box-shadow: 0 2px 0 #2184CD;
-	-webkit-box-shadow: 0 2px 0 #2184CD;
-	-o-box-shadow: 0 2px 0 #2184CD;
 }
 .ost-container label{
-    display: inline-block;
+    display: block;
     margin-bottom: 5px;
     font-weight: 600;
 }
@@ -169,7 +145,13 @@
 
 /* help classes */
 .m-bottom{
-	margin-bottom:20px;
+    margin-bottom:30px;
+}
+.p-bottom{
+    padding-bottom:30px;
+}
+.b-bottom{
+    border-bottom: 1px solid #f2f2f2;
 }
 
 /* media queries */

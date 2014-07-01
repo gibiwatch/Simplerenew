@@ -28,11 +28,8 @@ if ($this->user->id > 0) {
 
     <form action="<?php echo $action; ?>" method="post">
 
-        <div class="ost-section">
-            <div class="block12">
-                <h3><?php echo JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'); ?></h3>
-            </div>
-        </div>
+        <h3><?php echo JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'); ?></h3>
+
         <div class="ost-section">
             <div class="block6">
                 <label for="firstname"><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?> <span>*</span></label>
@@ -75,7 +72,7 @@ if ($this->user->id > 0) {
                     required=""/>
             </div>
         </div>
-        <div class="ost-section">
+        <div class="ost-section p-bottom b-bottom">
             <div class="block6">
                 <label for="password"><?php echo JText::_('COM_SIMPLERENEW_PASSWORD'); ?> <span>*</span></label>
                 <input
@@ -97,28 +94,28 @@ if ($this->user->id > 0) {
         </div>
         <!-- /.ost-section -->
 
-        <div class="ost-section m-bottom">
-            <div class="block12">
-                <?php echo $this->loadTemplate('plans'); ?>
+        <div class="ost-section">
 
-                <?php echo $this->loadtemplate('billing'); ?>
+            <?php echo $this->loadTemplate('plans'); ?>
 
-                <div>
-                    <?php echo JText::sprintf('COM_SIMPLERENEW_TERMS_OF_AGREEMENT', '#'); ?>
-                </div>
+            <?php echo $this->loadtemplate('billing'); ?>
 
+            <div class="m-bottom">
+                <?php echo JText::sprintf('COM_SIMPLERENEW_TERMS_OF_AGREEMENT', '#'); ?>
+            </div>
+
+            <div class="m-bottom">
                 <input
                     id="userid"
                     name="userid"
                     type="hidden"
                     value="<?php echo $this->user->id; ?>"/>
-
-                <input type="submit" value="<?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE'); ?>"/>
-
+                <input
+                    type="submit"
+                    value="<?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE'); ?>"
+                    class="btn-main"/>
                 <?php echo JHtml::_('form.token'); ?>
-
             </div>
-            <!-- /.block12 -->
 
         </div>
         <!-- /.ost-section -->

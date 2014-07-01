@@ -43,10 +43,29 @@ abstract class SimplerenewHelperSite
         $params = self::getParams();
 
         // Load the selected font
-        $font = $params->get('advanced.fontFamily', self::$defaultFont);
-        if ($font != 'none') {
-            $href = 'http://fonts.googleapis.com/css?family=' . $font;
+        $font = explode('|', $params->get('advanced.fontFamily', self::$defaultFont));
+        if ($font[0] != 'none') {
+
+            // Load Google fonts files
+            $href = 'http://fonts.googleapis.com/css?family=' . $font[0] . ':' . $font[1];
             JHtml::stylesheet($href);
+
+            // Assign font-family to specific tags
+            $style = '.ost-container p,
+            .ost-container h1,
+            .ost-container h2,
+            .ost-container h3,
+            .ost-container div,
+            .ost-container li,
+            .ost-container span,
+            .ost-container label,
+            .ost-container td,
+            .ost-container input,
+            .ost-container textarea,
+            .ost-container select{
+                font-family: \'' . $font[0] . '\', ' . $font[2] .
+            '}';
+            JFactory::getDocument()->addStyleDeclaration($style);
         }
 
         // Load font Awesome

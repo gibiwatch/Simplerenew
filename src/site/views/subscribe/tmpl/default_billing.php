@@ -8,8 +8,10 @@
 
 defined('_JEXEC') or die();
 ?>
-<ul>
-    <li>
+<h3><?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?></h3>
+
+<div class="ost-section">
+    <div class="block6">
         <label for="billing_firstname"><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
         <input
             id="billing_firstname"
@@ -17,9 +19,8 @@ defined('_JEXEC') or die();
             type="text"
             value="<?php echo $this->billing->firstname; ?>"
             required="true"/>
-    </li>
-
-    <li>
+    </div>
+    <div class="block6">
         <label for="billing_lastname"><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
         <input
             id="billing_lastname"
@@ -27,34 +28,37 @@ defined('_JEXEC') or die();
             type="text"
             value="<?php echo $this->billing->lastname; ?>"
             required="true"/>
-    </li>
+    </div>
+</div>
+<!-- /.ost-section -->
 
-    <li>
+<div class="ost-section">
+    <div class="block6">
         <label><?php echo JText::_('COM_SIMPLERENEW_CC_NUMBER'); ?></label>
-            <input
-                id="billing_cc_number"
-                name="billing[cc][number]"
-                type="text"
-                value=""
-                required="true"/>
-    </li>
-
-    <li>
-        <label><?php echo JText::_('COM_SIMPLERENEW_CC_CVV'); ?>
-            <input
-                id="billing_cc_cvv"
-                name="billing[cc][cvv]"
-                type="text"
-                value=""
-                required="true"/>
-    </li>
-
-    <li>
+        <input
+            id="billing_cc_number"
+            name="billing[cc][number]"
+            type="text"
+            value=""
+            required="true"/>
+    </div>
+    <div class="block2">
+        <label><?php echo JText::_('COM_SIMPLERENEW_CC_CVV'); ?></label>
+        <input
+            id="billing_cc_cvv"
+            name="billing[cc][cvv]"
+            type="text"
+            value=""
+            required="true"
+            class="small-width"/>
+    </div>
+    <div class="block4">
         <label><?php echo JText::_('COM_SIMPLERENEW_CC_EXPIRATION'); ?></label>
-        <?php echo JHtml::_('srselect.ccyear', 'billing[cc][year]', null, $this->billing->year, 'billing_cc_year'); ?>
-        <?php echo JHtml::_('srselect.ccmonth', 'billing[cc][month]', null, $this->billing->month, 'billing_cc_month'); ?>
-    </li>
-</ul>
+        <?php echo JHtml::_('srselect.ccyear', 'billing[cc][year]', 'class="small-width"', $this->billing->year, 'billing_cc_year'); ?>
+        <?php echo JHtml::_('srselect.ccmonth', 'billing[cc][month]', 'class="medium-width"', $this->billing->month, 'billing_cc_month'); ?>
+    </div>
+</div>
+<!-- /.ost-section -->
 
 <div>
     <?php echo JText::_('COM_SIMPLERENEW_PROCEED_TO_PAYPAL'); ?>
