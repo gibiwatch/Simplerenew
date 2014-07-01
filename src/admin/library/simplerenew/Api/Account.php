@@ -140,7 +140,7 @@ class Account extends AbstractApiBase
 
         $this->setProperties(
             array(
-                'code'      => $this->getAccountCode($this->user),
+                'code'      => $this->code      ? : $this->getAccountCode($this->user),
                 'username'  => $this->username  ? : $this->user->username,
                 'email'     => $this->email     ? : $this->user->email,
                 'firstname' => $this->firstname ? : $this->user->firstname,
