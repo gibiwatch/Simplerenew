@@ -142,4 +142,30 @@ class User extends Object
 
         throw new Exception('No current user to update.');
     }
+
+    /**
+     * Check the password for validity
+     *
+     * @param $password
+     *
+     * @return bool
+     */
+    public function validate($password)
+    {
+        return $this->adapter->validate($this, $password);
+    }
+
+    /**
+     * Login the current user
+     *
+     * @param string $password
+     * @param bool   $force
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function login($password, $force = false)
+    {
+        $this->adapter->login($this, $password, $force);
+    }
 }

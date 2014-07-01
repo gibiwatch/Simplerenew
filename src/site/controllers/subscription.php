@@ -45,8 +45,6 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
         $model = SimplerenewModel::getInstance('Gateway');
         $app   = SimplerenewFactory::getApplication();
 
-        $app->enqueueMessage('New subscriptions under construction', 'notice');
-
         // Create/Load the user
         try {
             $user = $model->saveUser();
@@ -73,7 +71,11 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             );
         }
 
-        return $this->callerReturn('User/Account Create - more to come');
+        // All went well! Regardless of Joomla settings, log in the user if not already logged in
+        $password = $app->input->getString('password');
+        $user->login($password, true);
+
+        return $this->callerReturn('User/Account Create - need to send the user someplace');
     }
 
     /**

@@ -31,6 +31,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
 
         if ($data === null) {
             $data = array(
+                'id'        => $app->input->getInt('userid'),
                 'firstname' => $app->input->getString('firstname'),
                 'lastname'  => $app->input->getString('lastname'),
                 'username'  => $app->input->getUsername('username'),
@@ -40,16 +41,8 @@ class SimplerenewModelGateway extends SimplerenewModelSite
             );
         }
 
-        return $user->load(943);
-
-        if ($userId = $app->input->getInt('userid')) {
-            // Load the logged in user
-            $user->load();
-            if ($user->id != $userId) {
-                throw new Exception('Under Construction - we need to verify credentials here');
-            }
-
-        } else {
+        if (empty($data['id'])) {
+            // Create a new user
             if (empty($data['password'])) {
                 throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_PASSWORD_EMPTY'));
 
@@ -58,6 +51,16 @@ class SimplerenewModelGateway extends SimplerenewModelSite
             }
 
             $user->setProperties($data)->create();
+        } else {
+            // Specific user subscription request
+            $currentUser = $container->getUser()->load();
+            if ($currentUser->id && $currentUser->id != $data['id']) {
+                if (!$user->validate($data['password'])) {
+                    throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_PASSWORD_INCORRECT'));
+                }
+            }
+            // The requested user is logged in or password valid
+            $user->setProperties($data)->update();
         }
         return $user;
     }

@@ -8,11 +8,22 @@
 
 namespace Simplerenew\User\Adapter;
 
+use JAuthentication;
+use JFactory;
+use JLoader;
+use JUser;
 use Simplerenew\Exception;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\User\User;
+use SimplerenewFactory;
+use SimplerenewModel;
+use SimplerenewUserHelper;
+use UsersModelRegistration;
 
 defined('_JEXEC') or die();
+
+JLoader::register('JAuthentication', JPATH_LIBRARIES . '/joomla/user/authentication.php');
+
 
 class Joomla implements UserInterface
 {
@@ -25,9 +36,9 @@ class Joomla implements UserInterface
 
     public function __construct()
     {
-        \SimplerenewModel::addIncludePath(JPATH_SITE . '/components/com_users/models');
+        SimplerenewModel::addIncludePath(JPATH_SITE . '/components/com_users/models');
 
-        $lang = \JFactory::getLanguage();
+        $lang = JFactory::getLanguage();
         $lang->load('com_users', JPATH_SITE);
     }
 
@@ -42,7 +53,7 @@ class Joomla implements UserInterface
         $username = $parent->username;
         $parent->clearProperties();
 
-        if ($id = \SimplerenewUserHelper::getUserId($username)) {
+        if ($id = SimplerenewUserHelper::getUserId($username)) {
             $parent->id = $id;
             $this->load($parent);
             return;
@@ -62,7 +73,7 @@ class Joomla implements UserInterface
         $id = $parent->id;
         $parent->clearProperties();
 
-        $user = \SimplerenewFactory::getUser($id);
+        $user = SimplerenewFactory::getUser($id);
         if (!$user || $user->id <= 0) {
             throw new NotFound('User ID not found - ' . $id);
         }
@@ -113,8 +124,8 @@ class Joomla implements UserInterface
      */
     public function create(User $parent)
     {
-        /** @var \UsersModelRegistration $model */
-        $model = \SimplerenewModel::getInstance('Registration', 'UsersModel');
+        /** @var UsersModelRegistration $model */
+        $model = SimplerenewModel::getInstance('Registration', 'UsersModel');
 
         $data = array(
             'email1'    => $parent->email,
@@ -139,7 +150,7 @@ class Joomla implements UserInterface
      */
     public function update(User $parent)
     {
-        $user = new \JUser($parent->id);
+        $user = new JUser($parent->id);
         if ($user->id != $parent->id) {
             throw new Exception('Unable to update user ID #' . ($parent->id ? $parent->id : 'NULL'));
         }
@@ -161,10 +172,112 @@ class Joomla implements UserInterface
         }
 
         // If current user, refresh the session data
-        if ($user->id == \SimplerenewFactory::getUser()->id) {
-            $session = \SimplerenewFactory::getSession();
+        if ($user->id == SimplerenewFactory::getUser()->id) {
+            $session = SimplerenewFactory::getSession();
             $session->set('user', $user);
-            \SimplerenewFactory::getUser();
+            SimplerenewFactory::getUser();
         }
+    }
+
+    /**
+     * Validate the password for the user
+     *
+     * @param User   $parent
+     * @param string $password
+     *
+     * @return bool
+     */
+    public function validate(User $parent, $password)
+    {
+        if ($parent->id) {
+            // We are not currently supporting 2-factor authentication
+            $credentials  = array(
+                'username' => $parent->username,
+                'password' => $password,
+            );
+            $authenticate = JAuthentication::getInstance();
+            $response     = $authenticate->authenticate($credentials);
+
+            return ($response->status == JAuthentication::STATUS_SUCCESS);
+        }
+    }
+
+    /**
+     * Log the user in
+     *
+     * @param User   $parent
+     * @param string $password
+     * @param bool   $force
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function login(User $parent, $password, $force = false)
+    {
+        if (empty($parent->username)) {
+            throw new Exception('No user selected to login');
+        }
+
+        $app = SimplerenewFactory::getApplication();
+
+        $credentials = array(
+            'username' => $parent->username,
+            'password' => $password
+        );
+
+        $currentUser = SimplerenewFactory::getUser();
+        if ($currentUser->username) {
+            if ($currentUser->username == $credentials['username']) {
+                // Already logged in
+                return;
+            } else {
+                if (!$app->logout()) {
+                    throw new Exception('Unable to logout from ' . $currentUser->username);
+                }
+            }
+        }
+
+        if ($force) {
+            $user = new JUser($parent->id);
+            if ($user->id != $parent->id) {
+                throw new Exception('Unable to login user - ' . $parent->username);
+            }
+
+            if ($user->activation || $user->block) {
+                $data = array(
+                    'activation' => '',
+                    'block'      => 0
+                );
+                $user->bind($data);
+                if (!$user->save(true)) {
+                    throw new Exception('Unable to activate or unblock user for logging in - ' . $user->username);
+                }
+            }
+        }
+
+        $response    = $app->login($credentials);
+        $currentUser = SimplerenewFactory::getUser();
+
+        if ($response !== false) {
+            /*
+             * Since Joomla won't tell us that login failed, we have to
+             * check for ourselves
+             */
+            if ($currentUser->username == $credentials['username']) {
+                return;
+            }
+        }
+
+        if ($messages = $app->getMessageQueue()) {
+            $error = array_pop($messages);
+            $error = $error['message'];
+
+            $session = SimplerenewFactory::getSession();
+            $session->set('application.queue', $messages);
+        } else {
+            $error = 'Unknown error logging in ' . $credentials['username'];
+        }
+
+        throw new Exception($error);
     }
 }

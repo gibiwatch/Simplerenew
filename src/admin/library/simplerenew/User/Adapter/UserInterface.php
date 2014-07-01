@@ -55,4 +55,26 @@ interface UserInterface
      * @throws Exception
      */
     public function update(User $parent);
+
+    /**
+     * Validate the password for the user
+     *
+     * @param User   $parent
+     * @param string $password
+     *
+     * @return bool
+     */
+    public function validate(User $parent, $password);
+
+    /**
+     * Log the user in
+     *
+     * @param User   $parent
+     * @param string $password
+     * @param bool   $force
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function login(User $parent, $password, $force = false);
 }

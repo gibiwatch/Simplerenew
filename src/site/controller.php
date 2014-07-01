@@ -11,4 +11,22 @@ defined('_JEXEC') or die();
 class SimplerenewController extends SimplerenewControllerBase
 {
     protected $default_view = 'subscribe';
+
+    public function test()
+    {
+        $user = SimplerenewFactory::getContainer()->getUser()->loadByUsername('fred');
+        $password = 'xyzzy';
+
+        try {
+            $user->login($password, true);
+        } catch (Exception $e) {
+            echo 'ERROR: ' . $e->getMessage() . ' (' . $e->getCode() . ')';
+        }
+
+        echo '<br/><br/>TEST: ' . $user->validate($password);
+        echo '<pre>';
+        print_r($user->getProperties());
+        echo '</pre>';
+
+    }
 }
