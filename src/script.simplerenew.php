@@ -113,7 +113,7 @@ class Com_SimplerenewInstallerScript
     }
 
     /**
-     * @param string            $type
+     * @param string                     $type
      * @param JInstallerAdapterComponent $parent
      *
      * @return bool
@@ -125,14 +125,14 @@ class Com_SimplerenewInstallerScript
     }
 
     /**
-     * @param string            $type
+     * @param string                     $type
      * @param JInstallerAdapterComponent $parent
      *
      * @return void
      */
     public function postFlight($type, $parent)
     {
-        $this->setDefaultParams();
+        $this->setDefaultParams($type);
         $this->installRelated();
         $this->showMessages();
     }
@@ -375,9 +375,11 @@ class Com_SimplerenewInstallerScript
     }
 
     /**
+     * @param string $type
+     *
      * @return void
      */
-    protected function setDefaultParams()
+    protected function setDefaultParams($type)
     {
         /** @var JTableExtension $table */
         $table = JTable::getInstance('Extension');
@@ -385,13 +387,35 @@ class Com_SimplerenewInstallerScript
 
         $params = new JRegistry($table->params);
 
+        // On initial installation, set some defaults
+        if ($type == 'install') {
+            $path = $this->installer->getPath('source') . '/admin/config.xml';
+            if (file_exists($path)) {
+                $config      = new SimpleXMLElement($path, 0, true);
+                $defaultFont = 'none';
+
+                // Look for the first fontFamily entry that isn't 'none'
+                $fonts = $config->xpath("//field[@name='fontFamily']/option");
+                foreach ($fonts as $font) {
+                    if ($font['value'] != 'none') {
+                        $defaultFont = (string)$font['value'];
+                        break;
+                    }
+                }
+                $params->set('advanced.fontFamily', $defaultFont);
+            }
+        }
+
         // Must have the default plan group set
         if ($params->get('defaultGroup') == '') {
             $defaultGroup = JComponentHelper::getParams('com_users')->get('new_usertype');
-            $params->set('defaultGroup', $defaultGroup);
+            $params->set('basic.defaultGroup', $defaultGroup);
+            $type = 'install';
+        }
+
+        if ($type == 'install') {
             $table->params = $params->toString();
             $table->store();
         }
-
     }
 }

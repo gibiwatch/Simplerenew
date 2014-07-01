@@ -12,8 +12,6 @@ abstract class SimplerenewHelperSite
 {
     protected static $awesomeCDN = 'https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css';
 
-    protected static $defaultFont = 'Open Sans:400,300,400italic,600,700';
-
     /**
      * @var JRegistry
      */
@@ -43,7 +41,7 @@ abstract class SimplerenewHelperSite
         $params = self::getParams();
 
         // Load the selected font
-        $font = explode('|', $params->get('advanced.fontFamily', self::$defaultFont));
+        $font = explode('|', $params->get('advanced.fontFamily', 'none'));
         if ($font[0] != 'none') {
 
             // Load Google fonts files
