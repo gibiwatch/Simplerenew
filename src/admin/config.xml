@@ -115,11 +115,11 @@
             <field
                 name="fontFamily"
                 type="list"
-                default="Open Sans|300,400,400italic,600,700|sans-serif"
+                default="Open Sans|400,400italic,600,700|sans-serif"
                 label="COM_SIMPLERENEW_ADVANCED_FONTFAMILY_LABEL"
                 description="COM_SIMPLERENEW_ADVANCED_FONTFAMILY_DESC">
                 <option value="none">COM_SIMPELRENEW_OPTION_FONT_NONE</option>
-                <option value="Open Sans|300,400,400italic,600,700|sans-serif">COM_SIMPLERENEW_OPTION_FONT_OPEN_SANS</option>
+                <option value="Open Sans|400,400italic,600,700|sans-serif">COM_SIMPLERENEW_OPTION_FONT_OPEN_SANS</option>
             </field>
 
             <field

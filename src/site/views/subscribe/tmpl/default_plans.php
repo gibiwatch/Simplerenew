@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die();
 ?>
-<h3><?php echo JText::_('COM_SIMPLERENEW_HEADING_PLANLIST'); ?></h3>
+<h3><span><?php echo JText::_('COM_SIMPLERENEW_HEADING_STEP2'); ?></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_PLANLIST'); ?></h3>
 
 <div class="ost-section">
     <div class="block12 p-bottom b-bottom">
