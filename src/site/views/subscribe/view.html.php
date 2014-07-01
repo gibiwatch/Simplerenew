@@ -49,7 +49,7 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
         // Fill in data from previous form attempt if any
         if ($formData = SimplerenewHelper::loadFormData('subscribe.create', false)) {
             $this->user->setProperties($formData);
-            $this->user->id = $formData['userid'];
+            $this->user->id = $formData['userid'] ? : null;
 
             $this->account->setProperties($formData);
             if (!empty($formData['billing'])) {

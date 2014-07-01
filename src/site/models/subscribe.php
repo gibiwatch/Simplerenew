@@ -31,11 +31,9 @@ class SimplerenewModelSubscribe extends SimplerenewModelSite
 
     protected function populateState()
     {
-        $app    = SimplerenewFactory::getApplication();
         $params = $this->state->get('parameters.menu');
 
         $plans = $params->get('plans');
-
         $this->setState('filter.plans', $plans);
     }
 }
