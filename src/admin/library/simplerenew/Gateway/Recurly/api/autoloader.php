@@ -15,7 +15,8 @@ abstract class RecurlyLoader
     protected static $exceptions = array(
         'Recurly_CouponRedemption' => 'redemption.php',
         'Recurly_ClientResponse'   => 'response.php',
-        'Recurly_HmacHash'         => 'util/hmac_hash.php'
+        'Recurly_HmacHash'         => 'util/hmac_hash.php',
+        'Recurly_TransactionError' => 'transaction_error.php'
     );
 
     public static function register()
