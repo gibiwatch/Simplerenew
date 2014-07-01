@@ -12,6 +12,8 @@ use Simplerenew\Api\Account;
 use Simplerenew\Gateway\AccountInterface;
 use Simplerenew\Gateway\BillingInterface;
 use Simplerenew\Gateway\PlanInterface;
+use Simplerenew\Primitive\CreditCard;
+use Simplerenew\Primitive\AbstractPayment;
 use Simplerenew\User\Adapter\UserInterface;
 
 defined('_JEXEC') or die();
@@ -152,5 +154,26 @@ class Container
 
         $plan = new Api\Plan($imp);
         return $plan;
+    }
+
+    /**
+     * Get a new payment primitive optionally initialising the data
+     *
+     * @param string $class
+     * @param array  $data
+     *
+     * @return AbstractPayment
+     */
+    public function getPaymentType($class = 'card', array $data = null)
+    {
+        switch (strtolower($class)) {
+            case 'cc':
+            case 'card':
+            case 'creditcard':
+            case 'credit':
+                return new CreditCard($data);
+        }
+
+        return null;
     }
 }
