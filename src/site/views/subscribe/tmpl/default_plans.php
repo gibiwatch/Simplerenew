@@ -19,14 +19,13 @@ defined('_JEXEC') or die();
             $checked = $plan->selected ? ' checked="checked"' : '';
         ?>
         <div class="<?php echo join(' ', $classes); ?>">
-            <input<?php echo $checked; ?>
-                type="radio"
-                name="planCode"
-                id="<?php echo $planId; ?>"
-                value="<?php echo $plan->code; ?>"/>
-
             <span class="simplerenew-plan <?php echo $planId; ?>">
-                <?php echo JHtml::_('plan.name', $plan); ?>
+                <input<?php echo $checked; ?>
+                    type="radio"
+                    name="planCode"
+                    id="<?php echo $planId; ?>"
+                    value="<?php echo $plan->code; ?>"/>
+                    <?php echo JHtml::_('plan.name', $plan); ?>
             </span>
         </div>
 
