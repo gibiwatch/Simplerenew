@@ -21,7 +21,7 @@ class JFormFieldThemes extends JFormFieldList
             JHtml::_('select.option', 'default.css', JText::_('COM_SIMPLERENEW_OPTION_STYLESHEET_DEFAULT'))
         );
 
-        $path = JPATH_SITE . '/' . dirname(JHtml::stylesheet('com_simplerenew/themes/default.css', null, true, true));
+        $path = JPATH_SITE . '/media/com_simplerenew/css/themes';
 
         $styles = JFolder::files($path, '\.css$');
         sort($styles);
