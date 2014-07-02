@@ -89,4 +89,6 @@ interface UserInterface
      * @throws Exception
      */
     public function setGroup(User $parent, Plan $plan);
+
+    public function getGroupText(User $parent);
 }

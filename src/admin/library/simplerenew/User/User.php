@@ -182,4 +182,9 @@ class User extends Object
     {
         $this->adapter->setGroup($this, $plan);
     }
+
+    public function getGroupText()
+    {
+        return $this->adapter->getGroupText($this);
+    }
 }
