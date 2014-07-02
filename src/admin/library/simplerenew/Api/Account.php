@@ -149,7 +149,6 @@ class Account extends AbstractApiBase
         );
 
         $this->imp->save($this, $isNew);
-        $this->imp->load($this);
         return $this;
     }
 
@@ -161,8 +160,6 @@ class Account extends AbstractApiBase
     public function close()
     {
         $this->imp->close($this);
-        $this->imp->load($this);
-
         return $this;
     }
 
@@ -174,7 +171,6 @@ class Account extends AbstractApiBase
     public function reopen()
     {
         $this->imp->reopen($this);
-        $this->imp->load($this);
         return $this;
     }
 

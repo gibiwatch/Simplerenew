@@ -37,11 +37,6 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
     );
 
     /**
-     * @var array associative array of \Recurly_Account objects previously loaded
-     */
-    protected $accountsLoaded = array();
-
-    /**
      * @param Account $parent
      *
      * @return array
@@ -87,6 +82,14 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
         $account->last_name    = $parent->lastname;
         $account->company_name = $parent->company;
 
+        $account->address           = new \Recurly_Address();
+        $account->address->address1 = $parent->address->address1;
+        $account->address->address2 = $parent->address->address2;
+        $account->address->city     = $parent->address->city;
+        $account->address->state    = $parent->address->region;
+        $account->address->zip      = $parent->address->postal;
+        $account->address->country  = $parent->address->country;
+
         try {
             if ($isNew) {
                 $account->create();
@@ -96,6 +99,7 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
         } catch (\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
+        $this->load($parent);
     }
 
     /**
@@ -114,6 +118,8 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
         } catch (\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
+
+        $this->load($parent);
     }
 
     /**
@@ -132,6 +138,8 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
         } catch (\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
+
+        $this->load($parent);
     }
 
     /**
@@ -142,18 +150,16 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
      */
     protected function getAccount($code)
     {
-        if (empty($this->accountsLoaded[$code])) {
-            try {
-                $this->accountsLoaded[$code] = \Recurly_Account::get($code, $this->client);
+        try {
+            $account = \Recurly_Account::get($code, $this->client);
 
-            } catch (\Recurly_NotFoundError $e) {
-                throw new NotFound($e->getMessage(), $e->getCode(), $e);
+        } catch (\Recurly_NotFoundError $e) {
+            throw new NotFound($e->getMessage(), $e->getCode(), $e);
 
-            } catch (\Exception $e) {
-                throw new Exception($e->getMessage(), $e->getCode(), $e);
-            }
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
 
-        return $this->accountsLoaded[$code];
+        return $account;
     }
 }
