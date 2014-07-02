@@ -10,7 +10,8 @@
 
 .ost-container h1,
 .ost-container h2,
-.ost-container h3 {
+.ost-container h3,
+.ost-container h4 {
     color: #333333;
     line-height: 30px;
     font-weight: 600;
@@ -32,6 +33,12 @@
 .ost-container h3 {
     font-size: 25px;
     line-height: 30px;
+}
+
+.ost-container h4 {
+    font-size: 18px;
+    line-height: 23px;
+    margin: 4px 0;
 }
 
 .ost-container h3 span {
@@ -150,6 +157,12 @@
     background: #41A1D6;
 }
 
+.ost-container input[type="submit"].btn-big,
+.ost-container button.btn-big{
+    font-size: 16px;
+    padding: 12px 20px;
+}
+
 .ost-container label {
     display: block;
     margin-bottom: 5px;
@@ -160,18 +173,32 @@
     color: #ff0000;
 }
 
-/* Help classes
+
+/* Subscribe view
  ========================================================================== */
-.m-bottom {
-    margin-bottom: 30px;
+.ost-container .tab-disabled  h4{
+    color: #545454;
 }
 
-.p-bottom {
-    padding-bottom: 30px;
+span.simplerenew-plan{
+    background: #feb123;
+    color: #ffffff;
+    text-shadow: 0 0 1px #999;
 }
 
-.b-bottom {
-    border-bottom: 1px solid #f2f2f2;
+span.simplerenew-plan:hover{
+    color: #333333;
+    text-shadow: none;
+}
+
+#tab_paypal,
+#tab_card{
+    border-color: #cccccc;
+}
+
+#content_card,
+#content_paypal{
+    border-color: #cccccc;
 }
 
 /* Media queries
