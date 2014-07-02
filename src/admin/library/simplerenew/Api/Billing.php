@@ -187,4 +187,13 @@ class Billing extends AbstractApiBase
         $this->address->clearProperties($publicOnly);
         $this->payment = null;
     }
+
+    public function getPaymentType()
+    {
+        if (is_object($this->payment)) {
+            $type = explode('\\', get_class($this->payment));
+            return array_pop($type);
+        }
+        return null;
+    }
 }
