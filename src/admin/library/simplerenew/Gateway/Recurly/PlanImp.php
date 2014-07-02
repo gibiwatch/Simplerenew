@@ -51,8 +51,10 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
     /**
      * Set the API object properties from the native Recurly object
      *
-     * @param string $plan
-     * @param Plan   $target
+     * @param mixed $plan
+     * @param Plan  $target
+     *
+     * @return void
      */
     protected function bindToPlan($plan, Plan $target)
     {
