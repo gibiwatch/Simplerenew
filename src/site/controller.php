@@ -14,19 +14,38 @@ class SimplerenewController extends SimplerenewControllerBase
 
     public function test()
     {
-        $user = SimplerenewFactory::getContainer()->getUser()->loadByUsername('fred');
-        $password = 'xyzzy';
+        /** @var SimplerenewModelGateway $model */
+        $model = SimplerenewModel::getInstance('Gateway');
+        $container = SimplerenewFactory::getContainer();
+
+
+        $user = $container->getUser()->loadByUsername('fred');
+        $account = $container->getAccount()->load($user);
+
+        
+        $subscription = $container->getSubscription()->load('2862ff2e16174984b46f6a4ecd8e09cf');
+
+        echo '<pre>';
+        print_r($subscription->getProperties());
+        echo '</pre>';
+        return;
+
+
+        $user = $container->getUser()->loadByUsername('fred');
+        $account = $container->getAccount()->load($user);
+        $plan = $container->getPlan()->load('monthly-3for1');
+
 
         try {
-            $user->login($password, true);
+            $subscription = $model->createSubscription($account, $plan);
+            echo '<pre>';
+            print_r($subscription->getProperties());
+            echo '</pre>';
+
         } catch (Exception $e) {
-            echo 'ERROR: ' . $e->getMessage() . ' (' . $e->getCode() . ')';
+            echo $e->getMessage();
         }
 
-        echo '<br/><br/>TEST: ' . $user->validate($password);
-        echo '<pre>';
-        print_r($user->getProperties());
-        echo '</pre>';
-
+        echo '<br/><br/>done';
     }
 }

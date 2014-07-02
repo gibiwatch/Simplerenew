@@ -75,6 +75,15 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
         $password = $app->input->getString('password');
         $user->login($password, true);
 
+        try {
+            $model->createSubscription($account, $app->input->getString('planCode'));
+        } catch (Exception $e) {
+            return $this->callerReturn(
+                $e->getMessage(),
+                'error'
+            );
+        }
+
         return $this->callerReturn('User/Account Create - need to send the user someplace');
     }
 
