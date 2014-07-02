@@ -10,5 +10,27 @@ defined('_JEXEC') or die();
 
 class SimplerenewViewAccount extends SimplerenewViewSite
 {
+    /**
+     * @var Simplerenew\User\User
+     */
+    protected $user = null;
 
+    /**
+     * @var Simplerenew\Api\Billing
+     */
+    protected $billing = null;
+
+    /**
+     * @var Simplerenew\Api\Subscription
+     */
+    protected $subscription = null;
+
+    public function display($tpl = null)
+    {
+        $this->user = $this->get('User');
+        $this->billing = $this->get('Billing');
+        $this->subscription = $this->get('Subscription');
+
+        parent::display($tpl);
+    }
 }
