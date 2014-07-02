@@ -85,6 +85,7 @@ class Billing extends AbstractApiBase
      * @param Account $account
      *
      * @return Billing
+     * @throws Exception
      */
     public function load(Account $account)
     {

@@ -76,6 +76,12 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
         }
     }
 
+    /**
+     * @param Billing $parent
+     *
+     * @return void
+     * @throws Exception
+     */
     public function save(Billing $parent)
     {
         $billing = $this->getBilling($parent->account->code);
@@ -107,6 +113,12 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
         }
     }
 
+    /**
+     * @param Billing $parent
+     *
+     * @return void
+     * @throws Exception
+     */
     public function delete(Billing $parent)
     {
         $accountCode = $parent->account->code;
@@ -132,7 +144,7 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
      * @param $accountCode
      *
      * @return \Recurly_BillingInfo
-     * @throws \Simplerenew\Exception
+     * @throws Exception
      */
     protected function getBilling($accountCode)
     {

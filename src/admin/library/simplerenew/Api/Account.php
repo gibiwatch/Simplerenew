@@ -108,6 +108,7 @@ class Account extends AbstractApiBase
      * @param User $user
      *
      * @return Account
+     * @throws Exception
      */
     public function load(User $user)
     {
