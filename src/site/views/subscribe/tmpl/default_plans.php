@@ -18,7 +18,7 @@ defined('_JEXEC') or die();
             $classes = 'plan_code ' . $planId;
             $checked = $plan->selected ? ' checked="checked"' : '';
         ?>
-        <div class="<?php echo join(' ', $classes); ?>">
+        <div class="<?php echo $classes; ?>">
             <input<?php echo $checked; ?>
                 type="radio"
                 name="planCode"
