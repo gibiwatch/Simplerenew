@@ -36,4 +36,24 @@ interface SubscriptionInterface
      * @throws Exception
      */
     public function load(Subscription $parent);
+
+    /**
+     * @param Subscription $parent
+     * @param Account      $account
+     * @param int          $status
+     *
+     * @return array
+     */
+    public function getList(Subscription $parent, Account $account, $status = null);
+
+    /**
+     * Get the currently active subscription
+     *
+     * @param Subscription $parent
+     * @param Account      $account
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function loadActive(Subscription $parent, Account $account);
 }

@@ -60,9 +60,9 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
             if ($billing->first_six && $billing->last_four) {
                 $payment = new CreditCard(
                     array(
-                        'month'    => $billing->month,
-                        'year'     => $billing->year,
-                        'type'     => $billing->card_type,
+                        'month'     => $billing->month,
+                        'year'      => $billing->year,
+                        'type'      => $billing->card_type,
                         'lastFour' => $billing->last_four
                     )
                 );

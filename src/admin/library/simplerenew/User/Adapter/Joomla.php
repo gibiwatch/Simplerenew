@@ -295,6 +295,19 @@ class Joomla implements UserInterface
         throw new Exception($error);
     }
 
+    protected function getLocalPlans()
+    {
+        if ($this->localPlans === null) {
+            $db               = \SimplerenewFactory::getDbo();
+            $query            = $db->getQuery(true)
+                ->select('p.code, p.name, p.group_id, g.title group_name')
+                ->from('#__simplerenew_plans p')
+                ->innerJoin('#__usergroups g on g.id = p.group_id');
+            $this->localPlans = $db->setQuery($query)->loadObjectList('code');
+        }
+        return $this->localPlans;
+    }
+
     /**
      * Set the user's group based on the plan
      *
@@ -306,20 +319,13 @@ class Joomla implements UserInterface
      */
     public function setGroup(User $parent, Plan $plan)
     {
-        if ($this->localPlans === null) {
-            $db = \SimplerenewFactory::getDbo();
-            $query = $db->getQuery(true)
-                ->select('p.code, p.group_id, g.title')
-                ->from('#__simplerenew_plans p')
-                ->innerJoin('#__usergroups g on g.id = p.group_id');
-            $this->localPlans = $db->setQuery($query)->loadObjectList('code');
-        }
-
+        $plans  = $this->getLocalPlans();
         $filter = array();
         if ($default = $this->userParams->get('new_usertype')) {
             $filter[] = $default;
         }
-        foreach ($this->localPlans as $p) {
+
+        foreach ($plans as $p) {
             $filter[] = $p->group_id;
         }
         $filter = array_unique($filter);
@@ -329,10 +335,28 @@ class Joomla implements UserInterface
             throw new Exception('Unable to find user group for - ' . $plan->code);
         }
 
-        $gid = $this->localPlans[$plan->code]->group_id;
+        $gid             = $this->localPlans[$plan->code]->group_id;
         $newGroups[$gid] = $gid;
 
         $parent->groups = $newGroups;
         $this->update($parent);
+    }
+
+    public function getGroupText(User $parent)
+    {
+        $plans = $this->getLocalPlans();
+        $groups = array();
+        foreach ($plans as $plan) {
+            $groups[$plan->group_id] = $plan->group_name;
+        }
+
+        $text = array();
+        foreach ($parent->groups as $groupId) {
+            if (isset($groups[$groupId])) {
+                $text[] = $groups[$groupId];
+            }
+        }
+        sort($text);
+        return join(', ', $text);
     }
 }
