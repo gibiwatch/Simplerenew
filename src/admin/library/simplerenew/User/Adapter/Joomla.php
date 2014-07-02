@@ -12,6 +12,7 @@ use JAuthentication;
 use JFactory;
 use JLoader;
 use JUser;
+use Simplerenew\Api\Plan;
 use Simplerenew\Exception;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\User\User;
@@ -34,12 +35,24 @@ class Joomla implements UserInterface
         'enabled'   => 'block'
     );
 
+    /**
+     * @var \JRegistry
+     */
+    protected $userParams = null;
+
+    /**
+     * @var array
+     */
+    protected $localPlans = null;
+
     public function __construct()
     {
         SimplerenewModel::addIncludePath(JPATH_SITE . '/components/com_users/models');
 
         $lang = JFactory::getLanguage();
         $lang->load('com_users', JPATH_SITE);
+
+        $this->userParams = \SimplerenewComponentHelper::getParams('com_users');
     }
 
     /**
@@ -158,7 +171,8 @@ class Joomla implements UserInterface
         $data = array(
             'name'     => trim($parent->firstname . ' ' . $parent->lastname),
             'email'    => $parent->email,
-            'username' => $parent->username
+            'username' => $parent->username,
+            'groups'   => $parent->groups
         );
 
         if (!empty($parent->password)) {
@@ -279,5 +293,46 @@ class Joomla implements UserInterface
         }
 
         throw new Exception($error);
+    }
+
+    /**
+     * Set the user's group based on the plan
+     *
+     * @param User $parent
+     * @param Plan $plan
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function setGroup(User $parent, Plan $plan)
+    {
+        if ($this->localPlans === null) {
+            $db = \SimplerenewFactory::getDbo();
+            $query = $db->getQuery(true)
+                ->select('p.code, p.group_id, g.title')
+                ->from('#__simplerenew_plans p')
+                ->innerJoin('#__usergroups g on g.id = p.group_id');
+            $this->localPlans = $db->setQuery($query)->loadObjectList('code');
+        }
+
+        $filter = array();
+        if ($default = $this->userParams->get('new_usertype')) {
+            $filter[] = $default;
+        }
+        foreach ($this->localPlans as $p) {
+            $filter[] = $p->group_id;
+        }
+        $filter = array_unique($filter);
+
+        $newGroups = array_diff($parent->groups, $filter);
+        if (!isset($this->localPlans[$plan->code])) {
+            throw new Exception('Unable to find user group for - ' . $plan->code);
+        }
+
+        $gid = $this->localPlans[$plan->code]->group_id;
+        $newGroups[$gid] = $gid;
+
+        $parent->groups = $newGroups;
+        $this->update($parent);
     }
 }

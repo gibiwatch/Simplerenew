@@ -8,6 +8,7 @@
 
 namespace Simplerenew\User;
 
+use Simplerenew\Api\Plan;
 use Simplerenew\Exception;
 use Simplerenew\Object;
 
@@ -167,5 +168,18 @@ class User extends Object
     public function login($password, $force = false)
     {
         $this->adapter->login($this, $password, $force);
+    }
+
+    /**
+     * Set the user group based on the plan
+     *
+     * @param Plan $plan
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function setGroup(Plan $plan)
+    {
+        $this->adapter->setGroup($this, $plan);
     }
 }

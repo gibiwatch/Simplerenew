@@ -8,6 +8,7 @@
 
 namespace Simplerenew\User\Adapter;
 
+use Simplerenew\Api\Plan;
 use Simplerenew\Exception;
 use Simplerenew\User\User;
 
@@ -77,4 +78,15 @@ interface UserInterface
      * @throws Exception
      */
     public function login(User $parent, $password, $force = false);
+
+    /**
+     * Set the user's group based on the plan
+     *
+     * @param User $parent
+     * @param Plan $plan
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function setGroup(User $parent, Plan $plan);
 }

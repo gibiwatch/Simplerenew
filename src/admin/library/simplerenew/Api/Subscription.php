@@ -54,6 +54,14 @@ class Subscription extends AbstractApiBase
         $this->imp = $imp;
     }
 
+    /**
+     * Load a specific subscription by system id
+     *
+     * @param string $id
+     *
+     * @return Subscription
+     * @throws Exception
+     */
     public function load($id)
     {
         $this->clearProperties();
@@ -64,12 +72,24 @@ class Subscription extends AbstractApiBase
         return $this;
     }
 
+    /**
+     * Create a new subscription for the account and plan
+     *
+     * @param Account $account
+     * @param Plan    $plan
+     *
+     * @return Subscription
+     * @throws Exception
+     */
     public function create(Account $account, Plan $plan)
     {
         $this->clearProperties();
         $this->account = $account;
 
         $this->imp->create($this, $account, $plan);
+        $account->user->setGroup($plan);
+
+        return $this;
     }
 
     public function cancel()
