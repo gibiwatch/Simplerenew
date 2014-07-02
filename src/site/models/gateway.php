@@ -7,6 +7,9 @@
  */
 
 use Simplerenew\Api\Account;
+use Simplerenew\Api\Billing;
+use Simplerenew\Api\Plan;
+use Simplerenew\Api\Subscription;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\Primitive\CreditCard;
 use Simplerenew\User\User;
@@ -108,6 +111,14 @@ class SimplerenewModelGateway extends SimplerenewModelSite
         return $account;
     }
 
+    /**
+     * Update billing info for an account
+     *
+     * @param Account $account
+     * @param array   $data
+     *
+     * @return Billing
+     */
     public function saveBilling(Account $account, array $data = null)
     {
         $app = SimplerenewFactory::getApplication();
@@ -155,5 +166,20 @@ class SimplerenewModelGateway extends SimplerenewModelSite
         $billing->save();
 
         return $billing;
+    }
+
+    /**
+     * @param Account $account
+     * @param Plan $plan
+     *
+     * @return Subscription
+     */
+    public function createSubscription(Account $account, Plan $plan)
+    {
+        $container    = SimplerenewFactory::getContainer();
+        $subscription = $container->getSubscription();
+        $subscription->create($account, $plan);
+
+        return $subscription;
     }
 }
