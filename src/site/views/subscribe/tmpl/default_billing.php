@@ -12,10 +12,10 @@ defined('_JEXEC') or die();
 
 <div class="ost-section">
     <div class="block3 tab-enabled" id="tab_paypal">
-        <h4>Paypal</h4>
+        <h4><i class="fa fa-pied-piper"></i> <?php echo JText::_('COM_SIMPLERENEW_PAYPAL'); ?></h4>
     </div>
     <div class="block3 tab-disabled" id="tab_card">
-        <h4>Credit Card</h4>
+        <h4><i class="fa fa-credit-card"></i> <?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?></h4>
     </div>
 </div>
 <!-- /.ost-section -->
