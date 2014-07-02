@@ -21,18 +21,69 @@ class Subscription extends AbstractApiBase
     const STATUS_EXPIRED = 0;
     const STATUS_UNKNOWN = -1;
 
+    /**
+     * @var string
+     */
     public $id = null;
+
+    /**
+     * @var string
+     */
     public $plan = null;
+
+    /**
+     * @var int
+     */
     public $status = null;
+
+    /**
+     * @var float
+     */
     public $amount = null;
+
+    /**
+     * @var string
+     */
     public $currency = null;
+
+    /**
+     * @var int
+     */
     public $quantity = null;
+
+    /**
+     * @var \DateTime
+     */
     public $enrolled = null;
+
+    /**
+     * @var \DateTime
+     */
     public $canceled = null;
+
+    /**
+     * @var \DateTime
+     */
     public $expires = null;
+
+    /**
+     * @var \DateTime
+     */
     public $period_start = null;
+
+    /**
+     * @var \DateTime
+     */
     public $period_end = null;
+
+    /**
+     * @var \DateTime
+     */
     public $trial_start = null;
+
+    /**
+     * @var \DateTime
+     */
     public $trial_end = null;
 
     /**
@@ -69,6 +120,25 @@ class Subscription extends AbstractApiBase
         $this->id = $id;
         $this->imp->load($this);
 
+        return $this;
+    }
+
+    /**
+     * Get list of subscriptions for the selected account
+     *
+     * @param Account $account
+     * @param int     $status
+     *
+     * @return array()
+     */
+    public function getList(Account $account, $status = null)
+    {
+        return $this->imp->getList($this, $account, $status);
+    }
+
+    public function loadActive(Account $account)
+    {
+        $this->imp->loadActive($this, $account);
         return $this;
     }
 

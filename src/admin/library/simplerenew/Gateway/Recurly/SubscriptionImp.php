@@ -38,8 +38,6 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
         'trial_end'    => 'trial_ends_at'
     );
 
-    protected $subscriptionsLoaded = array();
-
     /**
      * Create a new subscription for the selected account in the selected plan
      *
@@ -111,19 +109,62 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
             throw new Exception('No subscription selected');
         }
 
-        if (!isset($this->subscriptionsLoaded[$id])) {
-            try {
-                $subscription = \Recurly_Subscription::get($id, $this->client);
+        try {
+            $subscription = \Recurly_Subscription::get($id, $this->client);
 
-            } catch (\Recurly_NotFoundError $e) {
-                throw new NotFound($e->getMessage(), $e->getCode(), $e);
+        } catch (\Recurly_NotFoundError $e) {
+            throw new NotFound($e->getMessage(), $e->getCode(), $e);
 
-            } catch (\Exception $e) {
-                throw new Exception($e->getMessage(), $e->getCode(), $e);
-            }
-
-            $this->subscriptionsLoaded[$subscription->uuid] = $subscription;
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
-        return $this->subscriptionsLoaded[$id];
+
+        return $subscription;
+    }
+
+    /**
+     * @param Subscription $template
+     * @param Account      $account
+     * @param int          $status
+     *
+     * @return array
+     */
+    public function getList(Subscription $template, Account $account, $status = null)
+    {
+    }
+
+    /**
+     * Load the currently active subscription
+     *
+     * @param Subscription $parent
+     * @param Account      $account
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function loadActive(Subscription $parent, Account $account)
+    {
+        $rawList = iterator_to_array(
+            \Recurly_SubscriptionList::getForAccount(
+                $account->code,
+                null,
+                $this->client
+            )
+        );
+
+        $current = array_shift($rawList);
+        if ($this->translateState($current->state) != Subscription::STATUS_ACTIVE) {
+            throw new Exception('No active subscription found for ' . $account->code);
+        }
+
+        $this->bindToSubscription($current, $parent);
+    }
+
+    protected function translateState($state)
+    {
+        if (isset($this->fieldMap['status']['state'][$state])) {
+            return $this->fieldMap['status']['state'][$state];
+        }
+        return null;
     }
 }
