@@ -44,9 +44,13 @@ abstract class SimplerenewHelperSite
         $font = explode('|', $params->get('advanced.fontFamily', 'none'));
         if ($font[0] != 'none') {
 
-            // Load Google fonts files
-            $href = 'http://fonts.googleapis.com/css?family=' . $font[0] . ':' . $font[1];
-            JHtml::stylesheet($href);
+            /* Load Google fonts files when font-weight exists
+            *  Example: "Droid Sans|sans-serif|400,700"
+            *  400,700 is the font-weight */
+            if( count($font) > 2 ){
+                $href = 'http://fonts.googleapis.com/css?family=' . $font[0] . ':' . $font[2];
+                JHtml::stylesheet($href);
+            }
 
             // Assign font-family to specific tags
             $style = array(
@@ -62,7 +66,7 @@ abstract class SimplerenewHelperSite
                 '.ost-container input,',
                 '.ost-container textarea,',
                 '.ost-container select {',
-                "   font-family: '" . $font[0] . "', " . $font[2],
+                "   font-family: '" . $font[0] . "', " . $font[1] . ';',
                 '}'
             );
             JFactory::getDocument()->addStyleDeclaration(join("\n", $style));
