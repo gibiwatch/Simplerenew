@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 
 abstract class SimplerenewHelperSite
 {
-    protected static $awesomeCDN = 'https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css';
+    protected static $awesomeCDN = 'https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css';
 
     /**
      * @var JRegistry
