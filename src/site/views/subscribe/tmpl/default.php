@@ -100,7 +100,7 @@ if ($this->user->id > 0) {
 
             <?php echo $this->loadtemplate('billing'); ?>
 
-            <div class="m-bottom">
+            <div class="m-bottom m-top">
                 <?php echo JText::sprintf('COM_SIMPLERENEW_TERMS_OF_AGREEMENT', '#'); ?>
             </div>
 
@@ -108,7 +108,7 @@ if ($this->user->id > 0) {
                 <input
                     type="submit"
                     value="<?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE'); ?>"
-                    class="btn-main"/>
+                    class="btn-main btn-big"/>
                 <?php echo JHtml::_('form.token'); ?>
             </div>
 
