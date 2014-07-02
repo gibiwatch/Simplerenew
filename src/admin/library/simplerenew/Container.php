@@ -9,12 +9,17 @@
 namespace Simplerenew;
 
 use Simplerenew\Api\Account;
+use Simplerenew\Api\Billing;
+use Simplerenew\Api\Plan;
+use Simplerenew\Api\Subscription;
 use Simplerenew\Gateway\AccountInterface;
 use Simplerenew\Gateway\BillingInterface;
 use Simplerenew\Gateway\PlanInterface;
+use Simplerenew\Gateway\SubscriptionInterface;
 use Simplerenew\Primitive\CreditCard;
 use Simplerenew\Primitive\AbstractPayment;
 use Simplerenew\User\Adapter\UserInterface;
+use Simplerenew\User\User;
 
 defined('_JEXEC') or die();
 
@@ -93,7 +98,7 @@ class Container
      *
      * @param UserInterface $adapter
      *
-     * @return User\User
+     * @return User
      * @throws Exception
      */
     public function getUser(UserInterface $adapter = null)
@@ -101,17 +106,16 @@ class Container
         if (!$adapter) {
             $adapter = $this->userAdapter;
         }
-        $user = new User\User($adapter);
+        $user = new User($adapter);
         return $user;
     }
 
     /**
-     * Create a new Api\Account object
+     * Create a new Account object
      *
-     * @param Gateway\AccountInterface
+     * @param AccountInterface $imp
      *
      * @return Account
-     * @throws Exception
      */
     public function getAccount(AccountInterface $imp = null)
     {
@@ -127,7 +131,7 @@ class Container
     /**
      * @param BillingInterface $imp
      *
-     * @return Api\Billing
+     * @return Billing
      */
     public function getBilling(BillingInterface $imp = null)
     {
@@ -136,14 +140,14 @@ class Container
             $imp       = new $className($this->gatewayConfig);
         }
 
-        $billing = new Api\Billing($imp);
+        $billing = new Billing($imp);
         return $billing;
     }
 
     /**
      * @param PlanInterface $imp
      *
-     * @return Api\Plan
+     * @return Plan
      */
     public function getPlan(PlanInterface $imp = null)
     {
@@ -152,8 +156,26 @@ class Container
             $imp = new $className($this->gatewayConfig);
         }
 
-        $plan = new Api\Plan($imp);
+        $plan = new Plan($imp);
         return $plan;
+    }
+
+    /**
+     * Create subscription object
+     *
+     * @param SubscriptionInterface $imp
+     *
+     * @return Subscription
+     */
+    public function getSubscription(SubscriptionInterface $imp = null)
+    {
+        if (!$imp) {
+            $className = $this->gatewayNamespace . '\\SubscriptionImp';
+            $imp = new $className($this->gatewayConfig);
+        }
+
+        $subscription = new Subscription($imp);
+        return $subscription;
     }
 
     /**
