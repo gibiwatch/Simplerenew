@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die();
 ?>
-<h3><?php echo JText::_('COM_SIMPLERENEW_HEADING_PLANLIST'); ?></h3>
+<h3><span><?php echo JText::_('COM_SIMPLERENEW_HEADING_STEP2'); ?></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_PLANLIST'); ?></h3>
 
 <div class="ost-section">
     <div class="block12 p-bottom b-bottom">
@@ -19,14 +19,13 @@ defined('_JEXEC') or die();
             $checked = $plan->selected ? ' checked="checked"' : '';
         ?>
         <div class="<?php echo $classes; ?>">
-            <input<?php echo $checked; ?>
-                type="radio"
-                name="planCode"
-                id="<?php echo $planId; ?>"
-                value="<?php echo $plan->code; ?>"/>
-
             <span class="simplerenew-plan <?php echo $planId; ?>">
-                <?php echo JHtml::_('plan.name', $plan); ?>
+                <input<?php echo $checked; ?>
+                    type="radio"
+                    name="planCode"
+                    id="<?php echo $planId; ?>"
+                    value="<?php echo $plan->code; ?>"/>
+                    <?php echo JHtml::_('plan.name', $plan); ?>
             </span>
         </div>
 

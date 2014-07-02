@@ -1,10 +1,11 @@
-/* general */
+/* General
+ ========================================================================== */
 .ost-container p {
     color: #333333;
     font-size: 13px;
     line-height: 20px;
     margin: 0 0 20px;
-    font-weight: 300;
+    font-weight: 400;
 }
 
 .ost-container h1,
@@ -19,21 +20,22 @@
 }
 
 .ost-container h1 {
-    font-size: 30px;
+    font-size: 35px;
+    line-height: 40px;
 }
 
 .ost-container h2 {
-    font-size: 26px;
+    font-size: 30px;
+    line-height: 35px;
 }
 
 .ost-container h3 {
-    font-size: 22px;
+    font-size: 25px;
+    line-height: 30px;
 }
 
-.ost-container h1 span,
-.ost-container h2 span,
 .ost-container h3 span {
-    color: #666666;
+    color: #999999;
     font-weight: 300;
 }
 
@@ -41,13 +43,6 @@
     border: 0;
     padding: 0;
     margin: 0;
-}
-
-.ost-container .page-header h1 {
-    background: #333333;
-    color: #FFFFFF;
-    display: inline-block;
-    padding: 5px 10px 7px 10px;
 }
 
 .ost-container a {
@@ -67,7 +62,8 @@
     font-weight: 600;
 }
 
-/* form elements */
+/* Form elements
+ ========================================================================== */
 .ost-container form {
 
 }
@@ -80,7 +76,7 @@
     color: #666666;
     font-size: 13px;
     margin: 0 0 10px;
-    font-weight: 300;
+    font-weight: 400;
     border: 1px solid #999999;
     border-radius: 2px;
     -moz-border-radius: 2px;
@@ -164,7 +160,8 @@
     color: #ff0000;
 }
 
-/* help classes */
+/* Help classes
+ ========================================================================== */
 .m-bottom {
     margin-bottom: 30px;
 }
@@ -177,7 +174,25 @@
     border-bottom: 1px solid #f2f2f2;
 }
 
-/* media queries */
+/* Plans
+ ========================================================================== */
+span.simplerenew-plan{
+    display: inline-block;
+    background: #f2f2f2;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -o-border-radius: 3px;
+    margin-bottom: 4px;
+}
+span.simplerenew-plan:hover{
+    background: #cccccc;
+}
+
+/* Media queries
+ ========================================================================== */
 @media (min-width: 960px) {
 
 }
