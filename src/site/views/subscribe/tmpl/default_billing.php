@@ -11,6 +11,16 @@ defined('_JEXEC') or die();
 <h3><span><?php echo JText::_('COM_SIMPLERENEW_HEADING_STEP3'); ?></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?></h3>
 
 <div class="ost-section">
+    <div class="block3 active" id="tab_paypal">
+        Paypal
+    </div>
+    <div class="block3" id="tab_card">
+        Credit Card
+    </div>
+</div>
+<!-- /.ost-section -->
+
+<div class="ost-section active" id="content_card">
     <div class="block6">
         <label for="billing_firstname"><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
         <input
@@ -60,7 +70,9 @@ defined('_JEXEC') or die();
 </div>
 <!-- /.ost-section -->
 
-<div>
-    <?php echo JText::_('COM_SIMPLERENEW_PROCEED_TO_PAYPAL'); ?>
+<div class="ost-section" id="content_paypal">
+    <div class="block12">
+        <?php echo JText::_('COM_SIMPLERENEW_PROCEED_TO_PAYPAL'); ?>
+    </div>
 </div>
 

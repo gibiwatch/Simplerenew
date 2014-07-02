@@ -82,6 +82,7 @@ abstract class SimplerenewHelperSite
         // Load responsive grids
         JHtml::stylesheet('com_simplerenew/grid.css', null, true);
         JHtml::stylesheet('com_simplerenew/grid-responsive.css', null, true);
+        JHtml::stylesheet('com_simplerenew/style.css', null, true);
 
         // Load the selected theme
         if ($theme === null) {
