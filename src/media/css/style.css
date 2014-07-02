@@ -10,6 +10,7 @@ span.simplerenew-plan{
     -webkit-border-radius: 3px;
     -o-border-radius: 3px;
     margin-bottom: 4px;
+    cursor: pointer;
 }
 
 span.simplerenew-plan:hover{
@@ -20,6 +21,9 @@ span.simplerenew-plan:hover{
 #tab_paypal{
     text-align: center;
     border: 1px solid #cccccc;
+    float: left;
+    width: 180px;
+    cursor: pointer;
 }
 
 #tab_paypal{
@@ -49,7 +53,6 @@ span.simplerenew-plan:hover{
 
 #content_card,
 #content_paypal{
-    background: #ffffff;
     border-top-width: 0;
     border: 1px solid #cccccc;
     margin-top: -1px;
@@ -75,4 +78,17 @@ span.simplerenew-plan:hover{
 
 .b-bottom {
     border-bottom: 1px solid #f2f2f2;
+}
+
+/* Media Queries
+ ========================================================================== */
+@media (max-width: 480px){
+    #tab_card,
+    #tab_paypal{
+        width: 130px;
+    }
+    #tab_card i,
+    #tab_paypal i{
+        display: none;
+    }
 }
