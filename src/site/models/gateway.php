@@ -75,6 +75,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
      * @param array $data
      *
      * @return Account
+     * @throws Exception
      */
     public function saveAccount(User $user, array $data = null)
     {
@@ -147,12 +148,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
 
         $container = SimplerenewFactory::getContainer();
         $billing   = $container->getBilling();
-
-        try {
-            $billing->load($account);
-        } catch (Exception $e) {
-            $app->enqueueMessage('caught error: ' . $e->getMessage(), 'notice');
-        }
+        $billing->load($account);
 
         if (array_filter($data['cc'])) {
             if (!$billing->payment instanceof CreditCard) {
