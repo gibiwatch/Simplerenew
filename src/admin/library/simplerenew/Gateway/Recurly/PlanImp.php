@@ -41,11 +41,18 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
 
     protected $plansLoaded = array();
 
+    /**
+     * Retrieve all subscription plan information
+     *
+     * @param Plan $parent
+     *
+     * @return void
+     * @throws Exception
+     */
     public function load(Plan $parent)
     {
-        if ($plan = $this->getPlan($parent->code)) {
-            $this->bindToPlan($plan, $parent);
-        }
+        $plan = $this->getPlan($parent->code);
+        $this->bindToPlan($plan, $parent);
     }
 
     /**
@@ -162,6 +169,7 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
 
             $plan->update();
         }
+        $this->bindToPlan($plan, $parent);
     }
 
     /**

@@ -99,6 +99,7 @@ class Plan extends AbstractApiBase
      * @param $code
      *
      * @return Plan
+     * @throws Exception
      */
     public function load($code)
     {
@@ -113,6 +114,7 @@ class Plan extends AbstractApiBase
      * Get list of defined plans on the Gateway
      *
      * @return array Associative array of plans keyed on plan code
+     * @throws Exception
      */
     public function getList()
     {
@@ -126,7 +128,7 @@ class Plan extends AbstractApiBase
     /**
      * @param bool $create
      *
-     * @return $this
+     * @return Plan
      * @throws Exception
      */
     public function save($create = true)
@@ -137,8 +139,6 @@ class Plan extends AbstractApiBase
         }
 
         $this->imp->save($this);
-        $this->imp->load($this);
-
         return $this;
     }
 
@@ -149,7 +149,6 @@ class Plan extends AbstractApiBase
     public function delete()
     {
         $this->imp->delete($this);
-        $this->imp->load($this);
     }
 
     /**

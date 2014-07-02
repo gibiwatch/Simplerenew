@@ -47,6 +47,7 @@ interface PlanInterface
      * @param Plan $template
      *
      * @return array
+     * @throws Exception
      */
     public function getList(Plan $template);
 }
