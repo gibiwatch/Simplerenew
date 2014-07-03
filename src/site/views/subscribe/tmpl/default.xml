@@ -15,6 +15,7 @@
                 name="plans"
                 type="plans"
                 label="COM_SIMPLERENEW_FIELD_PLANS_LABEL"
+                format="[%code%] %name%"
                 description="COM_SIMPLERENEW_FIELD_PLANS_DESC"/>
 
         </fieldset>

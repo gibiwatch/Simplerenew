@@ -39,9 +39,23 @@ class JFormFieldPlans extends JFormFieldCheckboxes
             ->from('#__simplerenew_plans')
             ->order('code');
 
+        $format = $this->element['format'] ? (string)$this->element['format'] : '%name%';
+
         $list = $db->setQuery($query)->loadObjectList();
         foreach ($list as $plan) {
-            $option = JHtml::_('select.option', $plan->code, JHtml::_('plan.name', $plan));
+            $text = str_replace(
+                array(
+                    '%code%',
+                    '%name%'
+                ),
+                array(
+                    $plan->code,
+                    JHtml::_('plan.name', $plan)
+                ),
+                $format
+            );
+
+            $option = JHtml::_('select.option', $plan->code, $text);
             $option->checked = false;
             $options[] = $option;
         }
