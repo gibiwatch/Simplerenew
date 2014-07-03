@@ -57,7 +57,7 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
         }
 
         // Load the default group in case we add plans from the gateway
-        $defaultGroup = $params->get('defaultGroup');
+        $defaultGroup = $params->get('basic.defaultGroup');
         if ($defaultGroup <= 0) {
             $error = JText::_('COM_SIMPLERENEW_ERROR_DEFAULTGROUP');
             $this->setRedirect(
