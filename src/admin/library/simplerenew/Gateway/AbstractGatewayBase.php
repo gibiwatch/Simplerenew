@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Gateway;
 
+use Simplerenew\Configuration;
 use Simplerenew\Cache;
 use Simplerenew\Object;
 
@@ -22,7 +23,7 @@ defined('_JEXEC') or die();
 abstract class AbstractGatewayBase extends Object
 {
     /**
-     * @var array
+     * @var Configuration
      */
     protected $gatewayConfig = array();
 
@@ -31,14 +32,8 @@ abstract class AbstractGatewayBase extends Object
      */
     private $cache = null;
 
-    public function __construct(array $config = array())
+    public function __construct(Configuration $config = null)
     {
-        if (!empty($config['cache']) && $config['cache'] instanceof Cache) {
-            $this->cache = clone $config['cache'];
-            $this->cache->setDomain(get_class($this));
-            unset($config['cache']);
-        }
-
         $this->gatewayConfig = $config;
     }
 
@@ -47,10 +42,12 @@ abstract class AbstractGatewayBase extends Object
      */
     public function getCache()
     {
-        if (!$this->cache instanceof Cache) {
-            $this->cache = new Cache(array('domain' => get_class($this)));
+        $cache = $this->gatewayConfig->get('cache');
+        if (!$cache instanceof Cache) {
+            $cache = new Cache(array('domain' => get_class($this)));
+            $this->gatewayConfig->set('cache', $cache);
         }
-        return $this->cache;
+        return $cache;
     }
 
     /**
@@ -60,10 +57,17 @@ abstract class AbstractGatewayBase extends Object
      */
     public function setCache(Cache $cache)
     {
-        $this->cache = $cache;
+        $this->gatewayConfig->set('cache', $cache);
         return $this;
     }
 
+    /**
+     * Get a unique domain key for cache items
+     *
+     * @param $key
+     *
+     * @return string
+     */
     public function getCacheKey($key)
     {
         $domain = get_class($this);

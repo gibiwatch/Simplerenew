@@ -16,7 +16,7 @@ defined('_JEXEC') or die();
  * Class AbstractConfiguration
  * @package Simplerenew
  */
-abstract class AbstractConfiguration
+class Configuration
 {
     /**
      * @var array
@@ -33,7 +33,10 @@ abstract class AbstractConfiguration
      *
      * @return bool
      */
-    abstract public function isValid();
+    public function isValid()
+    {
+        return true;
+    }
 
     /**
      * Translate dot notation into array keys
@@ -80,10 +83,6 @@ abstract class AbstractConfiguration
      */
     public function set($name, $newValue)
     {
-        if (is_object($newValue) || is_array($newValue)) {
-            throw new Exception('Object/Array is not a valid configuration value');
-        }
-
         $oldValue = $this->get($name);
 
         if (strpos($name, '.') === false) {
@@ -93,7 +92,9 @@ abstract class AbstractConfiguration
             $tree = & $this->settings;
             for ($i = 0; $i < count($keys) - 1; $i++) {
                 $key        = $keys[$i];
-                $tree[$key] = array();
+                if (empty($tree[$key]) || !is_array($tree[$key])) {
+                    $tree[$key] = array();
+                }
                 $tree       = & $tree[$key];
             }
 
