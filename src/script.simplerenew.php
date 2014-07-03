@@ -25,12 +25,12 @@ class Com_SimplerenewInstallerScript
                 'srmyaccount' => array(1, 0, null)
             )
         ),
-*/
         'plugin' => array(
             'system' => array(
                 'simplerenew' => array(1, 1, null)
             )
         )
+*/
     );
 
     /**
@@ -389,6 +389,7 @@ class Com_SimplerenewInstallerScript
 
         // On initial installation, set some defaults
         if ($type == 'install') {
+            // Set defaults based on config.xml construction
             $path = $this->installer->getPath('source') . '/admin/config.xml';
             if (file_exists($path)) {
                 $config      = new SimpleXMLElement($path, 0, true);
