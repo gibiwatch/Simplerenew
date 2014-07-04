@@ -52,10 +52,10 @@ abstract class SimplerenewHelper
                         unset($source[$key]);
                     }
                 } else {
-                    $tree = explode('.', $key);
-                    $target = &$source[$tree[0]];
-                    for ($i=1; $i<count($tree)-1; $i++) {
-                        $target = &$target[$tree[$i]];
+                    $tree   = explode('.', $key);
+                    $target = & $source[$tree[0]];
+                    for ($i = 1; $i < count($tree) - 1; $i++) {
+                        $target = & $target[$tree[$i]];
                     }
                     if (isset($target[$tree[$i]])) {
                         unset($target[$tree[$i]]);
@@ -86,6 +86,41 @@ abstract class SimplerenewHelper
             $app->setUserState($domain, null);
         }
         return $formData;
+    }
+
+    /**
+     *
+     */
+    public static function getNotices()
+    {
+        $errors   = array();
+        $warnings = array();
+
+        $plan = SimplerenewFactory::getContainer()->getPlan();
+        if (!$plan->validConfiguration()) {
+            $errors[] = JText::_('COM_SIMPLERENEW_ERROR_GATEWAY_CONFIGURATION');
+        }
+
+        return array(
+            'errors' => $errors,
+            'warnings' => $warnings
+        );
+    }
+
+    public static function enqueueNotices()
+    {
+        $app = SimplerenewFactory::getApplication();
+        $notices = self::getNotices();
+
+        foreach ($notices['errors'] as $error) {
+            $app->enqueueMessage($error, 'error');
+        }
+
+        foreach ($notices['warnings'] as $warning) {
+            $app->enqueueMessage($warning, 'notice');
+        }
+
+        return (bool)($notices['errors'] || $notices['warnings']);
     }
 
     /**
