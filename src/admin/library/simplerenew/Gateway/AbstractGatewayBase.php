@@ -73,4 +73,11 @@ abstract class AbstractGatewayBase extends Object
         $domain = get_class($this);
         return $domain . '.' . $key;
     }
+
+    /**
+     * Determine whether the current configuration is usable/valid
+     *
+     * @return bool
+     */
+    abstract public function validConfiguration();
 }

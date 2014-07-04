@@ -78,4 +78,17 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
     {
         return $this->transparentUrl;
     }
+
+    /**
+     * Determine whether the current configuration is usable/valid
+     *
+     * @return bool
+     */
+    public function validConfiguration()
+    {
+        if ($this->client instanceof \Recurly_Client) {
+            return ($this->client->apiKey() != '');
+        }
+        return false;
+    }
 }
