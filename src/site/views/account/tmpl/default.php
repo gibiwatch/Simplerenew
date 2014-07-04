@@ -26,7 +26,7 @@ defined('_JEXEC') or die();
     </div>
     <!-- /.ost-section -->
 
-    <div class="ost-section p-bottom b-bottom">
+    <div class="ost-section">
         <div class="block6">
             <label><?php echo JText::_('COM_SIMPLERENEW_USERNAME'); ?></label>
             <?php echo $this->user->username; ?>
