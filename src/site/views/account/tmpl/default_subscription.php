@@ -17,9 +17,6 @@ if ($this->subscription):
             <label><?php echo JText::_('COM_SIMPLERENEW_PLAN'); ?></label>
             <?php echo $this->subscription->plan->name; ?>
         </div>
-    </div>
-
-    <div class="ost-section">
         <div class="block6">
             <label><?php echo JText::_('COM_SIMPLERENEW_PERIOD_END'); ?></label>
             <?php
@@ -31,6 +28,7 @@ if ($this->subscription):
             ?>
         </div>
     </div>
+    <!-- /.ost-section -->
 
     <?php
 else:

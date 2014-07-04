@@ -14,19 +14,17 @@ if ($this->billing):
     ?>
     <h3><?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?></h3>
 
-    <div class="ost-section">
+    <div class="ost-section p-bottom b-bottom">
         <div class="block6">
             <label><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
             <?php echo $this->billing->firstname; ?>
         </div>
-    </div>
-
-    <div class="ost-section">
         <div class="block6">
             <label><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
             <?php echo $this->billing->lastname; ?>
         </div>
     </div>
+    <!-- /.ost-section -->
 
     <?php
     switch ($this->billing->paymentType) {
@@ -35,26 +33,21 @@ if ($this->billing):
 
             <h3><?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?></h3>
 
-            <div class="ost-section">
+            <div class="ost-section p-bottom b-bottom">
                 <div class="block6">
                     <label><?php echo JText::_('COM_SIMPLERENEW_CC_TYPE'); ?></label>
                     <?php echo $payment->type; ?>
                 </div>
-            </div>
-
-            <div class="ost-section">
-                <div class="block6">
+                <div class="block2">
                     <label><?php echo JText::_('COM_SIMPLERENEW_CC_NUMBER'); ?></label>
                     <?php echo JHtml::_('creditcard.mask', $payment->lastFour); ?>
                 </div>
-            </div>
-
-            <div class="ost-section">
-                <div class="block6">
+                <div class="block4">
                     <label><?php echo JText::_('COM_SIMPLERENEW_CC_EXPIRATION'); ?></label>
                     <?php echo JHtml::_('creditcard.expiration', $payment->month, $payment->year); ?>
                 </div>
             </div>
+            <!-- /.ost-section -->
 
             <?php
             break;
@@ -71,10 +64,11 @@ if ($this->billing):
 else:
     ?>
     <div class="ost-section">
-        <div class="block6">
+        <div class="block12">
             <?php echo JText::_('COM_SIMPLERENEW_NO_BILLING_INFO'); ?>
         </div>
     </div>
+    <!-- /.ost-section -->
 <?php
 endif;
 
