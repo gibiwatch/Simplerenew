@@ -38,7 +38,7 @@ defined('_JEXEC') or die();
     <div class="ost-section">
         <div class="block6">
             <label><?php echo JText::_('COM_SIMPLERENEW_EMAIL'); ?></label>
-            <?php echo $this->user->firstname; ?>
+            <?php echo $this->user->email; ?>
         </div>
     </div>
 
