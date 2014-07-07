@@ -13,7 +13,7 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
     public function display($tpl = null)
     {
         if (version_compare(JVERSION, '3.0', 'ge')) {
-            $hide = SimplerenewFactory::getApplication()->input->getBool('hidemainmenu', false);
+            $hide    = SimplerenewFactory::getApplication()->input->getBool('hidemainmenu', false);
             $sidebar = count(JHtmlSidebar::getEntries()) + count(JHtmlSidebar::getFilters());
             if (!$hide && $sidebar > 0) {
                 $start = array(
@@ -87,24 +87,60 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
         }
     }
 
-    protected function renderFieldset($fieldSet, $options = array())
+    /**
+     * Render a form fieldset with the ability to compact two fields
+     * into a single line
+     *
+     * @param string $fieldSet
+     * @param array  $sameLine
+     *
+     * @return string
+     */
+    protected function renderFieldset($fieldSet, array $sameLine = array())
     {
         $html = array();
         if (!empty($this->form) && $this->form instanceof JForm) {
             $fieldSets = $this->form->getFieldsets();
 
             if (!empty($fieldSets[$fieldSet])) {
-                $name = $fieldSets[$fieldSet]->name;
-                $label = $fieldSets[$fieldSet]->label ?: 'COM_SIMPLERENEW_ADMIN_PAGE_' . $name;
+                $name  = $fieldSets[$fieldSet]->name;
+                $label = $fieldSets[$fieldSet]->label ? : 'COM_SIMPLERENEW_ADMIN_PAGE_' . $name;
 
                 $html = array(
                     JHtml::_('bootstrap.addTab', 'myTab', $name, JText::_($label)),
                     '<div class="row-fluid">',
-                    '<fieldset class="adminform">',
-                    $this->form->renderFieldset($name, $options),
-                    '</fieldset>',
-                    '</div>',
-                    JHtml::_('bootstrap.endTab')
+                    '<fieldset class="adminform">'
+                );
+
+                foreach ($this->form->getFieldset($name) as $field) {
+                    if (in_array($field->fieldname, $sameLine)) {
+                        continue;
+                    }
+                    $html = array_merge(
+                        $html,
+                        array(
+                            '<div class="control-group">',
+                            '<div class="control-label">',
+                            $field->label,
+                            '</div>',
+                            '<div class="controls">',
+                            $field->input
+                        )
+                    );
+                    if (isset($sameLine[$field->fieldname])) {
+                        $html[] = ' ' . $this->form->getField($sameLine[$field->fieldname])->input;
+                    }
+                    $html[] = '</div>';
+                    $html[] = '</div>';
+                }
+
+                $html = array_merge(
+                    $html,
+                    array(
+                        '</fieldset>',
+                        '</div>',
+                        JHtml::_('bootstrap.endTab')
+                    )
                 );
             }
         }

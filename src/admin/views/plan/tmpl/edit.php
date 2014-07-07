@@ -48,20 +48,13 @@ $input = $app->input;
         <?php
         echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'main'));
 
-        echo JHtml::_(
-            'bootstrap.addTab',
-            'myTab',
+        echo $this->renderFieldset(
             'main',
-            JText::_('COM_SIMPLERENEW_PLAN_PAGE_MAIN')
+            array(
+                'length'       => 'unit',
+                'trial_length' => 'trial_unit'
+            )
         );
-        ?>
-        <div class="row-fluid">
-            <fieldset class="adminform">
-                <?php echo $this->form->renderFieldset('main'); ?>
-            </fieldset>
-        </div>
-        <?php
-        echo JHtml::_('bootstrap.endTab');
 
         echo JHtml::_(
             'bootstrap.addTab',

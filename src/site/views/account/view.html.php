@@ -6,43 +6,61 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Api\Billing;
+use Simplerenew\Api\Plan;
+use Simplerenew\Api\Subscription;
+use Simplerenew\User\User;
+
 defined('_JEXEC') or die();
 
 class SimplerenewViewAccount extends SimplerenewViewSite
 {
     /**
-     * @var Simplerenew\User\User
+     * @var User
      */
     protected $user = null;
 
     /**
-     * @var Simplerenew\Api\Billing
+     * @var Billing
      */
     protected $billing = null;
 
     /**
-     * @var Simplerenew\Api\Subscription
+     * @var Subscription
      */
     protected $subscription = null;
 
     /**
-     * @var Simplerenew\Api\Plan
+     * @var Plan
      */
     protected $plan = null;
+
+    /**
+     * @var Plan
+     */
+    protected $pending = null;
 
     public function display($tpl = null)
     {
         try {
-            $this->user         = $this->get('User');
-            $this->billing      = $this->get('Billing');
-            $this->subscription = $this->get('Subscription');
-            $this->plan         = $this->get('Plan');
+            $this->user = $this->get('User');
+            if (!$this->user) {
+                $this->setLayout('login');
+
+            } else {
+                $this->billing      = $this->get('Billing');
+                $this->subscription = $this->get('Subscription');
+                $this->plan         = $this->get('Plan');
+                $this->pending      = $this->get('Pending');
+            }
+
         } catch (Exception $e) {
             SimplerenewFactory::getApplication()->enqueueMessage(
                 'Houston, we have a problem: ' . $e->getMessage(),
                 'error'
             );
         }
+
         parent::display($tpl);
     }
 }

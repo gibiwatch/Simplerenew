@@ -99,8 +99,7 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
                 'amount' => $subscription->pending_subscription->unit_amount_in_cents / 100
             );
         }
-        $pending_plan = isset($subscription->pending_subscription) ? $subscription->pending_subscription->plan->plan_code :
-            $target->setProperties($subscription, $this->fieldMap);
+        $target->setProperties($subscription, $this->fieldMap);
         $target->setProperties(
             array(
                 'plan'           => $subscription->plan->plan_code,
