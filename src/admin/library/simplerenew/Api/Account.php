@@ -25,8 +25,8 @@ defined('_JEXEC') or die();
 class Account extends AbstractApiBase
 {
     const STATUS_ACTIVE  = 1;
-    const STATUS_CLOSED  = 0;
-    const STATUS_UNKNOWN = -1;
+    const STATUS_CLOSED  = 2;
+    const STATUS_UNKNOWN = 0;
 
     /**
      * @var string
