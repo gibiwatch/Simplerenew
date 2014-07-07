@@ -57,7 +57,56 @@ $input = $app->input;
         ?>
         <div class="row-fluid">
             <fieldset class="adminform">
-                <?php echo $this->form->renderFieldset('main'); ?>
+                <?php
+                foreach ($this->form->getFieldset('main') as $field):
+                    switch ($field->fieldname) {
+                        case 'length':
+                            ?>
+                            <div class="control-group">
+                                <div class="control-label">
+                                    <?php echo $field->label; ?>
+                                </div>
+                                <div class="controls">
+                                    <?php echo $field->input; ?>
+                                    <?php echo $this->form->getField('unit')->input; ?>
+                                </div>
+                            </div>
+                        <?php
+                            break;
+
+                        case 'trial_length':
+                            ?>
+                            <div class="control-group">
+                                <div class="control-label">
+                                    <?php echo $field->label; ?>
+                                </div>
+                                <div class="controls">
+                                    <?php echo $field->input; ?>
+                                    <?php echo $this->form->getField('trial_unit')->input; ?>
+                                </div>
+                            </div>
+                            <?php
+                            break;
+
+                        case 'unit':
+                            // Fall through
+                        case 'trial_unit':
+                            break;
+
+                        default:
+                            ?>
+                                <div class="control-group">
+                                    <div class="control-label">
+                                        <?php echo $field->label; ?>
+                                    </div>
+                                    <div class="controls">
+                                        <?php echo $field->input; ?>
+                                    </div>
+                                </div>
+                            <?php
+                    }
+                endforeach;
+                ?>
             </fieldset>
         </div>
         <?php
