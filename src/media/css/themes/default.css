@@ -189,8 +189,17 @@
     color: #d85030;
     padding: 15px;
 }
-.bg-full{
-    background: #fbfbfb;
+.ost-alert-success{
+    background: #f2fae3;
+    border-color: rgba(101, 159, 19, 0.3);
+    color: #659f13;
+    padding: 15px;
+}
+.ost-alert-notify{
+    background: #ebf7fd;
+    border-color: rgba(235,247,253, 0.3);
+    color: #2d7091;
+    padding: 15px;
 }
 
 /* Subscribe view
@@ -236,7 +245,28 @@ span.simplerenew-plan:hover{
 
 /* Account view
  ========================================================================== */
+.ost-row-one{
+    background: #fbfbfb;
+}
 
+.ost-row-two{
+    background: #ffffff;
+}
+
+.ost-row-one [class*="block"],
+.ost-row-two [class*="block"]{
+    padding: 10px;
+}
+
+.ost-row-one [class*="block"] label,
+.ost-row-two [class*="block"] label{
+    margin: 0;
+}
+
+.ost-row-one.m-bottom,
+.ost-row-two.m-bottom {
+    margin-bottom: 50px;
+}
 
 /* Media queries
  ========================================================================== */

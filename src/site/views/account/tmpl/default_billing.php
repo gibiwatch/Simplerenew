@@ -14,13 +14,21 @@ if ($this->billing):
     ?>
     <h3><?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?></h3>
 
-    <div class="ost-section p-bottom b-bottom">
-        <div class="block4">
+    <div class="ost-section ost-row-one">
+        <div class="block3">
             <label><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
+        </div>
+        <div class="block9">
             <?php echo $this->billing->firstname; ?>
         </div>
-        <div class="block4">
+    </div>
+    <!-- /.ost-section -->
+
+    <div class="ost-section ost-row-two m-bottom b-bottom">
+        <div class="block3">
             <label><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
+        </div>
+        <div class="block9">
             <?php echo $this->billing->lastname; ?>
         </div>
     </div>
@@ -33,17 +41,31 @@ if ($this->billing):
 
             <h3><?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?></h3>
 
-            <div class="ost-section p-bottom b-bottom">
-                <div class="block4">
+            <div class="ost-section ost-row-one">
+                <div class="block3">
                     <label><?php echo JText::_('COM_SIMPLERENEW_CC_TYPE'); ?></label>
+                </div>
+                <div class="block9">
                     <?php echo $payment->type; ?>
                 </div>
-                <div class="block4">
+            </div>
+            <!-- /.ost-section -->
+
+            <div class="ost-section ost-row-two">
+                <div class="block3">
                     <label><?php echo JText::_('COM_SIMPLERENEW_CC_NUMBER'); ?></label>
+                </div>
+                <div class="block9">
                     <?php echo JHtml::_('creditcard.mask', $payment->lastFour); ?>
                 </div>
-                <div class="block4">
+            </div>
+            <!-- /.ost-section -->
+
+            <div class="ost-section ost-row-one m-bottom b-bottom">
+                <div class="block3">
                     <label><?php echo JText::_('COM_SIMPLERENEW_CC_EXPIRATION'); ?></label>
+                </div>
+                <div class="block9">
                     <?php echo JHtml::_('creditcard.expiration', $payment->month, $payment->year); ?>
                 </div>
             </div>
