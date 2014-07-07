@@ -14,10 +14,11 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
     {
         if (version_compare(JVERSION, '3.0', 'ge')) {
             $hide = SimplerenewFactory::getApplication()->input->getBool('hidemainmenu', false);
-            if (!$hide && $sidebar = JHtmlSidebar::render()) {
+            $sidebar = count(JHtmlSidebar::getEntries()) + count(JHtmlSidebar::getFilters());
+            if (!$hide && $sidebar > 0) {
                 $start = array(
                     '<div id="j-sidebar-container" class="span2">',
-                    $sidebar,
+                    JHtmlSidebar::render(),
                     '</div>',
                     '<div id="j-main-container" class="span10">'
                 );

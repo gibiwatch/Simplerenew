@@ -18,8 +18,6 @@ class SimplerenewModelPlans extends SimplerenewModelList
             'amount', 'plan.amount',
             'setup_cost', 'plan.setup_cost',
             'published', 'plan.published',
-            'id', 'plan.id',
-            'created', 'plan.created',
             'group', 'ug.title'
         );
 
@@ -67,7 +65,7 @@ class SimplerenewModelPlans extends SimplerenewModelList
             $query->where("plan.trial_length {$operator} 0");
         }
 
-        $listOrder = $this->getState('list.ordering', 'plan.id');
+        $listOrder = $this->getState('list.ordering', 'plan.code');
         $listDir   = $this->getState('list.direction', 'ASC');
         $query->order($listOrder . ' ' . $listDir);
 
