@@ -8,38 +8,34 @@
 
 defined('_JEXEC') or die();
 ?>
-<div class="ost-container simplerenew-subscribe">
+<div class="ost-container simplerenew-account">
 
     <div class="page-header">
         <h1><?php echo JText::_('COM_SIMPLERENEW_ACCOUNT_INFO'); ?></h1>
     </div>
 
     <div class="ost-section">
-        <div class="block6">
+        <div class="block4">
             <label><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
             <?php echo $this->user->firstname; ?>
         </div>
-        <div class="block6">
+        <div class="block4">
             <label><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
             <?php echo $this->user->lastname; ?>
         </div>
-    </div>
-    <!-- /.ost-section -->
-
-    <div class="ost-section">
-        <div class="block6">
+        <div class="block4">
             <label><?php echo JText::_('COM_SIMPLERENEW_USERNAME'); ?></label>
             <?php echo $this->user->username; ?>
-        </div>
-        <div class="block6">
-            <label><?php echo JText::_('COM_SIMPLERENEW_EMAIL'); ?></label>
-            <?php echo $this->user->email; ?>
         </div>
     </div>
     <!-- /.ost-section -->
 
     <div class="ost-section p-bottom b-bottom">
-        <div class="block12">
+        <div class="block4">
+            <label><?php echo JText::_('COM_SIMPLERENEW_EMAIL'); ?></label>
+            <?php echo $this->user->email; ?>
+        </div>
+        <div class="block4">
             <label><?php echo JText::_('COM_SIMPLERENEW_MEMBER_GROUP'); ?></label>
             <?php echo $this->user->groupText; ?>
         </div>

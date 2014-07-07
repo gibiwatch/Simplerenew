@@ -75,10 +75,6 @@
 
 /* Form elements
  ========================================================================== */
-.ost-container form {
-
-}
-
 .ost-container input[type="text"],
 .ost-container input[type="email"],
 .ost-container input[type="password"],
@@ -177,7 +173,7 @@
 .ost-container label {
     display: block;
     margin-bottom: 5px;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 14px;
 }
 
@@ -185,6 +181,17 @@
     color: #ff0000;
 }
 
+/* Help classes
+ ========================================================================== */
+.ost-alert-warning{
+    background: #fff1f0;
+    border-color: rgba(216, 80, 48, 0.3);
+    color: #d85030;
+    padding: 15px;
+}
+.bg-full{
+    background: #fbfbfb;
+}
 
 /* Subscribe view
  ========================================================================== */
@@ -226,6 +233,10 @@ span.simplerenew-plan:hover{
 .tab-enabled{
     background: #fbfbfb;
 }
+
+/* Account view
+ ========================================================================== */
+
 
 /* Media queries
  ========================================================================== */

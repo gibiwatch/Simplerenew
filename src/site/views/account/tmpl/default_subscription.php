@@ -19,7 +19,7 @@ if ($this->subscription):
     <h3><?php echo JText::_('COM_SIMPLERENEW_HEADING_SUBSCRIPTION'); ?></h3>
 
     <div class="ost-section">
-        <div class="block6">
+        <div class="block12">
             <label><?php echo JText::_('COM_SIMPLERENEW_PLAN'); ?></label>
             <?php echo $this->plan->name; ?>
         </div>
@@ -29,7 +29,7 @@ if ($this->subscription):
     if ($this->subscription->status == Subscription::STATUS_EXPIRED):
         ?>
         <div class="ost_section">
-            <div class="block6">
+            <div class="block12">
                 <?php
                 echo JText::sprintf(
                     'COM_SIMPLERENEW_SUBSCRIPTION_EXPIRED',
@@ -51,7 +51,7 @@ if ($this->subscription):
     else:
         ?>
         <div class="ost-section">
-            <div class="block6">
+            <div class="block12">
                 <?php
                 echo JText::sprintf(
                     'COM_SIMPLERENEW_SUBSCRIPTION_ACTIVE_PERIOD',
