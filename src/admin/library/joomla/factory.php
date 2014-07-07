@@ -22,13 +22,15 @@ abstract class SimplerenewFactory extends JFactory
      *
      * @TODO: Review Factory/DI pattern for possible improvement
      *
+     * @param JRegistry $params
+     *
      * @return Container
      */
-    public static function getContainer()
+    public static function getContainer(JRegistry $params = null)
     {
         if (!self::$SimplerenewContainer instanceof Container) {
             try {
-                $params = SimplerenewComponentHelper::getParams();
+                $params = $params ? : SimplerenewComponentHelper::getParams();
 
                 $config = array(
                     'user'    => array(
