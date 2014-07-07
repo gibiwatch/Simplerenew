@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Gateway\Recurly;
 
+use Simplerenew\Configuration;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\AbstractGatewayBase;
 
@@ -32,22 +33,22 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
      */
     protected $transparentUrl = 'https://api.recurly.com/transparent/';
 
-    public function __construct(array $config = array())
+    public function __construct(Configuration $config = null)
     {
         parent::__construct($config);
 
         // Initialise the native Recurly API
-        $mode = empty($this->gatewayConfig['mode']) ? 'test' : $this->gatewayConfig['mode'];
+        $mode = $this->gatewayConfig->get('mode', 'test');
 
-        if (!empty($this->gatewayConfig[$mode . 'Apikey'])) {
-            $this->client = new \Recurly_Client($this->gatewayConfig[$mode . 'Apikey']);
+        if ($apiKey = $this->gatewayConfig->get($mode.'Apikey')) {
+            $this->client = new \Recurly_Client($apiKey);
         }
 
-        if (!empty($this->gatewayConfig[$mode . 'Subdomain'])) {
-            $this->transparentUrl .= $this->gatewayConfig[$mode . 'Subdomain'];
+        if ($subDomain = $this->gatewayConfig->get($mode . 'Subdomain')) {
+            $this->transparentUrl .= $subDomain;
         }
 
-        $this->currency = empty($this->gatewayConfig['currency']) ? 'USD' : $this->gatewayConfig['currency'];
+        $this->currency = $this->gatewayConfig->get('currency', 'USD');
     }
 
     /**
@@ -76,5 +77,18 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
     public function getTransparentUrl()
     {
         return $this->transparentUrl;
+    }
+
+    /**
+     * Determine whether the current configuration is usable/valid
+     *
+     * @return bool
+     */
+    public function validConfiguration()
+    {
+        if ($this->client instanceof \Recurly_Client) {
+            return ($this->client->apiKey() != '');
+        }
+        return false;
     }
 }

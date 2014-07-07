@@ -10,5 +10,5 @@ defined('_JEXEC') or die();
 
 class SimplerenewController extends SimplerenewControllerBase
 {
-    protected $default_view = 'dashboard';
+    protected $default_view = 'plans';
 }

@@ -20,7 +20,7 @@
     <fieldset name="main" label="COM_SIMPLERENEW_PLAN_PAGE_MAIN">
         <field
             name="id"
-            type="text"
+            type="hidden"
             class="readonly"
             label="COM_SIMPLERENEW_ID_LABEL"
             description="COM_SIMPLERENEW_ID_DESC"
@@ -98,48 +98,6 @@
             <option value="0">JUNPUBLISHED</option>
             <option value="1">JPUBLISHED</option>
         </field>
-
-        <field
-            name="created_by"
-            type="user"
-            label="COM_SIMPLERENEW_COMMON_CREATED_BY_LABEL"
-            description="COM_SIMPLERENEW_COMMON_CREATED_BY_DESC"/>
-
-        <field
-            name="created_by_alias"
-            type="text"
-            label="COM_SIMPLERENEW_COMMON_CREATED_BY_ALIAS_LABEL"
-            description="COM_SIMPLERENEW_COMMON_CREATED_BY_ALIAS_DESC"
-            size="20"/>
-
-        <field
-            name="created"
-            type="calendar"
-            label="COM_SIMPLERENEW_COMMON_CREATED_LABEL"
-            description="COM_SIMPLERENEW_COMMON_CREATED_DESC"
-            class="inputbox"
-            size="22"
-            readonly="true"
-            format="%Y-%m-%d %H:%M:%S"
-            filter="user_utc"/>
-
-        <field
-            name="modified"
-            type="calendar"
-            class="readonly"
-            label="COM_SIMPLERENEW_COMMON_MODIFIED_LABEL"
-            size="22"
-            readonly="true"
-            format="%Y-%m-%d %H:%M:%S"
-            filter="user_utc"/>
-
-        <field
-            name="modified_by"
-            type="user"
-            label="COM_SIMPLERENEW_COMMON_MODIFIED_BY_LABEL"
-            class="readonly"
-            readonly="true"
-            filter="unset"/>
 
         <field name="checked_out" type="hidden" filter="unset"/>
         <field name="checked_out_time" type="hidden" filter="unset"/>
