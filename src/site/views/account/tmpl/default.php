@@ -19,35 +19,32 @@ defined('_JEXEC') or die();
             <label><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
             <?php echo $this->user->firstname; ?>
         </div>
-    </div>
-
-    <div class="ost-section">
         <div class="block6">
             <label><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
             <?php echo $this->user->lastname; ?>
         </div>
     </div>
+    <!-- /.ost-section -->
 
     <div class="ost-section">
         <div class="block6">
             <label><?php echo JText::_('COM_SIMPLERENEW_USERNAME'); ?></label>
             <?php echo $this->user->username; ?>
         </div>
-    </div>
-
-    <div class="ost-section">
         <div class="block6">
             <label><?php echo JText::_('COM_SIMPLERENEW_EMAIL'); ?></label>
-            <?php echo $this->user->firstname; ?>
+            <?php echo $this->user->email; ?>
         </div>
     </div>
+    <!-- /.ost-section -->
 
-    <div class="ost-section">
-        <div class="block6">
+    <div class="ost-section p-bottom b-bottom">
+        <div class="block12">
             <label><?php echo JText::_('COM_SIMPLERENEW_MEMBER_GROUP'); ?></label>
             <?php echo $this->user->groupText; ?>
         </div>
     </div>
+    <!-- /.ost-section -->
 
     <?php echo $this->loadTemplate('billing'); ?>
 
