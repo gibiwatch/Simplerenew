@@ -12,17 +12,6 @@ abstract class SimplerenewHelper
 {
     public static function addSubmenu($vName)
     {
-        self::addMenuEntry(
-            JText::_('COM_SIMPLERENEW_SUBMENU_DASHBOARD'),
-            'index.php?option=com_simplerenew&view=dashboard',
-            $vName == 'dashboard'
-        );
-
-        self::addMenuEntry(
-            JText::_('COM_SIMPLERENEW_SUBMENU_PLANS'),
-            'index.php?option=com_simplerenew&view=plans',
-            $vName == 'plans'
-        );
     }
 
     /**
