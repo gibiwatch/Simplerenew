@@ -9,15 +9,12 @@
 defined('_JEXEC') or die();
 
 /**
- * @var JForm      $form
- * @var JFormField $field
+ * @var SimplerenewViewPlan $this
+ * @var JFormField          $field
  */
-$form      = $this->form;
-$fieldSets = $form->getFieldsets();
 
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
-//JHtml::_('formbehavior.chosen', 'select');
 
 $app = SimplerenewFactory::getApplication();
 $input = $app->input;
@@ -40,7 +37,7 @@ $input = $app->input;
 
     <div class="form-inline form-inline-header">
         <?php
-        $fields = $form->getFieldset('heading');
+        $fields = $this->form->getFieldset('heading');
         foreach ($fields as $field) {
             echo $field->renderField();
         }
@@ -51,20 +48,36 @@ $input = $app->input;
         <?php
         echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'main'));
 
-        echo $this->renderFieldset('main');
+        echo JHtml::_(
+            'bootstrap.addTab',
+            'myTab',
+            'main',
+            JText::_('COM_SIMPLERENEW_PLAN_PAGE_MAIN')
+        );
         ?>
-
+        <div class="row-fluid">
+            <fieldset class="adminform">
+                <?php echo $this->form->renderFieldset('main'); ?>
+            </fieldset>
+        </div>
         <?php
-        echo JHtml::_('bootstrap.addTab', 'myTab', 'description', JText::_('COM_SIMPLERENEW_PLAN_DESCRIPTION_LABEL')); ?>
+        echo JHtml::_('bootstrap.endTab');
+
+        echo JHtml::_(
+            'bootstrap.addTab',
+            'myTab',
+            'description',
+            JText::_('COM_SIMPLERENEW_PLAN_DESCRIPTION_LABEL')
+        ); ?>
         <div class="row-fluid">
             <fieldset class="adminform">
                 <?php echo $this->form->getInput('description'); ?>
             </fieldset>
-        </div >
+        </div>
         <?php echo JHtml::_('bootstrap.endTab'); ?>
     </div>
 
-    <input type="hidden" name="task" value="" />
-    <input type="hidden" name="return" value="<?php echo $input->getCmd('return'); ?>" />
+    <input type="hidden" name="task" value=""/>
+    <input type="hidden" name="return" value="<?php echo $input->getCmd('return'); ?>"/>
     <?php echo JHtml::_('form.token'); ?>
 </form>
