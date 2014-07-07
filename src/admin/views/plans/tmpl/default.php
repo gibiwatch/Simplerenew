@@ -116,30 +116,6 @@ else:
             <th class="nowrap">
                 <?php echo JText::_('COM_SIMPLERENEW_PLAN_TRIAL_PERIOD_LABEL'); ?>
             </th>
-
-            <th class="nowrap">
-                <?php
-                echo JHtml::_(
-                    'searchtools.sort',
-                    'COM_SIMPLERENEW_CREATED',
-                    'plan.created',
-                    $listDir,
-                    $listOrder
-                );
-                ?>
-            </th>
-
-            <th width="1%" class="nowrap">
-                <?php
-                echo JHtml::_(
-                    'searchtools.sort',
-                    'COM_SIMPLERENEW_ID_LABEL',
-                    'plan.id',
-                    $listDir,
-                    $listOrder
-                );
-                ?>
-            </th>
         </tr>
     </thead>
 
@@ -218,14 +194,6 @@ else:
                         $item->trial_length
                     );
                     ?>
-                </td>
-
-                <td>
-                    <?php echo $item->created; ?>
-                </td>
-
-                <td>
-                    <?php echo (int)$item->id; ?>
                 </td>
             </tr>
         <?php endforeach; ?>
