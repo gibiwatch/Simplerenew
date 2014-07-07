@@ -12,7 +12,7 @@ if ($this->billing):
     $payment = $this->billing->payment;
 
     ?>
-    <h3><?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?></h3>
+    <h3><span><i class="fa fa-file-excel-o"></i></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?></h3>
 
     <div class="ost-section ost-row-one">
         <div class="block3">
@@ -39,7 +39,7 @@ if ($this->billing):
         case 'CreditCard':
             ?>
 
-            <h3><?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?></h3>
+            <h3><span><i class="fa fa-credit-card"></i></span> <?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?></h3>
 
             <div class="ost-section ost-row-one">
                 <div class="block3">
@@ -77,7 +77,7 @@ if ($this->billing):
         case 'PayPal':
             ?>
 
-            <h3><?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?></h3>
+            <h3><span><i class="fa fa-paid-pier"></i></span> <?php echo JText::_('COM_SIMPLERENEW_PAYPAL'); ?></h3>
 
             <div class="ost-alert-warning">
                 Paypal is not supported yet
@@ -89,7 +89,7 @@ if ($this->billing):
         default:
             ?>
 
-            <h3><?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?></h3>
+            <h3><span><i class="fa fa-credit-card"></i></span> <?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?></h3>
 
             <div class="ost-alert-warning">
                 <?php echo JText::_('COM_SIMPLERENEW_ERROR_PAYMENT_TYPE_UNKNOWN'); ?>

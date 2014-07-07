@@ -14,7 +14,7 @@ defined('_JEXEC') or die();
         <h1><?php echo JText::_('COM_SIMPLERENEW_ACCOUNT_INFO'); ?></h1>
     </div>
 
-    <h3><?php echo JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'); ?></h3>
+    <h3><span><i class="fa fa-info-circle"></i></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'); ?></h3>
 
     <div class="ost-section ost-row-one">
         <div class="block3">
@@ -69,4 +69,5 @@ defined('_JEXEC') or die();
     <?php echo $this->loadTemplate('billing'); ?>
 
     <?php echo $this->loadTemplate('subscription'); ?>
+
 </div>

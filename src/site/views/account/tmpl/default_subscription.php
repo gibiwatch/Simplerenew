@@ -16,7 +16,7 @@ defined('_JEXEC') or die();
 
 if ($this->subscription):
     ?>
-    <h3><?php echo JText::_('COM_SIMPLERENEW_HEADING_SUBSCRIPTION'); ?></h3>
+    <h3><span><i class="fa fa-check"></i></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_SUBSCRIPTION'); ?></h3>
 
     <div class="ost-section ost-row-one">
         <div class="block3">
