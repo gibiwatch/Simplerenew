@@ -6,30 +6,46 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Api\Account;
+use Simplerenew\Api\Billing;
+use Simplerenew\Api\Plan;
+use Simplerenew\Api\Subscription;
+use Simplerenew\Container;
 use Simplerenew\Exception\NotFound;
+use Simplerenew\User\User;
 
 defined('_JEXEC') or die();
 
 class SimplerenewModelAccount extends SimplerenewModelSite
 {
+    /**
+     * @return User
+     */
     public function getUser()
     {
         $user = $this->getState('user.user');
-        if (!$user instanceof Simplerenew\User\User) {
+        if (!$user instanceof User) {
             $uid = (int)$this->getState('user.id');
-            $user = $this->getContainer()
-                ->getUser()
-                ->load($uid);
+            try {
+                $user = $this->getContainer()
+                    ->getUser()
+                    ->load($uid);
+            } catch (NotFound $e) {
+                // most likely not logged in
+            }
 
             $this->setState('user.user', $user);
         }
         return $user;
     }
 
+    /**
+     * @return null|Account
+     */
     public function getAccount()
     {
         $account = $this->getState('account');
-        if (!$account instanceof Simplerenew\Api\Account) {
+        if (!$account instanceof Account) {
             $user = $this->getUser();
             try {
                 $account = $this->getContainer()
@@ -42,10 +58,14 @@ class SimplerenewModelAccount extends SimplerenewModelSite
         }
         return $account;
     }
+
+    /**
+     * @return null|Billing
+     */
     public function getBilling()
     {
         $billing = $this->getState('account.billing');
-        if (!$billing instanceof Simplerenew\Api\Billing) {
+        if (!$billing instanceof Billing) {
             if ($account = $this->getAccount()) {
                 $billing = $this->getContainer()
                     ->getBilling()
@@ -56,10 +76,13 @@ class SimplerenewModelAccount extends SimplerenewModelSite
         return $billing;
     }
 
+    /**
+     * @return null|Subscription
+     */
     public function getSubscription()
     {
         $subscription = $this->getState('subscription', null);
-        if (!$subscription instanceof Simplerenew\Api\Subscription) {
+        if (!$subscription instanceof Subscription) {
             if ($account = $this->getAccount()) {
                 try {
                     $subscription = $this->getContainer()
@@ -75,10 +98,13 @@ class SimplerenewModelAccount extends SimplerenewModelSite
         return $subscription;
     }
 
+    /**
+     * @return null|Plan
+     */
     public function getPlan()
     {
         $plan = $this->getState('subscription.plan', null);
-        if (!$plan instanceof Simplerenew\Api\Plan) {
+        if (!$plan instanceof Plan) {
             if ($subscription = $this->getSubscription()) {
                 $plan = $this->getContainer()
                     ->getPlan()
@@ -88,10 +114,35 @@ class SimplerenewModelAccount extends SimplerenewModelSite
         }
         return $plan;
     }
+
+    /**
+     * @return null|Plan
+     */
+    public function getPending()
+    {
+        if ($subscription = $this->getSubscription()) {
+            if ($subscription->pending_plan) {
+                $pending = $this->getState('subscription.pending', null);
+                if (!$pending instanceof Plan || $pending->plan_code != $subscription->pending_plan) {
+                    $pending = $this->getContainer()
+                        ->getPlan()
+                        ->load($subscription->pending_plan);
+                    $pending->amount = $subscription->pending_amount;
+                    $this->setState('subscription.pending', $pending);
+                }
+            }
+        }
+
+        return empty($pending) ? null : $pending;
+    }
+
+    /**
+     * @return Container
+     */
     protected function getContainer()
     {
         $container = $this->getState('container');
-        if (!$container instanceof Simplerenew\Container) {
+        if (!$container instanceof Container) {
             $container = SimplerenewFactory::getContainer();
             $this->setState('container', $container);
         }

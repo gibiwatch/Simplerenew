@@ -62,6 +62,43 @@ if ($this->subscription):
             </div>
         </div>
     <?php
+        if ($this->subscription->canceled):
+            ?>
+            <div class="ost-section">
+                <div class="block6">
+                    <?php echo JText::_('COM_SIMPLERENEW_SUBSCRIPTION_CANCELED'); ?>
+                </div>
+            </div>
+    <?php
+        else:
+            ?>
+            <div class="ost-section">
+                <div class="block6">
+                    <?php
+                    echo JText::sprintf(
+                        'COM_SIMPLERENEW_SUBSCRIPTION_RENEW_DATE',
+                        $this->subscription->period_end->format('F j, Y')
+                    );
+                    ?>
+                </div>
+            </div>
+    <?php
+            if ($this->pending):
+                ?>
+                <div class="ost-section">
+                    <div class="block6">
+                        <?php
+                        echo JText::sprintf(
+                            'COM_SIMPLERENEW_SUBSCRIPTION_PENDING',
+                            $this->pending->name,
+                            '$' . number_format($this->pending->amount, 2)
+                        );
+                        ?>
+                    </div>
+                </div>
+    <?php
+            endif;
+        endif;
     endif;
 else:
     echo JText::_('COM_SIMPLERENEW_NON_SUBSCRIBER');
