@@ -25,12 +25,13 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
         'status'       => array(
             'state' => array(
                 'active'              => Subscription::STATUS_ACTIVE,
+                'canceled'            => Subscription::STATUS_CANCELED,
                 'expired'             => Subscription::STATUS_EXPIRED,
                 Object::MAP_UNDEFINED => Subscription::MAP_UNDEFINED
             )
         ),
         'enrolled'     => 'activated_at',
-        'canceled'     => 'canceld_at',
+        'canceled'     => 'canceled_at',
         'expires'      => 'expires_at',
         'period_start' => 'current_period_started_at',
         'period_end'   => 'current_period_ends_at',
@@ -81,18 +82,31 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
     /**
      * Set the API object properties from the native Recurly object
      *
-     * @param mixed        $subscription
+     * @param object       $subscription
      * @param Subscription $target
      *
      * @return void
      */
     protected function bindToSubscription($subscription, Subscription $target)
     {
-        $target->setProperties($subscription, $this->fieldMap);
+        $pending = array(
+            'plan'   => null,
+            'amount' => null
+        );
+        if (isset($subscription->pending_subscription)) {
+            $pending = array(
+                'plan'   => $subscription->pending_subscription->plan->plan_code,
+                'amount' => $subscription->pending_subscription->unit_amount_in_cents / 100
+            );
+        }
+        $pending_plan = isset($subscription->pending_subscription) ? $subscription->pending_subscription->plan->plan_code :
+            $target->setProperties($subscription, $this->fieldMap);
         $target->setProperties(
             array(
-                'plan' => $subscription->plan->plan_code,
-                'amount'    => $subscription->unit_amount_in_cents / 100
+                'plan'           => $subscription->plan->plan_code,
+                'amount'         => $subscription->unit_amount_in_cents / 100,
+                'pending_plan'   => $pending['plan'],
+                'pending_amount' => $pending['amount']
             )
         );
     }
@@ -123,14 +137,31 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
     }
 
     /**
+     * Get all subscriptions for the selected account. The Recurly state
+     * field will contain
+     *
      * @param Subscription $template
      * @param Account      $account
-     * @param int          $status
      *
      * @return array
      */
-    public function getList(Subscription $template, Account $account, $status = null)
+    public function getList(Subscription $template, Account $account)
     {
+        $subs = array();
+
+        \Recurly_Client::$apiKey = $this->client->apiKey();
+        $account                 = \Recurly_Account::get('OS_699');
+        $x = \Recurly_SubscriptionList::get(array('state' => 'past_due', 'per_page' => 10), $this->client);
+        //$x = \Recurly_SubscriptionList::getForAccount($account->account_code);
+        foreach ($x as $y) {
+            $this->bindToSubscription($y, $template);
+
+            echo '<pre>';
+            print_r($template->getProperties());
+            print_r($y);
+            echo '</pre>';
+            return;
+        }
     }
 
     /**

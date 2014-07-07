@@ -40,11 +40,10 @@ interface SubscriptionInterface
     /**
      * @param Subscription $parent
      * @param Account      $account
-     * @param int          $status
      *
      * @return array
      */
-    public function getList(Subscription $parent, Account $account, $status = null);
+    public function getList(Subscription $parent, Account $account);
 
     /**
      * Get the currently active subscription

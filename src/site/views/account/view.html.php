@@ -25,12 +25,24 @@ class SimplerenewViewAccount extends SimplerenewViewSite
      */
     protected $subscription = null;
 
+    /**
+     * @var Simplerenew\Api\Plan
+     */
+    protected $plan = null;
+
     public function display($tpl = null)
     {
-        $this->user = $this->get('User');
-        $this->billing = $this->get('Billing');
-        $this->subscription = $this->get('Subscription');
-
+        try {
+            $this->user         = $this->get('User');
+            $this->billing      = $this->get('Billing');
+            $this->subscription = $this->get('Subscription');
+            $this->plan         = $this->get('Plan');
+        } catch (Exception $e) {
+            SimplerenewFactory::getApplication()->enqueueMessage(
+                'Houston, we have a problem: ' . $e->getMessage(),
+                'error'
+            );
+        }
         parent::display($tpl);
     }
 }

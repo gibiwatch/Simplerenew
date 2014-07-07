@@ -17,9 +17,10 @@ defined('_JEXEC') or die();
 
 class Subscription extends AbstractApiBase
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_EXPIRED = 0;
-    const STATUS_UNKNOWN = -1;
+    const STATUS_ACTIVE   = 1;
+    const STATUS_CANCELED = 2;
+    const STATUS_EXPIRED  = 3;
+    const STATUS_UNKNOWN  = 0;
 
     /**
      * @var string
@@ -85,6 +86,16 @@ class Subscription extends AbstractApiBase
      * @var \DateTime
      */
     public $trial_end = null;
+
+    /**
+     * @var string
+     */
+    public $pending_plan = null;
+
+    /**
+     * @var float
+     */
+    public $pending_amount = null;
 
     /**
      * @var SubscriptionInterface

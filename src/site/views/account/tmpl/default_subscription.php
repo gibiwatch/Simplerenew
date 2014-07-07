@@ -6,7 +6,13 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Api\Subscription;
+
 defined('_JEXEC') or die();
+
+/**
+ * @var SimplerenewViewAccount $this
+ */
 
 if ($this->subscription):
     ?>
@@ -15,24 +21,48 @@ if ($this->subscription):
     <div class="ost-section">
         <div class="block6">
             <label><?php echo JText::_('COM_SIMPLERENEW_PLAN'); ?></label>
-            <?php echo $this->subscription->plan->name; ?>
-        </div>
-    </div>
-
-    <div class="ost-section">
-        <div class="block6">
-            <label><?php echo JText::_('COM_SIMPLERENEW_PERIOD_END'); ?></label>
-            <?php
-            echo JHtml::_(
-                'datetime.format',
-                $this->subscription->period_end,
-                JText::_('COM_SIMPLERENEW_NO_PERIOD_END')
-            );
-            ?>
+            <?php echo $this->plan->name; ?>
         </div>
     </div>
 
     <?php
+    if ($this->subscription->status == Subscription::STATUS_EXPIRED):
+        ?>
+        <div class="ost_section">
+            <div class="block6">
+                <?php
+                echo JText::sprintf(
+                    'COM_SIMPLERENEW_SUBSCRIPTION_EXPIRED',
+                    $this->subscription->expires->format('F j, Y')
+                );
+                ?>
+                <br/>
+                <?php
+                JHtml::_(
+                    'link',
+                    '#',
+                    JText::_('COM_SIMPLERENEW_SUBSCRIPTION_RESUBCRIBE'),
+                    'onclick="alert(\'Under Construction\');return false;"'
+                );
+                ?>
+            </div>
+        </div>
+    <?php
+    else:
+        ?>
+        <div class="ost-section">
+            <div class="block6">
+                <?php
+                echo JText::sprintf(
+                    'COM_SIMPLERENEW_SUBSCRIPTION_ACTIVE_PERIOD',
+                    $this->subscription->period_start->format('F j, Y'),
+                    $this->subscription->period_end->format('F j, Y')
+                );
+                ?>
+            </div>
+        </div>
+    <?php
+    endif;
 else:
     echo JText::_('COM_SIMPLERENEW_NON_SUBSCRIBER');
 endif;

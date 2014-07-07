@@ -6,6 +6,8 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Exception\NotFound;
+
 defined('_JEXEC') or die();
 
 class SimplerenewModelAccount extends SimplerenewModelSite
@@ -29,10 +31,14 @@ class SimplerenewModelAccount extends SimplerenewModelSite
         $account = $this->getState('account');
         if (!$account instanceof Simplerenew\Api\Account) {
             $user = $this->getUser();
-            $account = $this->getContainer()
-                ->getAccount()
-                ->load($user);
-            $this->setState('account', $account);
+            try {
+                $account = $this->getContainer()
+                    ->getAccount()
+                    ->load($user);
+                $this->setState('account', $account);
+            } catch (NotFound $e) {
+                // No account, no worries
+            }
         }
         return $account;
     }
@@ -40,11 +46,12 @@ class SimplerenewModelAccount extends SimplerenewModelSite
     {
         $billing = $this->getState('account.billing');
         if (!$billing instanceof Simplerenew\Api\Billing) {
-            $account = $this->getAccount();
-            $billing = $this->getContainer()
-                ->getBilling()
-                ->load($account);
-            $this->setState('account.billing', $billing);
+            if ($account = $this->getAccount()) {
+                $billing = $this->getContainer()
+                    ->getBilling()
+                    ->load($account);
+                $this->setState('account.billing', $billing);
+            }
         }
         return $billing;
     }
@@ -53,22 +60,34 @@ class SimplerenewModelAccount extends SimplerenewModelSite
     {
         $subscription = $this->getState('subscription', null);
         if (!$subscription instanceof Simplerenew\Api\Subscription) {
-            $account = $this->getAccount();
-            $subscription = $this->getContainer()
-                ->getSubscription()
-                ->loadActive($account);
-
-            $plan = $this->getContainer()
-                ->getPlan()
-                ->load($subscription->plan);
-
-            $subscription->plan = $plan;
-            $this->setState('subscription', $subscription);
+            if ($account = $this->getAccount()) {
+                try {
+                    $subscription = $this->getContainer()
+                        ->getSubscription()
+                        ->loadActive($account);
+                    $this->setState('subscription', $subscription);
+                } catch (NotFound $e) {
+                    // No Subscription is fine
+                }
+            }
         }
 
         return $subscription;
     }
 
+    public function getPlan()
+    {
+        $plan = $this->getState('subscription.plan', null);
+        if (!$plan instanceof Simplerenew\Api\Plan) {
+            if ($subscription = $this->getSubscription()) {
+                $plan = $this->getContainer()
+                    ->getPlan()
+                    ->load($subscription->plan);
+                $this->setState('subscription.plan', $plan);
+            }
+        }
+        return $plan;
+    }
     protected function getContainer()
     {
         $container = $this->getState('container');
