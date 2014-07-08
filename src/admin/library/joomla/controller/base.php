@@ -15,7 +15,7 @@ class SimplerenewControllerBase extends JControllerLegacy
      *
      * @return void
      */
-    protected function checktoken()
+    protected function checkToken()
     {
         if (!JSession::checkToken()) {
             $home = SimplerenewFactory::getApplication()->getMenu()->getDefault();

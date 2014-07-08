@@ -12,5 +12,8 @@ jimport('joomla.application.component.controlleradmin');
 
 abstract class SimplerenewControllerAdmin extends JControllerAdmin
 {
-
+    protected function checkToken()
+    {
+        JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+    }
 }

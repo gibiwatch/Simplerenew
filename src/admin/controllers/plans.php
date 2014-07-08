@@ -20,7 +20,7 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
 
     public function sync()
     {
-        JSession::checkToken() or die(JText::_('JINVALID_TOKEN'));
+        $this->checkToken();
 
         $params    = SimplerenewComponentHelper::getParams('com_simplerenew');
         $returnUrl = 'index.php?option=com_simplerenew&view=plans';
