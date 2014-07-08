@@ -27,7 +27,7 @@ if ($this->billing->payment instanceof PayPal) {
 ?>
 <h3><?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?></h3>
 
-<div id="content_card" class="content-enabled">
+<div id="content_card" class="content-enabled m-bottom">
     <div class="p-full">
         <div class="ost-section">
             <div class="block6">
