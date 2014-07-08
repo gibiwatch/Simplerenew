@@ -25,7 +25,7 @@ if ($this->billing->payment instanceof PayPal) {
 }
 
 ?>
-<h3><?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?></h3>
+<h3><span><?php echo JText::_('COM_SIMPLERENEW_HEADING_STEP2'); ?></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?></h3>
 
 <div class="ost-section">
     <div class="block6">
