@@ -74,10 +74,12 @@ if ($this->billing->payment instanceof Payment\PayPal) {
         <!-- /.ost-section -->
 
         <?php
-        if (!empty($paypal)) {
-            echo JText::sprintf('COM_SIMPLERENEW_BILLING_EDIT_PAYPAL', $paypal->agreementId);
-        }
-        ?>
+        if (!empty($paypal)): ?>
+            <div class="ost-alert-warning">
+                <?php echo JText::sprintf('COM_SIMPLERENEW_BILLING_EDIT_PAYPAL', $paypal->agreementId); ?>
+            </div>
+        <?php
+        endif; ?>
 
         <div class="ost-section">
             <div class="block6">
