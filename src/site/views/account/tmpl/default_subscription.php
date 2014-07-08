@@ -52,7 +52,7 @@ if ($this->subscription):
     <?php
     else:
         ?>
-        <div class="ost-alert-notify">
+        <div class="ost-alert-success">
             <?php
             echo JText::sprintf(
                 'COM_SIMPLERENEW_SUBSCRIPTION_ACTIVE_PERIOD',
