@@ -27,8 +27,6 @@ if ($this->billing->payment instanceof PayPal) {
 ?>
 <h3><?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?></h3>
 
-
-
 <div class="ost-section">
     <div class="block6">
         <label for="billing_firstname"><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
@@ -51,11 +49,11 @@ if ($this->billing->payment instanceof PayPal) {
 </div>
 <!-- /.ost-section -->
 
-<?php
-if (!empty($paypal)) {
-    echo JText::sprintf('COM_SIMPLERENEW_BILLING_EDIT_PAYPAL', $paypal->agreementId);
-}
-?>
+<?php if (!empty($paypal)) { ?>
+    <div class="ost-alert-warning">
+        <?php echo JText::sprintf('COM_SIMPLERENEW_BILLING_EDIT_PAYPAL', $paypal->agreementId); ?>
+    </div>
+<?php } ?>
 
 <div class="ost-section m-bottom">
     <div class="block6">
