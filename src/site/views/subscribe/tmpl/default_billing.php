@@ -6,20 +6,19 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-use Simplerenew\Primitive\CreditCard;
-use Simplerenew\Primitive\PayPal;
+use Simplerenew\Primitive as Payment;
 
 defined('_JEXEC') or die();
 
 /**
  * @var SimplerenewViewSubscribe $this
- * @var Paypal                   $paypal
- * @var CreditCard               $creditCard
+ * @var Payment\Paypal           $paypal
+ * @var Payment\CreditCard       $creditCard
  */
 
-if ($this->billing->payment instanceof PayPal) {
+if ($this->billing->payment instanceof Payment\PayPal) {
     $paypal     = $this->billing->payment;
-    $creditCard = new CreditCard();
+    $creditCard = new Payment\CreditCard();
 } else {
     $creditCard = $this->billing->payment;
 }
