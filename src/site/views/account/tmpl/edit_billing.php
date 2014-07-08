@@ -6,26 +6,28 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-use Simplerenew\Primitive\PayPal;
-use Simplerenew\Primitive\CreditCard;
+use Simplerenew\Primitive as Payment;
 
 defined('_JEXEC') or die();
 
 /**
  * @var SimplerenewViewAccount $this
- * @var PayPal                 $paypal
- * @var CreditCard             $creditCard
+ * @var Payment\PayPal         $paypal
+ * @var Payment\CreditCard     $creditCard
  */
 
-if ($this->billing->payment instanceof PayPal) {
-    $paypal = $this->billing->payment;
-    $creditCard = new CreditCard();
+if ($this->billing->payment instanceof Payment\PayPal) {
+    $paypal     = $this->billing->payment;
+    $creditCard = new Payment\CreditCard();
 } else {
     $creditCard = $this->billing->payment;
 }
 
 ?>
-<h3><span><?php echo JText::_('COM_SIMPLERENEW_HEADING_STEP2'); ?></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?></h3>
+<h3>
+    <span><?php echo JText::_('COM_SIMPLERENEW_HEADING_STEP2'); ?></span>
+    <?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?>
+</h3>
 
 <div class="ost-section">
     <div class="block6">
@@ -49,11 +51,13 @@ if ($this->billing->payment instanceof PayPal) {
 </div>
 <!-- /.ost-section -->
 
-<?php if (!empty($paypal)) { ?>
+<?php
+if (!empty($paypal)): ?>
     <div class="ost-alert-warning">
         <?php echo JText::sprintf('COM_SIMPLERENEW_BILLING_EDIT_PAYPAL', $paypal->agreementId); ?>
     </div>
-<?php } ?>
+    <?php
+endif; ?>
 
 <div class="ost-section m-bottom">
     <div class="block6">
