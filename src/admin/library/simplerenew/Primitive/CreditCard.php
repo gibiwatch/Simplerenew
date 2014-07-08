@@ -41,4 +41,19 @@ class CreditCard extends AbstractPayment
      * @var string
      */
     public $lastFour = null;
+
+    public function __construct($data = null)
+    {
+        if (is_object($data)) {
+            $data = get_object_vars($data);
+        }
+
+        if (empty($data['year']) || empty($data['month'])) {
+            $ccDate        = getdate();
+            $ccDate        = getdate(mktime(0, 0, 0, $ccDate['mon'] + 1, 1, $ccDate['year']));
+            $data['year']  = $ccDate['year'];
+            $data['month'] = $ccDate['mon'];
+        }
+        parent::__construct($data);
+    }
 }
