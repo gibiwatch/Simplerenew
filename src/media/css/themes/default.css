@@ -186,21 +186,24 @@
  ========================================================================== */
 .ost-alert-warning{
     background: #fff1f0;
-    border-color: rgba(216, 80, 48, 0.3);
+    border: 1px solid rgba(216,80,48, 0.2);
     color: #d85030;
     padding: 15px;
+    margin: 2px 0;
 }
 .ost-alert-success{
     background: #f2fae3;
-    border-color: rgba(101, 159, 19, 0.3);
+    border: 1px solid rgba(101,159,19, 0.2);
     color: #659f13;
     padding: 15px;
+    margin: 2px 0;
 }
 .ost-alert-notify{
     background: #ebf7fd;
-    border-color: rgba(235,247,253, 0.3);
+    border: 1px solid rgba(45,112,145,0.2);
     color: #2d7091;
     padding: 15px;
+    margin: 2px 0;
 }
 
 /* Subscribe view
