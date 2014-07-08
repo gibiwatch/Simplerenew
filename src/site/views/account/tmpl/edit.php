@@ -7,5 +7,44 @@
  */
 
 defined('_JEXEC') or die();
+
+/**
+ * @var SimplerenewViewAccount $this
+ */
+$app = SimplerenewFactory::getApplication();
+
 ?>
-This is the account editing form
+<form
+    action="index.php"
+    method="post"
+    name="item-form"
+    id="item-form"
+    class="form-validate">
+
+    <?php echo $this->loadTemplate('account'); ?>
+
+    <?php echo $this->loadTemplate('billing'); ?>
+
+    <input
+        type="hidden"
+        name="id"
+        value="<?php echo $this->user->id; ?>"/>
+
+    <input
+        type="hidden"
+        name="option"
+        value="com_simplerenew"/>
+    <input
+        type="hidden"
+        name="Itemid"
+        value="<?php echo $app->input->getInt('Itemid'); ?>"/>
+
+    <input
+        type="hidden"
+        name="task"
+        value="account.save"/>
+
+    <input type="submit" value="Save"/>
+
+    <?php echo JHtml::_('form.token'); ?>
+</form>
