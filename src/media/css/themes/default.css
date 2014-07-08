@@ -247,6 +247,13 @@ span.simplerenew-plan:hover{
     background: #fbfbfb;
 }
 
+#billing_cc_number,
+#billing_cc_cvv,
+#billing_cc_year,
+#billing_cc_month {
+    margin-bottom: 4px;
+}
+
 /* Account view
  ========================================================================== */
 .ost-row-one{
