@@ -3,6 +3,7 @@
 .*
 *.bak
 *~
+build.properties
 !.gitignore
 !.htaccess
 
