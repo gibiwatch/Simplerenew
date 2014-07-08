@@ -12,15 +12,23 @@ if ($this->billing):
     $payment = $this->billing->payment;
 
     ?>
-    <h3><?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?></h3>
+    <h3><span><i class="fa fa-file-excel-o"></i></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?></h3>
 
-    <div class="ost-section p-bottom b-bottom">
-        <div class="block6">
+    <div class="ost-section ost-row-one">
+        <div class="block3">
             <label><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
+        </div>
+        <div class="block9">
             <?php echo $this->billing->firstname; ?>
         </div>
-        <div class="block6">
+    </div>
+    <!-- /.ost-section -->
+
+    <div class="ost-section ost-row-two m-bottom b-bottom">
+        <div class="block3">
             <label><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
+        </div>
+        <div class="block9">
             <?php echo $this->billing->lastname; ?>
         </div>
     </div>
@@ -31,19 +39,33 @@ if ($this->billing):
         case 'CreditCard':
             ?>
 
-            <h3><?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?></h3>
+            <h3><span><i class="fa fa-credit-card"></i></span> <?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?></h3>
 
-            <div class="ost-section p-bottom b-bottom">
-                <div class="block6">
+            <div class="ost-section ost-row-one">
+                <div class="block3">
                     <label><?php echo JText::_('COM_SIMPLERENEW_CC_TYPE'); ?></label>
+                </div>
+                <div class="block9">
                     <?php echo $payment->type; ?>
                 </div>
-                <div class="block2">
+            </div>
+            <!-- /.ost-section -->
+
+            <div class="ost-section ost-row-two">
+                <div class="block3">
                     <label><?php echo JText::_('COM_SIMPLERENEW_CC_NUMBER'); ?></label>
+                </div>
+                <div class="block9">
                     <?php echo JHtml::_('creditcard.mask', $payment->lastFour); ?>
                 </div>
-                <div class="block4">
+            </div>
+            <!-- /.ost-section -->
+
+            <div class="ost-section ost-row-one m-bottom b-bottom">
+                <div class="block3">
                     <label><?php echo JText::_('COM_SIMPLERENEW_CC_EXPIRATION'); ?></label>
+                </div>
+                <div class="block9">
                     <?php echo JHtml::_('creditcard.expiration', $payment->month, $payment->year); ?>
                 </div>
             </div>
@@ -53,22 +75,37 @@ if ($this->billing):
             break;
 
         case 'PayPal':
-            echo 'Paypal is not supported yet';
+            ?>
+
+            <h3><span><i class="fa fa-paid-pier"></i></span> <?php echo JText::_('COM_SIMPLERENEW_PAYPAL'); ?></h3>
+
+            <div class="ost-alert-warning">
+                Paypal is not supported yet
+            </div>
+
+            <?php
             break;
 
         default:
-            echo JText::_('COM_SIMPLERENEW_ERROR_PAYMENT_TYPE_UNKNOWN');
+            ?>
+
+            <h3><span><i class="fa fa-credit-card"></i></span> <?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?></h3>
+
+            <div class="ost-alert-warning">
+                <?php echo JText::_('COM_SIMPLERENEW_ERROR_PAYMENT_TYPE_UNKNOWN'); ?>
+            </div>
+
+            <?php
             break;
 
     } // endswitch
 else:
     ?>
-    <div class="ost-section">
-        <div class="block12">
-            <?php echo JText::_('COM_SIMPLERENEW_NO_BILLING_INFO'); ?>
-        </div>
+
+    <div class="ost-alert-warning">
+        <?php echo JText::_('COM_SIMPLERENEW_NO_BILLING_INFO'); ?>
     </div>
-    <!-- /.ost-section -->
+
 <?php
 endif;
 

@@ -16,90 +16,89 @@ defined('_JEXEC') or die();
 
 if ($this->subscription):
     ?>
-    <h3><?php echo JText::_('COM_SIMPLERENEW_HEADING_SUBSCRIPTION'); ?></h3>
+    <h3><span><i class="fa fa-check"></i></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_SUBSCRIPTION'); ?></h3>
 
-    <div class="ost-section">
-        <div class="block6">
+    <div class="ost-section ost-row-one">
+        <div class="block3">
             <label><?php echo JText::_('COM_SIMPLERENEW_PLAN'); ?></label>
+        </div>
+        <div class="block9">
             <?php echo $this->plan->name; ?>
         </div>
     </div>
+    <!-- /.ost-section -->
 
     <?php
     if ($this->subscription->status == Subscription::STATUS_EXPIRED):
         ?>
-        <div class="ost_section">
-            <div class="block6">
-                <?php
-                echo JText::sprintf(
-                    'COM_SIMPLERENEW_SUBSCRIPTION_EXPIRED',
-                    $this->subscription->expires->format('F j, Y')
-                );
-                ?>
-                <br/>
-                <?php
-                JHtml::_(
-                    'link',
-                    '#',
-                    JText::_('COM_SIMPLERENEW_SUBSCRIPTION_RESUBCRIBE'),
-                    'onclick="alert(\'Under Construction\');return false;"'
-                );
-                ?>
-            </div>
+        <div class="ost-alert-warning">
+            <?php
+             echo JText::sprintf(
+                'COM_SIMPLERENEW_SUBSCRIPTION_EXPIRED',
+                $this->subscription->expires->format('F j, Y')
+             );
+             ?>
+             <br/>
+             <?php
+             JHtml::_(
+                'link',
+                '#',
+                JText::_('COM_SIMPLERENEW_SUBSCRIPTION_RESUBCRIBE'),
+                'onclick="alert(\'Under Construction\');return false;"'
+             );
+             ?>
         </div>
     <?php
     else:
         ?>
-        <div class="ost-section">
-            <div class="block6">
-                <?php
-                echo JText::sprintf(
-                    'COM_SIMPLERENEW_SUBSCRIPTION_ACTIVE_PERIOD',
-                    $this->subscription->period_start->format('F j, Y'),
-                    $this->subscription->period_end->format('F j, Y')
-                );
-                ?>
-            </div>
+        <div class="ost-alert-success">
+            <?php
+            echo JText::sprintf(
+                'COM_SIMPLERENEW_SUBSCRIPTION_ACTIVE_PERIOD',
+                $this->subscription->period_start->format('F j, Y'),
+                $this->subscription->period_end->format('F j, Y')
+            );
+            ?>
         </div>
     <?php
         if ($this->subscription->canceled):
             ?>
-            <div class="ost-section">
-                <div class="block6">
-                    <?php echo JText::_('COM_SIMPLERENEW_SUBSCRIPTION_CANCELED'); ?>
-                </div>
+            <div class="ost-alert-notify">
+                <?php echo JText::_('COM_SIMPLERENEW_SUBSCRIPTION_CANCELED'); ?>
             </div>
     <?php
         else:
             ?>
-            <div class="ost-section">
-                <div class="block6">
-                    <?php
-                    echo JText::sprintf(
-                        'COM_SIMPLERENEW_SUBSCRIPTION_RENEW_DATE',
-                        $this->subscription->period_end->format('F j, Y')
-                    );
-                    ?>
-                </div>
+            <div class="ost-alert-notify">
+                <?php
+                echo JText::sprintf(
+                    'COM_SIMPLERENEW_SUBSCRIPTION_RENEW_DATE',
+                    $this->subscription->period_end->format('F j, Y')
+                );
+                ?>
             </div>
     <?php
             if ($this->pending):
                 ?>
-                <div class="ost-section">
-                    <div class="block6">
-                        <?php
-                        echo JText::sprintf(
-                            'COM_SIMPLERENEW_SUBSCRIPTION_PENDING',
-                            $this->pending->name,
-                            '$' . number_format($this->pending->amount, 2)
-                        );
-                        ?>
-                    </div>
+                <div class="ost-alert-notify">
+                    <?php
+                    echo JText::sprintf(
+                        'COM_SIMPLERENEW_SUBSCRIPTION_PENDING',
+                        $this->pending->name,
+                        '$' . number_format($this->pending->amount, 2)
+                    );
+                    ?>
                 </div>
     <?php
             endif;
         endif;
     endif;
 else:
-    echo JText::_('COM_SIMPLERENEW_NON_SUBSCRIBER');
+    ?>
+
+    <div class="ost-alert-notify">
+        <?php echo JText::_('COM_SIMPLERENEW_NON_SUBSCRIBER'); ?>
+    </div>
+
+<?php
 endif;
