@@ -72,12 +72,10 @@ if ($this->billing):
 
     <?php
     elseif ($payment instanceof Payment\PayPal): ?>
-        <h3><span><i class="fa fa-paid-pier"></i></span> <?php echo JText::_('COM_SIMPLERENEW_PAYPAL'); ?></h3>
+        <h3><span><i class="fa fa-pied-piper"></i></span> <?php echo JText::_('COM_SIMPLERENEW_PAYPAL'); ?></h3>
 
-        <div class="ost-section ost-row-one">
-            <div class="block8">
-                <label><?php echo JText::sprintf('COM_SIMPLERENEW_PAYPAL_AGREEMENTID', $payment->agreementId); ?></label>
-            </div>
+        <div class="ost-alert-success">
+            <?php echo JText::sprintf('COM_SIMPLERENEW_PAYPAL_AGREEMENTID', $payment->agreementId); ?>
         </div>
         <!-- /.ost-section -->
 
