@@ -12,7 +12,7 @@ abstract class JHtmlCreditcard
 {
     public static function mask($lastFour)
     {
-        return str_pad($lastFour, 16, '*', STR_PAD_LEFT);
+        return $lastFour ? str_pad($lastFour, 16, '*', STR_PAD_LEFT) : '';
     }
 
     public static function expiration($month, $year)
