@@ -6,9 +6,30 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Primitive\CreditCard;
+use Simplerenew\Primitive\PayPal;
+
 defined('_JEXEC') or die();
+
+/**
+ * @var SimplerenewViewSubscribe $this
+ * @var Paypal                   $paypal
+ * @var CreditCard               $creditCard
+ */
+
+if ($this->billing->payment instanceof PayPal) {
+    $paypal     = $this->billing->payment;
+    $creditCard = new CreditCard();
+} else {
+    $creditCard = $this->billing->payment;
+}
 ?>
-<h3><span><?php echo JText::_('COM_SIMPLERENEW_HEADING_STEP3'); ?></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?></h3>
+<h3>
+    <span>
+        <?php echo JText::_('COM_SIMPLERENEW_HEADING_STEP3'); ?>
+    </span>
+    <?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?>
+</h3>
 
 <div class="ost-section">
     <div class="block3 tab-disabled" id="tab_paypal">
@@ -53,6 +74,12 @@ defined('_JEXEC') or die();
         </div>
         <!-- /.ost-section -->
 
+        <?php
+        if (!empty($paypal)) {
+            echo JText::sprintf('COM_SIMPLERENEW_BILLING_EDIT_PAYPAL', $paypal->agreementId);
+        }
+        ?>
+
         <div class="ost-section">
             <div class="block6">
                 <label><?php echo JText::_('COM_SIMPLERENEW_CC_NUMBER'); ?></label>
@@ -61,6 +88,7 @@ defined('_JEXEC') or die();
                     name="billing[cc][number]"
                     type="text"
                     value=""
+                    placeholder="<?php echo JHtml::_('creditcard.mask', $creditCard->lastFour); ?>"
                     required="true"/>
             </div>
             <div class="block2">
@@ -75,8 +103,22 @@ defined('_JEXEC') or die();
             </div>
             <div class="block4">
                 <label><?php echo JText::_('COM_SIMPLERENEW_CC_EXPIRATION'); ?></label>
-                <?php echo JHtml::_('srselect.ccyear', 'billing[cc][year]', 'class="small-width"', $this->billing->year, 'billing_cc_year'); ?>
-                <?php echo JHtml::_('srselect.ccmonth', 'billing[cc][month]', 'class="medium-width"', $this->billing->month, 'billing_cc_month'); ?>
+                <?php
+                echo JHtml::_(
+                    'srselect.ccyear',
+                    'billing[cc][year]',
+                    'class="small-width"',
+                    $creditCard->year,
+                    'billing_cc_year'
+                ); ?>
+                <?php
+                echo JHtml::_(
+                    'srselect.ccmonth',
+                    'billing[cc][month]',
+                    'class="medium-width"',
+                    $creditCard->month,
+                    'billing_cc_month'
+                ); ?>
             </div>
         </div>
         <!-- /.ost-section -->

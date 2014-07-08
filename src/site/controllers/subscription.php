@@ -29,7 +29,7 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
      */
     public function create()
     {
-        $this->checktoken();
+        $this->checkToken();
 
         SimplerenewHelper::saveFormData(
             'subscribe.create',
