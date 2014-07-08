@@ -14,37 +14,48 @@ defined('_JEXEC') or die();
 $app = SimplerenewFactory::getApplication();
 
 ?>
-<form
-    action="index.php"
-    method="post"
-    name="item-form"
-    id="item-form"
-    class="form-validate">
+<div class="ost-container simplerenew-edit-account">
 
-    <?php echo $this->loadTemplate('account'); ?>
+    <div class="page-header">
+        <h1><?php echo JText::_('COM_SIMPLERENEW_ACCOUNT_EDIT'); ?></h1>
+    </div>
 
-    <?php echo $this->loadTemplate('billing'); ?>
+    <form
+        action="index.php"
+        method="post"
+        name="item-form"
+        id="item-form"
+        class="form-validate">
 
-    <input
-        type="hidden"
-        name="id"
-        value="<?php echo $this->user->id; ?>"/>
+        <?php echo $this->loadTemplate('account'); ?>
 
-    <input
-        type="hidden"
-        name="option"
-        value="com_simplerenew"/>
-    <input
-        type="hidden"
-        name="Itemid"
-        value="<?php echo $app->input->getInt('Itemid'); ?>"/>
+        <?php echo $this->loadTemplate('billing'); ?>
 
-    <input
-        type="hidden"
-        name="task"
-        value="account.save"/>
+        <input
+            type="hidden"
+            name="id"
+            value="<?php echo $this->user->id; ?>"/>
 
-    <input type="submit" value="Save"/>
+        <input
+            type="hidden"
+            name="option"
+            value="com_simplerenew"/>
+        <input
+            type="hidden"
+            name="Itemid"
+            value="<?php echo $app->input->getInt('Itemid'); ?>"/>
 
-    <?php echo JHtml::_('form.token'); ?>
-</form>
+        <input
+            type="hidden"
+            name="task"
+            value="account.save"/>
+
+        <input
+            type="submit"
+            value="<?php echo JText::_('COM_SIMPLERENEW_SAVE'); ?>"
+            class="btn-main btn-big"/>
+
+        <?php echo JHtml::_('form.token'); ?>
+    </form>
+
+</div>
