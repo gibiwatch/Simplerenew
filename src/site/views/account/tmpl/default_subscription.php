@@ -44,7 +44,8 @@ if ($this->subscription):
                 'link',
                 '#',
                 JText::_('COM_SIMPLERENEW_SUBSCRIPTION_RESUBCRIBE'),
-                'onclick="alert(\'Under Construction\');return false;"'
+                'onclick="alert(\'Under Construction\');return false;"',
+                'class="btn-main"'
              );
              ?>
         </div>
