@@ -76,12 +76,39 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             );
         }
 
-        // All went well! Regardless of Joomla settings, log in the user if not already logged in
-        $password = $app->input->getString('password');
-        $user->login($password, true);
+        // All went well! Valid billing information confirms the user so login them in
+        try {
+            $currentUser = SimplerenewFactory::getContainer()->getUser();
+            try {
+                $currentUser->load();
 
+            } catch (Exception $e) {
+                // No one logged in
+            }
+
+            // Logout current user if there is one
+            if ($currentUser->id > 0 && $currentUser->id != $user->id) {
+                $currentUser->logout();
+            }
+
+            //Regardless of Joomla settings, log in the user if not already logged in
+            $password = $app->input->getString('password');
+            $user->login($password, true);
+
+            $currentUser->load();
+
+        } catch (Exception $e) {
+            // Not a big deal but leave a message
+            $app->enqueueMessage(
+                JText::_('COM_SIMPLERENEW_WARN_SUBSCRIBE_USER_LOGIN_FAILED'),
+                'notice'
+            );
+        }
+
+        // Create the subscription
         try {
             $model->createSubscription($account, $app->input->getString('planCode'));
+
         } catch (Exception $e) {
             return $this->callerReturn(
                 $e->getMessage(),

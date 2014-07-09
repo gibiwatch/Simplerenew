@@ -8,7 +8,6 @@
 
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Billing;
-use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\Primitive\CreditCard;
@@ -30,39 +29,46 @@ class SimplerenewModelGateway extends SimplerenewModelSite
     {
         $app       = SimplerenewFactory::getApplication();
         $container = SimplerenewFactory::getContainer();
+        $data      = new JRegistry($data ? : $this->getState()->getProperties());
         $user      = $container->getUser();
 
-        if ($data === null) {
-            $data = array(
-                'id'        => $app->input->getInt('userid'),
-                'firstname' => $app->input->getString('firstname'),
-                'lastname'  => $app->input->getString('lastname'),
-                'username'  => $app->input->getUsername('username'),
-                'email'     => $app->input->getString('email'),
-                'password'  => $app->input->getString('password'),
-                'password2' => $app->input->getString('password2')
-            );
+        if (!$data->get('id')) {
+            // Check for existing user
+            try {
+                $user->loadByUsername($data->get('username'));
+                $data->set('id', $user->id);
+
+            } catch (NotFound $e) {
+                // User doesn't exist is okay
+            }
         }
 
-        if (empty($data['id'])) {
+        $password  = $data->get('password');
+        $password2 = $data->get('password2');
+        if ($data->get('id') <= 0) {
             // Create a new user
-            if (empty($data['password'])) {
+            if (!$password) {
                 throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_PASSWORD_EMPTY'));
 
-            } elseif (empty($data['password2']) || ($data['password'] !== $data['password2'])) {
+            } elseif (!$password2 || ($password !== $password2)) {
                 throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_PASSWORD_MISMATCH'));
             }
-
             $user->setProperties($data)->create();
+
         } else {
-            // Specific user subscription request
-            $currentUser = $container->getUser()->load();
-            if ($currentUser->id && $currentUser->id != $data['id']) {
-                if (!$user->validate($data['password'])) {
-                    throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_PASSWORD_INCORRECT'));
-                }
+            // User exists, Verify existing credentials
+            if (!$password || ($password !== $password2)) {
+                throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_PASSWORD_VERIFY_REQUIRED'));
             }
-            // The requested user is logged in or password valid
+            if (!$user->validate($password)) {
+                throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_PASSWORD_INCORRECT'));
+            }
+            if (!$user->enabled && ($user->email != $data->get('email'))) {
+                // For users not yet confirmed, we want to match the email address as well
+                throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_EMAIL_VERIFY_REQUIRED'));
+            }
+
+            // We've verified we can do this
             $user->setProperties($data)->update();
         }
         return $user;
@@ -186,5 +192,42 @@ class SimplerenewModelGateway extends SimplerenewModelSite
         $subscription->create($account, $plan);
 
         return $subscription;
+    }
+
+    protected function populateState()
+    {
+        $app = SimplerenewFactory::getApplication();
+
+        $billingData = new JInput($app->input->get('billing', null, 'array'));
+        $ccData      = new JInput($billingData->get('cc', null, 'array'));
+
+        $data = array(
+            'id'        => $app->input->getInt('userid'),
+            'firstname' => $app->input->getString('firstname'),
+            'lastname'  => $app->input->getString('lastname'),
+            'username'  => $app->input->getUsername('username'),
+            'email'     => $app->input->getString('email'),
+            'password'  => $app->input->getString('password'),
+            'password2' => $app->input->getString('password2'),
+            'billing'   => array(
+                'firstname' => $billingData->getString('firstname'),
+                'lastname'  => $billingData->getString('lastname'),
+                'phone'     => $billingData->getString('phone'),
+                'email'     => $billingData->getString('email'),
+                'address1'  => $billingData->getString('address1'),
+                'address2'  => $billingData->getString('address2'),
+                'city'      => $billingData->getString('city'),
+                'region'    => $billingData->getString('region'),
+                'country'   => $billingData->getString('country'),
+                'postal'    => $billingData->getString('postal'),
+                'cc'        => array(
+                    'number' => $ccData->getString('number'),
+                    'cvv'    => $ccData->getString('cvv'),
+                    'year'   => $ccData->getInt('year'),
+                    'month'  => $ccData->getInt('month')
+                )
+            )
+        );
+        $this->state->setProperties($data);
     }
 }
