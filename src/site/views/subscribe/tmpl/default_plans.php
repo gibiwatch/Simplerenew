@@ -7,29 +7,34 @@
  */
 
 defined('_JEXEC') or die();
-?>
-<h3><span><?php echo JText::_('COM_SIMPLERENEW_HEADING_STEP2'); ?></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_PLANLIST'); ?></h3>
 
+/**
+ * @var SimplerenewViewSubscribe $this
+ */
+
+echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_PLANLIST'));
+?>
 <div class="ost-section">
     <div class="block12 p-bottom b-bottom">
         <?php
         foreach ($this->plans as $code => $plan):
-            $planId = 'plan_code_' . $code;
+            $planId  = 'plan_code_' . $code;
             $classes = 'plan_code ' . $planId;
             $checked = $plan->selected ? ' checked="checked"' : '';
-        ?>
-        <div class="<?php echo $classes; ?>">
-            <span class="simplerenew-plan <?php echo $planId; ?>">
-                <input<?php echo $checked; ?>
-                    type="radio"
-                    name="planCode"
-                    id="<?php echo $planId; ?>"
-                    value="<?php echo $plan->code; ?>"/>
+            ?>
+            <div class="<?php echo $classes; ?>">
+                <span class="simplerenew-plan <?php echo $planId; ?>">
+                    <input<?php echo $checked; ?>
+                        type="radio"
+                        name="planCode"
+                        id="<?php echo $planId; ?>"
+                        value="<?php echo $plan->code; ?>"/>
                     <?php echo JHtml::_('plan.name', $plan); ?>
-            </span>
-        </div>
+                </span>
+            </div>
 
-        <?php endforeach; ?>
+        <?php
+        endforeach; ?>
     </div>
 </div>
 <!-- /.ost-section -->

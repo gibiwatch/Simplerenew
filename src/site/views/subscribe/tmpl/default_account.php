@@ -8,14 +8,17 @@
 
 defined('_JEXEC') or die();
 
+/**
+ * @var SimplerenewViewSubscribe $this
+ */
+
 $readonly = '';
 if ($this->user->id > 0) {
     $readonly = ' readonly="true"';
 }
 
+echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
 ?>
-<h3><span><?php echo JText::_('COM_SIMPLERENEW_HEADING_STEP1'); ?></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'); ?></h3>
-
 <div class="ost-section">
     <div class="block6">
         <label for="firstname"><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?> <span>*</span></label>

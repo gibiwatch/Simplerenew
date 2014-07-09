@@ -16,15 +16,15 @@ $app = SimplerenewFactory::getApplication();
 ?>
 <div class="ost-container simplerenew-subscribe">
 
-    <div class="page-header">
-        <h1><?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE'); ?></h1>
-    </div>
-
     <form
         name="subscribeForm"
         id="subscribeForm"
         action=""
         method="post">
+
+        <div class="page-header">
+            <h1><?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE'); ?></h1>
+        </div>
 
         <?php echo $this->loadTemplate('account'); ?>
 

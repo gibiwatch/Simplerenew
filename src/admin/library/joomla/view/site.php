@@ -10,5 +10,25 @@ defined('_JEXEC') or die();
 
 abstract class SimplerenewViewSite extends JViewLegacy
 {
+    /**
+     * @var int
+     */
+    protected $step = 1;
 
+    /**
+     * Display an incrementing step header. Each subsequent
+     * use adds one to the step number
+     *
+     * @param $text
+     *
+     * @return string
+     */
+    protected function stepHeading($text)
+    {
+        $step = JText::sprintf('COM_SIMPLERENEW_HEADING_STEP', $this->step++);
+
+        $html = '<h3><span>' . $step . '</span>' . $text . '</h3>';
+
+        return $html;
+    }
 }

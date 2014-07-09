@@ -22,20 +22,14 @@ if ($this->billing->payment instanceof Payment\PayPal) {
 } else {
     $creditCard = $this->billing->payment;
 }
-?>
-<h3>
-    <span>
-        <?php echo JText::_('COM_SIMPLERENEW_HEADING_STEP3'); ?>
-    </span>
-    <?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?>
-</h3>
 
-<?php
+echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BILLING'));
+
 if (!empty($paypal)): ?>
     <div class="ost-alert-notify m-bottom">
         <?php echo JText::sprintf('COM_SIMPLERENEW_BILLING_EDIT_PAYPAL', $paypal->agreementId); ?>
     </div>
-<?php
+    <?php
 endif; ?>
 
 <div class="ost-section">
