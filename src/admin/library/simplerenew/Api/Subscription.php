@@ -138,7 +138,7 @@ class Subscription extends AbstractApiBase
      * Get list of subscriptions for the selected account
      *
      * @param Account $account
-     * @param int     $status
+     * @param int     $status One of the Simplerenew\Api\Subscription status codes
      *
      * @return array()
      */
@@ -173,9 +173,15 @@ class Subscription extends AbstractApiBase
         return $this;
     }
 
+    /**
+     * Cancel this subscription
+     *
+     * @return void
+     * @throws Exception
+     */
     public function cancel()
     {
-        throw new Exception('Under Construction');
+        $this->imp->cancel($this);
     }
 
     public function reactivate()

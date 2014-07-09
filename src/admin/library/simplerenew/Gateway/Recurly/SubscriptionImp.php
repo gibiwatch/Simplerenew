@@ -136,31 +136,33 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
     }
 
     /**
-     * Get all subscriptions for the selected account. The Recurly state
-     * field will contain
-     *
      * @param Subscription $template
      * @param Account      $account
+     * @param int          $status One of the Simplerenew\Api\Subscription status codes
      *
      * @return array
      */
-    public function getList(Subscription $template, Account $account)
+    public function getList(Subscription $template, Account $account, $status = null)
     {
-        $subs = array();
+        /**
+         * @var \Recurly_Subscription $rawSubscription
+         */
+        $subscriptions = array();
+        $params        = array();
 
-        \Recurly_Client::$apiKey = $this->client->apiKey();
-        $account                 = \Recurly_Account::get('OS_699');
-        $x = \Recurly_SubscriptionList::get(array('state' => 'past_due', 'per_page' => 10), $this->client);
-        //$x = \Recurly_SubscriptionList::getForAccount($account->account_code);
-        foreach ($x as $y) {
-            $this->bindToSubscription($y, $template);
-
-            echo '<pre>';
-            print_r($template->getProperties());
-            print_r($y);
-            echo '</pre>';
-            return;
+        $state = array_search($status, $this->fieldMap['status']['state']);
+        if ($state) {
+            $params['state'] = $state;
         }
+
+        $list = \Recurly_SubscriptionList::getForAccount($account->code, null, $this->client);
+        foreach ($list as $rawSubscription) {
+            $subscription = clone $template;
+            $this->bindToSubscription($rawSubscription, $subscription);
+
+            $subscriptions[$subscription->id] = $subscription;
+        }
+        return $subscriptions;
     }
 
     /**
@@ -190,11 +192,37 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
         $this->bindToSubscription($current, $parent);
     }
 
+    /**
+     * Translate a Recurly state to an API Status
+     *
+     * @param $state
+     *
+     * @return string
+     */
     protected function translateState($state)
     {
         if (isset($this->fieldMap['status']['state'][$state])) {
             return $this->fieldMap['status']['state'][$state];
         }
         return null;
+    }
+
+    /**
+     * Cancel autorenew for this subscription
+     *
+     * @param Subscription $parent
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function cancel(Subscription $parent)
+    {
+        $subscription = $this->getSubscription($parent->id);
+
+        try {
+            $subscription->cancel();
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
+        }
     }
 }

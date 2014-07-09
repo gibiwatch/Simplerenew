@@ -40,10 +40,11 @@ interface SubscriptionInterface
     /**
      * @param Subscription $parent
      * @param Account      $account
+     * @param int          $status One of the Simplerenew\Api\Subscription status codes
      *
      * @return array
      */
-    public function getList(Subscription $parent, Account $account);
+    public function getList(Subscription $parent, Account $account, $status = null);
 
     /**
      * Get the currently active subscription
@@ -55,4 +56,14 @@ interface SubscriptionInterface
      * @throws Exception
      */
     public function loadActive(Subscription $parent, Account $account);
+
+    /**
+     * Cancel autorenew for this subscription
+     *
+     * @param Subscription $parent
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function cancel(Subscription $parent);
 }
