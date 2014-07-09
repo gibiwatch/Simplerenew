@@ -55,20 +55,23 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             return $this->callerReturn($e->getMessage(), 'error');
         }
 
-        // Store the user id to the form data in case something goes wrong
-        $formData = SimplerenewHelper::loadFormData('subscribe.create');
-
-        $formData['userid'] = $user->id;
-        SimplerenewHelper::saveFormData('subscribe.create', null, $formData);
-
         // Create the account
         try {
             $account = $model->saveAccount($user);
-            $model->saveBilling($account);
 
         } catch (Exception $e) {
             return $this->callerReturn(
                 JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIBE_ACCOUNT', $e->getMessage()),
+                'error'
+            );
+        }
+
+        // Update billing
+        try {
+            $model->saveBilling($account);
+        } catch (Exception $e) {
+            return $this->callerReturn(
+                JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIBE_BILLING', $e->getMessage()),
                 'error'
             );
         }
