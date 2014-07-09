@@ -10,6 +10,9 @@ defined('_JEXEC') or die();
 
 abstract class SimplerenewModelSite extends JModelLegacy
 {
+    /**
+     * @var string
+     */
     protected $context = null;
 
     public function __construct($config = array())
