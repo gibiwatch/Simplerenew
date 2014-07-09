@@ -8,4 +8,4 @@
 
 defined('_JEXEC') or die();
 ?>
-If you are seeing this, something probably went horribly wrong.
+Hey! Come on back!

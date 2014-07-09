@@ -7,5 +7,10 @@
  */
 
 defined('_JEXEC') or die();
-?>
-If you are seeing this, something probably went horribly wrong.
+
+require_once __DIR__ . '/account.php';
+
+class SimplerenewModelRenewal extends SimplerenewModelAccount
+{
+
+}
