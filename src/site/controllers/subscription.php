@@ -16,12 +16,6 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
     {
         parent::display($cachable, $urlparams);
         echo '<h4>subscription controller under construction</h4>h4>';
-
-        echo 'TASK: ' . $this->getTask();
-
-        echo '<pre>';
-        print_r($_REQUEST);
-        echo '</pre>';
     }
 
     /**
@@ -41,9 +35,17 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             )
         );
 
+        $app      = SimplerenewFactory::getApplication();
+        $planCode = $app->input->getString('planCode');
+        if (!$planCode) {
+            return $this->callerReturn(
+                JText::_('COM_SIMPLERENEW_ERROR_NOPLAN_SELECTED'),
+                'error'
+            );
+        }
+
         /** @var SimplerenewModelGateway $model */
         $model = SimplerenewModel::getInstance('Gateway');
-        $app   = SimplerenewFactory::getApplication();
 
         // Create/Load the user
         try {

@@ -9,16 +9,10 @@
 defined('_JEXEC') or die();
 
 /**
- * @var SimplerenewViewSubscribe $this;
+ * @var SimplerenewViewSubscribe $this ;
  */
 
-$input = SimplerenewFactory::getApplication()->input;
-
-$action = 'index.php?option=com_simplerenew&task=subscription.create';
-if ($itemid = $input->getInt('Itemid')) {
-    $action .= '&Itemid=' . $itemid;
-}
-
+$app = SimplerenewFactory::getApplication();
 ?>
 <div class="ost-container simplerenew-subscribe">
 
@@ -29,7 +23,7 @@ if ($itemid = $input->getInt('Itemid')) {
     <form
         name="subscribeForm"
         id="subscribeForm"
-        action="<?php echo $action; ?>"
+        action=""
         method="post">
 
         <?php echo $this->loadTemplate('account'); ?>
@@ -56,10 +50,19 @@ if ($itemid = $input->getInt('Itemid')) {
         <!-- /.ost-section -->
 
         <input
-            id="userid"
-            name="userid"
             type="hidden"
-            value="<?php echo $this->user->id; ?>"/>
+            name="option"
+            value="com_simplerenew"/>
+
+        <input
+            type="hidden"
+            name="task"
+            value="subscription.create"/>
+
+        <input
+            type="hidden"
+            name="Itemid"
+            value="<?php echo $app->input->getInt('Itemid'); ?>"/>
     </form>
 
 </div>

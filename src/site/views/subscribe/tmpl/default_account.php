@@ -24,7 +24,8 @@ if ($this->user->id > 0) {
             name="firstname"
             type="text"
             value="<?php echo $this->user->firstname; ?>"
-            equired="true"/>
+            required="true"
+            autofocus/>
     </div>
     <div class="block6">
         <label for="lastname"><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?> <span>*</span></label>
@@ -53,7 +54,7 @@ if ($this->user->id > 0) {
         <input
             id="email"
             name="email"
-            type="text"
+            type="email"
             value="<?php echo $this->user->email; ?>"
             required=""/>
     </div>
