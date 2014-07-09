@@ -157,7 +157,7 @@ class User extends Object
     }
 
     /**
-     * Login the current user
+     * Login the user
      *
      * @param string $password
      * @param bool   $force
@@ -170,6 +170,16 @@ class User extends Object
         $this->adapter->login($this, $password, $force);
     }
 
+    /**
+     * Logout the user
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function logout()
+    {
+        $this->adapter->logout();
+    }
     /**
      * Set the user group based on the plan
      *

@@ -12,13 +12,13 @@ use JAuthentication;
 use JFactory;
 use JLoader;
 use JUser;
+use JUserHelper;
 use Simplerenew\Api\Plan;
 use Simplerenew\Exception;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\User\User;
 use SimplerenewFactory;
 use SimplerenewModel;
-use SimplerenewUserHelper;
 use UsersModelRegistration;
 
 defined('_JEXEC') or die();
@@ -66,7 +66,7 @@ class Joomla implements UserInterface
         $username = $parent->username;
         $parent->clearProperties();
 
-        if ($id = SimplerenewUserHelper::getUserId($username)) {
+        if ($id = JUserHelper::getUserId($username)) {
             $parent->id = $id;
             $this->load($parent);
             return;
@@ -88,7 +88,7 @@ class Joomla implements UserInterface
 
         $user = SimplerenewFactory::getUser($id);
         if (!$user || $user->id <= 0) {
-            throw new NotFound('User ID not found - ' . $id);
+            throw new NotFound('User ID not found - ' . (int)$id);
         }
 
         $keys = array_keys(get_object_vars($parent));
@@ -240,14 +240,12 @@ class Joomla implements UserInterface
         );
 
         $currentUser = SimplerenewFactory::getUser();
-        if ($currentUser->username) {
+        if ($currentUser->id > 0) {
             if ($currentUser->username == $credentials['username']) {
                 // Already logged in
                 return;
             } else {
-                if (!$app->logout()) {
-                    throw new Exception('Unable to logout from ' . $currentUser->username);
-                }
+                $this->logout();
             }
         }
 
@@ -358,5 +356,21 @@ class Joomla implements UserInterface
         }
         sort($text);
         return join(', ', $text);
+    }
+
+    /**
+     * Log out the current user if possible
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function logout()
+    {
+        $currentUser = SimplerenewFactory::getUser();
+        if ($currentUser->id > 0) {
+            if (!SimplerenewFactory::getApplication()->logout()) {
+                    throw new Exception('Unable to logout from ' . $currentUser->username);
+            }
+        }
     }
 }
