@@ -43,7 +43,6 @@ $app = SimplerenewFactory::getApplication();
                     type="submit"
                     value="<?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE'); ?>"
                     class="btn-main btn-big"/>
-                <?php echo JHtml::_('form.token'); ?>
             </div>
 
         </div>
@@ -63,6 +62,8 @@ $app = SimplerenewFactory::getApplication();
             type="hidden"
             name="Itemid"
             value="<?php echo $app->input->getInt('Itemid'); ?>"/>
+
+        <?php echo JHtml::_('form.token'); ?>
     </form>
 
 </div>
