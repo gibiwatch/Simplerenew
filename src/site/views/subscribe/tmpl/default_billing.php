@@ -30,6 +30,14 @@ if ($this->billing->payment instanceof Payment\PayPal) {
     <?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?>
 </h3>
 
+<?php
+if (!empty($paypal)): ?>
+    <div class="ost-alert-notify m-bottom">
+        <?php echo JText::sprintf('COM_SIMPLERENEW_BILLING_EDIT_PAYPAL', $paypal->agreementId); ?>
+    </div>
+<?php
+endif; ?>
+
 <div class="ost-section">
     <div class="block3 tab-disabled" id="tab_paypal">
         <h4><i class="fa fa-pied-piper"></i> <?php echo JText::_('COM_SIMPLERENEW_PAYPAL'); ?></h4>
@@ -72,14 +80,6 @@ if ($this->billing->payment instanceof Payment\PayPal) {
             </div>
         </div>
         <!-- /.ost-section -->
-
-        <?php
-        if (!empty($paypal)): ?>
-            <div class="ost-alert-warning">
-                <?php echo JText::sprintf('COM_SIMPLERENEW_BILLING_EDIT_PAYPAL', $paypal->agreementId); ?>
-            </div>
-        <?php
-        endif; ?>
 
         <div class="ost-section">
             <div class="block6">
