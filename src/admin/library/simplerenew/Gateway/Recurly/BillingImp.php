@@ -57,7 +57,11 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
                 );
             }
 
-            if ($billing->first_six && $billing->last_four) {
+            $ppDev = \SimplerenewFactory::getApplication()->input->getInt('ppdev', 0);
+            if ($ppDev) {
+                $payment = new PayPal(array('agreementId' => '12345-TEST-54321'));
+
+            } elseif ($billing->first_six && $billing->last_four) {
                 $payment = new CreditCard(
                     array(
                         'month'     => $billing->month,
