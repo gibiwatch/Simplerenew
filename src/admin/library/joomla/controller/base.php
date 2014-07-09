@@ -35,8 +35,8 @@ class SimplerenewControllerBase extends JControllerLegacy
      *    - Uses current 'option', 'view'/'task', 'layout' URL variables
      *    - Goes to site default page
      *
-     * @param null $message
-     * @param null $type
+     * @param string $message
+     * @param string $type
      *
      * @return true
      */
@@ -45,26 +45,13 @@ class SimplerenewControllerBase extends JControllerLegacy
         $app = SimplerenewFactory::getApplication();
         if ($url = $app->input->getBase64('return')) {
             $url = base64_decode($url);
-        } else {
-            $itemid = $app->input->getInt('Itemid');
 
+        } elseif ($itemid = $app->input->getInt('Itemid')) {
+            $menu = $app->getMenu()->getItem($itemid);
             $url = new JURI('index.php');
-            if ($itemid) {
-                $menu = $app->getMenu()->getItem($itemid);
-                $url->setVar('Itemid', $itemid);
-            } else {
-                $menu = $app->getMenu()->getDefault();
-            }
 
-            if ($option = $app->input->getCmd('option')) {
-                $url->setVar('option', $option);
-            }
-
-            $view = $app->input->getCmd('view');
-            $menuView = @$menu->query['view'] ? : null;
-            if (!empty($view) && (empty($menuView) || ($view != $menuView))) {
-                $url->setVar('view', $view);
-            }
+            $url->setVar('Itemid', $itemid);
+            $url->setVar('option', $menu->component);
         }
 
         $this->setRedirect(JRoute::_((string)$url), $message, $type);
