@@ -152,7 +152,7 @@ class Joomla implements UserInterface
             return;
         }
 
-        throw new Exception('<br/>' . join('<br/>', $model->getErrors()));
+        throw new Exception(join('<br/>', $model->getErrors()));
     }
 
     /**
@@ -182,7 +182,7 @@ class Joomla implements UserInterface
 
         $user->bind($data);
         if (!$user->save(true)) {
-            throw new Exception('<br/>' . join('<br/>', $user->getErrors()));
+            throw new Exception(join('<br/>', array_filter($user->getErrors())));
         }
 
         // If current user, refresh the session data
