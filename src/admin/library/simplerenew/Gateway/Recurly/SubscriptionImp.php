@@ -166,7 +166,7 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
     }
 
     /**
-     * Load the currently active subscription
+     * Get the most recent subscription
      *
      * @param Subscription $parent
      * @param Account      $account
@@ -174,7 +174,7 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
      * @return void
      * @throws Exception
      */
-    public function loadActive(Subscription $parent, Account $account)
+    public function loadLast(Subscription $parent, Account $account)
     {
         $rawList = iterator_to_array(
             \Recurly_SubscriptionList::getForAccount(
@@ -185,10 +185,6 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
         );
 
         $current = array_shift($rawList);
-        if ($this->translateState($current->state) != Subscription::STATUS_ACTIVE) {
-            throw new Exception('No active subscription found for ' . $account->code);
-        }
-
         $this->bindToSubscription($current, $parent);
     }
 

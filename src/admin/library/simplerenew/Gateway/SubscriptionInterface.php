@@ -47,7 +47,7 @@ interface SubscriptionInterface
     public function getList(Subscription $parent, Account $account, $status = null);
 
     /**
-     * Get the currently active subscription
+     * Get the most recent subscription
      *
      * @param Subscription $parent
      * @param Account      $account
@@ -55,7 +55,7 @@ interface SubscriptionInterface
      * @return void
      * @throws Exception
      */
-    public function loadActive(Subscription $parent, Account $account);
+    public function loadLast(Subscription $parent, Account $account);
 
     /**
      * Cancel autorenew for this subscription

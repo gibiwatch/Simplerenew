@@ -147,9 +147,17 @@ class Subscription extends AbstractApiBase
         return $this->imp->getList($this, $account, $status);
     }
 
-    public function loadActive(Account $account)
+    /**
+     * Load the most recent subscription on file
+     * for the account
+     *
+     * @param Account $account
+     *
+     * @return Subscription
+     */
+    public function loadLast(Account $account)
     {
-        $this->imp->loadActive($this, $account);
+        $this->imp->loadLast($this, $account);
         return $this;
     }
 

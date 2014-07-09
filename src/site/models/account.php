@@ -87,7 +87,7 @@ class SimplerenewModelAccount extends SimplerenewModelSite
                 try {
                     $subscription = $this->getContainer()
                         ->getSubscription()
-                        ->loadActive($account);
+                        ->loadLast($account);
                     $this->setState('subscription', $subscription);
                 } catch (NotFound $e) {
                     // No Subscription is fine
