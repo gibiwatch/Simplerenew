@@ -67,10 +67,14 @@ class SimplerenewModelAccount extends SimplerenewModelSite
         $billing = $this->getState('account.billing');
         if (!$billing instanceof Billing) {
             if ($account = $this->getAccount()) {
-                $billing = $this->getContainer()
-                    ->getBilling()
-                    ->load($account);
-                $this->setState('account.billing', $billing);
+                try {
+                    $billing = $this->getContainer()
+                        ->getBilling()
+                        ->load($account);
+                    $this->setState('account.billing', $billing);
+                } catch (NotFound $e) {
+                    // No billing is okay
+                }
             }
         }
         return $billing;

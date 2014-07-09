@@ -184,8 +184,13 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
             )
         );
 
+        if (count($rawList) == 0) {
+            throw new NotFound('No subscriptions found for Account ' . $account->code);
+        }
+
         $current = array_shift($rawList);
         $this->bindToSubscription($current, $parent);
+
     }
 
     /**

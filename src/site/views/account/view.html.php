@@ -54,12 +54,13 @@ class SimplerenewViewAccount extends SimplerenewViewSite
                 $this->pending      = $this->get('Pending');
             }
 
-        } catch (Exception $e) {
+        } catch (Simplerenew\Exception $e) {
             // @TODO: Decide what to do here, if anything
             SimplerenewFactory::getApplication()->enqueueMessage(
                 'Houston, we have a problem: ' . $e->getMessage(),
                 'error'
             );
+            echo $e->getTraceMessage();
         }
 
         parent::display($tpl);

@@ -29,11 +29,6 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
     );
 
     /**
-     * @var array Associative array of \Recurly_BillingInfo objects already loaded
-     */
-    protected $accountsLoaded = array();
-
-    /**
      * @param Billing $parent
      *
      * @return void
@@ -153,20 +148,15 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
     protected function getBilling($accountCode)
     {
         try {
-            if (empty($this->accountsLoaded[$accountCode])) {
-                $this->accountsLoaded[$accountCode] = \Recurly_BillingInfo::get($accountCode, $this->client);
-            }
+            $billing = \Recurly_BillingInfo::get($accountCode, $this->client);
 
         } catch (\Recurly_NotFoundError $e) {
-            // Need to have blank/default billing for an existing account
-            $newBilling                         = new \Recurly_BillingInfo(null, $this->client);
-            $newBilling->account_code           = $accountCode;
-            $this->accountsLoaded[$accountCode] = $newBilling;
+            throw new NotFound($e->getMessage(), $e->getCode(), $e);
 
         } catch (\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
 
-        return $this->accountsLoaded[$accountCode];
+        return $billing;
     }
 }
