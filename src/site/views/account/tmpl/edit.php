@@ -21,11 +21,10 @@ $app = SimplerenewFactory::getApplication();
     </div>
 
     <form
+        name="accountForm"
+        id="accountForm"
         action="index.php"
-        method="post"
-        name="item-form"
-        id="item-form"
-        class="form-validate">
+        method="post">
 
         <?php echo $this->loadTemplate('account'); ?>
 

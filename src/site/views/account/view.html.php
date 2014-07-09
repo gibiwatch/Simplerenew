@@ -55,6 +55,7 @@ class SimplerenewViewAccount extends SimplerenewViewSite
             }
 
         } catch (Exception $e) {
+            // @TODO: Decide what to do here, if anything
             SimplerenewFactory::getApplication()->enqueueMessage(
                 'Houston, we have a problem: ' . $e->getMessage(),
                 'error'

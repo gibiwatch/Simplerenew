@@ -26,7 +26,11 @@ if ($itemid = $input->getInt('Itemid')) {
         <h1><?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE'); ?></h1>
     </div>
 
-    <form action="<?php echo $action; ?>" method="post">
+    <form
+        name="subscribeForm"
+        id="subscribeForm"
+        action="<?php echo $action; ?>"
+        method="post">
 
         <?php echo $this->loadTemplate('account'); ?>
 
