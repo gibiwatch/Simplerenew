@@ -40,18 +40,20 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
             );
         }
 
-        switch ($this->subscription->status) {
-            case Subscription::STATUS_ACTIVE:
-                $this->setLayout('cancel');
-                break;
+        if ($this->subscription) {
+            switch ($this->subscription->status) {
+                case Subscription::STATUS_ACTIVE:
+                    $this->setLayout('cancel');
+                    break;
 
-            case Subscription::STATUS_CANCELED:
-                $this->setLayout('reactivate');
-                break;
+                case Subscription::STATUS_CANCELED:
+                    $this->setLayout('reactivate');
+                    break;
 
-            case Subscription::STATUS_EXPIRED:
-                $this->setLayout('resubscribe');
-                break;
+                case Subscription::STATUS_EXPIRED:
+                    $this->setLayout('resubscribe');
+                    break;
+            }
         }
 
         parent::display($tpl);
