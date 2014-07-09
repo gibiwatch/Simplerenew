@@ -31,7 +31,7 @@ if ($this->billing->payment instanceof Payment\PayPal) {
 
 <?php
 if (!empty($paypal)): ?>
-    <div class="ost-alert-notify">
+    <div class="ost-alert-notify m-bottom">
         <?php echo JText::sprintf('COM_SIMPLERENEW_BILLING_EDIT_PAYPAL', $paypal->agreementId); ?>
     </div>
 <?php

@@ -254,6 +254,10 @@ span.simplerenew-plan:hover{
     margin-bottom: 4px;
 }
 
+.ost-alert-notify.m-bottom{
+    margin-bottom: 30px;
+}
+
 /* Account view
  ========================================================================== */
 .ost-row-one{
