@@ -32,11 +32,11 @@ class SimplerenewModelGateway extends SimplerenewModelSite
         $data      = new JRegistry($data ? : $this->getState()->getProperties());
         $user      = $container->getUser();
 
-        if (!$data->get('id')) {
+        if (!$data->get('userId')) {
             // Check for existing user
             try {
                 $user->loadByUsername($data->get('username'));
-                $data->set('id', $user->id);
+                $data->set('userId', $user->id);
 
             } catch (NotFound $e) {
                 // User doesn't exist is okay
@@ -45,7 +45,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
 
         $password  = $data->get('password');
         $password2 = $data->get('password2');
-        if ($data->get('id') <= 0) {
+        if ($data->get('userId') <= 0) {
             // Create a new user
             if (!$password) {
                 throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_PASSWORD_EMPTY'));
@@ -94,25 +94,11 @@ class SimplerenewModelGateway extends SimplerenewModelSite
             // Create a new account
         }
 
-        if ($data === null) {
-            $app  = SimplerenewFactory::getApplication();
-            $data = array(
-                'firstname' => $app->input->getString('firstname'),
-                'lastname'  => $app->input->getString('lastname'),
-                'username'  => $app->input->getString('username'),
-                'email'     => $app->input->getString('email'),
-                'company'   => $app->input->getString('company'),
-                'address1'  => $app->input->getString('address1'),
-                'address2'  => $app->input->getString('address2'),
-                'city'      => $app->input->getString('city'),
-                'region'    => $app->input->getString('region'),
-                'country'   => $app->input->getString('country'),
-                'postal'    => $app->input->getString('postal')
-            );
-        }
+        $data = new JRegistry($data ? : $this->getState()->getProperties());
+        $data = $data->toObject();
 
-        $account->address->setProperties($data);
         $account->setProperties($data);
+        $account->address->setProperties($data);
         $account->save();
 
         return $account;
@@ -129,28 +115,9 @@ class SimplerenewModelGateway extends SimplerenewModelSite
     public function saveBilling(Account $account, array $data = null)
     {
         $app = SimplerenewFactory::getApplication();
-        if ($data === null) {
-            $billingData = new JInput($app->input->get('billing', null, 'array'));
-            $ccData      = new JInput($billingData->get('cc', null, 'array'));
-            $data        = array(
-                'firstname' => $billingData->getString('firstname'),
-                'lastname'  => $billingData->getString('lastname'),
-                'phone'     => $billingData->getString('phone'),
-                'email'     => $billingData->getString('email'),
-                'address1'  => $billingData->getString('address1'),
-                'address2'  => $billingData->getString('address2'),
-                'city'      => $billingData->getString('city'),
-                'region'    => $billingData->getString('region'),
-                'country'   => $billingData->getString('country'),
-                'postal'    => $billingData->getString('postal'),
-                'cc'        => array(
-                    'number' => $ccData->getString('number'),
-                    'cvv'    => $ccData->getString('cvv'),
-                    'year'   => $ccData->getInt('year'),
-                    'month'  => $ccData->getInt('month')
-                )
-            );
-        }
+
+        $data = new JRegistry($data ? : $this->getState()->getProperties());
+        $data = $data->toArray();
 
         $container = SimplerenewFactory::getContainer();
         $billing   = $container->getBilling();
@@ -163,8 +130,8 @@ class SimplerenewModelGateway extends SimplerenewModelSite
             $billing->payment->setProperties($data['cc']);
         }
 
-        $billing->address->setProperties($data);
         $billing->setProperties($data);
+        $billing->address->setProperties($data);
         $billing->save();
 
         return $billing;
@@ -202,7 +169,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
         $ccData      = new JInput($billingData->get('cc', null, 'array'));
 
         $data = array(
-            'id'        => $app->input->getInt('userid'),
+            'userId'    => $app->input->getInt('userId'),
             'firstname' => $app->input->getString('firstname'),
             'lastname'  => $app->input->getString('lastname'),
             'username'  => $app->input->getUsername('username'),
