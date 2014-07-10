@@ -21,11 +21,14 @@ defined('_JEXEC') or die();
 class BillingImp extends AbstractRecurlyBase implements BillingInterface
 {
     protected $fieldMap = array(
-        'firstname' => 'first_name',
-        'lastname'  => 'last_name',
-        'region'    => 'state',
-        'postal'    => 'zip',
-        'ipaddress' => 'ip_address'
+        'firstname'   => 'first_name',
+        'lastname'    => 'last_name',
+        'region'      => 'state',
+        'postal'      => 'zip',
+        'ipaddress'   => 'ip_address',
+        'type'        => 'card_type',
+        'lastFour'    => 'last_four',
+        'agreementId' => 'paypal_billing_agreement_id'
     );
 
     /**
@@ -42,35 +45,23 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
         if ($billing) {
             $parent->setProperties($billing, $this->fieldMap);
 
-            if ($parent->address instanceof Address) {
-                $parent->address->setProperties(
-                    $billing,
-                    array(
-                        'region' => 'state',
-                        'postal' => 'zip'
-                    )
-                );
+            // Recognize debugging url var
+            if (\SimplerenewFactory::getApplication()->input->getInt('ppdev', 0)) {
+                $billing->paypal_billing_agreement_id = '12345-TEST-54321';
             }
 
-            $ppDev = \SimplerenewFactory::getApplication()->input->getInt('ppdev', 0);
-            if ($ppDev) {
-                $payment = new PayPal(array('agreementId' => '12345-TEST-54321'));
+            if ($billing->paypal_billing_agreement_id) {
+                $payment = new PayPal();
+                $payment->setProperties($billing, $this->fieldMap);
 
             } elseif ($billing->first_six && $billing->last_four) {
-                $payment = new CreditCard(
-                    array(
-                        'month'     => $billing->month,
-                        'year'      => $billing->year,
-                        'type'      => $billing->card_type,
-                        'lastFour' => $billing->last_four
-                    )
-                );
-            } elseif ($billing->paypal_billing_agreement_id) {
-                $payment              = new PayPal();
-                $payment->agreementId = $billing->paypal_billing_agreement_id;
+                $payment = new CreditCard();
+                $payment->setProperties($billing, $this->fieldMap);
+
             } else {
                 $payment = null;
             }
+
             $parent->setPayment($payment);
         }
     }
@@ -83,7 +74,25 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
      */
     public function save(Billing $parent)
     {
-        $billing = $this->getBilling($parent->account->code);
+        $accountCode = $parent->account->code;
+
+        /** @var CreditCard $cc */
+        if ($parent->payment instanceof CreditCard) {
+            $cc = $parent->payment;
+        }
+
+        try {
+            $billing = $this->getBilling($accountCode);
+
+        } catch (NotFound $e) {
+            // Let's see if we have what it takes to create
+            if (empty($cc) || empty($cc->number)) {
+                return;
+            }
+
+            $billing               = new \Recurly_BillingInfo(null, $this->client);
+            $billing->account_code = $accountCode;
+        }
 
         $billing->first_name = $parent->firstname;
         $billing->last_name  = $parent->lastname;
@@ -97,16 +106,16 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
         $billing->country  = $parent->address->country;
         $billing->zip      = $parent->address->postal;
 
-        if ($parent->payment instanceof CreditCard) {
-            /** @var CreditCard $cc */
-            $cc              = $parent->payment;
-            $billing->number = $cc->number;
-            $billing->month  = $cc->month;
-            $billing->year   = $cc->year;
+        if ($cc) {
+            $billing->number             = $cc->number;
+            $billing->verification_value = $cc->cvv;
+            $billing->month              = $cc->month;
+            $billing->year               = $cc->year;
         }
 
         try {
             $billing->update();
+
         } catch (\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
