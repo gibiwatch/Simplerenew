@@ -222,6 +222,27 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
 
         try {
             $subscription->cancel();
+
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * Turn autorenew on for this subscription
+     *
+     * @param Subscription $parent
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function reactivate(Subscription $parent)
+    {
+        $subscription = $this->getSubscription($parent->id);
+
+        try {
+            $subscription->reactivate();
+
         } catch (\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }

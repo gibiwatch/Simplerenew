@@ -66,4 +66,14 @@ interface SubscriptionInterface
      * @throws Exception
      */
     public function cancel(Subscription $parent);
+
+    /**
+     * Turn autorenew on for this subscription
+     *
+     * @param Subscription $parent
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function reactivate(Subscription $parent);
 }

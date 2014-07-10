@@ -192,13 +192,14 @@ class Subscription extends AbstractApiBase
         $this->imp->cancel($this);
     }
 
+    /**
+     * Turn autorenew on for this subscription
+     *
+     * @return void
+     * @throws Exception
+     */
     public function reactivate()
     {
-        throw new Exception('Under Construction');
-    }
-
-    public function history(Account $account)
-    {
-        throw new Exception('Under Construction');
+        $this->imp->reactivate($this);
     }
 }
