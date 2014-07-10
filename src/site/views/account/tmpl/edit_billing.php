@@ -16,11 +16,22 @@ defined('_JEXEC') or die();
  * @var Payment\CreditCard     $creditCard
  */
 
-if ($this->billing->payment instanceof Payment\PayPal) {
-    $paypal     = $this->billing->payment;
-    $creditCard = new Payment\CreditCard();
+$billing = $this->billing;
+if (!$billing) {
+    $billing = (object)array(
+        'firstname' => null,
+        'lastname'  => null
+    );
+
 } else {
-    $creditCard = $this->billing->payment;
+    if ($billing->payment instanceof Payment\PayPal) {
+        $paypal = $billing->payment;
+    } else {
+        $creditCard = $billing->payment;
+    }
+}
+if (empty($creditCard)) {
+    $creditCard = new Payment\CreditCard();
 }
 
 echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BILLING'));
@@ -34,7 +45,10 @@ endif; ?>
 
 <div class="ost-section">
     <div class="block3 tab-enabled" id="tab_card">
-        <h4><i class="fa fa-credit-card"></i> <?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?></h4>
+        <h4>
+            <i class="fa fa-credit-card"></i>
+            <?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?>
+        </h4>
     </div>
 </div>
 <!-- /.ost-section -->
@@ -48,7 +62,7 @@ endif; ?>
                     id="billing_firstname"
                     name="billing[firstname]"
                     type="text"
-                    value="<?php echo $this->billing->firstname; ?>"
+                    value="<?php echo $billing->firstname; ?>"
                     required="true"/>
             </div>
             <div class="block6">
@@ -57,7 +71,7 @@ endif; ?>
                     id="billing_lastname"
                     name="billing[lastname]"
                     type="text"
-                    value="<?php echo $this->billing->lastname; ?>"
+                    value="<?php echo $billing->lastname; ?>"
                     required="true"/>
             </div>
         </div>
