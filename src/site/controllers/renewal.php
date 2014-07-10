@@ -7,6 +7,7 @@
  */
 
 use Simplerenew\Exception\NotFound;
+use Simplerenew\Api\Subscription;
 
 defined('_JEXEC') or die();
 
@@ -18,6 +19,61 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
 
         $app       = SimplerenewFactory::getApplication();
         $id        = $app->input->getString('id');
+
+        if ($subscription = $this->getValidSubscription($id)) {
+            try {
+                $subscription->cancel();
+
+            } catch (Exception $e) {
+                $this->callerReturn(
+                    JText::sprintf('COM_SIMPLERENEW_ERROR_RENEWAL', $e->getMessage()),
+                    'error'
+                );
+                return;
+            }
+
+            $this->callerReturn(
+                JText::sprintf(
+                    'COM_SIMPLERENEW_RENEWAL_CANCEL_SUCCESS',
+                    $subscription->period_end->format('F, j, Y')
+                )
+            );
+        }
+    }
+
+    public function reactivate()
+    {
+        $this->checkToken();
+
+        $app = SimplerenewFactory::getApplication();
+        $id = $app->input->getString('id');
+
+        if ($subscription = $this->getValidSubscription($id)) {
+            try {
+                $subscription->reactivate();
+
+            } catch (Exception $e) {
+                $this->callerReturn(
+                    JText::sprintf('COM_SIMPLERENEW_ERROR_RENEWAL', $e->getMessage()),
+                    'error'
+                );
+                return;
+            }
+
+            $this->callerReturn(JText::_('COM_SIMPLERENEW_RENEWAL_REACTIVATE_SUCCESS'));
+        }
+    }
+
+    /**
+     * Get a specific subscription that is valid
+     * for the current user to edit
+     *
+     * @param $id
+     *
+     * @return null|Subscription
+     */
+    protected function getValidSubscription($id)
+    {
         $container = SimplerenewFactory::getContainer();
 
         try {
@@ -29,21 +85,21 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
                 throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_NOTAUTH'));
             }
 
-            $subscriptions[$id]->cancel();
+            return $subscriptions[$id];
 
         } catch (NotFound $e) {
-            return $this->callerReturn(
-                JText::_('COM_SIMPLERENEW_WARN_RENEWAL_CANCEL_NOTFOUND'),
+            $this->callerReturn(
+                JText::_('COM_SIMPLERENEW_WARN_RENEWAL_NOTFOUND'),
                 'notice'
             );
 
         } catch (Exception $e) {
-            return $this->callerReturn(
-                JText::sprintf('COM_SIMPLERENEW_ERROR_RENEWAL_CANCEL', $e->getMessage()),
+            $this->callerReturn(
+                JText::sprintf('COM_SIMPLERENEW_ERROR_RENEWAL', $e->getMessage()),
                 'error'
             );
         }
 
-        $this->callerReturn(JText::_('COM_SIMPLERENEW_RENEWAL_CANCEL_SUCCESS'));
+        return null;
     }
 }
