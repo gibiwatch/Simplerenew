@@ -46,14 +46,15 @@ class SimplerenewModelAccount extends SimplerenewModelSite
     {
         $account = $this->getState('account');
         if (!$account instanceof Account) {
-            $user = $this->getUser();
-            try {
-                $account = $this->getContainer()
-                    ->getAccount()
-                    ->load($user);
-                $this->setState('account', $account);
-            } catch (NotFound $e) {
-                // No account, no worries
+            if ($user = $this->getUser()) {
+                try {
+                    $account = $this->getContainer()
+                        ->getAccount()
+                        ->load($user);
+                    $this->setState('account', $account);
+                } catch (NotFound $e) {
+                    // No account, no worries
+                }
             }
         }
         return $account;
