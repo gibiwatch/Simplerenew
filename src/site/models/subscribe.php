@@ -8,7 +8,9 @@
 
 defined('_JEXEC') or die();
 
-class SimplerenewModelSubscribe extends SimplerenewModelSite
+require_once __DIR__ . '/account.php';
+
+class SimplerenewModelSubscribe extends SimplerenewModelAccount
 {
     public function getPlans()
     {
@@ -31,6 +33,8 @@ class SimplerenewModelSubscribe extends SimplerenewModelSite
 
     protected function populateState()
     {
+        parent::populateState();
+
         if ($params = $this->state->get('parameters.menu')) {
             $plans = $params->get('plans');
             $this->setState('filter.plans', $plans);
