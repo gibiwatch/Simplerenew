@@ -6,6 +6,9 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Api\Account;
+use Simplerenew\Exception\NotFound;
+
 defined('_JEXEC') or die();
 
 class SimplerenewControllerAccount extends SimplerenewControllerBase
@@ -14,10 +17,62 @@ class SimplerenewControllerAccount extends SimplerenewControllerBase
     {
         $this->checkToken();
 
-        echo '<p>testing in progress</p>';
+        /** @var SimplerenewModelGateway $model */
+        $model = SimplerenewModel::getInstance('Gateway');
+        $data  = new JRegistry($model->getState()->getProperties());
 
-        echo '<pre>';
-        print_r($_REQUEST);
-        echo '</pre>';
+        $userId = $data->get('userId');
+        $user   = SimplerenewFactory::getUser();
+
+        // Check for authorisation
+        if (!$user->id || $userId != $user->id) {
+            return $this->callerReturn(
+                JText::_('COM_SIMPLERENEW_ERROR_ACCOUNT_EDIT_NOAUTH'),
+                'error'
+            );
+        }
+
+        $container = SimplerenewFactory::getContainer();
+
+        try {
+            // Update User
+            $user     = $container->getUser();
+            $user->id = $userId;
+            $user->setProperties($data->toArray());
+            $user->update();
+
+            // Update Subscription account
+            $account = $container->getAccount();
+            try {
+                $account
+                    ->load($user)
+                    ->setProperties($data->toArray())
+                    ->save(false);
+
+            } catch (NotFound $e) {
+                // Create an account only if they supplied a credit card
+                if ($data->get('billing.cc.number')) {
+                    $account
+                        ->setUser($user)
+                        ->setProperties($data->toArray())
+                        ->save(true);
+                }
+            }
+
+            // Update Billing
+            if ($account->status === Account::STATUS_ACTIVE) {
+                $container->getBilling()->setAccount($account)
+                    ->setProperties($data->get('billing'))
+                    ->save();
+            }
+
+        } catch (Exception $e) {
+            return $this->callerReturn(
+                JText::sprintf('COM_SIMPLERENEW_ERROR_ACCOUNT_EDIT', $e->getMessage()),
+                'error'
+            );
+        }
+
+        $this->callerReturn(JText::_('COM_SIMPLERENEW_ACCOUNT_EDIT_SUCCESS'));
     }
 }

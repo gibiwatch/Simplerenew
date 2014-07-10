@@ -23,7 +23,8 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             name="firstname"
             type="text"
             value="<?php echo $this->user->firstname; ?>"
-            required="true"/>
+            required="true"
+            autofocus/>
     </div>
     <div class="block6">
         <label for="lastname"><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?> <span>*</span></label>

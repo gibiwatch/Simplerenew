@@ -23,7 +23,7 @@ $app = SimplerenewFactory::getApplication();
     <form
         name="accountForm"
         id="accountForm"
-        action="index.php"
+        action=""
         method="post">
 
         <?php echo $this->loadTemplate('account'); ?>
@@ -32,7 +32,7 @@ $app = SimplerenewFactory::getApplication();
 
         <input
             type="hidden"
-            name="id"
+            name="userId"
             value="<?php echo $this->user->id; ?>"/>
 
         <input
