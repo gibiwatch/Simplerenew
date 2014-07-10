@@ -9,6 +9,7 @@
 namespace Simplerenew\Api;
 
 use Simplerenew\Exception;
+use Simplerenew\Exception\NotFound;
 use Simplerenew\Gateway\BillingInterface;
 use Simplerenew\Primitive\AbstractPayment;
 use Simplerenew\Primitive\Address;
@@ -124,8 +125,13 @@ class Billing extends AbstractApiBase
             $this->address->setProperties($address);
         }
 
-        $this->imp->save($this);
-        $this->imp->load($this);
+        try {
+            $this->imp->save($this);
+            $this->imp->load($this);
+
+        } catch (NotFound $e) {
+            // This is fine, accounts don't have to have billing info
+        }
         return $this;
     }
 
@@ -147,6 +153,17 @@ class Billing extends AbstractApiBase
     public function getAccount()
     {
         return $this->account;
+    }
+
+    /**
+     * @param Account $account
+     *
+     * @return Billing
+     */
+    public function setAccount(Account $account)
+    {
+        $this->account = $account;
+        return $this;
     }
 
     /**
@@ -178,6 +195,34 @@ class Billing extends AbstractApiBase
     public function setPayment(AbstractPayment $payment = null)
     {
         $this->payment = $payment;
+        return $this;
+    }
+
+    /**
+     * @param array|object $data
+     * @param array        $map
+     *
+     * @return Billing
+     */
+    public function setProperties($data, array $map = null)
+    {
+        parent::setProperties($data, $map);
+        $this->address->setProperties($data, $map);
+
+        if (!empty($data->cc)) {
+            $cc = $data->cc;
+        } elseif (!empty($cc['cc'])) {
+            $cc = $data['cc'];
+        }
+
+        if (!empty($cc)) {
+            if ($this->payment instanceof CreditCard) {
+                $this->payment->setProperties($cc, $map);
+            } else {
+                $this->payment = new CreditCard($cc, $map);
+            }
+        }
+
         return $this;
     }
 
