@@ -43,6 +43,11 @@ class User extends Object
     public $password = null;
 
     /**
+     * @var String
+     */
+    public $password2 = null;
+
+    /**
      * @var string
      */
     public $firstname = null;

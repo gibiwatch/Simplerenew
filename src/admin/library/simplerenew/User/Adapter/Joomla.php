@@ -30,6 +30,7 @@ class Joomla implements UserInterface
 {
     protected $fieldMap = array(
         'password'  => null,
+        'password2' => null,
         'firstname' => null,
         'lastname'  => null,
         'enabled'   => 'block'
@@ -177,10 +178,13 @@ class Joomla implements UserInterface
 
         if (!empty($parent->password)) {
             $data['password']  = $parent->password;
-            $data['password2'] = $parent->password;
+            $data['password2'] = $parent->password2;
         }
 
-        $user->bind($data);
+        if (!$user->bind($data)) {
+            throw new Exception(join('<br/>', array_filter($user->getErrors())));
+        }
+
         if (!$user->save(true)) {
             throw new Exception(join('<br/>', array_filter($user->getErrors())));
         }
@@ -342,7 +346,7 @@ class Joomla implements UserInterface
 
     public function getGroupText(User $parent)
     {
-        $plans = $this->getLocalPlans();
+        $plans  = $this->getLocalPlans();
         $groups = array();
         foreach ($plans as $plan) {
             $groups[$plan->group_id] = $plan->group_name;
@@ -369,7 +373,7 @@ class Joomla implements UserInterface
         $currentUser = SimplerenewFactory::getUser();
         if ($currentUser->id > 0) {
             if (!SimplerenewFactory::getApplication()->logout()) {
-                    throw new Exception('Unable to logout from ' . $currentUser->username);
+                throw new Exception('Unable to logout from ' . $currentUser->username);
             }
         }
     }
