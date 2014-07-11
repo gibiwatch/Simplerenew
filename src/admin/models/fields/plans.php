@@ -16,6 +16,11 @@ JFormHelper::loadFieldClass('Checkboxes');
 
 class JFormFieldPlans extends JFormFieldCheckboxes
 {
+    /**
+     * @var array
+     */
+    protected $options = null;
+
     public function __construct($form = null)
     {
         parent::__construct($form);
@@ -31,55 +36,57 @@ class JFormFieldPlans extends JFormFieldCheckboxes
 
     protected function getOptions()
     {
-        $options = parent::getOptions();
+        if ($this->options === null) {
+            $this->options = array();
 
-        $db       = SimplerenewFactory::getDbo();
-        $fields   = array_map(
-            array($db, 'quoteName'),
-            array(
-                'p.code',
-                'p.name',
-                'p.amount',
-                'p.trial_length',
-                'p.trial_unit',
-                'p.group_id'
-            )
-        );
-        $fields[] = $db->quoteName('g.title', 'group');
-
-        $query = $db->getQuery(true)
-            ->select($fields)
-            ->from('#__simplerenew_plans p')
-            ->innerJoin('#__usergroups g on g.id = p.group_id')
-            ->order('code');
-
-        $format = $this->element['format'] ? (string)$this->element['format'] : '%name%';
-
-        $list = $db->setQuery($query)->loadObjectList();
-
-        foreach ($list as $plan) {
-            $text = str_replace(
+            $db       = SimplerenewFactory::getDbo();
+            $fields   = array_map(
+                array($db, 'quoteName'),
                 array(
-                    '{code}',
-                    '{fullname}',
-                    '{name}',
-                    '{group}'
-                ),
-                array(
-                    $plan->code,
-                    JHtml::_('plan.name', $plan),
-                    $plan->name,
-                    $plan->group
-                ),
-                $format
+                    'p.code',
+                    'p.name',
+                    'p.amount',
+                    'p.trial_length',
+                    'p.trial_unit',
+                    'p.group_id'
+                )
             );
+            $fields[] = $db->quoteName('g.title', 'group');
 
-            $option           = JHtml::_('select.option', $plan->code, $text);
-            $option->checked  = false;
-            $option->group    = $plan->group;
-            $option->group_id = $plan->group_id;
-            $options[]        = $option;
+            $query = $db->getQuery(true)
+                ->select($fields)
+                ->from('#__simplerenew_plans p')
+                ->innerJoin('#__usergroups g on g.id = p.group_id')
+                ->order('code');
+
+            $format = $this->element['format'] ? (string)$this->element['format'] : '%name%';
+
+            $list = $db->setQuery($query)->loadObjectList();
+
+            foreach ($list as $plan) {
+                $text = str_replace(
+                    array(
+                        '{code}',
+                        '{fullname}',
+                        '{name}',
+                        '{group}'
+                    ),
+                    array(
+                        $plan->code,
+                        JHtml::_('plan.name', $plan),
+                        $plan->name,
+                        $plan->group
+                    ),
+                    $format
+                );
+
+                $option           = JHtml::_('select.option', $plan->code, $text);
+                $option->checked  = false;
+                $option->group    = $plan->group;
+                $option->group_id = $plan->group_id;
+                $this->options[]  = $option;
+            }
         }
-        return $options;
+        return $this->options;
     }
 }
