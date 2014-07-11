@@ -17,109 +17,68 @@ class JFormFieldPlanAccess extends JFormFieldPlans
      */
     protected $plans = null;
 
+    protected $forceMultiple = false;
+
     protected function getInput()
     {
         JHtml::_('bootstrap.tooltip');
 
-        // Initialize tabs
-        $html = array(
-            '<p class="planaccess-desc">' . 'planaccess-desc' . '</p>',
-            '<div id="planaccess-sliders" class="tabbable tabs-left">',
-            '<ul class="nav nav-tabs">'
+        $pages = array(
+            'ALL' => $this->fieldname . '-all',
+            'SELECT' => $this->fieldname . '-select',
+            'GROUP' => $this->fieldname . '-group'
         );
 
-        $groups = $this->getGroups();
-        $plans  = $this->getOptions();
-        foreach ($groups as $group) {
-            // Initial Active Tab
-            $active = "";
-
-            if ($group->value == 1) {
-                $active = "active";
-            }
-
-            $html[] = '<li class="' . $active . '">';
-            $html[] = '<a href="#group-' . $group->value . '" data-toggle="tab">';
-            $html[] = $group->text;
-            $html[] = '</a>';
-            $html[] = '</li>';
+        $pageOptions = array();
+        foreach ($pages as $key => $value) {
+            $pageOptions[] = JHtml::_(
+                'select.option',
+                $value,
+                JText::_('COM_SIMPLERENEW_OPTION_PLANACCESS_' . $key)
+            );
         }
 
-        $html[] = '</ul>';
-
-        $html[] = '<div class="tab-content">';
-
-        // Start a row for each user group.
-        foreach ($groups as $group) {
-            // Initial Active Pane
-            $active = "";
-
-            if ($group->value == 1) {
-                $active = " active";
-            }
-
-            $html[] = '<div class="tab-pane' . $active . '" id="group-' . $group->value . '">';
-            $html[] = '<table class="table table-striped">';
-            $html[] = '<thead>';
-            $html[] = '<tr>';
-
-            $html[] = '<th class="actions" id="actions-th' . $group->value . '">';
-            $html[] = '<span class="acl-action">' . 'Plan Name' . '</span>';
-            $html[] = '</th>';
-
-            $html[] = '<th class="settings" id="settings-th' . $group->value . '">';
-            $html[] = '<span class="acl-action">' . 'Setting' . '</span>';
-            $html[] = '</th>';
-
-            $html[] = '</tr>';
-            $html[] = '</thead>';
-            $html[] = '<tbody>';
-
-            foreach ($plans as $plan) {
-                $html[] = '<tr>';
-                $html[] = '<td headers="actions-th' . $group->value . '">';
-                $html[] = '<label for="' . $this->id . '_' . $plan->value . '_' . $group->value . '" class="hasTooltip" title="'
-                    . htmlspecialchars(
-                        JText::_($plan->text),
-                        ENT_COMPAT,
-                        'UTF-8'
-                    ) . '">';
-                $html[] = JText::_($plan->text);
-                $html[] = '</label>';
-                $html[] = '</td>';
-
-                $html[] = '<td headers="settings-th' . $group->value . '">';
-
-                $html[] = '<select class="input-small" name="' . $this->name . '[' . $plan->value . '][' . $group->value . ']" id="' . $this->id . '_' . $plan->value
-                    . '_' . $group->value . '" title="'
-                    . JText::sprintf(
-                        'JLIB_RULES_SELECT_ALLOW_DENY_GROUP',
-                        JText::_($plan->text),
-                        trim($group->text)
-                    ) . '">';
-
-                $html[] = '</td>';
-
-
-                $html[] = '</td>';
-
-                $html[] = '</tr>';
-            }
-
-            $html[] = '</tbody>';
-            $html[] = '</table></div>';
+        if (!$this->value) {
+            $selected = $pages['ALL'];
+        } elseif (isset($this->value['*'])) {
+            $selected = $pages['SELECT'];
+        } else {
+            $selected = $pages['GROUP'];
         }
 
-        $html[] = '</div></div>';
-
-        $html[] = '<div class="alert">';
-
+        $class = $this->fieldname . '-pagetype';
+        $html = array(
+            JHtml::_('select.genericlist', $pageOptions, $this->fieldname . '-pagecontrol', null, 'value', 'text', $selected),
+            '<div class="' . $class . '" id="' . $this->fieldname . '-all"></div>',
+            '<div class="' . $class . '" id="' . $this->fieldname . '-select">This page will have just plans</div>',
+            '<div class="' . $class . '" id="' . $this->fieldname . '-group">'
+        );
+        $html = array_merge($html, $this->groupPager());
         $html[] = '</div>';
+
+        $js = <<<JS
+(function($) {
+        $(document).ready(function() {
+            $('#{$this->fieldname}-pagecontrol').on('change', function(evt) {
+                var active = $(this).val();
+                $('.{$class}').each(function(index, el) {
+                    if ($(el).attr('id') == active) {
+                        $(el).show();
+                        $(el).find(':input').attr('disabled', false);
+                    } else {
+                        $(el).hide().find(':input').attr('disabled', true);
+                    }
+                });
+            }).trigger('change');
+        });
+})(jQuery);
+JS;
+        SimplerenewFactory::getDocument()->addScriptDeclaration($js);
 
         return implode("\n", $html);
     }
 
-    protected function createCheckbox($groupId, $i, $option)
+    protected function createCheckbox($groupId, $option)
     {
         $html = array();
 
@@ -130,8 +89,8 @@ class JFormFieldPlanAccess extends JFormFieldPlans
         $class    = !empty($option->class) ? ' class="' . $option->class . '"' : '';
         $disabled = !empty($option->disable) || $this->disabled ? ' disabled' : '';
 
-        $id   = $this->id . '_' . $groupId . '_' . $i;
-        $name = preg_replace('/\[\]$/', '[' . $groupId . '][]', $this->name);
+        $id   = $this->id . '_' . $groupId . '_' . $option->value;
+        $name = $this->name . '[' . $groupId . '][]';
 
         $html[] = '<li>';
         $html[] = '<input type="checkbox" id="' . $id . '" name="' . $name . '" value="'
@@ -175,4 +134,57 @@ class JFormFieldPlanAccess extends JFormFieldPlans
         return $groups;
     }
 
+    protected function groupPager()
+    {
+        // Initialize tabs
+        $html = array(
+            '<p>' . JText::_('COM_SIMPLERENEW_PLANACCESS_DESC') . '</p>',
+            '<div id="planaccess-sliders" class="tabbable tabs-left">',
+            '<ul class="nav nav-tabs">'
+        );
+
+        $groups = $this->getGroups();
+        $plans  = $this->getOptions();
+        foreach ($groups as $group) {
+            // Initial Active Tab
+            $active = "";
+
+            if ($group->value == 0) {
+                $active = "active";
+            }
+
+            $html[] = '<li class="' . $active . '">';
+            $html[] = '<a href="#group-' . $group->value . '" data-toggle="tab">';
+            $html[] = $group->text;
+            $html[] = '</a>';
+            $html[] = '</li>';
+        }
+
+        $html[] = '</ul>';
+
+        $html[] = '<div class="tab-content">';
+        foreach ($groups as $group) {
+            // Initial Active Pane
+            $active = "";
+
+            if ($group->value == 0) {
+                $active = " active";
+            }
+
+            $html[] = '<div class="tab-pane' . $active . '" id="group-' . $group->value . '">';
+            $html[] = '<fieldset id="" class="checkboxes">';
+            $html[] = '<ul>';
+            foreach ($plans as $plan) {
+                $html[] = $this->createCheckbox($group->value, $plan);
+            }
+            $html[] = '</ul>';
+            $html[] = '</fieldset>';
+            $html[] = '</div>';
+        }
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
+        return $html;
+    }
 }
