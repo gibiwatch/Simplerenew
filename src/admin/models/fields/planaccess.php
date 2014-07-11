@@ -12,40 +12,111 @@ require_once __DIR__ . '/plans.php';
 
 class JFormFieldPlanAccess extends JFormFieldPlans
 {
+    /**
+     * @var array
+     */
+    protected $plans = null;
+
     protected function getInput()
     {
-        // Initialize some field attributes.
-        $class     = !empty($this->class) ? ' class="checkboxes ' . $this->class . '"' : ' class="checkboxes"';
-        $required  = $this->required ? ' required aria-required="true"' : '';
-        $autofocus = $this->autofocus ? ' autofocus' : '';
-        $groups    = $this->getGroups();
+        JHtml::_('bootstrap.tooltip');
 
-        // Including fallback code for HTML5 non supported browsers.
-        JHtml::_('jquery.framework');
-        JHtml::_('script', 'system/html5fallback.js', false, true);
-
-        // Start the checkbox field output.
+        // Initialize tabs
         $html = array(
-            '<fieldset id="' . $this->id . '"' . $class . $required . $autofocus . '>',
-            '<ul>'
+            '<p class="planaccess-desc">' . 'planaccess-desc' . '</p>',
+            '<div id="planaccess-sliders" class="tabbable tabs-left">',
+            '<ul class="nav nav-tabs">'
         );
 
-        foreach ($groups as $groupId => $group) {
-            $html[] = '<li>'
-                . $group['name']
-                . '<ul>';
-            foreach ($group['options'] as $i => $option) {
-                $html[] = $this->createCheckbox($groupId, $i, $option);
+        $groups = $this->getGroups();
+        $plans  = $this->getOptions();
+        foreach ($groups as $group) {
+            // Initial Active Tab
+            $active = "";
+
+            if ($group->value == 1) {
+                $active = "active";
             }
-            $html[] = '</ul></li>';
+
+            $html[] = '<li class="' . $active . '">';
+            $html[] = '<a href="#group-' . $group->value . '" data-toggle="tab">';
+            $html[] = $group->text;
+            $html[] = '</a>';
+            $html[] = '</li>';
         }
 
         $html[] = '</ul>';
 
-        // End the checkbox field output.
-        $html[] = '</fieldset>';
+        $html[] = '<div class="tab-content">';
 
-        return implode($html);
+        // Start a row for each user group.
+        foreach ($groups as $group) {
+            // Initial Active Pane
+            $active = "";
+
+            if ($group->value == 1) {
+                $active = " active";
+            }
+
+            $html[] = '<div class="tab-pane' . $active . '" id="group-' . $group->value . '">';
+            $html[] = '<table class="table table-striped">';
+            $html[] = '<thead>';
+            $html[] = '<tr>';
+
+            $html[] = '<th class="actions" id="actions-th' . $group->value . '">';
+            $html[] = '<span class="acl-action">' . 'Plan Name' . '</span>';
+            $html[] = '</th>';
+
+            $html[] = '<th class="settings" id="settings-th' . $group->value . '">';
+            $html[] = '<span class="acl-action">' . 'Setting' . '</span>';
+            $html[] = '</th>';
+
+            $html[] = '</tr>';
+            $html[] = '</thead>';
+            $html[] = '<tbody>';
+
+            foreach ($plans as $plan) {
+                $html[] = '<tr>';
+                $html[] = '<td headers="actions-th' . $group->value . '">';
+                $html[] = '<label for="' . $this->id . '_' . $plan->value . '_' . $group->value . '" class="hasTooltip" title="'
+                    . htmlspecialchars(
+                        JText::_($plan->text),
+                        ENT_COMPAT,
+                        'UTF-8'
+                    ) . '">';
+                $html[] = JText::_($plan->text);
+                $html[] = '</label>';
+                $html[] = '</td>';
+
+                $html[] = '<td headers="settings-th' . $group->value . '">';
+
+                $html[] = '<select class="input-small" name="' . $this->name . '[' . $plan->value . '][' . $group->value . ']" id="' . $this->id . '_' . $plan->value
+                    . '_' . $group->value . '" title="'
+                    . JText::sprintf(
+                        'JLIB_RULES_SELECT_ALLOW_DENY_GROUP',
+                        JText::_($plan->text),
+                        trim($group->text)
+                    ) . '">';
+
+                $html[] = '</td>';
+
+
+                $html[] = '</td>';
+
+                $html[] = '</tr>';
+            }
+
+            $html[] = '</tbody>';
+            $html[] = '</table></div>';
+        }
+
+        $html[] = '</div></div>';
+
+        $html[] = '<div class="alert">';
+
+        $html[] = '</div>';
+
+        return implode("\n", $html);
     }
 
     protected function createCheckbox($groupId, $i, $option)
@@ -59,8 +130,8 @@ class JFormFieldPlanAccess extends JFormFieldPlans
         $class    = !empty($option->class) ? ' class="' . $option->class . '"' : '';
         $disabled = !empty($option->disable) || $this->disabled ? ' disabled' : '';
 
-        $id     = $this->id . '_' . $groupId . '_' . $i;
-        $name   = preg_replace('/\[\]$/', '[' . $groupId . '][]', $this->name);
+        $id   = $this->id . '_' . $groupId . '_' . $i;
+        $name = preg_replace('/\[\]$/', '[' . $groupId . '][]', $this->name);
 
         $html[] = '<li>';
         $html[] = '<input type="checkbox" id="' . $id . '" name="' . $name . '" value="'
@@ -86,26 +157,22 @@ class JFormFieldPlanAccess extends JFormFieldPlans
 
         // Get the field options and recopy into group assignments
         $groups = array(
-            array(
-                'name'    => JText::_('COM_SIMPLERENEW_UNSBUSCRIBED'),
-                'options' => array()
+            (object)array(
+                'text'  => JText::_('COM_SIMPLERENEW_UNSBUSCRIBED'),
+                'value' => 0
             )
         );
 
         foreach ($options as $option) {
-            if (!isset($groups[$option->group_id])) {
-                $groups[$option->group_id] = array(
-                    'name'    => $option->group,
-                    'options' => array()
+            $key = (int)$option->group_id;
+            if (!isset($groups[$key])) {
+                $groups[$key] = (object)array(
+                    'text'  => $option->group,
+                    'value' => $option->group_id
                 );
             }
         }
-        foreach ($groups as $group => $list) {
-            foreach ($options as $option) {
-                $groups[$group]['options'][] = $option;
-            }
-        }
-
         return $groups;
     }
+
 }
