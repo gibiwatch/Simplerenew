@@ -20,8 +20,8 @@ class SimplerenewModelSubscribe extends SimplerenewModelAccount
             ->from('#__simplerenew_plans plans')
             ->order('code');
 
-        // Select the plans based on the user's user group
         if ($plans = $this->getState('filter.plans')) {
+            // Select the plans based on the user's user group
             $userId = $this->getState('user.id');
             $user   = SimplerenewFactory::getUser($userId);
 
@@ -39,7 +39,13 @@ class SimplerenewModelSubscribe extends SimplerenewModelAccount
             $available = array();
             foreach ($checkGroups as $group) {
                 if (isset($plans[$group])) {
-                    $available = array_filter(array_merge($available, $plans[$group]));
+                    if (is_array($plans[$group])) {
+                        $available = array_filter(array_merge($available, $plans[$group]));
+                    } elseif ($plans[$group] == '*') {
+                        // This group makes all plans selected
+                        $available = array();
+                        break;
+                    }
                 }
             }
 
