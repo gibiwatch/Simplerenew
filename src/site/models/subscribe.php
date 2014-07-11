@@ -20,9 +20,35 @@ class SimplerenewModelSubscribe extends SimplerenewModelAccount
             ->from('#__simplerenew_plans plans')
             ->order('code');
 
+        // Select the plans based on the user's user group
         if ($plans = $this->getState('filter.plans')) {
-            $plans = array_map(array($db, 'quote'), $plans);
-            $query->where('code IN (' . join(',', $plans) . ')');
+            $userId = $this->getState('user.id');
+            $user   = SimplerenewFactory::getUser($userId);
+
+            // Start by assuming unsubscribed
+            $checkGroups = array(0);
+            if ($user->id > 0) {
+                // See if the user is in a plan group
+                $planGroups = $db
+                    ->setQuery('Select group_id from #__simplerenew_plans group by group_id')
+                    ->loadColumn();
+
+                $checkGroups = array_intersect($planGroups, $user->groups) ? : $checkGroups;
+            }
+
+            $available = array();
+            foreach ($checkGroups as $group) {
+                if (isset($plans[$group])) {
+                    $available = array_filter(array_merge($available, $plans[$group]));
+                }
+            }
+
+            if ($available) {
+                $available = array_map(array($db, 'quote'), $available);
+                $query->where('code IN (' . join(',', $available) . ')');
+            } else {
+                return array();
+            }
         }
 
         $query->where('published = 1');
@@ -36,8 +62,8 @@ class SimplerenewModelSubscribe extends SimplerenewModelAccount
         parent::populateState();
 
         if ($params = $this->state->get('parameters.menu')) {
-            $plans = $params->get('plans');
-            $this->setState('filter.plans', $plans);
+            $plans = new JRegistry($params->get('plans'));
+            $this->setState('filter.plans', $plans->toArray());
         }
     }
 }

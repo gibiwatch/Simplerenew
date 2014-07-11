@@ -23,7 +23,7 @@ abstract class JHtmlPlan
             $plan = (object)$plan;
         }
 
-        if (!isset($plan->name)) {
+        if (empty($plan->name)) {
             return '';
         }
 

@@ -47,6 +47,14 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
 
     public function display($tpl = null)
     {
+        // Depending on user state, there may not be any plans to choose
+        $this->plans = $this->get('Plans');
+        if (!$this->plans) {
+            $this->setLayout('noplans');
+            parent::display($tpl);
+            return;
+        }
+
         try {
             if ($this->user = $this->get('User')) {
                 $this->account      = $this->get('Account');
@@ -85,7 +93,6 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
         }
 
         $selectedPlan = empty($formData['planCode']) ? null : $formData['planCode'];
-        $this->plans  = $this->get('Plans');
         foreach ($this->plans as $plan) {
             $plan->selected = ($selectedPlan == $plan->code);
             $plan->disabled = ($this->subscription->plan == $plan->code);

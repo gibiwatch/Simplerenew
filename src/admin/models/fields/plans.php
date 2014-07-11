@@ -20,44 +20,65 @@ class JFormFieldPlans extends JFormFieldCheckboxes
     {
         parent::__construct($form);
 
+        SimplerenewFactory::getDocument()
+            ->addStyleDeclaration('fieldset.checkboxes input { margin-right: 5px; }');
+
         if (!SimplerenewFactory::getApplication()->isSite()) {
             $lang = SimplerenewFactory::getLanguage();
             $lang->load('com_simplerenew', SIMPLERENEW_SITE);
         }
     }
 
-    public function getOptions()
+    protected function getOptions()
     {
-        SimplerenewFactory::getDocument()
-            ->addStyleDeclaration('fieldset.checkboxes input { margin-right: 5px; }');
-
         $options = parent::getOptions();
 
-        $db = SimplerenewFactory::getDbo();
+        $db       = SimplerenewFactory::getDbo();
+        $fields   = array_map(
+            array($db, 'quoteName'),
+            array(
+                'p.code',
+                'p.name',
+                'p.amount',
+                'p.trial_length',
+                'p.trial_unit',
+                'p.group_id'
+            )
+        );
+        $fields[] = $db->quoteName('g.title', 'group');
+
         $query = $db->getQuery(true)
-            ->select('code, name, amount, trial_length, trial_unit')
-            ->from('#__simplerenew_plans')
+            ->select($fields)
+            ->from('#__simplerenew_plans p')
+            ->innerJoin('#__usergroups g on g.id = p.group_id')
             ->order('code');
 
         $format = $this->element['format'] ? (string)$this->element['format'] : '%name%';
 
         $list = $db->setQuery($query)->loadObjectList();
+
         foreach ($list as $plan) {
             $text = str_replace(
                 array(
-                    '%code%',
-                    '%name%'
+                    '{code}',
+                    '{fullname}',
+                    '{name}',
+                    '{group}'
                 ),
                 array(
                     $plan->code,
-                    JHtml::_('plan.name', $plan)
+                    JHtml::_('plan.name', $plan),
+                    $plan->name,
+                    $plan->group
                 ),
                 $format
             );
 
-            $option = JHtml::_('select.option', $plan->code, $text);
-            $option->checked = false;
-            $options[] = $option;
+            $option           = JHtml::_('select.option', $plan->code, $text);
+            $option->checked  = false;
+            $option->group    = $plan->group;
+            $option->group_id = $plan->group_id;
+            $options[]        = $option;
         }
         return $options;
     }
