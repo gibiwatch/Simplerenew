@@ -20,7 +20,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_PLANLIST'));
         foreach ($this->plans as $code => $plan):
             $planId   = 'plan_code_' . $code;
             $classes  = 'plan_code ' . $planId;
-            $checked  = $plan->selected ? ' checked="checked"' : '';
+            $checked  = $plan->selected ? ' checked' : '';
             $disabled = $plan->disabled ? ' disabled' : '';
             ?>
             <div class="<?php echo $classes; ?>">
