@@ -23,7 +23,7 @@ defined('_JEXEC') or die();
 
     <?php echo $this->loadtemplate('billing'); ?>
 
-    <div class="m-bottom">
+    <div class="m-bottom m-top">
         <input
             type="submit"
             value="<?php echo JText::_('COM_SIMPLERENEW_CHANGE_BUTTON'); ?>"
