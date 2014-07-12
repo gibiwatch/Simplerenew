@@ -8,8 +8,7 @@
 
 defined('_JEXEC') or die();
 ?>
-<div class="ost-container simplerenew-subscribe">
-
+<div class="ost-container simplerenew-renewal">
     <div class="ost-alert-warning">
         <?php echo JText::_('COM_SIMPLERENEW_ERROR_LOGIN_REQUIRED'); ?>
     </div>

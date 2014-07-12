@@ -8,4 +8,9 @@
 
 defined('_JEXEC') or die();
 ?>
-If you are seeing this, something probably went horribly wrong.
+<div class="ost-container simplerenew-renewal">
+    <div class="ost-alert-warning">
+        If you are seeing this, something probably went horribly wrong.
+        RE: lol
+    </div>
+</div>
