@@ -85,8 +85,13 @@ abstract class SimplerenewHelper
         $errors   = array();
         $warnings = array();
 
-        $plan = SimplerenewFactory::getContainer()->getPlan();
-        if (!$plan->validConfiguration()) {
+        try {
+            $plan = SimplerenewFactory::getContainer()->getPlan();
+            if (!$plan->validConfiguration()) {
+                $errors[] = JText::_('COM_SIMPLERENEW_ERROR_GATEWAY_CONFIGURATION');
+            }
+
+        } catch (Exception $e) {
             $errors[] = JText::_('COM_SIMPLERENEW_ERROR_GATEWAY_CONFIGURATION');
         }
 

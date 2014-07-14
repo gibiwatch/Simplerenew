@@ -25,40 +25,26 @@ abstract class SimplerenewFactory extends JFactory
      * @param JRegistry $params
      *
      * @return Container
+     * @throws Exception
      */
     public static function getContainer(JRegistry $params = null)
     {
         if (!self::$SimplerenewContainer instanceof Container) {
-            try {
-                $params = $params ? : SimplerenewComponentHelper::getParams();
+            $params = $params ? : SimplerenewComponentHelper::getParams();
 
-                $config = array(
-                    'user'    => array(
-                        'adapter' => 'joomla'
-                    ),
-                    'gateway' => array(
-                        'recurly' => (array)$params->get('gateway.recurly')
-                    ),
-                    'account' => array(
-                        'codeMask' => $params->get('basic.codeMask', '%s')
-                    )
-                );
+            $config = array(
+                'user'    => array(
+                    'adapter' => 'joomla'
+                ),
+                'gateway' => array(
+                    'recurly' => (array)$params->get('gateway.recurly')
+                ),
+                'account' => array(
+                    'codeMask' => $params->get('basic.codeMask', '%s')
+                )
+            );
 
-                self::$SimplerenewContainer = new Container($config);
-            } catch (Exception $e) {
-                $app = self::getApplication();
-                if ($app->isAdmin()) {
-                    $link = 'index.php?option=com_simplerenew';
-                } else {
-                    $link = JRoute::_('index.php');
-                }
-                $app->redirect(
-                    $link,
-                    JText::sprintf('COM_SIMPLERENEW_ERROR_CONFIGURATION', $e->getMessage()),
-                    'error'
-                );
-            }
-
+            self::$SimplerenewContainer = new Container($config);
         }
         return self::$SimplerenewContainer;
     }
