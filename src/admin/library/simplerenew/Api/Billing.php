@@ -209,18 +209,18 @@ class Billing extends AbstractApiBase
         parent::setProperties($data, $map);
         $this->address->setProperties($data, $map);
 
-        if (!empty($data->cc)) {
+        if (is_object($data) && !empty($data->cc)) {
             $cc = $data->cc;
-        } elseif (!empty($cc['cc'])) {
+        } elseif (is_array($data) && !empty($data['cc'])) {
             $cc = $data['cc'];
+        } else {
+            $cc = $data;
         }
 
-        if (!empty($cc)) {
-            if ($this->payment instanceof CreditCard) {
-                $this->payment->setProperties($cc, $map);
-            } else {
-                $this->payment = new CreditCard($cc, $map);
-            }
+        if (empty($this->payment)) {
+            $this->payment = new CreditCard($cc, $map);
+        } else {
+            $this->payment->setProperties($cc, $map);
         }
 
         return $this;

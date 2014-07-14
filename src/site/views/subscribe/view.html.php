@@ -92,10 +92,18 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
             }
         }
 
-        $selectedPlan = empty($formData['planCode']) ? null : $formData['planCode'];
+        if (!empty($formData['planCode'])) {
+            $selectedPlan = $formData['planCode'];
+        } elseif ($this->subscription->plan) {
+            $selectedPlan = $this->subscription->plan;
+        } else {
+            $plan = current($this->plans);
+            $selectedPlan = $plan->code;
+        }
+
         foreach ($this->plans as $plan) {
             $plan->selected = ($selectedPlan == $plan->code);
-            $plan->disabled = ($this->subscription->plan == $plan->code);
+            $plan->disabled = (!$this->newSubscription && $this->subscription->plan == $plan->code);
         }
 
         parent::display($tpl);

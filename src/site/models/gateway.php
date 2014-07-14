@@ -43,9 +43,10 @@ class SimplerenewModelGateway extends SimplerenewModelSite
             }
         }
 
+        $userId    = $data->get('userId');
         $password  = $data->get('password');
         $password2 = $data->get('password2');
-        if ($data->get('userId') <= 0) {
+        if ($userId <= 0) {
             // Create a new user
             if (!$password) {
                 throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_PASSWORD_EMPTY'));
@@ -57,15 +58,19 @@ class SimplerenewModelGateway extends SimplerenewModelSite
 
         } else {
             // User exists, Verify existing credentials
-            if (!$password || ($password !== $password2)) {
-                throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_PASSWORD_VERIFY_REQUIRED'));
-            }
-            if (!$user->validate($password)) {
-                throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_PASSWORD_INCORRECT'));
-            }
-            if (!$user->enabled && ($user->email != $data->get('email'))) {
-                // For users not yet confirmed, we want to match the email address as well
-                throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_EMAIL_VERIFY_REQUIRED'));
+            $currentUser = SimplerenewFactory::getUser();
+
+            if ($userId != $currentUser->id) {
+                if (!$password || ($password !== $password2)) {
+                    throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_PASSWORD_VERIFY_REQUIRED'));
+                }
+                if (!$user->validate($password)) {
+                    throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_PASSWORD_VERIFY_REQUIRED'));
+                }
+                if (!$user->enabled && ($user->email != $data->get('email'))) {
+                    // For users not yet confirmed, we want to match the email address as well
+                    throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_EMAIL_VERIFY_REQUIRED'));
+                }
             }
 
             // We've verified we can do this
@@ -116,22 +121,18 @@ class SimplerenewModelGateway extends SimplerenewModelSite
     {
         $app = SimplerenewFactory::getApplication();
 
-        $data = new JRegistry($data ? : $this->getState()->getProperties());
+        $data = new JRegistry($data ? : $this->getState('billing'));
         $data = $data->toArray();
 
         $container = SimplerenewFactory::getContainer();
         $billing   = $container->getBilling();
-        $billing->load($account);
-
-        if (array_filter($data['cc'])) {
-            if (!$billing->payment instanceof CreditCard) {
-                $billing->setPayment();
-            }
-            $billing->payment->setProperties($data['cc']);
+        try {
+            $billing->load($account);
+        } catch (NotFound $e) {
+            // this is not a problem here
         }
 
         $billing->setProperties($data);
-        $billing->address->setProperties($data);
         $billing->save();
 
         return $billing;
