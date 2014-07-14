@@ -8,4 +8,6 @@
 
 defined('_JEXEC') or die();
 ?>
-Instructions to re-subscribe will go here
+<div class="ost-container simplerenew-renewal">
+    Instructions to re-subscribe will go here
+</div>

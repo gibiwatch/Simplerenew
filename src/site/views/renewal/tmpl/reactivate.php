@@ -18,7 +18,7 @@ error_reporting(-1);
 ini_set('display_errors', true);
 
 ?>
-<div class="ost-container simplerenew-account">
+<div class="ost-container simplerenew-renewal">
 
     <div class="page-header">
         <h1><?php echo JText::_('COM_SIMPLERENEW_RENEWAL_REACTIVATE'); ?></h1>

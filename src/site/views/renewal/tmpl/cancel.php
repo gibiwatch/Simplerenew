@@ -15,7 +15,7 @@ defined('_JEXEC') or die();
 $app = SimplerenewFactory::getApplication();
 
 ?>
-<div class="ost-container simplerenew-account">
+<div class="ost-container simplerenew-renewal">
 
     <div class="page-header">
         <h1><?php echo JText::_('COM_SIMPLERENEW_RENEWAL_CANCEL'); ?></h1>

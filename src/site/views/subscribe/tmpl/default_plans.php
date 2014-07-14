@@ -20,11 +20,11 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_PLANLIST'));
         foreach ($this->plans as $code => $plan):
             $planId   = 'plan_code_' . $code;
             $classes  = 'plan_code ' . $planId;
-            $checked  = $plan->selected ? ' checked="checked"' : '';
-            $disabled = $plan->disabled ? ' disabled="disabled"' : '';
+            $checked  = $plan->selected ? ' checked' : '';
+            $disabled = $plan->disabled ? ' disabled' : '';
             ?>
             <div class="<?php echo $classes; ?>">
-                <span class="simplerenew-plan <?php echo $planId; ?>">
+                <span class="simplerenew-plan <?php echo $planId . $disabled; ?>">
                     <input<?php echo $checked . $disabled; ?>
                         type="radio"
                         name="planCode"
