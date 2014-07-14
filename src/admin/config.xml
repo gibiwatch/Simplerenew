@@ -45,11 +45,6 @@
                     type="text"/>
 
                 <field
-                    name="testPrivate"
-                    label="COM_SIMPLERENEW_RECURLY_PRIVATE_LABEL"
-                    type="text"/>
-
-                <field
                     name="testSubdomain"
                     label="COM_SIMPLERENEW_RECURLY_SUBDOMAIN_LABEL"
                     description="COM_SIMPLERENEW_RECURLY_SUBDOMAIN_DESC"
@@ -64,11 +59,6 @@
                 <field
                     name="liveApikey"
                     label="COM_SIMPLERENEW_RECURLY_APIKEY_LABEL"
-                    type="text"/>
-
-                <field
-                    name="livePrivate"
-                    label="COM_SIMPLERENEW_RECURLY_PRIVATE_LABEL"
                     type="text"/>
 
                 <field
