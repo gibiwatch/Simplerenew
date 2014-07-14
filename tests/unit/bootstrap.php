@@ -31,6 +31,8 @@ if (!defined('JPATH_BASE')) {
 }
 require_once JPATH_BASE . '/includes/defines.php';
 
+require_once JPATH_BASE . '/includes/framework.php';
+
 // Copied from /includes/framework.php
 @ini_set('magic_quotes_runtime', 0);
 @ini_set('zend.ze1_compatibility_mode', '0');
