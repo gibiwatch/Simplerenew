@@ -19,14 +19,23 @@ class JFormFieldPlanAccess extends JFormFieldPlans
 
     protected $forceMultiple = false;
 
+    protected $pageControl = null;
+    protected $pageClass = null;
+    protected $groupControls = null;
+
+
     protected function getInput()
     {
+        $this->pageControl  = $this->fieldname . '-pagecontrol';
+        $this->pageClass    = $this->fieldname . '-pagetype';
+        $this->groupControls = $this->fieldname . '-group-control';
+
         JHtml::_('bootstrap.tooltip');
 
         $pages = array(
-            'ALL' => $this->fieldname . '-all',
+            'ALL'    => $this->fieldname . '-all',
             'SELECT' => $this->fieldname . '-select',
-            'GROUP' => $this->fieldname . '-group'
+            'GROUP'  => $this->fieldname . '-group'
         );
 
         $pageOptions = array();
@@ -46,38 +55,19 @@ class JFormFieldPlanAccess extends JFormFieldPlans
             $selected = $pages['GROUP'];
         }
 
-        $pageControl = $this->fieldname . '-pagecontrol';
-        $pageClass = $this->fieldname . '-pagetype';
         $html = array(
-            JHtml::_('select.genericlist', $pageOptions, $pageControl, null, 'value', 'text', $selected)
+            JHtml::_('select.genericlist', $pageOptions, $this->pageControl, null, 'value', 'text', $selected)
         );
 
-        $html[] = '<div class="' . $pageClass . '" id="' . $pages['ALL'] . '"></div>';
-        $html[] = '<div class="' . $pageClass . '" id="' . $pages['SELECT'] . '">';
+        $html[] = '<div class="' . $this->pageClass . '" id="' . $pages['ALL'] . '"></div>';
+        $html[] = '<div class="' . $this->pageClass . '" id="' . $pages['SELECT'] . '">';
         $html[] = $this->planSelect();
         $html[] = '</div>';
-        $html[] = '<div class="' . $pageClass . '" id="' . $pages['GROUP'] . '">';
+        $html[] = '<div class="' . $this->pageClass . '" id="' . $pages['GROUP'] . '">';
         $html[] = $this->groupPager();
         $html[] = '</div>';
 
-        $js = <<<JS
-(function($) {
-        $(document).ready(function() {
-            $('#{$pageControl}').on('change', function(evt) {
-                var active = $(this).val();
-                $('.{$pageClass}').each(function(index, el) {
-                    if ($(el).attr('id') == active) {
-                        $(el).show();
-                        $(el).find(':input').attr('disabled', false);
-                    } else {
-                        $(el).hide().find(':input').attr('disabled', true);
-                    }
-                });
-            }).trigger('change');
-        });
-})(jQuery);
-JS;
-        SimplerenewFactory::getDocument()->addScriptDeclaration($js);
+        $this->addJs();
 
         return implode("\n", $html);
     }
@@ -88,7 +78,7 @@ JS;
 
         // Initialize some option attributes.
         $group   = isset($this->value[$groupId]) ? $this->value[$groupId] : array();
-        $checked = (in_array($option->value, $group) ? ' checked' : '');
+        $checked = (is_array($group) && in_array($option->value, $group) ? ' checked' : '');
 
         $class    = !empty($option->class) ? ' class="' . $option->class . '"' : '';
         $disabled = !empty($option->disable) || $this->disabled ? ' disabled' : '';
@@ -173,56 +163,108 @@ JS;
         $html = array(
             '<p>' . $this->pageDescription(JText::_('COM_SIMPLERENEW_PLANACCESS_BYGROUP_DESC')) . '</p>',
             '<div id="planaccess-sliders" class="tabbable tabs-left">',
-            '<ul class="nav nav-tabs">'
         );
+
+        $options = array(
+            JHtml::_('select.option', '0', JText::_('COM_SIMPLERENEW_OPTION_PLANACCESS_ALL')),
+            JHtml::_('select.option', '1', JText::_('COM_SIMPLERENEW_OPTION_PLANACCESS_SELECT'))
+        );
+
+        // Build the selectors and controls
+        $selectors = array('<ul class="nav nav-tabs">');
+        $controls  = array('<div class="tab-content">');
 
         $groups = $this->getGroups();
         $plans  = $this->getOptions();
         foreach ($groups as $group) {
+            $groupId   = $group->value;
+            $controlId = $this->fieldname . '-group' . $groupId;
+
             // Initial Active Tab
             $active = "";
-
-            if ($group->value == 0) {
+            if ($groupId == 0) {
                 $active = "active";
             }
 
-            $html[] = '<li class="' . $active . '">';
-            $html[] = '<a href="#group-' . $group->value . '" data-toggle="tab">';
-            $html[] = $group->text;
-            $html[] = '</a>';
-            $html[] = '</li>';
-        }
+            $selectors[] = '<li class="' . $active . '">';
+            $selectors[] = '<a href="#' . $controlId . '" data-toggle="tab">';
+            $selectors[] = $group->text;
+            $selectors[] = '</a>';
+            $selectors[] = '</li>';
 
-        $html[] = '</ul>';
+            $selected   = (int)(empty($this->value[$groupId]) || is_array($this->value[$groupId]));
+            $controls[] = '<div class="' . trim('tab-pane ' . $active) . '" id="' . $controlId . '">';
+            $controls[] = JHtml::_(
+                'select.genericlist',
+                $options,
+                $controlId . '-select',
+                'class="' . $this->groupControls . '"',
+                'value',
+                'text',
+                $selected
+            );
+            $controls[] = '<fieldset class="allplans">';
+            $controls[] = '<input type="hidden" name="' . $this->name . '[' . $groupId . ']" value="*"/>';
+            $controls[] = '</fieldset>';
 
-        $html[] = '<div class="tab-content">';
-        foreach ($groups as $group) {
-            // Initial Active Pane
-            $active = "";
-
-            if ($group->value == 0) {
-                $active = " active";
-            }
-
-            $html[] = '<div class="tab-pane' . $active . '" id="group-' . $group->value . '">';
-            $html[] = '<fieldset id="" class="checkboxes">';
-            $html[] = '<ul>';
+            $controls[] = '<fieldset class="checkboxes">';
+            $controls[] = '<ul>';
             foreach ($plans as $plan) {
-                $html[] = $this->createCheckbox($group->value, $plan);
+                $controls[] = $this->createCheckbox($groupId, $plan);
             }
-            $html[] = '</ul>';
-            $html[] = '</fieldset>';
-            $html[] = '</div>';
+            $controls[] = '</ul>';
+            $controls[] = '</fieldset>';
+            $controls[] = '</div>';
         }
+        $selectors[] = '</ul>';
+        $controls[]  = '</div>';
+
+        $html   = array_merge($html, $selectors, $controls);
         $html[] = '</div>';
 
-        $html[] = '</div>';
-
-        return join("\n",$html);
+        return join("\n", $html);
     }
 
     protected function pageDescription($text)
     {
         return '<p style="padding: 10px">' . $text . '</p>';
+    }
+
+    protected function addJs()
+    {
+        $js = <<<JS
+(function($) {
+        $(document).ready(function() {
+
+            var pageControl = $('#{$this->pageControl}');
+            var groupControls = $('.{$this->groupControls}');
+
+            groupControls.on('change', function(evt) {
+                var selected = ($(this).val() == 1 ? 'checkboxes' : 'allplans');
+                $(this).siblings('fieldset').each(function(index, el) {
+                    if ($(el).hasClass(selected)) {
+                        $(el).find(':input').attr('disabled', false);
+                    } else {
+                        $(el).find(':input').attr('disabled', true);
+                    }
+                });
+            });
+
+            pageControl.on('change', function(evt) {
+                var active = $(this).val();
+                $('.{$this->pageClass}').each(function(index, el) {
+                    if ($(el).attr('id') == active) {
+                        $(el).show();
+                        $(el).find(':input').attr('disabled', false);
+                        $(el).find('.{$this->groupControls}').trigger('change');
+                    } else {
+                        $(el).hide().find(':input').attr('disabled', true);
+                    }
+                });
+            }).trigger('change');
+        });
+})(jQuery);
+JS;
+        SimplerenewFactory::getDocument()->addScriptDeclaration($js);
     }
 }
