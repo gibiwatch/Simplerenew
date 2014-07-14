@@ -13,10 +13,6 @@ defined('_JEXEC') or die();
  */
 
 $app = SimplerenewFactory::getApplication();
-
-error_reporting(-1);
-ini_set('display_errors', true);
-
 ?>
 <div class="ost-container simplerenew-renewal">
 
