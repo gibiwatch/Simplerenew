@@ -54,7 +54,10 @@ class SimplerenewModelGateway extends SimplerenewModelSite
             } elseif (!$password2 || ($password !== $password2)) {
                 throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_PASSWORD_MISMATCH'));
             }
-            $user->setProperties($data)->create();
+
+            $user
+                ->setProperties($data->toArray())
+                ->create();
 
         } else {
             // User exists, Verify existing credentials
@@ -74,7 +77,9 @@ class SimplerenewModelGateway extends SimplerenewModelSite
             }
 
             // We've verified we can do this
-            $user->setProperties($data)->update();
+            $user
+                ->setProperties($data->toArray())
+                ->update();
         }
         return $user;
     }

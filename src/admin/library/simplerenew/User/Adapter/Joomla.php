@@ -60,7 +60,7 @@ class Joomla implements UserInterface
      * @param User $parent
      *
      * @return void
-     * @throws Exception
+     * @throws NotFound
      */
     public function loadByUsername(User $parent)
     {
@@ -73,7 +73,7 @@ class Joomla implements UserInterface
             return;
         }
 
-        throw new Exception('Username not found - ' . $username);
+        throw new NotFound('Username not found - ' . $username);
     }
 
     /**
