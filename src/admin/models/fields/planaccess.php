@@ -46,22 +46,26 @@ class JFormFieldPlanAccess extends JFormFieldPlans
             $selected = $pages['GROUP'];
         }
 
-        $class = $this->fieldname . '-pagetype';
+        $pageControl = $this->fieldname . '-pagecontrol';
+        $pageClass = $this->fieldname . '-pagetype';
         $html = array(
-            JHtml::_('select.genericlist', $pageOptions, $this->fieldname . '-pagecontrol', null, 'value', 'text', $selected),
-            '<div class="' . $class . '" id="' . $this->fieldname . '-all"></div>',
-            '<div class="' . $class . '" id="' . $this->fieldname . '-select">This page will have just plans</div>',
-            '<div class="' . $class . '" id="' . $this->fieldname . '-group">'
+            JHtml::_('select.genericlist', $pageOptions, $pageControl, null, 'value', 'text', $selected)
         );
-        $html = array_merge($html, $this->groupPager());
+
+        $html[] = '<div class="' . $pageClass . '" id="' . $pages['ALL'] . '"></div>';
+        $html[] = '<div class="' . $pageClass . '" id="' . $pages['SELECT'] . '">';
+        $html[] = $this->planSelect();
+        $html[] = '</div>';
+        $html[] = '<div class="' . $pageClass . '" id="' . $pages['GROUP'] . '">';
+        $html[] = $this->groupPager();
         $html[] = '</div>';
 
         $js = <<<JS
 (function($) {
         $(document).ready(function() {
-            $('#{$this->fieldname}-pagecontrol').on('change', function(evt) {
+            $('#{$pageControl}').on('change', function(evt) {
                 var active = $(this).val();
-                $('.{$class}').each(function(index, el) {
+                $('.{$pageClass}').each(function(index, el) {
                     if ($(el).attr('id') == active) {
                         $(el).show();
                         $(el).find(':input').attr('disabled', false);
@@ -134,11 +138,40 @@ JS;
         return $groups;
     }
 
+    /**
+     * Selected plans page
+     *
+     * @return string
+     */
+    protected function planSelect()
+    {
+        $plans = $this->getOptions();
+
+        $html = array(
+            $this->pageDescription(JText::_('COM_SIMPLERENEW_PLANACCESS_SELECT_DESC'))
+        );
+
+        $html[] = '<fieldset id="" class="checkboxes">';
+        $html[] = '<ul>';
+        foreach ($plans as $plan) {
+            $html[] = $this->createCheckbox('*', $plan);
+        }
+        $html[] = '</ul>';
+        $html[] = '</fieldset>';
+
+        return join("\n", $html);
+    }
+
+    /**
+     * Selected plans by group page
+     *
+     * @return string
+     */
     protected function groupPager()
     {
         // Initialize tabs
         $html = array(
-            '<p>' . JText::_('COM_SIMPLERENEW_PLANACCESS_DESC') . '</p>',
+            '<p>' . $this->pageDescription(JText::_('COM_SIMPLERENEW_PLANACCESS_BYGROUP_DESC')) . '</p>',
             '<div id="planaccess-sliders" class="tabbable tabs-left">',
             '<ul class="nav nav-tabs">'
         );
@@ -185,6 +218,11 @@ JS;
 
         $html[] = '</div>';
 
-        return $html;
+        return join("\n",$html);
+    }
+
+    protected function pageDescription($text)
+    {
+        return '<p style="padding: 10px">' . $text . '</p>';
     }
 }
