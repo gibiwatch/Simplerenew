@@ -6,6 +6,7 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Api\Subscription;
 use Simplerenew\Exception\NotFound;
 
 defined('_JEXEC') or die();
@@ -124,14 +125,46 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
      */
     public function change()
     {
-        echo 'change subscriptions under construction';
-    }
+        $this->checkToken();
 
-    /**
-     * Change autorenew status
-     */
-    public function renewal()
-    {
-        echo 'cancel/autorenew under construction';
+        $app = SimplerenewFactory::getApplication();
+        if ($id = $app->input->getString('id')) {
+            $container = SimplerenewFactory::getContainer();
+
+            try {
+                $user    = $container->getUser()->load();
+                $account = $container->getAccount()->load($user);
+
+                $subscription = $container
+                    ->getSubscription()
+                    ->getValidSubscription($account, $id);
+
+                $planCode = $app->input->getString('planCode');
+
+                if ($subscription->status == Subscription::STATUS_CANCELED) {
+                    $subscription->reactivate();
+                }
+
+                $oldPlan = $container->getPlan()->load($subscription->plan);
+                $newPlan = $container->getPlan()->load($planCode);
+                $subscription->update($newPlan);
+
+            } catch (Exception $e) {
+                $this->callerReturn(
+                    JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_CHANGE', $e->getMessage()),
+                    'error'
+                );
+                return;
+            }
+        }
+
+        $this->callerReturn(
+            JText::sprintf(
+                'COM_SIMPLERENEW_SUBSCRIPTION_CHANGE_SUCCESS',
+                $oldPlan->name,
+                $newPlan->name,
+                $subscription->period_end->format('F, j, Y')
+            )
+        );
     }
 }
