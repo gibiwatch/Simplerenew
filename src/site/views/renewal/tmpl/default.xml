@@ -5,4 +5,20 @@
             <![CDATA[COM_SIMPLERENEW_VIEW_RENEWAL_DEFAULT_DESC]]>
         </message>
     </layout>
+
+    <fields name="params">
+        <fieldset
+            name="basic"
+            label="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_BASIC_LABEL">
+
+            <field
+                name="cancelMessage"
+                type="editor"
+                label="COM_SIMPLERENEW_FIELD_CANCEL_MESSAGE_LABEL"
+                description="COM_SIMPLERENEW_FIELD_CANCEL_MESSAGE_DESC"
+                filter="JComponentHelper::filterText"/>
+        </fieldset>
+
+    </fields>
+
 </metadata>

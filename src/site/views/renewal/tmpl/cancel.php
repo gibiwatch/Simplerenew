@@ -21,10 +21,7 @@ $app = SimplerenewFactory::getApplication();
         <h1><?php echo JText::_('COM_SIMPLERENEW_RENEWAL_CANCEL'); ?></h1>
     </div>
 
-    <p>
-        Some text can go here to talk the user out of canceling. Probably we'll
-        put the contents of a selected Joomla! article here.
-    </p>
+    <?php echo $this->params->get('cancelMessage'); ?>
 
     <form
         name="renewCancel"

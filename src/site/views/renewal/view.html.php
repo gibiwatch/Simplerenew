@@ -19,6 +19,11 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
     protected $user = null;
 
     /**
+     * @var JRegistry
+     */
+    protected $params = null;
+
+    /**
      * @var Subscription
      */
     protected $subscription = null;
@@ -55,6 +60,10 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
                     break;
             }
         }
+
+        $state = $this->get('State');
+        $this->params = $state->get('parameters.component');
+        $this->params->merge($state->get('parameters.menu'));
 
         parent::display($tpl);
     }
