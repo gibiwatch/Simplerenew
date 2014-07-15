@@ -180,11 +180,11 @@ else:
                 </td>
 
                 <td style="text-align: right;">
-                    <?php echo number_format($item->amount, 2) ?>
+                    <?php echo JHtml::_('currency.format', $item->amount); ?>
                 </td>
 
                 <td style="text-align: right;">
-                    <?php echo number_format($item->setup_cost, 2); ?>
+                    <?php echo JHtml::_('currency.format', $item->setup_cost); ?>
                 </td>
 
                 <td>
