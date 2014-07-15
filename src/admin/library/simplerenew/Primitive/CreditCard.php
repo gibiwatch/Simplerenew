@@ -56,4 +56,14 @@ class CreditCard extends AbstractPayment
         }
         parent::__construct($data);
     }
+
+    /**
+     * Determine if the payment type exists
+     *
+     * @return bool
+     */
+    public function exists()
+    {
+        return (bool)($this->lastFour != '');
+    }
 }

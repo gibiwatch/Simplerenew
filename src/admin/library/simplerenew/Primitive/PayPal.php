@@ -16,4 +16,14 @@ class PayPal extends AbstractPayment
      * @var string
      */
     public $agreementId = null;
+
+    /**
+     * Determine if the payment type exists
+     *
+     * @return bool
+     */
+    public function exists()
+    {
+        return (bool)($this->agreementId != '');
+    }
 }

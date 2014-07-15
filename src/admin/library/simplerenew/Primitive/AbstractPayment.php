@@ -12,5 +12,10 @@ defined('_JEXEC') or die();
 
 abstract class AbstractPayment extends AbstractPrimitive
 {
-
+    /**
+     * Determine if the payment type exists
+     *
+     * @return bool
+     */
+    abstract public function exists();
 }
