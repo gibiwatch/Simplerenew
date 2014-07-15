@@ -75,15 +75,16 @@ abstract class SimplerenewHelperSite
         // Load font Awesome
         switch ($params->get('advanced.fontAwesome', 'local')) {
             case 'local':
-                JHtml::stylesheet('com_simplerenew/fontello/css/fontello.css', null, true);
                 JHtml::stylesheet('com_simplerenew/awesome/css/font-awesome.min.css', null, true);
                 break;
 
             case 'cdn':
-                JHtml::stylesheet('com_simplerenew/fontello/css/fontello.css', null, true);
                 JHtml::stylesheet(self::$awesomeCDN);
                 break;
         }
+
+        // Load fontello with Paypal icon by separate
+        JHtml::stylesheet('com_simplerenew/fontello/css/fontello.css', null, true);
 
         // Load responsive grids
         JHtml::stylesheet('com_simplerenew/grid.css', null, true);
