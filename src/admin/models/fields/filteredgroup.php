@@ -12,7 +12,7 @@ JFormHelper::loadFieldClass('Usergrouplist');
 
 /**
  * This class is incompatible with Joomla 2.x
- * 
+ *
  * Class JFormFieldFilteredgroup
  */
 class JFormFieldFilteredgroup extends JFormFieldUserGroupList
