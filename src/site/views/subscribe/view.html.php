@@ -103,7 +103,6 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
 
         foreach ($this->plans as $plan) {
             $plan->selected = ($selectedPlan == $plan->code);
-            $plan->disabled = (!$this->newSubscription && $this->subscription->plan == $plan->code);
         }
 
         parent::display($tpl);
