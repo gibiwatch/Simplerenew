@@ -30,7 +30,8 @@
 
         <field
             name="group_id"
-            type="usergrouplist"
+            type="filteredgroup"
+            exclude="core.admin"
             label="COM_SIMPLERENEW_PLAN_GROUP_ID_LABEL"
             description="COM_SIMPLERENEW_PLAN_GROUP_ID_DESC">
             <option value="">COM_SIMPLERENEW_OPTION_SELECT_GROUP</option>
