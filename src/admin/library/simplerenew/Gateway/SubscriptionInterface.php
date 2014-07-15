@@ -76,4 +76,15 @@ interface SubscriptionInterface
      * @throws Exception
      */
     public function reactivate(Subscription $parent);
+
+    /**
+     * Update subscription to a different plan
+     *
+     * @param Subscription $parent
+     * @param Plan         $plan
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function update(Subscription $parent, Plan $plan);
 }

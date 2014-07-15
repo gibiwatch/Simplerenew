@@ -247,4 +247,25 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
     }
+
+    /**
+     * Update subscription to a different plan
+     *
+     * @param Subscription $parent
+     * @param Plan         $plan
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function update(Subscription $parent, Plan $plan)
+    {
+        $subscription = $this->getSubscription($parent->id);
+
+        try {
+            $subscription->plan_code = $plan->code;
+            $subscription->updateAtRenewal();
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
+        }
+    }
 }

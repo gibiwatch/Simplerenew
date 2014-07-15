@@ -11,6 +11,7 @@ namespace Simplerenew\Api;
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Plan;
 use Simplerenew\Exception;
+use Simplerenew\Exception\NotFound;
 use Simplerenew\Gateway\SubscriptionInterface;
 
 defined('_JEXEC') or die();
@@ -201,5 +202,36 @@ class Subscription extends AbstractApiBase
     public function reactivate()
     {
         $this->imp->reactivate($this);
+    }
+
+    /**
+     * Update subscription to a different plans
+     *
+     * @param Plan $plan
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function update(Plan $plan)
+    {
+        $this->imp->update($this, $plan);
+    }
+
+    /**
+     * @param Account $account
+     * @param string  $id
+     *
+     * @return Subscription
+     * @throws NotFound
+     */
+    public function getValidSubscription(Account $account, $id)
+    {
+        $list = $this->getList($account);
+
+        if (isset($list[$id])) {
+            return $list[$id];
+        }
+
+        throw new NotFound('Subscription not found for account ' . $account->code);
     }
 }
