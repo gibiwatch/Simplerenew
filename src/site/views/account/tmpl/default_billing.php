@@ -9,12 +9,15 @@
 use Simplerenew\Primitive as Payment;
 
 defined('_JEXEC') or die();
+?>
 
+<h3><span><i class="fa fa-file-excel-o"></i></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?></h3>
+
+<?php
 if ($this->billing):
     $payment = $this->billing->payment;
 
     ?>
-    <h3><span><i class="fa fa-file-excel-o"></i></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?></h3>
 
     <div class="ost-section ost-row-one">
         <div class="block3">
