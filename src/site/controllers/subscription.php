@@ -117,7 +117,11 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             );
         }
 
-        return $this->callerReturn('User/Account Create - need to send the user someplace');
+        $link = SimplerenewRoute::get('account');
+        $this->setRedirect(
+            JRoute::_($link),
+            JText::_('COM_SIMPLERENEW_SUBSCRIPTION_SUCCESS')
+        );
     }
 
     /**
@@ -128,37 +132,46 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
         $this->checkToken();
 
         $app = SimplerenewFactory::getApplication();
-        if ($id = $app->input->getString('id')) {
-            $container = SimplerenewFactory::getContainer();
+        $id  = $app->input->getString('id');
 
-            try {
-                $user    = $container->getUser()->load();
-                $account = $container->getAccount()->load($user);
-
-                $subscription = $container
-                    ->getSubscription()
-                    ->getValidSubscription($account, $id);
-
-                $planCode = $app->input->getString('planCode');
-
-                if ($subscription->status == Subscription::STATUS_CANCELED) {
-                    $subscription->reactivate();
-                }
-
-                $oldPlan = $container->getPlan()->load($subscription->plan);
-                $newPlan = $container->getPlan()->load($planCode);
-                $subscription->update($newPlan);
-
-            } catch (Exception $e) {
-                $this->callerReturn(
-                    JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_CHANGE', $e->getMessage()),
-                    'error'
-                );
-                return;
-            }
+        if (!$id) {
+            $this->callerReturn(
+                JText::_('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_NOID'),
+                'error'
+            );
+            return;
         }
 
-        $this->callerReturn(
+        $container = SimplerenewFactory::getContainer();
+        try {
+            $user    = $container->getUser()->load();
+            $account = $container->getAccount()->load($user);
+
+            $subscription = $container
+                ->getSubscription()
+                ->getValidSubscription($account, $id);
+
+            $planCode = $app->input->getString('planCode');
+
+            if ($subscription->status == Subscription::STATUS_CANCELED) {
+                $subscription->reactivate();
+            }
+
+            $oldPlan = $container->getPlan()->load($subscription->plan);
+            $newPlan = $container->getPlan()->load($planCode);
+            $subscription->update($newPlan);
+
+        } catch (Exception $e) {
+            $this->callerReturn(
+                JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_CHANGE', $e->getMessage()),
+                'error'
+            );
+            return;
+        }
+
+        $link = SimplerenewRoute::get('account');
+        $this->setRedirect(
+            JRoute::_($link),
             JText::sprintf(
                 'COM_SIMPLERENEW_SUBSCRIPTION_CHANGE_SUCCESS',
                 $oldPlan->name,

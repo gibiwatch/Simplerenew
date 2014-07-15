@@ -17,8 +17,8 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
     {
         $this->checkToken();
 
-        $app       = SimplerenewFactory::getApplication();
-        $id        = $app->input->getString('id');
+        $app = SimplerenewFactory::getApplication();
+        $id  = $app->input->getString('id');
 
         if ($subscription = $this->getValidSubscription($id)) {
             try {
@@ -32,7 +32,9 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
                 return;
             }
 
-            $this->callerReturn(
+            $link = SimplerenewRoute::get('account');
+            $this->setRedirect(
+                JRoute::_($link),
                 JText::sprintf(
                     'COM_SIMPLERENEW_RENEWAL_CANCEL_SUCCESS',
                     $subscription->period_end->format('F, j, Y')
@@ -46,7 +48,7 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
         $this->checkToken();
 
         $app = SimplerenewFactory::getApplication();
-        $id = $app->input->getString('id');
+        $id  = $app->input->getString('id');
 
         if ($subscription = $this->getValidSubscription($id)) {
             try {
@@ -60,7 +62,11 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
                 return;
             }
 
-            $this->callerReturn(JText::_('COM_SIMPLERENEW_RENEWAL_REACTIVATE_SUCCESS'));
+            $link = SimplerenewRoute::get('account');
+            $this->setRedirect(
+                JRoute::_($link),
+                JText::_('COM_SIMPLERENEW_RENEWAL_REACTIVATE_SUCCESS')
+            );
         }
     }
 
