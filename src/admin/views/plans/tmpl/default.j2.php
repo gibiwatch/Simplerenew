@@ -111,7 +111,7 @@ window.addEvent('domready', function() {
                     );
                     ?>
                 </th>
-                <th>
+                <th width="5%">
                     <?php
                     echo JHtml::_(
                         'grid.sort',
@@ -153,9 +153,9 @@ window.addEvent('domready', function() {
                     <td><?php echo JHtml::_('link', $link, htmlspecialchars($item->code)); ?></td>
                     <td><?php echo JHtml::_('link', $link, htmlspecialchars($item->name)); ?></td>
                     <td><?php echo $item->usergroup; ?></td>
-                    <td><?php echo '$' . number_format($item->amount, 2); ?></td>
-                    <td><?php echo '$' . number_format($item->setup_cost, 2); ?></td>
-                    <td><?php JHtml::_('jgrid.published', $item->published, $i, 'simplerenew.', true) ?></td>
+                    <td class="right"><?php echo JHtml::_('currency.format', $item->amount); ?></td>
+                    <td class="right"><?php echo JHtml::_('currency.format', $item->setup_cost); ?></td>
+                    <td class="center"><?php echo JHtml::_('jgrid.published', $item->published, $i, 'plans.', true) ?></td>
                     <td class="right"><?php echo $item->id; ?></td>
                 </tr>
             <?php
