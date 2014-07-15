@@ -79,21 +79,29 @@ endif; ?>
             <div class="block6">
                 <label><?php echo JText::_('COM_SIMPLERENEW_CC_NUMBER'); ?></label>
                 <input
+                    <?php
+                    if (!$this->billing->payment->exists()) {
+                        echo 'required="true"';
+                    }
+                    ?>
                     id="billing_cc_number"
                     name="billing[cc][number]"
                     type="text"
                     value=""
-                    placeholder="<?php echo JHtml::_('creditcard.mask', $creditCard->lastFour); ?>"
-                    required="true"/>
+                    placeholder="<?php echo JHtml::_('creditcard.mask', $creditCard->lastFour); ?>"/>
             </div>
             <div class="block2">
                 <label><?php echo JText::_('COM_SIMPLERENEW_CC_CVV'); ?></label>
                 <input
+                    <?php
+                    if (!$this->billing->payment->exists()) {
+                        echo 'required="true"';
+                    }
+                    ?>
                     id="billing_cc_cvv"
                     name="billing[cc][cvv]"
                     type="text"
                     value=""
-                    required="true"
                     class="small-width"/>
             </div>
             <div class="block4">
