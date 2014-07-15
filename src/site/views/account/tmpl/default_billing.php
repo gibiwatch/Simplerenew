@@ -73,6 +73,8 @@ if ($this->billing):
         </div>
         <!-- /.ost-section -->
 
+        <?php echo $this->loadTemplate('address'); ?>
+
     <?php
     elseif ($payment instanceof Payment\PayPal): ?>
         <h3><span><i class="fa fa-paypal"></i></span> <?php echo JText::_('COM_SIMPLERENEW_PAYPAL'); ?></h3>
