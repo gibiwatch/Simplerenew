@@ -8,20 +8,48 @@
 
 defined('_JEXEC') or die();
 
-JFormHelper::loadFieldClass('Usergrouplist');
+JFormHelper::loadFieldClass('List');
 
-/**
- * This class is incompatible with Joomla 2.x
- *
- * Class JFormFieldFilteredgroup
- */
-class JFormFieldFilteredgroup extends JFormFieldUserGroupList
+class JFormFieldFilteredgroup extends JFormFieldList
 {
+    /**
+     * Cached array of the category items.
+     * Copied from Joomla 3.x
+     *
+     * @var    array
+     */
+    protected static $options = array();
+
     protected function getOptions()
     {
+        // Hash for caching
+        $hash = md5($this->element);
 
-        $options = parent::getOptions();
+        if (!isset(static::$options[$hash])) {
+            static::$options[$hash] = parent::getOptions();
 
+            $options = array();
+
+            $db    = JFactory::getDbo();
+            $query = $db->getQuery(true)
+                ->select('a.id AS value')
+                ->select('a.title AS text')
+                ->select('COUNT(DISTINCT b.id) AS level')
+                ->from('#__usergroups as a')
+                ->join('LEFT', '#__usergroups  AS b ON a.lft > b.lft AND a.rgt < b.rgt')
+                ->group('a.id, a.title, a.lft, a.rgt')
+                ->order('a.lft ASC');
+            $db->setQuery($query);
+
+            if ($options = $db->loadObjectList()) {
+                foreach ($options as $option) {
+                    $option->text = str_repeat('- ', $option->level) . $option->text;
+                }
+                static::$options[$hash] = array_merge(static::$options[$hash], $options);
+            }
+        }
+
+        $options = static::$options[$hash];
         if ($exclude = explode(',', (string)$this->element['exclude'])) {
             $filtered = array();
             foreach ($options as $option) {
@@ -32,8 +60,9 @@ class JFormFieldFilteredgroup extends JFormFieldUserGroupList
                 }
                 $filtered[] = $option;
             }
+            return $filtered;
         }
 
-        return $filtered;
+        return $options;
     }
 }

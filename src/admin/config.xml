@@ -8,7 +8,8 @@
                 name="defaultGroup"
                 label="COM_SIMPLERENEW_DEFAULT_GROUP_LABEL"
                 description="COM_SIMPLERENEW_DEFAULT_GROUP_DESC"
-                type="usergrouplist"/>
+                type="filteredgroup"
+                exclude="core.admin"/>
 
             <field
                 name="codeMask"
