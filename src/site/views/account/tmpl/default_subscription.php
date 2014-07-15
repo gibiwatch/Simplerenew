@@ -97,7 +97,7 @@ if ($this->subscription):
 else:
     ?>
 
-    <div class="ost-alert-notify">
+    <div class="ost-alert-warning">
         <?php echo JText::_('COM_SIMPLERENEW_NON_SUBSCRIBER'); ?>
     </div>
 
