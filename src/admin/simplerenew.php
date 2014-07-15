@@ -17,8 +17,6 @@ if (!SimplerenewFactory::getUser()->authorise('core.manage', 'com_simplerenew'))
 
 require_once JPATH_COMPONENT . '/include.php';
 
-SimplerenewHelper::enqueueNotices();
-
 $controller = SimplerenewControllerBase::getInstance('Simplerenew');
 $controller->execute(SimplerenewFactory::getApplication()->input->getCmd('task'));
 $controller->redirect();

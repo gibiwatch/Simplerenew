@@ -26,7 +26,16 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
         $returnUrl = 'index.php?option=com_simplerenew&view=plans';
 
         $plansGateway = SimplerenewFactory::getContainer()->getPlan();
-        $plansRemote  = $plansGateway->getList();
+        try {
+            $plansRemote  = $plansGateway->getList();
+        } catch (Exception $e) {
+            $this->setRedirect(
+                $returnUrl,
+                JText::sprintf('COM_SIMPLERENEW_ERROR_GATEWAY_FAILURE', $e->getMessage()),
+                'error'
+            );
+            return;
+        }
 
         $plansTable = SimplerenewTable::getInstance('Plans');
 
