@@ -63,7 +63,7 @@ if ($this->billing):
         </div>
         <!-- /.ost-section -->
 
-        <div class="ost-section ost-row-one m-bottom b-bottom">
+        <div class="ost-section ost-row-one">
             <div class="block3">
                 <label><?php echo JText::_('COM_SIMPLERENEW_CC_EXPIRATION'); ?></label>
             </div>
