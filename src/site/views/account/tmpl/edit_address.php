@@ -26,7 +26,7 @@ defined('_JEXEC') or die();
             id="billing_address2"
             name="billing[address2]"
             type="text"
-            value="<?php echo $this->billing->address2; ?>"
+            value="<?php echo $this->billing->address->address2; ?>"
             required="true"/>
     </div>
 </div>
