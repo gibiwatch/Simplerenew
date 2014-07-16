@@ -20,7 +20,7 @@ defined('_JEXEC') or die();
 </div>
 <!-- /.ost-section -->
 
-<div class="ost-section ost-row-two">
+<div class="ost-section ost-row-one">
     <div class="block3">
         <label><?php echo JText::_('COM_SIMPLERENEW_BILLING_ADDRESS2'); ?></label>
     </div>
@@ -40,7 +40,7 @@ defined('_JEXEC') or die();
 </div>
 <!-- /.ost-section -->
 
-<div class="ost-section ost-row-two">
+<div class="ost-section ost-row-one">
     <div class="block3">
         <label><?php echo JText::_('COM_SIMPLERENEW_BILLING_REGION'); ?></label>
     </div>
@@ -60,7 +60,7 @@ defined('_JEXEC') or die();
 </div>
 <!-- /.ost-section -->
 
-<div class="ost-section ost-row-two">
+<div class="ost-section ost-row-one m-bottom b-bottom">
     <div class="block3">
         <label><?php echo JText::_('COM_SIMPLERENEW_BILLING_COUNTRY'); ?></label>
     </div>
