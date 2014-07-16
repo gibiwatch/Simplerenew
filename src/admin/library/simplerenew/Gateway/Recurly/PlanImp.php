@@ -148,13 +148,16 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
             $isNew           = true;
         }
 
-        $plan->name                  = $parent->name;
-        $plan->description           = $parent->description;
-        $plan->plan_interval_length  = $parent->length;
-        $plan->plan_interval_unit    = $parent->unit;
-        $plan->accounting_code       = $parent->accounting_code;
+        $plan->name            = $parent->name;
+        $plan->description     = $parent->description;
+        $plan->accounting_code = $parent->accounting_code;
+
+        $this->convertLength($parent->length, $parent->unit);
+        $plan->plan_interval_length = $parent->length;
+        $plan->plan_interval_unit   = $parent->unit;
 
         if ($parent->trial_length) {
+            $this->convertLength($parent->trial_length, $parent->trial_unit);
             $plan->trial_interval_length = $parent->trial_length;
             $plan->trial_interval_unit   = $parent->trial_unit;
         }
@@ -195,6 +198,30 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
 
         } catch (NotFound $e) {
             // No worries, nothing to delete
+        }
+    }
+
+    /**
+     * Handle interval units not supported by Recurly. Changes
+     * parameters passed by reference.
+     *
+     * @param $interval
+     * @param $unit
+     *
+     * @return void
+     */
+    protected function convertLength(&$interval, &$unit)
+    {
+        switch ($unit) {
+            case Plan::INTERVAL_WEEKS:
+                $interval = $interval * 7;
+                $unit     = 'days';
+                break;
+
+            case Plan::INTERVAL_YEARS:
+                $interval = $interval * 12;
+                $unit     = 'months';
+                break;
         }
     }
 }
