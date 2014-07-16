@@ -15,16 +15,16 @@ $listDir = $this->escape($this->state->get('list.direction'));
 
 ?>
 <script>
-window.addEvent('domready', function() {
-    $('clear_form').addEvent('click', function(e) {
-        this.form.filter_search.value = '';
-        this.form.submit();
-    });
+    window.addEvent('domready', function () {
+        $('clear_form').addEvent('click', function (e) {
+            this.form.filter_search.value = '';
+            this.form.submit();
+        });
 
-    $$('*[name^=filter_]').addEvent('change', function(e) {
-        this.form.submit();
+        $$('*[name^=filter_]').addEvent('change', function (e) {
+            this.form.submit();
+        });
     });
-});
 </script>
 <form action="index.php?option=com_simplerenew&view=plans" method="post" name="adminForm" id="adminForm">
     <fieldset id="filter-bar">
@@ -53,114 +53,140 @@ window.addEvent('domready', function() {
 
     <table class="adminlist">
         <thead>
-            <tr>
-                <th width="1%">&nbsp;</th>
-                <th width="1%"><input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)"/></th>
-                <th width="10%">
-                    <?php
-                    echo JHtml::_(
-                        'grid.sort',
-                        'COM_SIMPLERENEW_PLAN_CODE_LABEL',
-                        'plan.code',
-                        $listDir,
-                        $listOrder
-                    );
-                    ?>
-                </th>
-                <th>
-                    <?php
-                    echo JHtml::_(
-                        'grid.sort',
-                        'COM_SIMPLERENEW_PLAN_NAME_LABEL',
-                        'plan.name',
-                        $listDir,
-                        $listOrder
-                    );
-                    ?>
-                </th>
-                <th>
-                    <?php
-                    echo JHtml::_(
-                        'grid.sort',
-                        'COM_SIMPLERENEW_PLAN_GROUP_ID_LABEL',
-                        'ug.title',
-                        $listDir,
-                        $listOrder
-                    )
-                    ?>
-                </th>
-                <th>
-                    <?php
-                    echo JHtml::_(
-                        'grid.sort',
-                        'COM_SIMPLERENEW_PLAN_AMOUNT_LABEL',
-                        'plan.amount',
-                        $listDir,
-                        $listOrder
-                    );
-                    ?>
-                </th>
-                <th>
-                    <?php
-                    echo JHtml::_(
-                        'grid.sort',
-                        'COM_SIMPLERENEW_PLAN_SETUP_COST_LABEL',
-                        'plan.setup_cost',
-                        $listDir,
-                        $listOrder
-                    );
-                    ?>
-                </th>
-                <th width="5%">
-                    <?php
-                    echo JHtml::_(
-                        'grid.sort',
-                        'COM_SIMPLERENEW_PUBLISHED',
-                        'plan.published',
-                        $listDir,
-                        $listOrder
-                    );
-                    ?>
-                </th>
-                <th width="%5">
-                    <?php
-                    echo JHtml::_(
-                        'grid.sort',
-                        'COM_SIMPLERENEW_ID_LABEL',
-                        'plan.id',
-                        $listDir,
-                        $listOrder
-                    );
-                    ?>
-                </th>
-            </tr>
+        <tr>
+            <th width="1%">&nbsp;</th>
+
+            <th width="1%"><input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)"/></th>
+
+            <th width="5%">
+                <?php
+                echo JHtml::_(
+                    'grid.sort',
+                    'COM_SIMPLERENEW_PUBLISHED',
+                    'plan.published',
+                    $listDir,
+                    $listOrder
+                );
+                ?>
+            </th>
+
+            <th width="10%">
+                <?php
+                echo JHtml::_(
+                    'grid.sort',
+                    'COM_SIMPLERENEW_PLAN_CODE_LABEL',
+                    'plan.code',
+                    $listDir,
+                    $listOrder
+                );
+                ?>
+            </th>
+
+            <th>
+                <?php
+                echo JHtml::_(
+                    'grid.sort',
+                    'COM_SIMPLERENEW_PLAN_NAME_LABEL',
+                    'plan.name',
+                    $listDir,
+                    $listOrder
+                );
+                ?>
+            </th>
+
+            <th>
+                <?php
+                echo JHtml::_(
+                    'grid.sort',
+                    'COM_SIMPLERENEW_PLAN_GROUP_ID_LABEL',
+                    'ug.title',
+                    $listDir,
+                    $listOrder
+                )
+                ?>
+            </th>
+
+            <th>
+                <?php
+                echo JHtml::_(
+                    'grid.sort',
+                    'COM_SIMPLERENEW_PLAN_AMOUNT_LABEL',
+                    'plan.amount',
+                    $listDir,
+                    $listOrder
+                );
+                ?>
+            </th>
+
+            <th>
+                <?php
+                echo JHtml::_(
+                    'grid.sort',
+                    'COM_SIMPLERENEW_PLAN_SETUP_COST_LABEL',
+                    'plan.setup_cost',
+                    $listDir,
+                    $listOrder
+                );
+                ?>
+            </th>
+
+            <th class="nowrap">
+                <?php echo JText::_('COM_SIMPLERENEW_PLAN_TRIAL_PERIOD_LABEL'); ?>
+            </th>
+        </tr>
         </thead>
 
         <tfoot>
-            <tr>
-                <td colspan="9"><?php echo $this->pagination->getListFooter(); ?></td>
-            </tr>
+        <tr>
+            <td colspan="8"><?php echo $this->pagination->getListFooter(); ?></td>
+        </tr>
         </tfoot>
 
         <tbody>
-            <?php
-            foreach ($this->items as $i => $item):
-                $link = 'index.php?option=com_simplerenew&task=plan.edit&id=' . $item->id;
-                ?>
-                <tr class="row<?php echo $i % 2; ?>">
-                    <td><?php echo $this->pagination->getRowOffset($i); ?></td>
-                    <td class="center"><?php echo JHtml::_('grid.id', $i, $item->id); ?></td>
-                    <td><?php echo JHtml::_('link', $link, htmlspecialchars($item->code)); ?></td>
-                    <td><?php echo JHtml::_('link', $link, htmlspecialchars($item->name)); ?></td>
-                    <td><?php echo $item->usergroup; ?></td>
-                    <td class="right"><?php echo JHtml::_('currency.format', $item->amount); ?></td>
-                    <td class="right"><?php echo JHtml::_('currency.format', $item->setup_cost); ?></td>
-                    <td class="center"><?php echo JHtml::_('jgrid.published', $item->published, $i, 'plans.', true) ?></td>
-                    <td class="right"><?php echo $item->id; ?></td>
-                </tr>
-            <?php
-            endforeach;
+        <?php
+        foreach ($this->items as $i => $item):
+            $link = 'index.php?option=com_simplerenew&task=plan.edit&id=' . $item->id;
             ?>
+            <tr class="row<?php echo $i % 2; ?>">
+                <td>
+                    <?php echo $this->pagination->getRowOffset($i); ?>
+                </td>
+
+                <td class="center">
+                    <?php echo JHtml::_('grid.id', $i, $item->id); ?>
+                </td>
+
+                <td class="center">
+                    <?php echo JHtml::_('jgrid.published', $item->published, $i, 'plans.', true) ?>
+                </td>
+
+                <td>
+                    <?php echo JHtml::_('link', $link, htmlspecialchars($item->code)); ?>
+                </td>
+
+                <td>
+                    <?php echo JHtml::_('link', $link, htmlspecialchars($item->name)); ?>
+                </td>
+
+                <td>
+                    <?php echo $item->usergroup; ?>
+                </td>
+
+                <td class="right">
+                    <?php echo JHtml::_('currency.format', $item->amount); ?>
+                </td>
+
+                <td class="right">
+                    <?php echo JHtml::_('currency.format', $item->setup_cost); ?>
+                </td>
+
+                <td>
+                    <?php echo JHtml::_('plan.trial', $item) ? : JText::_('COM_SIMPLERENEW_PLAN_TRIAL_NONE'); ?>
+                </td>
+            </tr>
+        <?php
+        endforeach;
+        ?>
         </tbody>
     </table>
 

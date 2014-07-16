@@ -67,13 +67,11 @@ class JFormFieldPlans extends JFormFieldCheckboxes
                 $text = str_replace(
                     array(
                         '{code}',
-                        '{fullname}',
                         '{name}',
                         '{group}'
                     ),
                     array(
                         $plan->code,
-                        JHtml::_('plan.name', $plan),
                         $plan->name,
                         $plan->group
                     ),

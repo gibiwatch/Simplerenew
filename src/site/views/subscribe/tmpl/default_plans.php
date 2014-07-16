@@ -12,15 +12,15 @@ defined('_JEXEC') or die();
  * @var SimplerenewViewSubscribe $this
  */
 
-echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_PLANLIST'));
+echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count($this->plans)));
 ?>
 <div class="ost-section">
     <div class="block12 p-bottom b-bottom">
         <?php
         foreach ($this->plans as $code => $plan):
-            $planId   = 'plan_code_' . $code;
-            $classes  = 'plan_code ' . $planId;
-            $checked  = $plan->selected ? ' checked' : '';
+            $planId  = 'plan_code_' . $code;
+            $classes = 'plan_code ' . $planId;
+            $checked = $plan->selected ? ' checked' : '';
             ?>
             <div class="<?php echo $classes; ?>">
                 <span class="simplerenew-plan <?php echo $planId; ?>">
@@ -29,7 +29,17 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_PLANLIST'));
                         name="planCode"
                         id="<?php echo $planId; ?>"
                         value="<?php echo $plan->code; ?>"/>
-                    <?php echo JHtml::_('plan.name', $plan); ?>
+                    <?php
+                    echo JHtml::_(
+                        'plan.name',
+                        $plan->name,
+                        $plan->amount,
+                        $plan->length,
+                        $plan->unit,
+                        $plan->trial_length,
+                        $plan->trial_unit
+                    );
+                    ?>
                 </span>
             </div>
 

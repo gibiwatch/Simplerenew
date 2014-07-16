@@ -187,14 +187,9 @@ else:
                     <?php echo JHtml::_('currency.format', $item->setup_cost); ?>
                 </td>
 
-                <td>
-                    <?php
-                    echo JText::plural(
-                        'COM_SIMPLERENEW_CALENDAR_N_PERIOD_'.$item->trial_unit,
-                        $item->trial_length
-                    );
-                    ?>
-                </td>
+            <td>
+                <?php echo JHtml::_('plan.trial', $item) ? : JText::_('COM_SIMPLERENEW_PLAN_TRIAL_NONE'); ?>
+            </td>
             </tr>
         <?php endforeach; ?>
         </tbody>
