@@ -152,9 +152,12 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
         $plan->description           = $parent->description;
         $plan->plan_interval_length  = $parent->length;
         $plan->plan_interval_unit    = $parent->unit;
-        $plan->trial_interval_length = $parent->trial_length;
-        $plan->trial_interval_unit   = $parent->trial_unit;
         $plan->accounting_code       = $parent->accounting_code;
+
+        if ($parent->trial_length) {
+            $plan->trial_interval_length = $parent->trial_length;
+            $plan->trial_interval_unit   = $parent->trial_unit;
+        }
 
         $amount     = $parent->amount * 100;
         $setup_cost = $parent->setup_cost * 100;
