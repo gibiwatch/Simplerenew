@@ -92,6 +92,7 @@
     -o-border-radius: 2px;
     padding: 9px 10px;
     width: 90%;
+    background: #ffffff;
 }
 
 .ost-container select {
