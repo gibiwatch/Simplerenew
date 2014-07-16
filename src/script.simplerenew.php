@@ -13,7 +13,9 @@ class Com_SimplerenewInstallerScript
     /**
      * @var array Obsolete folders/files to be deleted - use admin/site/media for location
      */
-    protected $obsoleteItems = array();
+    protected $obsoleteItems = array(
+        '/admin/library/configuration.json'
+    );
 
     /**
      * @var array Related extensions required or useful with the component
