@@ -75,6 +75,8 @@ endif; ?>
         </div>
         <!-- /.ost-section -->
 
+        <?php echo $this->loadTemplate('address'); ?>
+
         <div class="ost-section">
             <div class="block6">
                 <label><?php echo JText::_('COM_SIMPLERENEW_CC_NUMBER'); ?></label>

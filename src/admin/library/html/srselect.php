@@ -58,4 +58,18 @@ abstract class JHtmlSrselect
 
         return JHtml::_('select.genericlist', $data, $name, $attribs, 'value', 'text', $selected, $idtag, $translate);
     }
+
+    public static function country($name, $attribs = null, $selected = null, $idtag = false, $translate = false)
+    {
+        if ($attribs && !is_array($attribs)) {
+            $attribs = JUtility::parseAttributes($attribs);
+        }
+        $attribs['name'] = $name;
+        $attribs['id'] = $idtag ? : preg_replace('/(\[\]|\[|\])/', '_', $name);
+        $attribs['type'] = 'text';
+        $attribs['value'] = $selected;
+        $html = '<input ' . JArrayHelper::toString($attribs) . '/>';
+
+        return $html;
+    }
 }
