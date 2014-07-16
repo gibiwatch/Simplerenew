@@ -8,6 +8,9 @@
 
 defined('_JEXEC') or die();
 
+error_reporting(-1);
+ini_set('display_errors', 1);
+
 require_once __DIR__ . '/plans.php';
 
 class JFormFieldPlanAccess extends JFormFieldPlans
@@ -26,6 +29,11 @@ class JFormFieldPlanAccess extends JFormFieldPlans
 
     protected function getInput()
     {
+        if (version_compare(JVERSION, '3', 'le')) {
+            // Use only a simple selection for J2.x
+            return $this->planSelect();
+        }
+
         $this->pageControl  = $this->fieldname . '-pagecontrol';
         $this->pageClass    = $this->fieldname . '-pagetype';
         $this->groupControls = $this->fieldname . '-group-control';
@@ -137,8 +145,13 @@ class JFormFieldPlanAccess extends JFormFieldPlans
     {
         $plans = $this->getOptions();
 
+        if (version_compare(JVERSION, '3', 'le')) {
+            $header = '<br/>' . JText::_('COM_SIMPLERENEW_PLANACCESS_SELECT_J2X_DESC');
+        } else {
+            $header = JText::_('COM_SIMPLERENEW_PLANACCESS_SELECT_DESC');
+        }
         $html = array(
-            $this->pageDescription(JText::_('COM_SIMPLERENEW_PLANACCESS_SELECT_DESC'))
+            $this->pageDescription($header)
         );
 
         $html[] = '<fieldset id="" class="checkboxes">';
