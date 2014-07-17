@@ -10,7 +10,7 @@ Simple Renew manages renewable subscriptions to your site.
 ## Requirements
 
 * PHP 5.3+ with libcurl and openSSL
-* Joomla! 3.2+
+* Joomla! 2.5 - 3.x
 
 ## License
 
