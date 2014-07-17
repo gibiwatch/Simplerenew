@@ -77,7 +77,7 @@
 .ost-container .page-header {
     border: 0;
     padding: 0;
-    margin: 0;
+    margin: 0 0 40px 0;
 }
 
 .ost-container a {
@@ -245,8 +245,10 @@ span.simplerenew-plan{
     font-size: 14px;
 }
 
-span.simplerenew-plan:hover{
-    color: #333333;
+/* plan-selected class is added when plan is selected. Use js (maybe) to add the class */
+span.simplerenew-plan:hover,
+span.simplerenew-plan.plan-selected{
+    background: #8cc14c;
 }
 
 #tab_paypal,
