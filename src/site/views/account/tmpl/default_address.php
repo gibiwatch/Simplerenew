@@ -8,64 +8,26 @@
 
 defined('_JEXEC') or die();
 
-/** @var SimplerenewViewSubscribe $this */
-?>
-<div class="ost-section ost-row-two">
-    <div class="block3">
-        <label><?php echo JText::_('COM_SIMPLERENEW_BILLING_ADDRESS1'); ?></label>
-    </div>
-    <div class="block9">
-        <?php echo $this->billing->address->address1; ?>
-    </div>
-</div>
-<!-- /.ost-section -->
+/** @var SimplerenewViewAccount $this */
 
-<div class="ost-section ost-row-one">
-    <div class="block3">
-        <label><?php echo JText::_('COM_SIMPLERENEW_BILLING_ADDRESS2'); ?></label>
-    </div>
-    <div class="block9">
-        <?php echo $this->billing->address->address2; ?>
-    </div>
-</div>
-<!-- /.ost-section -->
+$fields = SimplerenewRender::addressDisplay($this->billing->address);
 
-<div class="ost-section ost-row-two">
-    <div class="block3">
-        <label><?php echo JText::_('COM_SIMPLERENEW_BILLING_CITY'); ?></label>
-    </div>
-    <div class="block9">
-        <?php echo $this->billing->address->city; ?>
-    </div>
-</div>
-<!-- /.ost-section -->
-
-<div class="ost-section ost-row-one">
-    <div class="block3">
-        <label><?php echo JText::_('COM_SIMPLERENEW_BILLING_REGION'); ?></label>
-    </div>
-    <div class="block9">
-        <?php echo $this->billing->address->region; ?>
-    </div>
-</div>
-<!-- /.ost-section -->
-
-<div class="ost-section ost-row-two">
-    <div class="block3">
-        <label><?php echo JText::_('COM_SIMPLERENEW_BILLING_POSTAL'); ?></label>
-    </div>
-    <div class="block9">
-        <?php echo $this->billing->address->postal; ?>
-    </div>
-</div>
-<!-- /.ost-section -->
-
-<div class="ost-section ost-row-one m-bottom b-bottom">
-    <div class="block3">
-        <label><?php echo JText::_('COM_SIMPLERENEW_BILLING_COUNTRY'); ?></label>
-    </div>
-    <div class="block9">
-        <?php echo $this->billing->address->country; ?>
-    </div>
-</div>
-<!-- /.ost-section -->
+$html        = array();
+$lastSection = 0;
+foreach ($fields as $i => $field) {
+        $row = 'ost-row-' . (($i%2) ? 'one' : 'two');
+    $html = array_merge(
+        $html,
+        array(
+            '<div class="ost-section ' . $row . '">',
+            '   <div class="block3">',
+            '      <label>' . $field->label . '</label>',
+            '   </div>',
+            '   <div class="block9">',
+            '   ' . $field->value,
+            '   </div>',
+            '</div>'
+        )
+    );
+}
+echo join("\n", $html);
