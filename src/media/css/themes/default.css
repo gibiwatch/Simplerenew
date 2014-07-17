@@ -1,7 +1,30 @@
 /* General
  ========================================================================== */
-.ost-container p {
+.ost-container p,
+.ost-container h1,
+.ost-container h2,
+.ost-container h3,
+.ost-container div,
+.ost-container li,
+.ost-container span,
+.ost-container label,
+.ost-container td {
     color: #333333;
+}
+
+.ost-container input,
+.ost-container textarea,
+.ost-container select {
+    color: #555555;
+}
+
+.ost-container div{
+    font-size: 13px;
+    line-height: 20px;
+    font-weight: 400;
+}
+
+.ost-container p{
     font-size: 13px;
     line-height: 20px;
     margin: 0 0 20px;
