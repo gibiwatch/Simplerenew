@@ -6,11 +6,12 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+/** @var SimplerenewViewRenewal $this */
+
 defined('_JEXEC') or die();
 ?>
 <div class="ost-container simplerenew-renewal">
     <div class="ost-alert-warning">
-        If you are seeing this, something probably went horribly wrong.
-        RE: lol
+        <?php echo JText::_('COM_SIMPLERENEW_RENEWAL_NON_SUBSCRIBER'); ?>
     </div>
 </div>
