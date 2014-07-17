@@ -68,11 +68,15 @@ class JFormFieldPlans extends JFormFieldCheckboxes
                     array(
                         '{code}',
                         '{name}',
+                        '{amount}',
+                        '{trial}',
                         '{group}'
                     ),
                     array(
                         $plan->code,
                         $plan->name,
+                        JHtml::_('currency.format', $plan->amount),
+                        JHtml::_('plan.trial', $plan->trial_length, $plan->trial_unit),
                         $plan->group
                     ),
                     $format
