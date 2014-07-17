@@ -137,7 +137,7 @@
                 type="list"
                 label="COM_SIMPLERENEW_CONFIG_FONTFAMILY_LABEL"
                 description="COM_SIMPLERENEW_CONFIG_FONTFAMILY_DESC">
-                <option value="none">COM_SIMPELRENEW_OPTION_FONT_NONE</option>
+                <option value="none">COM_SIMPLERENEW_OPTION_FONT_NONE</option>
                 <option value="Arial, Helvetica|sans-serif">COM_SIMPLERENEW_OPTION_FONT_ARIAL</option>
                 <option value="Times New Roman|serif">COM_SIMPLERENEW_OPTION_FONT_TIMES_NEW_ROMAN</option>
                 <option value="Droid Sans|sans-serif|400,700">COM_SIMPLERENEW_OPTION_FONT_DROID_SANS</option>
