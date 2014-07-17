@@ -21,7 +21,7 @@ defined('_JEXEC') or die();
     <?php echo $this->loadtemplate('billing'); ?>
 
     <div class="m-bottom m-top">
-        <?php echo JText::sprintf('COM_SIMPLERENEW_TERMS_OF_AGREEMENT', '#'); ?>
+        <?php echo JHtml::_('sr.terms'); ?>
     </div>
 
     <div class="m-bottom">

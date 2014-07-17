@@ -10,6 +10,14 @@
                 description="COM_SIMPLERENEW_DEFAULT_GROUP_DESC"
                 type="filteredgroup"
                 exclude="core.admin"/>
+
+            <field
+                name="terms"
+                label="COM_SIMPLERENEW_TERMS_LABEL"
+                description="COM_SIMPLERENEW_TERMS_DESC"
+                type="menuitem">
+                <option value="">COM_SIMPLERENEW_OPTION_NOTERMS</option>
+            </field>
         </fieldset>
     </fields>
 
