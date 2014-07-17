@@ -136,6 +136,7 @@ class Com_SimplerenewInstallerScript
     {
         $this->setDefaultParams($type);
         $this->installRelated();
+        $this->clearObsolete();
         $this->showMessages();
     }
 
