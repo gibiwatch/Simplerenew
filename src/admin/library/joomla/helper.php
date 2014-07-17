@@ -96,14 +96,14 @@ abstract class SimplerenewHelper
         }
 
         return array(
-            'errors' => $errors,
+            'errors'   => $errors,
             'warnings' => $warnings
         );
     }
 
     public static function enqueueNotices()
     {
-        $app = SimplerenewFactory::getApplication();
+        $app     = SimplerenewFactory::getApplication();
         $notices = self::getNotices();
 
         foreach ($notices['errors'] as $error) {
