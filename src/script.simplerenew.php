@@ -427,17 +427,26 @@ class Com_SimplerenewInstallerScript
             $setParams = true;
         }
 
-        if (!empty($data['basic']['codeMask'])) {
+        $codeMask = $params->get('basic.codeMask', $params->get('account.codeMask'));
+        if ($codeMask) {
+            $setParams = true;
+
             if (empty($data['account'])) {
                 $data['account'] = array();
             }
-            $data['account']['codeMask'] = $data['basic']['codeMask'];
-            unset($data['basic']['codeMask']);
-            $setParams = true;
+            if (!empty($data['basic']['codeMask'])) {
+                unset($data['basic']['codeMask']);
+            }
+            if (!empty($data['account']['codeMask'])) {
+                unset($data['account']['codeMask']);
+            }
+            $prefix = substr($codeMask, 0, strpos($codeMask, '%s'));
+
+            $data['account']['prefix'] = $prefix;
         }
 
         if ($setParams) {
-            $params = new JRegistry($data);
+            $params        = new JRegistry($data);
             $table->params = $params->toString();
             $table->store();
         }
@@ -446,9 +455,9 @@ class Com_SimplerenewInstallerScript
     protected function renameParam(JRegistry $params, $original, $new)
     {
         if ($value = $params->get($original)) {
-            $data = $params->toObject();
+            $data       = $params->toObject();
             $data->$new = $value;
-            $params = new JRegistry($data);
+            $params     = new JRegistry($data);
             return $params;
         }
         return false;

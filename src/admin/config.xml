@@ -20,9 +20,9 @@
             description="COM_SIMPLERENEW_CONFIG_FIELDSET_ACCOUNT_DESC">
 
             <field
-                name="codeMask"
-                label="COM_SIMPLERENEW_ACCOUNT_CODEMASK_LABEL"
-                description="COM_SIMPLERENEW_ACCOUNT_CODEMASK_DESC"
+                name="prefix"
+                label="COM_SIMPLERENEW_ACCOUNT_PREFIX_LABEL"
+                description="COM_SIMPLERENEW_ACCOUNT_PREFIX_DESC"
                 type="text"
                 default="%s"/>
 
