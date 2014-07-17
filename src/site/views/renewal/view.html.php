@@ -61,11 +61,7 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
             }
         }
 
-        $state = $this->get('State');
-        $this->params = $state->get('parameters.component');
-
-        $menuParams = $state->get('parameters.menu');
-        $this->params->merge($menuParams);
+        $this->params = $this->getParams();
 
         parent::display($tpl);
     }
