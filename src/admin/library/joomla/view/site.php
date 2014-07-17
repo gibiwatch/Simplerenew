@@ -31,4 +31,16 @@ abstract class SimplerenewViewSite extends JViewLegacy
 
         return $html;
     }
+
+    /**
+     * @return JRegistry
+     */
+    protected function getParams()
+    {
+        if ($params = $this->get('Params')) {
+            return $params;
+        }
+
+        return new JRegistry();
+    }
 }
