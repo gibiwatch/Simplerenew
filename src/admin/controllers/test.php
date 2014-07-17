@@ -19,6 +19,26 @@ class SimplerenewControllerTest extends SimplerenewControllerBase
         // silent fail
     }
 
+    public function test()
+    {
+        /** @var JTableExtension $table */
+        $table = JTable::getInstance('Extension');
+        $table->load(array('element' => 'com_simplerenew'));
+
+        $params = new JRegistry($table->params);
+
+        if ($advanced = $params->get('advanced')) {
+            $data = $params->toObject();
+            unset($data->advanced);
+            $data->themes = $advanced;
+            $params = new JRegistry($data);
+        }
+
+        echo '<pre>';
+        print_r($params->toObject());
+        echo '</pre>';
+
+    }
     /**
      * Create all test accounts
      */

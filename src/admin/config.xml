@@ -3,13 +3,21 @@
     <fields name="basic">
         <fieldset
             name="basic"
-            label="COM_SIMPLERENEW_CONFIG_BASIC_LABEL">
+            label="COM_SIMPLERENEW_CONFIG_FIELDSET_BASIC_LABEL">
             <field
                 name="defaultGroup"
                 label="COM_SIMPLERENEW_DEFAULT_GROUP_LABEL"
                 description="COM_SIMPLERENEW_DEFAULT_GROUP_DESC"
                 type="filteredgroup"
                 exclude="core.admin"/>
+        </fieldset>
+    </fields>
+
+    <fields name="account">
+        <fieldset
+            name="account"
+            label="COM_SIMPLERENEW_CONFIG_FIELDSET_ACCOUNT_LABEL"
+            description="COM_SIMPLERENEW_CONFIG_FIELDSET_ACCOUNT_DESC">
 
             <field
                 name="codeMask"
@@ -24,8 +32,8 @@
         <fields name="recurly">
             <fieldset
                 name="recurly"
-                label="COM_SIMPLERENEW_CONFIG_RECURLY_LABEL"
-                description="COM_SIMPLERENEW_CONFIG_RECURLY_DESC">
+                label="COM_SIMPLERENEW_CONFIG_FIELDSET_RECURLY_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_FIELDSET_RECURLY_DESC">
                 <field
                     name="mode"
                     label="COM_SIMPLERENEW_GATEWAY_MODE_LABEL"
@@ -88,18 +96,18 @@
             section="component"/>
     </fieldset>
 
-    <fields name="advanced">
+    <fields name="themes">
         <fieldset
-            name="advanced"
-            label="COM_SIMPLERENEW_CONFIG_ADVANCED_LABEL"
-            description="COM_SIMPLERENEW_CONFIG_ADVANCED_DESC">
+            name="themes"
+            label="COM_SIMPLERENEW_CONFIG_FIELDSET_THEMES_LABEL"
+            description="COM_SIMPLERENEW_CONFIG_FIELDSET_THEMES_DESC">
 
             <field
                 name="fontAwesome"
                 type="list"
                 default="local"
-                label="COM_SIMPLERENEW_ADVANCED_FONTAWESOME_LABEL"
-                description="COM_SIMPLERENEW_ADVANCED_FONTAWESOME_DESC">
+                label="COM_SIMPLERENEW_CONFIG_FONTAWESOME_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_FONTAWESOME_DESC">
                 <option value="cdn">COM_SIMPLERENEW_OPTION_YES_CDN</option>
                 <option value="local">COM_SIMPLERENEW_OPTION_YES_LOCAL</option>
                 <option value="no">JNO</option>
@@ -108,8 +116,8 @@
             <field
                 name="fontFamily"
                 type="list"
-                label="COM_SIMPLERENEW_ADVANCED_FONTFAMILY_LABEL"
-                description="COM_SIMPLERENEW_ADVANCED_FONTFAMILY_DESC">
+                label="COM_SIMPLERENEW_CONFIG_FONTFAMILY_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_FONTFAMILY_DESC">
                 <option value="none">COM_SIMPELRENEW_OPTION_FONT_NONE</option>
                 <option value="Arial, Helvetica|sans-serif">COM_SIMPLERENEW_OPTION_FONT_ARIAL</option>
                 <option value="Times New Roman|serif">COM_SIMPLERENEW_OPTION_FONT_TIMES_NEW_ROMAN</option>
@@ -124,8 +132,8 @@
                 name="theme"
                 type="themes"
                 default="default.css"
-                label="COM_SIMPLERENEW_ADVANCED_THEME_LABEL"
-                description="COM_SIMPLERENEW_ADVANCED_THEME_DESC">
+                label="COM_SIMPLERENEW_CONFIG_THEME_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_THEME_DESC">
             </field>
 
         </fieldset>

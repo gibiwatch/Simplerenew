@@ -12,6 +12,8 @@ abstract class SimplerenewHelperSite
 {
     protected static $awesomeCDN = 'https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css';
 
+    protected static $googleFonts = 'http://fonts.googleapis.com';
+
     /**
      * @var JRegistry
      */
@@ -41,14 +43,14 @@ abstract class SimplerenewHelperSite
         $params = self::getParams();
 
         // Load the selected font
-        $font = explode('|', $params->get('advanced.fontFamily', 'none'));
+        $font = explode('|', $params->get('themes.fontFamily', 'none'));
         if ($font[0] != 'none') {
 
             /* Load Google fonts files when font-weight exists
             *  Example: "Droid Sans|sans-serif|400,700"
             *  400,700 is the font-weight */
-            if( count($font) > 2 ){
-                $href = 'http://fonts.googleapis.com/css?family=' . $font[0] . ':' . $font[2];
+            if (count($font) > 2) {
+                $href = self::$googleFonts . '/css?family=' . $font[0] . ':' . $font[2];
                 JHtml::stylesheet($href);
             }
 
@@ -73,7 +75,7 @@ abstract class SimplerenewHelperSite
         }
 
         // Load font Awesome
-        switch ($params->get('advanced.fontAwesome', 'local')) {
+        switch ($params->get('themes.fontAwesome', 'local')) {
             case 'local':
                 JHtml::stylesheet('com_simplerenew/awesome/css/font-awesome.min.css', null, true);
                 break;
@@ -93,7 +95,7 @@ abstract class SimplerenewHelperSite
 
         // Load the selected theme
         if ($theme === null) {
-            $theme = $params->get('advanced.theme', 'default.css');
+            $theme = $params->get('themes.theme', 'default.css');
         }
         if ($theme != 'none') {
             JHtml::stylesheet('com_simplerenew/themes/' . $theme, null, true);

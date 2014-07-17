@@ -389,8 +389,10 @@ class Com_SimplerenewInstallerScript
 
         $params = new JRegistry($table->params);
 
+        $setParams = ($type == 'install');
+
         // On initial installation, set some defaults
-        if ($type == 'install') {
+        if ($setParams) {
             // Set defaults based on config.xml construction
             $path = $this->installer->getPath('source') . '/admin/config.xml';
             if (file_exists($path)) {
@@ -405,7 +407,7 @@ class Com_SimplerenewInstallerScript
                         break;
                     }
                 }
-                $params->set('advanced.fontFamily', $defaultFont);
+                $params->set('themes.fontFamily', $defaultFont);
             }
         }
 
@@ -413,12 +415,41 @@ class Com_SimplerenewInstallerScript
         if ($params->get('defaultGroup') == '') {
             $defaultGroup = JComponentHelper::getParams('com_users')->get('new_usertype');
             $params->set('basic.defaultGroup', $defaultGroup);
-            $type = 'install';
+            $setParams = true;
         }
 
-        if ($type == 'install') {
+        // Check for older versions of params and fix
+        $data = $params->toArray();
+        if (!empty($data['advanced'])) {
+            $data['themes'] = $data['advanced'];
+            unset($data['advanced']);
+            $setParams = true;
+        }
+
+        if (!empty($data['basic']['codeMask'])) {
+            if (empty($data['account'])) {
+                $data['account'] = array();
+            }
+            $data['account']['codeMask'] = $data['basic']['codeMask'];
+            unset($data['basic']['codeMask']);
+            $setParams = true;
+        }
+
+        if ($setParams) {
+            $params = new JRegistry($data);
             $table->params = $params->toString();
             $table->store();
         }
+    }
+
+    protected function renameParam(JRegistry $params, $original, $new)
+    {
+        if ($value = $params->get($original)) {
+            $data = $params->toObject();
+            $data->$new = $value;
+            $params = new JRegistry($data);
+            return $params;
+        }
+        return false;
     }
 }

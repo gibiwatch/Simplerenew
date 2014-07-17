@@ -40,7 +40,7 @@ abstract class SimplerenewFactory extends JFactory
                     'recurly' => (array)$params->get('gateway.recurly')
                 ),
                 'account' => array(
-                    'codeMask' => $params->get('basic.codeMask', '%s')
+                    'codeMask' => $params->get('account.codeMask', '%s')
                 )
             );
 
