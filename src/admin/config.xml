@@ -25,6 +25,17 @@
                 description="COM_SIMPLERENEW_ACCOUNT_CODEMASK_DESC"
                 type="text"
                 default="%s"/>
+
+            <field
+                name="billingAddress"
+                label="COM_SIMPLERENEW_ACCOUNT_BILLING_ADDRESS_LABEL"
+                description="COM_SIMPLERENEW_ACCOUNT_BILLING_ADDRESS_DESC"
+                type="list">
+                <option value="none">COM_SIMPLERENEW_OPTION_NONE</option>
+                <option value="">COM_SIMPLERENEW_OPTION_FULL_ADDRESS</option>
+                <option value="address1,postal">COM_SIMPLERENEW_OPTION_ADDRESS_POSTAL</option>
+                <option value="postal">COM_SIMPLERENEW_OPTION_POSTAL</option>
+            </field>
         </fieldset>
     </fields>
 
