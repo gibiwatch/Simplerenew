@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form addfieldpath="/administrator/components/com_simplerenew/models/fields">
+<form
+    addfieldpath="/administrator/components/com_simplerenew/models/fields"
+    addrulepath="/administrator/components/com_simplerenew/models/rules">
     <fieldset name="heading">
         <field
             name="code"
@@ -55,6 +57,8 @@
             type="text"
             label="COM_SIMPLERENEW_PLAN_LENGTH_LABEL"
             description="COM_SIMPLERENEW_PLAN_LENGTH_DESC"
+            validate="integer"
+            message="COM_SIMPLERENEW_PLAN_LENGTH_INVALID"
             required="true"/>
 
         <field
@@ -68,7 +72,9 @@
             name="trial_length"
             type="text"
             label="COM_SIMPLERENEW_PLAN_TRIAL_LENGTH_LABEL"
-            description="COM_SIMPLERENEW_PLAN_TRIAL_LENGTH_DESC"/>
+            description="COM_SIMPLERENEW_PLAN_TRIAL_LENGTH_DESC"
+            validate="integer"
+            message="COM_SIMPLERENEW_PLAN_TRIAL_LENGTH_INVALID"/>
 
         <field
             name="trial_unit"
@@ -110,6 +116,6 @@
             type="editor"
             label="COM_SIMPLERENEW_PLAN_DESCRIPTION_LABEL"
             description="COM_SIMPLERENEW_PLAN_DESCRIPTION_DESC"
-            filter="JComponentHelper::filterText"/>
+            filter="safehtml"/>
     </fieldset>
 </form>
