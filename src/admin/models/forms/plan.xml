@@ -54,12 +54,15 @@
 
         <field
             name="length"
-            type="text"
+            type="integer"
             label="COM_SIMPLERENEW_PLAN_LENGTH_LABEL"
             description="COM_SIMPLERENEW_PLAN_LENGTH_DESC"
             validate="integer"
             message="COM_SIMPLERENEW_PLAN_LENGTH_INVALID"
-            required="true"/>
+            required="true"
+            first="1"
+            last="12"
+            step="1"/>
 
         <field
             name="unit"
@@ -70,11 +73,14 @@
 
         <field
             name="trial_length"
-            type="text"
+            type="integer"
             label="COM_SIMPLERENEW_PLAN_TRIAL_LENGTH_LABEL"
             description="COM_SIMPLERENEW_PLAN_TRIAL_LENGTH_DESC"
             validate="integer"
-            message="COM_SIMPLERENEW_PLAN_TRIAL_LENGTH_INVALID"/>
+            message="COM_SIMPLERENEW_PLAN_TRIAL_LENGTH_INVALID"
+            first="0"
+            last="10"
+            step="1"/>
 
         <field
             name="trial_unit"
