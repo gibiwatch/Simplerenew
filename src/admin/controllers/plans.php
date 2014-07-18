@@ -22,7 +22,7 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
     {
         $this->checkToken();
 
-        $messages = SimplerenewHelper::syncPlans(true);
+        $messages = SimplerenewHelper::syncPlans();
         SimplerenewHelper::enqueueMessages($messages);
 
         $this->setRedirect('index.php?option=com_simplerenew&view=plans');
