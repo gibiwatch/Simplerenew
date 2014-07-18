@@ -150,11 +150,11 @@ abstract class SimplerenewHelper
     /**
      * Update local plans from gateway plans
      *
-     * @param bool $silent
+     * @param string $show
      *
      * @return object
      */
-    public static function syncPlans($silent = false)
+    public static function syncPlans($show = 'uad')
     {
         // Set messaging for return
         $message = (object)array(
@@ -241,20 +241,20 @@ abstract class SimplerenewHelper
             }
         }
 
-        if (!$silent) {
-            if ($updated = count($plansUpdate)) {
-                $message->success[] = JText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_UPDATED', $updated);
-            }
-            if ($added = count($plansRemote) - $updated) {
-                $message->success[] = JText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_ADDED', $added);
-            }
-            if ($disabled = count($plansDisable)) {
-                $message->success[] = JText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_DISABLED', $disabled);
-            }
+        if (stripos($show, 'u') !== false && ($updated = count($plansUpdate))) {
+            $message->success[] = JText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_UPDATED', $updated);
+        }
 
-            if (!count($message->success)) {
-                $message->success[] = JText::_('COM_SIMPLERENEW_PLANS_NOSYNC');
-            }
+        if (stripos($show, 'a') !== false && ($added = count($plansRemote) - $updated)) {
+            $message->success[] = JText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_ADDED', $added);
+        }
+
+        if (stripos($show, 'd') !== false && ($disabled = count($plansDisable))) {
+            $message->success[] = JText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_DISABLED', $disabled);
+        }
+
+        if (!$show && !count($message->success)) {
+            $message->success[] = JText::_('COM_SIMPLERENEW_PLANS_NOSYNC');
         }
 
         return $message;
