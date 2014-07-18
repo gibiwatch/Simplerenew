@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 
 class JFormRuleInteger extends JFormRule
 {
-    protected $regex = '^[0-9\-]$';
+    protected $regex = '^[0-9\-]*$';
 
     protected $modifiers = 'i';
 }
