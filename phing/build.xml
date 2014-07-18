@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="OS Training Joomla Phing Builder" default="package">
     <!-- version for this build file -->
-    <property name="build.version" value="1.1.0"/>
+    <property name="build.version" value="1.2.0"/>
     <echo message="Version ${build.version} for Joomla! extensions"/>
 
     <taskdef name="setversion" classname="phingext.SetversionTask" />
@@ -20,12 +20,21 @@
     </if>
 
     <property name="app.jtype" value=""/>
+    <property name="app.jfolder" value=""/>
     <property name="app.name.short" value=""/>
     <property name="app.version" value=""/>
 
     <property name="app.source" value="${project.root}/src"/>
 
-    <property name="app.name.long" value="${app.jtype}_${app.name.short}"/>
+    <if>
+        <equals arg1="${app.jfolder" arg2=""/>
+        <then>
+            <property name="app.name.long" value="${app.jtype}_${app.name.short}"/>
+        </then>
+        <else>
+            <property name="app.name.long" value="${app.jtype}_${app.jfolder}_${app.name.short}"/>
+        </else>
+    </if>
     <property name="app.manifest" value="${app.source}/${app.jtype}_${app.name.short}.xml"/>
     <property name="package.file" value="${app.name.long}.zip"/>
 
