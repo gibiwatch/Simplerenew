@@ -78,7 +78,9 @@ abstract class SimplerenewHelper
     }
 
     /**
+     * Return a messaging object with Simplerenew warnings and errors
      *
+     * @return object
      */
     public static function getNotices()
     {
@@ -95,26 +97,38 @@ abstract class SimplerenewHelper
             $errors[] = JText::_('COM_SIMPLERENEW_ERROR_GATEWAY_CONFIGURATION');
         }
 
-        return array(
+        return (object)array(
             'errors'   => $errors,
             'warnings' => $warnings
         );
     }
 
-    public static function enqueueNotices()
+    /**
+     * Queue errors, warnings and messages from a messaging object
+     *
+     * @param object $messages
+     */
+    public static function enqueueMessages($messages)
     {
-        $app     = SimplerenewFactory::getApplication();
-        $notices = self::getNotices();
+        $app = SimplerenewFactory::getApplication();
 
-        foreach ($notices['errors'] as $error) {
-            $app->enqueueMessage($error, 'error');
+        if (!empty($messages->errors)) {
+            foreach ($messages->errors as $error) {
+                $app->enqueueMessage($error, 'error');
+            }
         }
 
-        foreach ($notices['warnings'] as $warning) {
-            $app->enqueueMessage($warning, 'notice');
+        if (!empty($messages->warnings)) {
+            foreach ($messages->warnings as $warning) {
+                $app->enqueueMessage($warning, 'notice');
+            }
         }
 
-        return (bool)($notices['errors'] || $notices['warnings']);
+        if (!empty($messages->success)) {
+            foreach ($messages->success as $message) {
+                $app->enqueueMessage($message);
+            }
+        }
     }
 
     /**
@@ -131,5 +145,118 @@ abstract class SimplerenewHelper
         } else {
             JSubMenuHelper::addEntry($name, $link, $active);
         }
+    }
+
+    /**
+     * Update local plans from gateway plans
+     *
+     * @param bool $silent
+     *
+     * @return object
+     */
+    public static function syncPlans($silent = false)
+    {
+        // Set messaging for return
+        $message = (object)array(
+            'errors'  => array(),
+            'success' => array()
+        );
+        $params  = SimplerenewComponentHelper::getParams('com_simplerenew');
+
+        try {
+            $plansGateway = SimplerenewFactory::getContainer()->getPlan();
+            $plansRemote  = $plansGateway->getList();
+        } catch (Exception $e) {
+            $message->errors[] = JText::sprintf('COM_SIMPLERENEW_ERROR_GATEWAY_FAILURE', $e->getMessage());
+            return $message;
+        }
+
+        $plansTable = SimplerenewTable::getInstance('Plans');
+
+        $db         = SimplerenewFactory::getDbo();
+        $query      = $db->getQuery(true)
+            ->select('*')
+            ->from('#__simplerenew_plans');
+        $plansLocal = $db->setQuery($query)->loadAssocList('code');
+
+        // Identify local plans not on the gateway
+        $plansDisable = array();
+        $plansUpdate  = array();
+        foreach ($plansLocal as $code => $plan) {
+            if (!array_key_exists($code, $plansRemote)) {
+                if ($plan['published']) {
+                    $plansDisable[] = $plan['id'];
+                }
+            } else {
+                $plansUpdate[$code] = $plan;
+            }
+        }
+
+        // Unpublish any plans not on the gateway
+        if ($plansDisable) {
+            /** @var SimplerenewModelPlan $planModel */
+            $planModel = SimplerenewModel::getInstance('Plan');
+            $planModel->publish($plansDisable, 0);
+        }
+
+        // Load the default group in case we add plans from the gateway
+        $defaultGroup = $params->get('basic.defaultGroup');
+        if ($defaultGroup <= 0) {
+            $message->errors[] = JText::_('COM_SIMPLERENEW_ERROR_DEFAULTGROUP');
+            return $message;
+        }
+
+        // Update/Add plans found on the gateway
+
+        /** @var Simplerenew\Api\Plan $plan */
+        foreach ($plansRemote as $code => $plan) {
+            if (array_key_exists($code, $plansUpdate)) {
+                // Refresh old plan if changes found
+                if ($plan->equals($plansUpdate[$code])) {
+                    continue;
+                }
+                $plansTable->bind($plansUpdate[$code]);
+            } else {
+                // Add new plan
+                $plansTable->setProperties(
+                    array(
+                        'id'               => null,
+                        'published'        => 1,
+                        'alias'            => SimplerenewApplicationHelper::stringURLSafe($plan->code),
+                        'created_by_alias' => JText::_('COM_SIMPLERENEW_PLAN_SYNC_IMPORTED')
+                    )
+                );
+            }
+            $plansTable->bind($plan->getProperties());
+
+            if ($plansTable->group_id <= 0) {
+                $plansTable->group_id = $defaultGroup;
+            }
+
+            if (!$plansTable->store()) {
+                $message->errors = array_merge(
+                    $message->errors,
+                    $plansTable->getErrors()
+                );
+            }
+        }
+
+        if (!$silent) {
+            if ($updated = count($plansUpdate)) {
+                $message->success[] = JText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_UPDATED', $updated);
+            }
+            if ($added = count($plansRemote) - $updated) {
+                $message->success[] = JText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_ADDED', $added);
+            }
+            if ($disabled = count($plansDisable)) {
+                $message->success[] = JText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_DISABLED', $disabled);
+            }
+
+            if (!count($message->success)) {
+                $message->success[] = JText::_('COM_SIMPLERENEW_PLANS_NOSYNC');
+            }
+        }
+
+        return $message;
     }
 }

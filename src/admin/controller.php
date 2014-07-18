@@ -16,6 +16,7 @@ class SimplerenewController extends SimplerenewControllerBase
     {
         parent::__construct($config);
 
-        SimplerenewHelper::enqueueNotices();
+        $notices = SimplerenewHelper::getNotices();
+        SimplerenewHelper::enqueueMessages($notices);
     }
 }
