@@ -56,30 +56,17 @@ SimplerenewFactory::getDocument()->addStyleDeclaration($style);
     </div>
     <div class="clr"></div>
 
-    <?php echo JHtml::_('tabs.start', 'plans-pane'); ?>
-
     <?php
-    echo JHtml::_(
-        'tabs.panel',
-        JText::_($fieldSets['main']->label),
-        $fieldSets['main']->name . '-page'
+    echo JHtml::_('tabs.start', 'plans-pane');
+
+    echo $this->renderFieldset(
+        'main',
+        array(
+            'length'       => 'unit',
+            'trial_length' => 'trial_unit'
+        )
     );
-    ?>
-    <div class="width-100">
-        <fieldset class="adminform fltlft">
-            <ul class="adminformlist">
-                <?php
-                $mainFields = $this->form->getFieldset('main');
-                foreach ($mainFields as $field) {
-                    echo '<li>' . $field->label . $field->input . '</li>';
-                }
-                ?>
-            </ul>
-        </fieldset>
-    </div>
-    <div class="clr"></div>
 
-    <?php
     echo JHtml::_(
         'tabs.panel',
         JText::_('COM_SIMPLERENEW_PLAN_DESCRIPTION_LABEL'),

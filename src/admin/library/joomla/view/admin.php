@@ -106,42 +106,72 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
                 $name  = $fieldSets[$fieldSet]->name;
                 $label = $fieldSets[$fieldSet]->label ? : 'COM_SIMPLERENEW_ADMIN_PAGE_' . $name;
 
-                $html = array(
-                    JHtml::_('bootstrap.addTab', 'myTab', $name, JText::_($label)),
-                    '<div class="row-fluid">',
-                    '<fieldset class="adminform">'
-                );
+                $joomla3 = version_compare(JVERSION, '3', 'ge');
+                if ($joomla3) {
+                    $html = array(
+                        JHtml::_('bootstrap.addTab', 'myTab', $name, JText::_($label)),
+                        '<div class="row-fluid">',
+                        '<fieldset class="adminform">'
+                    );
+
+                } else {
+                    $html = array(
+                        JHtml::_('tabs.panel', JText::_($label), $name . '-page'),
+                        '<div class="width-100">',
+                        '<fieldset class="adminform">',
+                        '<ul class="adminformlist">'
+                    );
+                }
 
                 foreach ($this->form->getFieldset($name) as $field) {
                     if (in_array($field->fieldname, $sameLine)) {
                         continue;
                     }
-                    $html = array_merge(
-                        $html,
-                        array(
+
+                    if ($joomla3) {
+                        $fieldHtml = array(
                             '<div class="control-group">',
                             '<div class="control-label">',
                             $field->label,
                             '</div>',
                             '<div class="controls">',
                             $field->input
-                        )
-                    );
+                        );
+
+                    } else {
+                        $fieldHtml = array(
+                            '<li>' . $field->label . $field->input . '</li>'
+                        );
+                    }
+
+                    $html = array_merge($html, $fieldHtml);
+
                     if (isset($sameLine[$field->fieldname])) {
                         $html[] = ' ' . $this->form->getField($sameLine[$field->fieldname])->input;
                     }
-                    $html[] = '</div>';
-                    $html[] = '</div>';
-                }
 
-                $html = array_merge(
-                    $html,
-                    array(
+                    if ($joomla3) {
+                        $html[] = '</div>';
+                        $html[] = '</div>';
+                    }
+                }
+                if ($joomla3) {
+                    $endHtml = array(
                         '</fieldset>',
                         '</div>',
                         JHtml::_('bootstrap.endTab')
-                    )
-                );
+                    );
+
+                } else {
+                    $endHtml = array(
+                        '</ul>',
+                        '</fieldset>',
+                        '</div>',
+                        '<div class="clr"></div>'
+                    );
+                }
+
+                $html = array_merge($html, $endHtml);
             }
         }
         return join("\n", $html);
