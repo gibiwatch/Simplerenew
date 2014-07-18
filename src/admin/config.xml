@@ -6,15 +6,15 @@
             label="COM_SIMPLERENEW_CONFIG_FIELDSET_BASIC_LABEL">
             <field
                 name="defaultGroup"
-                label="COM_SIMPLERENEW_DEFAULT_GROUP_LABEL"
-                description="COM_SIMPLERENEW_DEFAULT_GROUP_DESC"
+                label="COM_SIMPLERENEW_CONFIG_DEFAULT_GROUP_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_DEFAULT_GROUP_DESC"
                 type="filteredgroup"
                 exclude="core.admin"/>
 
             <field
                 name="terms"
-                label="COM_SIMPLERENEW_TERMS_LABEL"
-                description="COM_SIMPLERENEW_TERMS_DESC"
+                label="COM_SIMPLERENEW_CONFIG_TERMS_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_TERMS_DESC"
                 type="menuitem">
                 <option value="">COM_SIMPLERENEW_OPTION_NOTERMS</option>
             </field>
@@ -29,15 +29,15 @@
 
             <field
                 name="prefix"
-                label="COM_SIMPLERENEW_ACCOUNT_PREFIX_LABEL"
-                description="COM_SIMPLERENEW_ACCOUNT_PREFIX_DESC"
+                label="COM_SIMPLERENEW_CONFIG_ACCOUNT_PREFIX_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_ACCOUNT_PREFIX_DESC"
                 type="text"
                 default="%s"/>
 
             <field
                 name="billingAddress"
-                label="COM_SIMPLERENEW_ACCOUNT_BILLING_ADDRESS_LABEL"
-                description="COM_SIMPLERENEW_ACCOUNT_BILLING_ADDRESS_DESC"
+                label="COM_SIMPLERENEW_CONFIG_ACCOUNT_BILLING_ADDRESS_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_ACCOUNT_BILLING_ADDRESS_DESC"
                 type="list">
                 <option value="none">COM_SIMPLERENEW_OPTION_NONE</option>
                 <option value="">COM_SIMPLERENEW_OPTION_FULL_ADDRESS</option>
@@ -55,65 +55,50 @@
                 description="COM_SIMPLERENEW_CONFIG_FIELDSET_RECURLY_DESC">
                 <field
                     name="mode"
-                    label="COM_SIMPLERENEW_GATEWAY_MODE_LABEL"
+                    label="COM_SIMPLERENEW_CONFIG_GATEWAY_MODE_LABEL"
                     type="list">
-                    <option value="test">COM_SIMPLERENEW_GATEWAY_MODE_TEST</option>
-                    <option value="live">COM_SIMPLERENEW_GATEWAY_MODE_LIVE</option>
+                    <option value="test">COM_SIMPLERENEW_OPTION_GATEWAY_MODE_TEST</option>
+                    <option value="live">COM_SIMPLERENEW_OPTION_GATEWAY_MODE_LIVE</option>
                 </field>
 
                 <field
                     name="testHead"
-                    label="COM_SIMPLERENEW_GATEWAY_HEAD_TEST"
+                    label="COM_SIMPLERENEW_CONFIG_GATEWAY_HEAD_TEST"
                     type="heading"
                     tag="h4"/>
 
                 <field
                     name="testApikey"
-                    label="COM_SIMPLERENEW_RECURLY_APIKEY_LABEL"
-                    description="COM_SIMPLERENEW_RECURLY_APIKEY_DESC"
+                    label="COM_SIMPLERENEW_CONFIG_RECURLY_APIKEY_LABEL"
+                    description="COM_SIMPLERENEW_CONFIG_RECURLY_APIKEY_DESC"
                     type="text"/>
 
                 <field
                     name="testSubdomain"
-                    label="COM_SIMPLERENEW_RECURLY_SUBDOMAIN_LABEL"
-                    description="COM_SIMPLERENEW_RECURLY_SUBDOMAIN_DESC"
+                    label="COM_SIMPLERENEW_CONFIG_RECURLY_SUBDOMAIN_LABEL"
+                    description="COM_SIMPLERENEW_CONFIG_RECURLY_SUBDOMAIN_DESC"
                     type="text"/>
 
                 <field
                     name="LiveHead"
-                    label="COM_SIMPLERENEW_GATEWAY_HEAD_LIVE"
+                    label="COM_SIMPLERENEW_CONFIG_GATEWAY_HEAD_LIVE"
                     type="heading"
                     tag="h4"/>
 
                 <field
                     name="liveApikey"
-                    label="COM_SIMPLERENEW_RECURLY_APIKEY_LABEL"
-                    description="COM_SIMPLERENEW_RECURLY_APIKEY_DESC"
+                    label="COM_SIMPLERENEW_CONFIG_RECURLY_APIKEY_LABEL"
+                    description="COM_SIMPLERENEW_CONFIG_RECURLY_APIKEY_DESC"
                     type="text"/>
 
                 <field
                     name="liveSubdomain"
-                    label="COM_SIMPLERENEW_RECURLY_SUBDOMAIN_LABEL"
-                    description="COM_SIMPLERENEW_RECURLY_SUBDOMAIN_DESC"
+                    label="COM_SIMPLERENEW_CONFIG_RECURLY_SUBDOMAIN_LABEL"
+                    description="COM_SIMPLERENEW_CONFIG_RECURLY_SUBDOMAIN_DESC"
                     type="text"/>
             </fieldset>
         </fields>
     </fields>
-
-    <fieldset
-        name="permissions"
-        label="JCONFIG_PERMISSIONS_LABEL"
-        description="JCONFIG_PERMISSIONS_DESC">
-        <field
-            name="rules"
-            type="rules"
-            label="JCONFIG_PERMISSIONS_LABEL"
-            class="inputbox"
-            filter="rules"
-            validate="rules"
-            component="com_simplerenew"
-            section="component"/>
-    </fieldset>
 
     <fields name="themes">
         <fieldset
@@ -157,4 +142,19 @@
 
         </fieldset>
     </fields>
+
+    <fieldset
+        name="permissions"
+        label="JCONFIG_PERMISSIONS_LABEL"
+        description="JCONFIG_PERMISSIONS_DESC">
+        <field
+            name="rules"
+            type="rules"
+            label="JCONFIG_PERMISSIONS_LABEL"
+            class="inputbox"
+            filter="rules"
+            validate="rules"
+            component="com_simplerenew"
+            section="component"/>
+    </fieldset>
 </config>
