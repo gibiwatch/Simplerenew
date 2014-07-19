@@ -3,7 +3,8 @@
     <fields name="basic">
         <fieldset
             name="basic"
-            label="COM_SIMPLERENEW_CONFIG_FIELDSET_BASIC_LABEL">
+            label="COM_SIMPLERENEW_CONFIG_FIELDSET_BASIC_LABEL"
+            description="COM_SIMPLERENEW_CONFIG_FIELDSET_BASIC_DESC">
             <field
                 name="defaultGroup"
                 label="COM_SIMPLERENEW_CONFIG_DEFAULT_GROUP_LABEL"
