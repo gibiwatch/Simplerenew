@@ -18,6 +18,10 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
         return $model;
     }
 
+    /**
+     * Used for manual update/sync of plans from the gateway.
+     * @TODO: Not currently used
+     */
     public function sync()
     {
         $this->checkToken();
