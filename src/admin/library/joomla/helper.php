@@ -10,6 +10,11 @@ defined('_JEXEC') or die();
 
 abstract class SimplerenewHelper
 {
+    /**
+     * @var JTableExtension
+     */
+    protected static $extensionTable = null;
+
     public static function addSubmenu($vName)
     {
     }
@@ -241,7 +246,15 @@ abstract class SimplerenewHelper
             }
         }
 
-        if (stripos($show, 'u') !== false && ($updated = count($plansUpdate))) {
+        // Update Sync time
+        $table = self::getExtensionTable();
+        $table->params->set('log.lastPlanSync', time());
+        $table->params = $params->toString();
+        $table->store();
+
+        // Fill out messaging object
+        $updated = count($plansUpdate);
+        if (stripos($show, 'u') !== false && $updated) {
             $message->success[] = JText::plural('COM_SIMPLERENEW_PLANS_N_ITEMS_UPDATED', $updated);
         }
 
@@ -258,5 +271,25 @@ abstract class SimplerenewHelper
         }
 
         return $message;
+    }
+
+    /**
+     * Get the Extension table entry
+     *
+     * @param string $extension
+     *
+     * @return JTableExtension
+     */
+    public static function getExtensionTable($extension = 'com_simplerenew')
+    {
+        if (static::$extensionTable === null) {
+            $table = JTable::getInstance('Extension');
+
+            $table->load(array('element' => $extension));
+            $table->params = new JRegistry($table->params);
+
+            static::$extensionTable = $table;
+        }
+        return static::$extensionTable;
     }
 }

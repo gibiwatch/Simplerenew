@@ -27,4 +27,14 @@ if (!defined('SIMPLERENEW_LOADED')) {
 
     // Any additional helper paths
     JHtml::addIncludePath(SIMPLERENEW_LIBRARY . '/html');
+
+    // Cover other situations
+    switch (JFactory::getApplication()->getName()) {
+        case 'administrator':
+            SimplerenewFactory::getLanguage()->load('com_simplerenew', SIMPLERENEW_ADMIN);
+            break;
+
+        case 'site':
+            break;
+    }
 }
