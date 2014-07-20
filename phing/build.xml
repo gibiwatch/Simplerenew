@@ -27,7 +27,7 @@
     <property name="app.source" value="${project.root}/src"/>
 
     <if>
-        <equals arg1="${app.jfolder" arg2=""/>
+        <equals arg1="${app.jfolder}" arg2=""/>
         <then>
             <property name="app.name.long" value="${app.jtype}_${app.name.short}"/>
         </then>
