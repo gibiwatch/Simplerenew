@@ -16,7 +16,8 @@
                 type="planaccess"
                 label="COM_SIMPLERENEW_FIELD_PLANS_LABEL"
                 format="[{code}] {name} {amount} {trial}"
-                description="COM_SIMPLERENEW_FIELD_PLANS_DESC"/>
+                description="COM_SIMPLERENEW_FIELD_PLANS_DESC"
+                class="checkbox"/>
         </fieldset>
 
     </fields>

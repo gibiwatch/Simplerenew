@@ -31,8 +31,8 @@ class JFormFieldPlanAccess extends JFormFieldPlans
             return $this->planSelect();
         }
 
-        $this->pageControl  = $this->fieldname . '-pagecontrol';
-        $this->pageClass    = $this->fieldname . '-pagetype';
+        $this->pageControl   = $this->fieldname . '-pagecontrol';
+        $this->pageClass     = $this->fieldname . '-pagetype';
         $this->groupControls = $this->fieldname . '-group-control';
 
         JHtml::_('bootstrap.tooltip');
@@ -85,7 +85,6 @@ class JFormFieldPlanAccess extends JFormFieldPlans
         $group   = isset($this->value[$groupId]) ? $this->value[$groupId] : array();
         $checked = (is_array($group) && in_array($option->value, $group) ? ' checked' : '');
 
-        $class    = !empty($option->class) ? ' class="' . $option->class . '"' : '';
         $disabled = !empty($option->disable) || $this->disabled ? ' disabled' : '';
 
         $id   = $this->id . '_' . $groupId . '_' . $option->value;
@@ -99,11 +98,10 @@ class JFormFieldPlanAccess extends JFormFieldPlans
                 'UTF-8'
             ) . '"'
             . $checked
-            . $class
             . $disabled
             . '/>';
 
-        $html[] = '<label for="' . $id . '"' . $class . '>' . JText::_($option->text) . '</label>';
+        $html[] = '<label for="' . $id . '">' . JText::_($option->text) . '</label>';
         $html[] = '</li>';
 
         return implode($html);
@@ -151,7 +149,8 @@ class JFormFieldPlanAccess extends JFormFieldPlans
             $this->pageDescription($header)
         );
 
-        $html[] = '<fieldset id="" class="checkboxes">';
+        $class  = sprintf('class="%s"', empty($this->class) ? 'checkboxes' : 'checkboxes ' . $this->class);
+        $html[] = '<fieldset id="" ' . $class . '>';
         $html[] = '<ul>';
         foreach ($plans as $plan) {
             $html[] = $this->createCheckbox('*', $plan);
@@ -183,6 +182,7 @@ class JFormFieldPlanAccess extends JFormFieldPlans
         // Build the selectors and controls
         $selectors = array('<ul class="nav nav-tabs">');
         $controls  = array('<div class="tab-content">');
+        $class     = sprintf('class="%s"', empty($this->class) ? 'checkboxes' : 'checkboxes ' . $this->class);
 
         $groups = $this->getGroups();
         $plans  = $this->getOptions();
@@ -217,7 +217,7 @@ class JFormFieldPlanAccess extends JFormFieldPlans
             $controls[] = '<input type="hidden" name="' . $this->name . '[' . $groupId . ']" value="*"/>';
             $controls[] = '</fieldset>';
 
-            $controls[] = '<fieldset class="checkboxes">';
+            $controls[] = '<fieldset ' . $class . '>';
             $controls[] = '<ul>';
             foreach ($plans as $plan) {
                 $controls[] = $this->createCheckbox($groupId, $plan);

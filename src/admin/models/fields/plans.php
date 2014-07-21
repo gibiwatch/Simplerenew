@@ -25,9 +25,6 @@ class JFormFieldPlans extends JFormFieldCheckboxes
     {
         parent::__construct($form);
 
-        SimplerenewFactory::getDocument()
-            ->addStyleDeclaration('fieldset.checkboxes input { margin-right: 5px; }');
-
         if (!SimplerenewFactory::getApplication()->isSite()) {
             $lang = SimplerenewFactory::getLanguage();
             $lang->load('com_simplerenew', SIMPLERENEW_SITE);
