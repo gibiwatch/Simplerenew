@@ -33,6 +33,7 @@
     <media destination="com_simplerenew" folder="media">
         <folder>css</folder>
         <folder>images</folder>
+        <folder>js</folder>
     </media>
 
     <files folder="site">

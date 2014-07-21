@@ -144,6 +144,23 @@
         </fieldset>
     </fields>
 
+    <fields name="advanced">
+        <fieldset
+            name="advanced"
+            label="COM_SIMPLERENEW_CONFIG_FIELDSET_ADVANCED_LABEL"
+            description="COM_SIMPLERENEW_CONFIG_FIELDSET_ADVANCED_DESC">
+            <field
+                name="jquery"
+                type="list"
+                default="local"
+                label="COM_SIMPLERENEW_CONFIG_JQUERY_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_JQUERY_DESC">
+                <option value="1">JYES</option>
+                <option value="0">JNO</option>
+            </field>
+        </fieldset>
+    </fields>
+
     <fieldset
         name="permissions"
         label="JCONFIG_PERMISSIONS_LABEL"
