@@ -128,7 +128,7 @@
                 <option value="Times New Roman|serif">COM_SIMPLERENEW_OPTION_FONT_TIMES_NEW_ROMAN</option>
                 <option value="Droid Sans|sans-serif|400,700">COM_SIMPLERENEW_OPTION_FONT_DROID_SANS</option>
                 <option value="Lato|sans-serif|400,400italic,700">COM_SIMPLERENEW_OPTION_FONT_LATO</option>
-                <option value="Old Standard TT|serif|400,700,400italic">COM_SIMPLERENEW_OPTION_FONT_OLD_STARNDARD</option>
+                <option value="Old Standard TT|serif|400,700,400italic">COM_SIMPLERENEW_OPTION_FONT_OLD_STANDARD</option>
                 <option value="Open Sans|sans-serif|400,400italic,600,700">COM_SIMPLERENEW_OPTION_FONT_OPEN_SANS</option>
                 <option value="Ubuntu|sans-serif|400,400italic,700,500">COM_SIMPLERENEW_OPTION_FONT_UBUNTU</option>
             </field>
