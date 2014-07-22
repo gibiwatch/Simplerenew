@@ -19,11 +19,14 @@ class Com_SimplerenewInstallerScript
 
     /**
      * @var array Related extensions required or useful with the component
-     *            type => [ (folder) => [ (element) => [ (publish), (uninstall), (unused) ] ] ]
+     *            type => [ (folder) => [ (element) => [ (publish), (uninstall), (ordering) ] ] ]
      */
     protected $relatedExtensions = array(
         'plugin' => array(
             'system' => array(
+                'simplerenew' => array(1, 1, null)
+            ),
+            'user'   => array(
                 'simplerenew' => array(1, 1, null)
             )
         )
@@ -157,9 +160,10 @@ class Com_SimplerenewInstallerScript
                             $current = $this->findExtension($type, $element, $folder);
                             $isNew   = empty($current);
 
+                            $typeName = trim(($folder ? : '') . ' ' . $type);
                             $text = 'COM_SIMPLERENEW_RELATED_' . ($isNew ? 'INSTALL' : 'UPDATE');
                             if ($installer->install($path)) {
-                                $this->setMessage(JText::sprintf($text, $type, $element));
+                                $this->setMessage(JText::sprintf($text, $typeName, $element));
                                 if ($isNew) {
                                     $current = $this->findExtension($type, $element, $folder);
                                     if ($settings[0]) {
@@ -170,7 +174,7 @@ class Com_SimplerenewInstallerScript
                                     }
                                 }
                             } else {
-                                $this->setMessage(JText::sprintf($text . '_FAIL', $type, $element), 'error');
+                                $this->setMessage(JText::sprintf($text . '_FAIL', $typeName, $element), 'error');
                             }
                         }
                     }
@@ -235,6 +239,11 @@ class Com_SimplerenewInstallerScript
 
     /**
      * Set requested ordering for selected plugin extension
+     * Accepted ordering arguments:
+     * (n<=1 | first) First within folder
+     * (* | last) Last within folder
+     * (before:element) Before the named plugin
+     * (after:element) After the named plugin
      *
      * @param JTable $extension
      * @param string $order
