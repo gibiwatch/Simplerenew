@@ -407,9 +407,15 @@ class Com_SimplerenewInstallerScript
         }
 
         // Must have the default plan group set
-        if ($params->get('defaultGroup') == '') {
+        if ($params->get('basic.defaultGroup') == '') {
             $defaultGroup = JComponentHelper::getParams('com_users')->get('new_usertype');
             $params->set('basic.defaultGroup', $defaultGroup);
+            $setParams = true;
+        }
+
+        // Must have default payment option set
+        if (!$params->get('basic.paymentOptions', array())) {
+            $params->set('basic.paymentOptions', array('cc'));
             $setParams = true;
         }
 
@@ -444,16 +450,5 @@ class Com_SimplerenewInstallerScript
             $table->params = $params->toString();
             $table->store();
         }
-    }
-
-    protected function renameParam(JRegistry $params, $original, $new)
-    {
-        if ($value = $params->get($original)) {
-            $data       = $params->toObject();
-            $data->$new = $value;
-            $params     = new JRegistry($data);
-            return $params;
-        }
-        return false;
     }
 }

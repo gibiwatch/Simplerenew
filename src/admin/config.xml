@@ -19,6 +19,17 @@
                 type="menuitem">
                 <option value="">COM_SIMPLERENEW_OPTION_NOTERMS</option>
             </field>
+
+            <field
+                name="paymentOptions"
+                label="COM_SIMPLERENEW_CONFIG_PAYMENT_OPTIONS_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_PAYMENT_OPTIONS_DESC"
+                type="checkboxes"
+                class="checkbox"
+                required="true">
+                <option value="cc">COM_SIMPLERENEW_OPTION_CREDITCARD</option>
+                <option value="pp">COM_SIMPLERENEW_OPTION_PAYPAL</option>
+            </field>
         </fieldset>
     </fields>
 

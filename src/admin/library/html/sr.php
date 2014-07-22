@@ -45,32 +45,46 @@ abstract class JHtmlSr
         $params = SimplerenewComponentHelper::getParams();
 
         if ($params->get('advanced.jquery', 1)) {
-            if (version_compare(JVERSION, '3', 'ge')) {
-                    JHtml::_('jquery.framework', $noConflict, $debug);
-                    return;
-            }
-
-            // pre 3.0 manual loading
-
             // Only load once
             if (!empty(static::$jqueryLoaded[__METHOD__])) {
                 return;
             }
 
-            // If no debugging value is set, use the configuration setting
-            if ($debug === null) {
-                $config = JFactory::getConfig();
-                $debug  = (boolean)$config->get('debug');
+            if (version_compare(JVERSION, '3', 'ge')) {
+                JHtml::_('jquery.framework', $noConflict, $debug);
+            } else {
+                // pre 3.0 manual loading
+
+                // If no debugging value is set, use the configuration setting
+                if ($debug === null) {
+                    $config = JFactory::getConfig();
+                    $debug  = (boolean)$config->get('debug');
+                }
+
+                JHtml::_('script', 'com_simplerenew/jquery.js', false, true, false, false, $debug);
+
+                // Check if we are loading in noConflict
+                if ($noConflict) {
+                    JHtml::_('script', 'com_simplerenew/jquery-noconflict.js', false, true, false, false, false);
+                }
             }
-
-            JHtml::_('script', 'com_simplerenew/jquery.js', false, true, false, false, $debug);
-
-            // Check if we are loading in noConflict
-            if ($noConflict) {
-                JHtml::_('script', 'com_simplerenew/jquery-noconflict.js', false, true, false, false, false);
-            }
-
-            static::$jqueryLoaded[__METHOD__] = true;
         }
+
+        static::$jqueryLoaded[__METHOD__] = true;
+    }
+
+    public static function tabs($selector = '.payment-tabs div')
+    {
+        static::jquery();
+        JHtml::_('script', 'com_simplerenew/tabs.js', false, true);
+
+        $js = array(
+            "(function($) {",
+            "   $(document).ready(function () {",
+            "       $.Simplerenew.tabs('{$selector}');",
+            "    });",
+            "})(jQuery);"
+        );
+        SimplerenewFactory::getDocument()->addScriptDeclaration(join("\n", $js));
     }
 }
