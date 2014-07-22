@@ -69,20 +69,22 @@
     <!-- update submodule -->
     <target name="submodules"  description="Submodule Version/Creation updates" depends="select-submodule,release">
         <if>
-            <and>
-                <isset property="release.type"/>
-                <isset property="sub.manifest"/>
-            </and>
+            <equals arg1="${sub.manifest}" arg2=""/>
             <then>
-                <property name="sub.version" value=""/>
-                <getversion property="sub.version" file="${sub.manifest}"/>
-                <setversion file="${sub.manifest}" releasetype="${release.type}" property="${sub.version}"/>
-                <phingcall target="update-creation">
-                    <property name="app.manifest" value="${sub.manifest}"/>
-                </phingcall>
+                <echo message="Submodule was not selected"/>
             </then>
+            <elseif>
+                <isset property="release.type"/>
+                <then>
+                    <property name="sub.version" value=""/>
+                    <getversion property="sub.version" file="${sub.manifest}"/>
+                    <setversion file="${sub.manifest}" releasetype="${release.type}" property="${sub.version}"/>
+                    <phingcall target="update-creation">
+                        <property name="app.manifest" value="${sub.manifest}"/>
+                    </phingcall>
+                </then>
+            </elseif>
         </if>
-
     </target>
 
     <!-- Create Current Release and package -->
