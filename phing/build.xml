@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="OS Training Joomla Phing Builder" default="package">
     <!-- version for this build file -->
-    <property name="build.version" value="1.2.0"/>
+    <property name="build.version" value="1.3.0"/>
     <echo message="Version ${build.version} for Joomla! extensions"/>
 
-    <taskdef name="setversion" classname="phingext.SetversionTask" />
+    <taskdef name="setversion" classname="phingext.SetversionTask"/>
     <taskdef name="getversion" classname="phingext.GetVersionTask"/>
 
     <property name="project.root" value=".."/>
@@ -25,6 +25,8 @@
     <property name="app.version" value=""/>
 
     <property name="app.source" value="${project.root}/src"/>
+
+    <import file="./submodules.xml"/>
 
     <if>
         <equals arg1="${app.jfolder}" arg2=""/>
@@ -50,18 +52,37 @@
     <getversion file="${app.manifest}" property="app.version"/>
 
     <!-- Create New Release and package -->
-    <target name="new-release" description="Update version/creation and create IDed package">
-        <input
-                propertyName="release.type"
-                validArgs="major,minor,bugfix"
-                message="Current Version ${app.version}"/>
+    <target name="new-release" description="Update version/creation and create IDed package" depends="release">
+        <if>
+            <isset property="release.type"/>
+            <then>
+                <setversion releasetype="${release.type}" file="${app.manifest}" property="app.version"/>
+                <phingcall target="update-creation"/>
 
-        <setversion releasetype="${release.type}" file="${app.manifest}" property="app.version"/>
-        <phingcall target="update-creation"/>
+                <phingcall target="package">
+                    <property name="package.file" value="${app.name.long}_${app.version}.zip"/>
+                </phingcall>
+            </then>
+        </if>
+    </target>
 
-        <phingcall target="package">
-            <property name="package.file" value="${app.name.long}_${app.version}.zip"/>
-        </phingcall>
+    <!-- update submodule -->
+    <target name="submodules"  description="Submodule Version/Creation updates" depends="select-submodule,release">
+        <if>
+            <and>
+                <isset property="release.type"/>
+                <isset property="sub.manifest"/>
+            </and>
+            <then>
+                <property name="sub.version" value=""/>
+                <getversion property="sub.version" file="${sub.manifest}"/>
+                <setversion file="${sub.manifest}" releasetype="${release.type}" property="${sub.version}"/>
+                <phingcall target="update-creation">
+                    <property name="app.manifest" value="${sub.manifest}"/>
+                </phingcall>
+            </then>
+        </if>
+
     </target>
 
     <!-- Create Current Release and package -->
@@ -102,5 +123,36 @@
             </filterchain>
         </reflexive>
         <echo message="Creation Date: ${creation.TODAY}"/>
+    </target>
+
+    <target name="release" hidden="true">
+        <echo><![CDATA[
+            1. Major
+            2. Minor
+            3. Bugfix
+        ]]></echo>
+        <input
+            propertyName="release.id"
+            validArgs="0,1,2,3"
+            message="Release Type: "/>
+
+        <if>
+            <equals arg1="${release.id}" arg2="1"/>
+            <then>
+                <property name="release.type" value="major"/>
+            </then>
+            <elseif>
+                <equals arg1="${release.id}" arg2="2"/>
+                <then>
+                    <property name="release.type" value="minor"/>
+                </then>
+            </elseif>
+            <elseif>
+                <equals arg1="${release.id}" arg2="3"/>
+                <then>
+                    <property name="release.type" value="bugfix"/>
+                </then>
+            </elseif>
+        </if>
     </target>
 </project>
