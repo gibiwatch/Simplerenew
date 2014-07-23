@@ -88,6 +88,10 @@ class Joomla implements UserInterface
         $parent->clearProperties();
 
         // Always load from DB to avoid session conflicts
+        if ($id <= 0) {
+            $session = SimplerenewFactory::getSession()->get('user');
+            $id = $session->get('id');
+        }
         $user = new JUser($id);
 
         if (!$user || $user->id <= 0) {
