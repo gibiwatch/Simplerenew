@@ -124,8 +124,6 @@ class SimplerenewModelGateway extends SimplerenewModelSite
      */
     public function saveBilling(Account $account, array $data = null)
     {
-        $app = SimplerenewFactory::getApplication();
-
         $data = new JRegistry($data ? : $this->getState('billing'));
         $data = $data->toArray();
 
@@ -137,8 +135,11 @@ class SimplerenewModelGateway extends SimplerenewModelSite
             // this is not a problem here
         }
 
-        $billing->setProperties($data);
-        $billing->save();
+        // Save changes only when Credit Card Number has been entered
+        if (!empty($data['cc']['number'])) {
+            $billing->setProperties($data);
+            $billing->save();
+        }
 
         return $billing;
     }
