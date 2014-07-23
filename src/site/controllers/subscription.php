@@ -15,8 +15,11 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
 {
     public function display($cachable = false, $urlparams = array())
     {
-        parent::display($cachable, $urlparams);
-        echo '<h4>subscription controller under construction</h4>h4>';
+        $app = SimplerenewFactory::getApplication();
+        $app->enqueueMessage(
+            JText::sprintf('COM_SIMPLERENEW_ERROR_UNKNOWN_TASK', $this->getTask()),
+            'error'
+        );
     }
 
     /**
@@ -39,10 +42,11 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
         $app      = SimplerenewFactory::getApplication();
         $planCode = $app->input->getString('planCode');
         if (!$planCode) {
-            return $this->callerReturn(
+            $this->callerReturn(
                 JText::_('COM_SIMPLERENEW_ERROR_NOPLAN_SELECTED'),
                 'error'
             );
+            return;
         }
 
         /** @var SimplerenewModelGateway $model */
@@ -53,7 +57,8 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             $user = $model->saveUser();
 
         } catch (Exception $e) {
-            return $this->callerReturn($e->getMessage(), 'error');
+            $this->callerReturn($e->getMessage(), 'error');
+            return;
         }
 
         // Create the account
@@ -61,20 +66,22 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             $account = $model->saveAccount($user);
 
         } catch (Exception $e) {
-            return $this->callerReturn(
+            $this->callerReturn(
                 JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIBE_ACCOUNT', $e->getMessage()),
                 'error'
             );
+            return;
         }
 
         // Update billing
         try {
             $model->saveBilling($account);
         } catch (Exception $e) {
-            return $this->callerReturn(
+            $this->callerReturn(
                 JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIBE_BILLING', $e->getMessage()),
                 'error'
             );
+            return;
         }
 
         // All went well! Valid billing information confirms the user so login them in
@@ -111,10 +118,11 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             $model->createSubscription($account, $app->input->getString('planCode'));
 
         } catch (Exception $e) {
-            return $this->callerReturn(
+            $this->callerReturn(
                 $e->getMessage(),
                 'error'
             );
+            return;
         }
 
         $link = SimplerenewRoute::get('account');
