@@ -2,12 +2,12 @@
 <extension type="component" version="2.5" method="upgrade">
     <name>COM_SIMPLERENEW</name>
     <author>OSTraining</author>
-    <creationDate>July 22 2014</creationDate>
+    <creationDate>July 23 2014</creationDate>
     <copyright>Copyright (C) 2013 OSTraining.com</copyright>
     <license>GPL v3</license>
     <authorEmail>info@ostraining.com</authorEmail>
     <authorUrl>http://www.ostraining.com</authorUrl>
-    <version>0.0.15</version>
+    <version>0.0.16</version>
     <description>COM_SIMPLERENEW_COMPONENT_DESCRIPTION</description>
 
     <scriptfile>script.simplerenew.php</scriptfile>

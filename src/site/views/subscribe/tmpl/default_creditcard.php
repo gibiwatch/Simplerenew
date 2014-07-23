@@ -18,7 +18,7 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
 ?>
 <div id="content_card">
     <input type="hidden" name="payment_method" value="cc"/>
-    
+
     <div class="p-full">
         <div class="ost-section">
             <div class="block6">
