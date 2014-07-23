@@ -6,13 +6,18 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Api\Account;
 use Simplerenew\Api\Subscription;
-use Simplerenew\Exception\NotFound;
 
 defined('_JEXEC') or die();
 
 class SimplerenewControllerSubscription extends SimplerenewControllerBase
 {
+    /**
+     * @var SimplerenewModelGateway
+     */
+    protected $gatewayModel = null;
+
     public function display($cachable = false, $urlparams = array())
     {
         $app = SimplerenewFactory::getApplication();
@@ -49,8 +54,7 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             return;
         }
 
-        /** @var SimplerenewModelGateway $model */
-        $model = SimplerenewModel::getInstance('Gateway');
+        $model = $this->getGatewayModel();
 
         // Create/Load the user
         try {
@@ -73,56 +77,26 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             return;
         }
 
-        // Update billing
-        try {
-            $model->saveBilling($account);
-        } catch (Exception $e) {
-            $this->callerReturn(
-                JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIBE_BILLING', $e->getMessage()),
-                'error'
-            );
-            return;
-        }
+        $method = $app->input->getCmd('payment_method');
+        switch ($method) {
+            case 'pp':
+                $this->callerReturn(
+                    'Payment via PayPal is not yet implemented',
+                    'error'
+                );
+                return;
 
-        // All went well! Valid billing information confirms the user so login them in
-        try {
-            $currentUser = SimplerenewFactory::getContainer()->getUser();
-            try {
-                $currentUser->load();
+            case 'cc':
+                $this->subscribeByCreditCard($account);
+                break;
 
-            } catch (Exception $e) {
-                // No one logged in
-            }
-
-            // Logout current user if there is one
-            if ($currentUser->id > 0 && $currentUser->id != $user->id) {
-                $currentUser->logout();
-            }
-
-            //Regardless of Joomla settings, log in the user if not already logged in
-            $password = $app->input->getString('password');
-            $user->login($password, true);
-
-            $currentUser->load();
-
-        } catch (Exception $e) {
-            // Not a big deal but leave a message
-            $app->enqueueMessage(
-                JText::_('COM_SIMPLERENEW_WARN_SUBSCRIBE_USER_LOGIN_FAILED'),
-                'notice'
-            );
-        }
-
-        // Create the subscription
-        try {
-            $model->createSubscription($account, $app->input->getString('planCode'));
-
-        } catch (Exception $e) {
-            $this->callerReturn(
-                $e->getMessage(),
-                'error'
-            );
-            return;
+            default:
+                $this->callerReturn(
+                    JText::sprintf('COM_SIMPLERENEW_ERROR_UNKNOWN_PAYMENT_METHOD', $method),
+                    'error'
+                );
+                return;
+                break;
         }
 
         $link = SimplerenewRoute::get('account');
@@ -156,9 +130,7 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             $account = $container->getAccount()->load($user);
 
             // Update the billing info
-            /** @var SimplerenewModelGateway $model */
-            $model = SimplerenewModel::getInstance('Gateway');
-            $model->saveBilling($account);
+            $this->getGatewayModel()->saveBilling($account);
 
             $subscription = $container
                 ->getSubscription()
@@ -192,5 +164,79 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
                 $subscription->period_end->format('F, j, Y')
             )
         );
+    }
+
+    /**
+     * Subscribe a new member using CC info in input stream
+     *
+     * @param Account $account
+     */
+    protected function subscribeByCreditCard(Account $account)
+    {
+        $app   = SimplerenewFactory::getApplication();
+        $model = $this->getGatewayModel();
+
+        // Update billing
+        try {
+            $model->saveBilling($account);
+        } catch (Exception $e) {
+            $this->callerReturn(
+                JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIBE_BILLING', $e->getMessage()),
+                'error'
+            );
+            return;
+        }
+
+        // All went well! Valid billing information confirms the user so login them in
+        try {
+            $currentUser = SimplerenewFactory::getContainer()->getUser();
+            try {
+                $currentUser->load();
+
+            } catch (Exception $e) {
+                // No one logged in
+            }
+
+            // Logout current user if there is one
+            if ($currentUser->id > 0 && $currentUser->id != $account->user->id) {
+                $currentUser->logout();
+            }
+
+            //Regardless of Joomla settings, log in the user if not already logged in
+            $password = $app->input->getString('password');
+            $account->user->login($password, true);
+
+            $currentUser->load();
+
+        } catch (Exception $e) {
+            // Not a big deal but leave a message
+            $app->enqueueMessage(
+                JText::_('COM_SIMPLERENEW_WARN_SUBSCRIBE_USER_LOGIN_FAILED'),
+                'notice'
+            );
+        }
+
+        // Create the subscription
+        try {
+            $model->createSubscription($account, $app->input->getString('planCode'));
+
+        } catch (Exception $e) {
+            $this->callerReturn(
+                $e->getMessage(),
+                'error'
+            );
+            return;
+        }
+    }
+
+    /**
+     * @return SimplerenewModelGateway
+     */
+    protected function getGatewayModel()
+    {
+        if ($this->gatewayModel === null) {
+            $this->gatewayModel = SimplerenewModel::getInstance('Gateway');
+        }
+        return $this->gatewayModel;
     }
 }

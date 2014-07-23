@@ -67,6 +67,7 @@ if (in_array('pp', $paymentOptions)):
         <div class="block12">
             <div class="p-full">
                 <?php echo JText::_('COM_SIMPLERENEW_PROCEED_TO_PAYPAL'); ?>
+                <input type="hidden" name="payment_method" value="pp"/>
             </div>
         </div>
     </div>
