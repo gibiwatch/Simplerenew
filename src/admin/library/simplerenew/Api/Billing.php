@@ -144,7 +144,7 @@ class Billing extends AbstractApiBase
     public function delete()
     {
         $this->imp->delete($this);
-        $this->imp->load($this);
+        $this->clearProperties();
     }
 
     /**
