@@ -29,12 +29,15 @@ if (!defined('SIMPLERENEW_LOADED')) {
     JHtml::addIncludePath(SIMPLERENEW_LIBRARY . '/html');
 
     // Cover other situations
-    switch (JFactory::getApplication()->getName()) {
-        case 'administrator':
-            SimplerenewFactory::getLanguage()->load('com_simplerenew', SIMPLERENEW_ADMIN);
-            break;
+    if (SimplerenewFactory::getApplication()->input->getCmd('option') != 'com_simplerenew') {
+        switch (JFactory::getApplication()->getName()) {
+            case 'administrator':
+                SimplerenewFactory::getLanguage()->load('com_simplerenew', SIMPLERENEW_ADMIN);
+                break;
 
-        case 'site':
-            break;
+            case 'site':
+                SimplerenewFactory::getLanguage()->load('com_simplerenew', SIMPLERENEW_SITE);
+                break;
+        }
     }
 }

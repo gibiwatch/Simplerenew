@@ -22,13 +22,32 @@ class plgUserSimplerenew extends JPlugin
         $this->loadLanguage();
     }
 
-    public function onUserBeforeSave($user, $isNew, $new)
+    public function onUserAfterSave($data, $isNew, $success, $msg)
     {
-    }
+        if ($success && !$isNew && $this->isInstalled()) {
+            $container = SimplerenewFactory::getContainer();
+            $user = $container->getUser();
+            $account = $container->getAccount();
 
-    public function onUserAfterSave($user, $isNew, $success, $msg)
-    {
+            try {
+                $user->load($data['id']);
+                $account->load($user);
 
+                // Allow API to turn Joomla name into first/last
+                $account->firstname = null;
+                $account->lastname = null;
+                $account->setProperties($user->getProperties());
+
+                $account->save(false);
+
+            } catch (Exception $e) {
+                SimplerenewFactory::getApplication()
+                    ->enqueueMessage(
+                        JText::sprintf('COM_SIMPLERENEW_ERROR_ACCOUNT_SAVE', $e->getMessage()),
+                        'notice'
+                    );
+            }
+        }
     }
 
     public function onUserAfterDelete($user, $success, $msg)
