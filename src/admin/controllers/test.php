@@ -16,7 +16,7 @@ class SimplerenewControllerTest extends SimplerenewControllerBase
 {
     public function display($cachable = false, $urlparams = array())
     {
-        // silent fail
+        echo 'Simplerenew test area';
     }
 
     /**
@@ -36,12 +36,14 @@ class SimplerenewControllerTest extends SimplerenewControllerBase
             'Canceled',
             'Expired',
             'Pending',
-            'Nobilling',
+            'NoBilling',
             'NoSubs',
             'NoAccount'
         );
 
-        $plans = SimplerenewFactory::getContainer()->getPlan()->getList();
+        $prefix = SimplerenewComponentHelper::getParams()->get('account.prefix');
+        $container = SimplerenewFactory::getContainer();
+        $plans = $container->getPlan()->getList();
 
         foreach ($accounts as $account) {
             $username = 'demo-' . strtolower($account);
@@ -52,12 +54,13 @@ class SimplerenewControllerTest extends SimplerenewControllerBase
                 'lastname'  => 'Demo',
                 'username'  => $username,
                 'email'     => $email,
+                'company'   => 'Site Prefix: ' . $prefix,
                 'password'  => 'test',
                 'password2' => 'test',
                 'cc' => array(
                     'number' => '4111111111111111',
                     'cvv' => '123',
-                    'year' => 2020,
+                    'year' => date('Y')+5,
                     'month' => 12
                 )
             );
@@ -66,7 +69,10 @@ class SimplerenewControllerTest extends SimplerenewControllerBase
                 $this->createAccount($properties);
             } elseif ($account != 'NoAccount') {
                 $plan = array_shift($plans);
-                $this->createAccount($properties, $plan);
+                $subscription = $this->createAccount($properties, $plan);
+                if ($account == 'NoBilling') {
+                    $container->getBilling()->load($subscription->account)->delete();
+                }
             } else {
                 $user = SimplerenewFactory::getContainer()->getUser();
                 $user->setProperties($properties)->create();
@@ -84,7 +90,7 @@ class SimplerenewControllerTest extends SimplerenewControllerBase
      * @param array $properties
      * @param Plan $plan
      *
-     * @return Account|Subscription
+     * @return Subscription
      */
     protected function createAccount(array $properties, Plan $plan = null)
     {
@@ -99,11 +105,16 @@ class SimplerenewControllerTest extends SimplerenewControllerBase
         $juser->save(true);
 
         $account = $container->getAccount();
-        $account->setUser($user)->save();
+        $account
+            ->setProperties($properties)
+            ->setUser($user)
+            ->save();
 
         $billing = $container->getBilling();
-        $billing->setProperties($properties);
-        $billing->setAccount($account)->save();
+        $billing
+            ->setProperties($properties)
+            ->setAccount($account)
+            ->save();
 
         if ($plan) {
             $subscription = $container->getSubscription();
@@ -111,6 +122,6 @@ class SimplerenewControllerTest extends SimplerenewControllerBase
             return $subscription;
         }
 
-        return $account;
+        return null;
     }
 }
