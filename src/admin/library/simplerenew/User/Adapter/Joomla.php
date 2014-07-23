@@ -87,11 +87,8 @@ class Joomla implements UserInterface
         $id = $parent->id;
         $parent->clearProperties();
 
-        $user = SimplerenewFactory::getUser();
-        if ($user->id == $id) {
-            // Load from db since session data could be stale
-            $user = new JUser($id);
-        }
+        // Always load from DB to avoid session conflicts
+        $user = new JUser($id);
 
         if (!$user || $user->id <= 0) {
             throw new NotFound('User ID not found - ' . (int)$id);
