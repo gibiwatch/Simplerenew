@@ -6,6 +6,8 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Exception\NotFound;
+
 defined('_JEXEC') or die();
 
 jimport('joomla.plugin.plugin');
@@ -39,6 +41,9 @@ class plgUserSimplerenew extends JPlugin
                 $account->setProperties($user->getProperties());
 
                 $account->save(false);
+
+            } catch (NotFound $e) {
+                // Non-subscription user can be ignored
 
             } catch (Exception $e) {
                 SimplerenewFactory::getApplication()
