@@ -98,5 +98,12 @@ interface UserInterface
      */
     public function setGroup(User $parent, Plan $plan);
 
+    /**
+     * Get a human friendly version of group membership
+     *
+     * @param User $parent
+     *
+     * @return string
+     */
     public function getGroupText(User $parent);
 }

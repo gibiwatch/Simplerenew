@@ -198,6 +198,11 @@ class User extends Object
         $this->adapter->setGroup($this, $plan);
     }
 
+    /**
+     * Get a human friendly version of group membership
+     *
+     * @return string
+     */
     public function getGroupText()
     {
         return $this->adapter->getGroupText($this);
