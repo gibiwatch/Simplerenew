@@ -147,6 +147,11 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             $user    = $container->getUser()->load();
             $account = $container->getAccount()->load($user);
 
+            // Update the billing info
+            /** @var SimplerenewModelGateway $model */
+            $model = SimplerenewModel::getInstance('Gateway');
+            $model->saveBilling($account);
+
             $subscription = $container
                 ->getSubscription()
                 ->getValidSubscription($account, $id);
