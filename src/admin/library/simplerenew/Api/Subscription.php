@@ -234,4 +234,12 @@ class Subscription extends AbstractApiBase
 
         throw new NotFound('Subscription not found for account ' . $account->code);
     }
+
+    /**
+     * @return Account
+     */
+    public function getAccount()
+    {
+        return $this->account;
+    }
 }
