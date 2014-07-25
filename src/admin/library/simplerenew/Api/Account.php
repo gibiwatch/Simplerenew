@@ -213,7 +213,7 @@ class Account extends AbstractApiBase
     {
         $oldMask = $this->codeMask;
 
-        switch (substr_count($mask, '%s') == 1) {
+        switch (substr_count($mask, '%s')) {
             case 1:
                 // Just right!
                 break;

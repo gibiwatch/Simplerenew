@@ -47,7 +47,7 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
         $account = $this->getAccount($parent->code);
         $parent->setProperties($account, $this->fieldMap);
 
-        if ($parent->address instanceof Address) {
+        if ($account->address && $parent->address instanceof Address) {
             $parent->address->setProperties(
                 $account->address,
                 array(
