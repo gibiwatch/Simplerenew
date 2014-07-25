@@ -138,7 +138,7 @@ $listDir = $this->escape($this->state->get('list.direction'));
 
         <tfoot>
         <tr>
-            <td colspan="8"><?php echo $this->pagination->getListFooter(); ?></td>
+            <td colspan="9"><?php echo $this->pagination->getListFooter(); ?></td>
         </tr>
         </tfoot>
 
