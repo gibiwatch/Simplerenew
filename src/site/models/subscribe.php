@@ -86,16 +86,21 @@ class SimplerenewModelSubscribe extends SimplerenewModelAccount
             // Using the coupon URL var overrides couponAllow
             $input          = SimplerenewFactory::getApplication()->input;
             $couponOverride = $input->getCmd('coupon', 'null');
-            $couponAllow    = (bool)$params->get('couponAllow', false);
+            $couponAllow    = (int)$params->get('couponAllow', 0);
 
-            if ($couponOverride == 'false' || $couponOverride == '0') {
+            if ($couponOverride == 'null') {
+                // No override from URL
                 $couponOverride = '';
-                $couponAllow    = false;
-            } elseif ($couponOverride == 'true' || $couponOverride == '1' || $couponOverride == '') {
+            } elseif ($couponOverride == 'false' || $couponOverride == '0') {
+                // Force usage off
                 $couponOverride = '';
-                $couponAllow    = true;
-            } elseif ($couponOverride == 'null') {
-                $couponOverride = '';
+                $couponAllow    = 0;
+            } else {
+                // Force usage on
+                if ($couponOverride == 'true' || $couponOverride == '1') {
+                    $couponOverride = '';
+                }
+                $couponAllow = -1;
             }
             $this->setState('coupon.allow', $couponAllow);
 
