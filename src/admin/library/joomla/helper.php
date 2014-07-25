@@ -20,6 +20,27 @@ abstract class SimplerenewHelper
     }
 
     /**
+     * get component information
+     *
+     * @return JRegistry
+     */
+    public static function getInfo()
+    {
+        $info = new jRegistry();
+        $path = SIMPLERENEW_ADMIN . '/simplerenew.xml';
+        if (file_exists($path)) {
+            $xml = JFactory::getXML($path);
+
+            foreach ($xml->children() as $e) {
+                if (!$e->children()) {
+                    $info->set($e->getName(), (string)$e);
+                }
+            }
+        }
+        return $info;
+    }
+
+    /**
      * Save submitted form data in the session.
      * NOTE: No security is employed here. Caller should be
      * careful not to store sensitive data in the session.

@@ -34,6 +34,8 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
         } else {
             parent::display($tpl);
         }
+
+        $this->displayFooter();
     }
 
     public function getLayout()
@@ -175,5 +177,24 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
             }
         }
         return join("\n", $html);
+    }
+
+    /**
+     * Display a standard footer on all admin pages
+     *
+     * @return void
+     */
+    protected function displayFooter()
+    {
+        $info = SimplerenewHelper::getInfo()->toObject();
+
+        echo JText::sprintf(
+            'COM_SIMPLERENEW_VERSION_FOOTER',
+            JText::_($info->name),
+            $info->version,
+            $info->creationDate,
+            $info->copyright,
+            $info->authorEmail
+        );
     }
 }
