@@ -8,8 +8,8 @@
 
     <fields name="params">
         <fieldset
-            name="basic"
-            label="COM_SIMPLERENEW_VIEW_SUBSCRIBE_PARAMS_BASIC_LABEL">
+            name="plans"
+            label="COM_SIMPLERENEW_VIEW_SUBSCRIBE_PARAMS_PLANS_LABEL">
 
             <field
                 name="plans"
@@ -18,6 +18,27 @@
                 format="[{code}] {name} {amount} {trial}"
                 description="COM_SIMPLERENEW_FIELD_PLANS_DESC"
                 class="checkbox"/>
+        </fieldset>
+
+        <fieldset
+            name="coupons"
+            label="COM_SIMPLERENEW_VIEW_SUBSCRIBE_PARAMS_COUPONS_LABEL">
+
+            <field
+                name="couponAllow"
+                type="list"
+                label="COM_SIMPLERENEW_FIELD_COUPON_ALLOW_LABEL"
+                description="COM_SIMPLERENEW_FIELD_COUPON_ALLOW_DESC">
+
+                <option value="0">JNO</option>
+                <option value="1">JYES</option>
+            </field>
+
+            <field
+                name="couponDefault"
+                type="text"
+                label="COM_SIMPLERENEW_FIELD_COUPON_DEFAULT_LABEL"
+                description="COM_SIMPLERENEW_FIELD_COUPON_DEFAULT_DESC"/>
         </fieldset>
 
     </fields>
