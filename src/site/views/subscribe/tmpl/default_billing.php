@@ -16,7 +16,7 @@ defined('_JEXEC') or die();
  * @var Payment\CreditCard       $creditCard
  */
 
-JHtml::_('sr.tabs');
+JHtml::_('sr.tabs', '.payment-tabs div');
 
 $paymentOptions = $this->getParams()->get('basic.paymentOptions');
 

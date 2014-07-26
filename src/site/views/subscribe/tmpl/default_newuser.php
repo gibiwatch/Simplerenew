@@ -7,6 +7,11 @@
  */
 
 defined('_JEXEC') or die();
+
+/**
+ * @var SimplerenewViewSubscribe $this
+ */
+
 ?>
 <div class="page-header">
     <h1><?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE'); ?></h1>
@@ -20,6 +25,13 @@ defined('_JEXEC') or die();
 
     <?php echo $this->loadtemplate('billing'); ?>
 
+    <?php
+    $showCoupon = $this->get('State')->get('coupon.allow');
+    if ($showCoupon <= 0 || $showCoupon == 1) {
+        echo $this->loadTemplate('coupon');
+    }
+    ?>
+
     <div class="m-bottom m-top">
         <?php echo JHtml::_('sr.terms'); ?>
     </div>
@@ -30,7 +42,6 @@ defined('_JEXEC') or die();
             value="<?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE'); ?>"
             class="btn-main btn-big"/>
     </div>
-
 </div>
 <!-- /.ost-section -->
 
