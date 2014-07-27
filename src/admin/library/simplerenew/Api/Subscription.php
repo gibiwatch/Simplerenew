@@ -154,8 +154,6 @@ class Subscription extends AbstractApiBase
     public function loadLast(Account $account)
     {
         $this->imp->loadLast($this, $account);
-        $this->account = $account;
-
         return $this;
     }
 
@@ -171,7 +169,6 @@ class Subscription extends AbstractApiBase
     public function create(Account $account, Plan $plan)
     {
         $this->clearProperties();
-        $this->account = $account;
 
         $this->imp->create($this, $account, $plan);
         $account->user->setGroup($plan);
