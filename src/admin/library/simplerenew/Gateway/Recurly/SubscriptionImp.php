@@ -27,7 +27,7 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
                 'active'              => Subscription::STATUS_ACTIVE,
                 'canceled'            => Subscription::STATUS_CANCELED,
                 'expired'             => Subscription::STATUS_EXPIRED,
-                Object::MAP_UNDEFINED => Subscription::MAP_UNDEFINED
+                Object::MAP_UNDEFINED => Subscription::STATUS_UNKNOWN
             )
         ),
         'enrolled'     => 'activated_at',
@@ -190,7 +190,6 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
 
         $current = array_shift($rawList);
         $this->bindToSubscription($current, $parent);
-
     }
 
     /**
