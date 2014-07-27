@@ -10,10 +10,12 @@ namespace Simplerenew;
 
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Billing;
+use Simplerenew\Api\Coupon;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
 use Simplerenew\Gateway\AccountInterface;
 use Simplerenew\Gateway\BillingInterface;
+use Simplerenew\Gateway\CouponInterface;
 use Simplerenew\Gateway\PlanInterface;
 use Simplerenew\Gateway\SubscriptionInterface;
 use Simplerenew\Primitive\CreditCard;
@@ -40,7 +42,7 @@ class Container
     {
         $this->configuration = new Configuration(array());
 
-        $config = new Configuration($config);
+        $config  = new Configuration($config);
         $account = $config->get('account', array());
         $this->configuration->set('account.config', $account);
 
@@ -134,6 +136,18 @@ class Container
         $imp  = $imp ? : $this->createGatewayInstance('PlanImp');
         $plan = new Plan($imp);
         return $plan;
+    }
+
+    /**
+     * @param CouponInterface $imp
+     *
+     * @return Coupon
+     */
+    public function getCoupon(CouponInterface $imp = null)
+    {
+        $imp    = $imp ? : $this->createGatewayInstance('CouponImp');
+        $coupon = new Coupon($imp);
+        return $coupon;
     }
 
     /**
