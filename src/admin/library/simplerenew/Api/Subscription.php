@@ -104,11 +104,6 @@ class Subscription extends AbstractApiBase
     protected $imp = null;
 
     /**
-     * @var Account
-     */
-    protected $account = null;
-
-    /**
      * @param SubscriptionInterface $imp
      * @param array                 $config
      */
@@ -159,6 +154,8 @@ class Subscription extends AbstractApiBase
     public function loadLast(Account $account)
     {
         $this->imp->loadLast($this, $account);
+        $this->account = $account;
+
         return $this;
     }
 
@@ -233,13 +230,5 @@ class Subscription extends AbstractApiBase
         }
 
         throw new NotFound('Subscription not found for account ' . $account->code);
-    }
-
-    /**
-     * @return Account
-     */
-    public function getAccount()
-    {
-        return $this->account;
     }
 }
