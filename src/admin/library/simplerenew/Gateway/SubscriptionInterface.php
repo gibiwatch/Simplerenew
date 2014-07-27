@@ -38,13 +38,13 @@ interface SubscriptionInterface
     public function load(Subscription $parent);
 
     /**
-     * @param Subscription $parent
+     * @param Subscription $template
      * @param Account      $account
      * @param int          $status One of the Simplerenew\Api\Subscription status codes
      *
      * @return array
      */
-    public function getList(Subscription $parent, Account $account, $status = null);
+    public function getList(Subscription $template, Account $account, $status = null);
 
     /**
      * Get the most recent subscription
