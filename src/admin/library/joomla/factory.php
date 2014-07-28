@@ -13,9 +13,9 @@ defined('_JEXEC') or die();
 abstract class SimplerenewFactory extends JFactory
 {
     /**
-     * @var Container
+     * @var array
      */
-    protected static $SimplerenewContainer = null;
+    protected static $SimplerenewContainers = array();
 
     /**
      * Get the Simplerenew container class
@@ -29,9 +29,10 @@ abstract class SimplerenewFactory extends JFactory
      */
     public static function getContainer(JRegistry $params = null)
     {
-        if (!self::$SimplerenewContainer instanceof Container) {
-            $params = $params ? : SimplerenewComponentHelper::getParams();
+        $params = $params ? : SimplerenewComponentHelper::getParams();
+        $key = sha1($params->toString());
 
+        if (empty(self::$SimplerenewContainers[$key])) {
             $config = array(
                 'user'    => array(
                     'adapter' => 'joomla'
@@ -43,9 +44,8 @@ abstract class SimplerenewFactory extends JFactory
                     'codeMask' => $params->get('account.prefix', '') . '%s'
                 )
             );
-
-            self::$SimplerenewContainer = new Container($config);
+            self::$SimplerenewContainers[$key] = new Container($config);
         }
-        return self::$SimplerenewContainer;
+        return self::$SimplerenewContainers[$key];
     }
 }

@@ -14,7 +14,8 @@ class Com_SimplerenewInstallerScript
      * @var array Obsolete folders/files to be deleted - use admin/site/media for location
      */
     protected $obsoleteItems = array(
-        '/admin/library/configuration.json'
+        '/admin/library/configuration.json',
+        '/media/js/tabs.js'
     );
 
     /**

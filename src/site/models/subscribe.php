@@ -82,6 +82,30 @@ class SimplerenewModelSubscribe extends SimplerenewModelAccount
         if ($params = $this->state->get('parameters.menu')) {
             $plans = new JRegistry($params->get('plans'));
             $this->setState('filter.plans', $plans->toArray());
+
+            // Using the coupon URL var overrides couponAllow
+            $input          = SimplerenewFactory::getApplication()->input;
+            $couponOverride = $input->getCmd('coupon', 'null');
+            $couponAllow    = (int)$params->get('couponAllow', 0);
+
+            if ($couponOverride == 'null') {
+                // No override from URL
+                $couponOverride = '';
+            } elseif ($couponOverride == 'false' || $couponOverride == '0') {
+                // Force usage off
+                $couponOverride = '';
+                $couponAllow    = 0;
+            } else {
+                // Force usage on
+                if ($couponOverride == 'true' || $couponOverride == '1') {
+                    $couponOverride = '';
+                }
+                $couponAllow = -1;
+            }
+            $this->setState('coupon.allow', $couponAllow);
+
+            $couponDefault = $couponOverride ? : $params->get('couponDefault', '');
+            $this->setState('coupon.default', $couponDefault);
         }
     }
 }

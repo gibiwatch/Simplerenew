@@ -16,7 +16,7 @@ defined('_JEXEC') or die();
  * @var Payment\CreditCard       $creditCard
  */
 
-JHtml::_('sr.tabs');
+JHtml::_('sr.tabs', '.payment-tabs div');
 
 $paymentOptions = $this->getParams()->get('basic.paymentOptions');
 
@@ -38,7 +38,10 @@ endif; ?>
     if (in_array('pp', $paymentOptions)):
         ?>
         <div class="block3 tab-disabled payment-tab" id="tab_paypal" data-content="#content_paypal">
-            <h4><i class="fa fa-paypal"></i> <?php echo JText::_('COM_SIMPLERENEW_PAYPAL'); ?></h4>
+            <h4>
+                <i class="fa fa-paypal"></i>
+                <?php echo JText::_('COM_SIMPLERENEW_PAYPAL'); ?>
+            </h4>
         </div>
     <?php
     endif;
@@ -48,7 +51,10 @@ endif; ?>
     if (in_array('cc', $paymentOptions)):
         ?>
         <div class="block3 tab-disabled payment-tab" id="tab_card" data-content="#content_card">
-            <h4><i class="fa fa-credit-card"></i> <?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?></h4>
+            <h4>
+                <i class="fa fa-credit-card"></i>
+                <?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?>
+            </h4>
         </div>
     <?php
     endif;
@@ -61,16 +67,6 @@ if (in_array('cc', $paymentOptions)) {
     echo $this->loadTemplate('creditcard');
 }
 
-if (in_array('pp', $paymentOptions)):
-    ?>
-    <div class="ost-section" id="content_paypal">
-        <div class="block12">
-            <div class="p-full">
-                <?php echo JText::_('COM_SIMPLERENEW_PROCEED_TO_PAYPAL'); ?>
-                <input type="hidden" name="payment_method" value="pp"/>
-            </div>
-        </div>
-    </div>
-    <!-- /.ost-section -->
-<?php
-endif;
+if (in_array('pp', $paymentOptions)) {
+    echo $this->loadTemplate('paypal');
+}

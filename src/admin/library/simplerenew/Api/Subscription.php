@@ -104,11 +104,6 @@ class Subscription extends AbstractApiBase
     protected $imp = null;
 
     /**
-     * @var Account
-     */
-    protected $account = null;
-
-    /**
      * @param SubscriptionInterface $imp
      * @param array                 $config
      */
@@ -174,7 +169,6 @@ class Subscription extends AbstractApiBase
     public function create(Account $account, Plan $plan)
     {
         $this->clearProperties();
-        $this->account = $account;
 
         $this->imp->create($this, $account, $plan);
         $account->user->setGroup($plan);
@@ -233,13 +227,5 @@ class Subscription extends AbstractApiBase
         }
 
         throw new NotFound('Subscription not found for account ' . $account->code);
-    }
-
-    /**
-     * @return Account
-     */
-    public function getAccount()
-    {
-        return $this->account;
     }
 }

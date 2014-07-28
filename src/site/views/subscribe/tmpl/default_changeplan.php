@@ -23,13 +23,19 @@ defined('_JEXEC') or die();
 
     <?php echo $this->loadtemplate('billing'); ?>
 
+    <?php
+    $showCoupon = $this->get('State')->get('coupon.allow');
+    if ($showCoupon <= 0 || $showCoupon == 2) {
+        echo $this->loadTemplate('coupon');
+    }
+    ?>
+
     <div class="m-bottom m-top">
         <input
             type="submit"
             value="<?php echo JText::_('COM_SIMPLERENEW_CHANGE_BUTTON'); ?>"
             class="btn-main btn-big"/>
     </div>
-
 </div>
 <!-- /.ost-section -->
 

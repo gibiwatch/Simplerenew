@@ -73,16 +73,52 @@ abstract class JHtmlSr
         static::$jqueryLoaded[__METHOD__] = true;
     }
 
-    public static function tabs($selector = '.payment-tabs div')
+    /**
+     * Setup tabbed areas
+     *
+     * @param $selector
+     *
+     * @return void
+     */
+    public static function tabs($selector)
     {
         static::jquery();
-        JHtml::_('script', 'com_simplerenew/tabs.js', false, true);
+        JHtml::_('script', 'com_simplerenew/utilities.js', false, true);
 
         $js = array(
             "(function($) {",
             "   $(document).ready(function () {",
             "       $.Simplerenew.tabs('{$selector}');",
             "    });",
+            "})(jQuery);"
+        );
+        SimplerenewFactory::getDocument()->addScriptDeclaration(join("\n", $js));
+    }
+
+    /**
+     * Setup simple sliders
+     *
+     * @param string $selector
+     * @param bool   $visible
+     *
+     * @return void
+     */
+    public static function sliders($selector, $visible = false)
+    {
+        static::jquery();
+        JHtml::_('script', 'com_simplerenew/utilities.js', false, true);
+
+        $options = json_encode(
+            array(
+                'visible' => (bool)$visible
+            )
+        );
+
+        $js = array(
+            "(function($) {",
+            "   $(document).ready(function () {",
+            "      $.Simplerenew.sliders('{$selector}', {$options});",
+            "   });",
             "})(jQuery);"
         );
         SimplerenewFactory::getDocument()->addScriptDeclaration(join("\n", $js));

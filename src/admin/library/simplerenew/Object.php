@@ -81,7 +81,7 @@ class Object
      *
      * @param bool $publicOnly Pass false to include protected properties as well
      *
-     * @return void
+     * @return $this
      */
     public function clearProperties($publicOnly = true)
     {
@@ -89,6 +89,8 @@ class Object
         foreach ($properties as $property) {
             $this->$property = null;
         }
+
+        return $this;
     }
 
     /**

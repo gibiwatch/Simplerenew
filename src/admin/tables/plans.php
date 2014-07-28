@@ -88,8 +88,8 @@ class SimplerenewTablePlans extends SimplerenewTable
 
         $success = parent::delete($pk);
         if ($success && $localPlan) {
-            $remotePlan = $this->getGateway()->load($localPlan->code);
             try {
+                $remotePlan = $this->getGateway()->load($localPlan->code);
                 $remotePlan->delete();
 
                 SimplerenewFactory::getApplication()
@@ -100,6 +100,9 @@ class SimplerenewTablePlans extends SimplerenewTable
                         )
                     );
                 return true;
+
+            } catch (NotFound $e) {
+                // Nothing on the gateway to delete
 
             } catch (Exception $e) {
                 SimplerenewFactory::getApplication()->enqueueMessage(
@@ -112,8 +115,6 @@ class SimplerenewTablePlans extends SimplerenewTable
                 );
                 return true;
             }
-
-
         }
         return $success;
     }
