@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Api;
 
+use Simplerenew\Exception;
 use Simplerenew\Gateway\CouponInterface;
 
 defined('_JEXEC') or die();
@@ -48,6 +49,7 @@ class Coupon extends AbstractApiBase
      * @param $code
      *
      * @return Coupon
+     * @throws Exception
      */
     public function load($code)
     {
