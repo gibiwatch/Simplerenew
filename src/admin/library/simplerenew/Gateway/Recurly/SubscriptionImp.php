@@ -9,6 +9,7 @@
 namespace Simplerenew\Gateway\Recurly;
 
 use Simplerenew\Api\Account;
+use Simplerenew\Api\Coupon;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
 use Simplerenew\Exception;
@@ -45,18 +46,20 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
      * @param Subscription $parent
      * @param Account      $account
      * @param Plan         $plan
+     * @param Coupon       $coupon
      *
      * @return void
      * @throws Exception
      */
-    public function create(Subscription $parent, Account $account, Plan $plan)
+    public function create(Subscription $parent, Account $account, Plan $plan, Coupon $coupon = null)
     {
         try {
             $subscription = new \Recurly_Subscription(null, $this->client);
 
-            $subscription->account   = \Recurly_Account::get($account->code, $this->client);
-            $subscription->plan_code = $plan->code;
-            $subscription->currency  = $this->currency;
+            $subscription->account     = \Recurly_Account::get($account->code, $this->client);
+            $subscription->plan_code   = $plan->code;
+            $subscription->coupon_code = $coupon ? $coupon->code : null;
+            $subscription->currency    = $this->currency;
 
             $subscription->create();
         } catch (Exception $e) {

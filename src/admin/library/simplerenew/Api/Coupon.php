@@ -44,10 +44,17 @@ class Coupon extends AbstractApiBase
         $this->imp = $imp;
     }
 
+    /**
+     * @param $code
+     *
+     * @return Coupon
+     */
     public function load($code)
     {
         $this->clearProperties();
         $this->code = $code;
         $this->imp->load($this);
+
+        return $this;
     }
 }

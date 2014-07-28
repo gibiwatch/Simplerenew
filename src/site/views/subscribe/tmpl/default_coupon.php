@@ -32,7 +32,7 @@ $couponCode = $state->get('coupon.default');
             <div class="input">
                 <input
                     type="text"
-                    name="coupon_code"
+                    name="couponCode"
                     id="coupon_code"
                     value="<?php echo $couponCode; ?>"/>
             </div>

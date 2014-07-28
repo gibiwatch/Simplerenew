@@ -218,7 +218,9 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
 
         // Create the subscription
         try {
-            $model->createSubscription($account, $app->input->getString('planCode'));
+            $planCode = $app->input->getString('planCode');
+            $couponCode = $app->input->getString('couponCode');
+            $model->createSubscription($account, $planCode, $couponCode);
 
         } catch (Exception $e) {
             $this->callerReturn(

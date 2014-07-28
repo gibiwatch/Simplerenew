@@ -9,6 +9,7 @@
 namespace Simplerenew\Api;
 
 use Simplerenew\Api\Account;
+use Simplerenew\Api\Coupon;
 use Simplerenew\Api\Plan;
 use Simplerenew\Exception;
 use Simplerenew\Exception\NotFound;
@@ -162,15 +163,16 @@ class Subscription extends AbstractApiBase
      *
      * @param Account $account
      * @param Plan    $plan
+     * @param Coupon  $coupon
      *
      * @return Subscription
      * @throws Exception
      */
-    public function create(Account $account, Plan $plan)
+    public function create(Account $account, Plan $plan, Coupon $coupon = null)
     {
         $this->clearProperties();
 
-        $this->imp->create($this, $account, $plan);
+        $this->imp->create($this, $account, $plan, $coupon);
         $account->user->setGroup($plan);
 
         return $this;

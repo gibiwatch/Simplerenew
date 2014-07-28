@@ -8,9 +8,9 @@
 
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Billing;
+use Simplerenew\Api\Coupon;
 use Simplerenew\Api\Subscription;
 use Simplerenew\Exception\NotFound;
-use Simplerenew\Primitive\CreditCard;
 use Simplerenew\User\User;
 
 defined('_JEXEC') or die();
@@ -147,11 +147,12 @@ class SimplerenewModelGateway extends SimplerenewModelSite
     /**
      * @param Account $account
      * @param mixed   $plan
+     * @param mixed   $coupon
      *
      * @return Subscription
      * @throws Exception
      */
-    public function createSubscription(Account $account, $plan)
+    public function createSubscription(Account $account, $plan, $coupon)
     {
         $container    = SimplerenewFactory::getContainer();
         $subscription = $container->getSubscription();
@@ -160,10 +161,14 @@ class SimplerenewModelGateway extends SimplerenewModelSite
             $plan = $container->getPlan()->load($plan);
         }
 
-        if (!$plan instanceof Simplerenew\Api\Plan) {
+        if (is_string($coupon)) {
+            $coupon = $container->getCoupon()->load($coupon);
+        }
+
+        if (!$plan instanceof Simplerenew\Api\Plan || !$coupon instanceof Coupon) {
             throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_INVALID_ARGUMENT'));
         }
-        $subscription->create($account, $plan);
+        $subscription->create($account, $plan, $coupon);
 
         return $subscription;
     }

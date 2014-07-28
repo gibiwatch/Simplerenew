@@ -9,6 +9,7 @@
 namespace Simplerenew\Gateway;
 
 use Simplerenew\Api\Account;
+use Simplerenew\Api\Coupon;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
 use Simplerenew\Exception;
@@ -23,11 +24,12 @@ interface SubscriptionInterface
      * @param Subscription $parent
      * @param Account      $account
      * @param Plan         $plan
+     * @param Coupon       $coupon
      *
      * @return void
      * @throws Exception
      */
-    public function create(Subscription $parent, Account $account, Plan $plan);
+    public function create(Subscription $parent, Account $account, Plan $plan, Coupon $coupon = null);
 
     /**
      * @param Subscription $parent
