@@ -12,7 +12,7 @@ abstract class SimplerenewHelperSite
 {
     protected static $awesomeCDN = 'https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css';
 
-    protected static $googleFonts = 'http://fonts.googleapis.com';
+    protected static $googleFonts = 'https://fonts.googleapis.com';
 
     /**
      * @var JRegistry
