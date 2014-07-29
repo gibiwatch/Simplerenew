@@ -146,28 +146,20 @@ class SimplerenewModelGateway extends SimplerenewModelSite
 
     /**
      * @param Account $account
-     * @param mixed   $plan
-     * @param mixed   $coupon
+     * @param string  $plan
+     * @param string  $coupon
      *
      * @return Subscription
      * @throws Exception
      */
-    public function createSubscription(Account $account, $plan, $coupon)
+    public function createSubscription(Account $account, $plan, $coupon = null)
     {
         $container    = SimplerenewFactory::getContainer();
         $subscription = $container->getSubscription();
 
-        if (is_string($plan)) {
-            $plan = $container->getPlan()->load($plan);
-        }
+        $plan   = $container->getPlan()->load($plan);
+        $coupon = $coupon ? $container->getCoupon()->load($coupon) : null;
 
-        if (is_string($coupon)) {
-            $coupon = $container->getCoupon()->load($coupon);
-        }
-
-        if (!$plan instanceof Simplerenew\Api\Plan || !$coupon instanceof Coupon) {
-            throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_INVALID_ARGUMENT'));
-        }
         $subscription->create($account, $plan, $coupon);
 
         return $subscription;

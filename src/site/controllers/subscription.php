@@ -71,32 +71,31 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
 
         } catch (Exception $e) {
             $this->callerReturn(
-                JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIBE_ACCOUNT', $e->getMessage()),
+                JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_ACCOUNT', $e->getMessage()),
                 'error'
             );
             return;
         }
 
-        $method = $app->input->getCmd('payment_method');
-        switch ($method) {
-            case 'pp':
-                $this->callerReturn(
-                    'Payment via PayPal is not yet implemented',
-                    'error'
-                );
-                return;
+        // Create the subscription based on payment type
+        try {
+            $method = $app->input->getCmd('payment_method');
+            switch ($method) {
+                case 'pp':
+                    throw new Exception('Payment via PayPal is not yet implemented');
+                    break;
 
-            case 'cc':
-                $this->subscribeByCreditCard($account);
-                break;
+                case 'cc':
+                    $this->subscribeByCreditCard($account);
+                    break;
 
-            default:
-                $this->callerReturn(
-                    JText::sprintf('COM_SIMPLERENEW_ERROR_UNKNOWN_PAYMENT_METHOD', $method),
-                    'error'
-                );
-                return;
-                break;
+                default:
+                    throw new Exception(JText::sprintf('COM_SIMPLERENEW_ERROR_UNKNOWN_PAYMENT_METHOD', $method));
+                    break;
+            }
+        } catch (Exception $e) {
+            $this->callerReturn($e->getMessage(), 'error');
+            return;
         }
 
         $link = SimplerenewRoute::get('account');
@@ -136,15 +135,18 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
                 ->getSubscription()
                 ->getValidSubscription($account, $id);
 
-            $planCode = $app->input->getString('planCode');
-
             if ($subscription->status == Subscription::STATUS_CANCELED) {
                 $subscription->reactivate();
             }
 
-            $oldPlan = $container->getPlan()->load($subscription->plan);
-            $newPlan = $container->getPlan()->load($planCode);
-            $subscription->update($newPlan);
+            $planCode = $app->input->getString('planCode');
+            $oldPlan  = $container->getPlan()->load($subscription->plan);
+            $newPlan  = $container->getPlan()->load($planCode);
+
+            $couponCode = $app->input->getString('couponCode');
+            $coupon     = $couponCode ? $container->getCoupon()->load($couponCode) : null;
+
+            $subscription->update($newPlan, $coupon);
 
         } catch (Exception $e) {
             $this->callerReturn(
@@ -170,6 +172,9 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
      * Subscribe a new member using CC info in input stream
      *
      * @param Account $account
+     *
+     * @return void
+     * @throws Exception
      */
     protected function subscribeByCreditCard(Account $account)
     {
@@ -180,11 +185,11 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
         try {
             $model->saveBilling($account);
         } catch (Exception $e) {
-            $this->callerReturn(
-                JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIBE_BILLING', $e->getMessage()),
-                'error'
+            throw new Exception(
+                JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_BILLING', $e->getMessage()),
+                $e->getCode(),
+                $e
             );
-            return;
         }
 
         // All went well! Valid billing information confirms the user so login them in
@@ -211,23 +216,23 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
         } catch (Exception $e) {
             // Not a big deal but leave a message
             $app->enqueueMessage(
-                JText::_('COM_SIMPLERENEW_WARN_SUBSCRIBE_USER_LOGIN_FAILED'),
+                JText::_('COM_SIMPLERENEW_WARN_SUBSCRIPTION_USER_LOGIN_FAILED'),
                 'notice'
             );
         }
 
         // Create the subscription
         try {
-            $planCode = $app->input->getString('planCode');
+            $planCode   = $app->input->getString('planCode');
             $couponCode = $app->input->getString('couponCode');
-            $model->createSubscription($account, $planCode, $couponCode);
 
+            $model->createSubscription($account, $planCode, $couponCode);
         } catch (Exception $e) {
-            $this->callerReturn(
-                $e->getMessage(),
-                'error'
+            throw new Exception(
+                JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_CREATE', $e->getMessage()),
+                $e->getCode(),
+                $e
             );
-            return;
         }
     }
 

@@ -203,14 +203,15 @@ class Subscription extends AbstractApiBase
     /**
      * Update subscription to a different plans
      *
-     * @param Plan $plan
+     * @param Plan   $plan
+     * @param Coupon $coupon
      *
      * @return void
      * @throws Exception
      */
-    public function update(Plan $plan)
+    public function update(Plan $plan, Coupon $coupon = null)
     {
-        $this->imp->update($this, $plan);
+        $this->imp->update($this, $plan, $coupon);
     }
 
     /**

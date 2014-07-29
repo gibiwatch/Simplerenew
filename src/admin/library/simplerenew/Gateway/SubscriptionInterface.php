@@ -84,9 +84,10 @@ interface SubscriptionInterface
      *
      * @param Subscription $parent
      * @param Plan         $plan
+     * @param Coupon       $coupon
      *
      * @return void
      * @throws Exception
      */
-    public function update(Subscription $parent, Plan $plan);
+    public function update(Subscription $parent, Plan $plan, Coupon $coupon = null);
 }

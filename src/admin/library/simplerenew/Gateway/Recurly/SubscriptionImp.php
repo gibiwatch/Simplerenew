@@ -255,15 +255,36 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
      *
      * @param Subscription $parent
      * @param Plan         $plan
+     * @param Coupon       $coupon
      *
      * @return void
      * @throws Exception
      */
-    public function update(Subscription $parent, Plan $plan)
+    public function update(Subscription $parent, Plan $plan, Coupon $coupon = null)
     {
         $subscription = $this->getSubscription($parent->id);
 
         try {
+            if ($coupon) {
+                // Need to set apiKey statically for additional info
+                \Recurly_Client::$apiKey = $this->client->apiKey();
+
+                $account     = $subscription->account->get();
+                $accountCode = $account->account_code;
+
+                try {
+                    /** @var \Recurly_CouponRedemption $oldCoupon */
+                    $oldCoupon = \Recurly_CouponRedemption::get($accountCode);
+                    $oldCoupon->delete();
+                } catch (\Recurly_NotFoundError $e) {
+                    // Perfectly fine
+                }
+
+                /** @var \Recurly_Coupon $newCoupon */
+                $newCoupon = \Recurly_Coupon::get($coupon->code, $this->client);
+                $newCoupon->redeemCoupon($accountCode, $this->currency);
+            }
+
             $subscription->plan_code = $plan->code;
             $subscription->updateAtRenewal();
         } catch (\Exception $e) {
