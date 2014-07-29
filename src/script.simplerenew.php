@@ -121,6 +121,8 @@ class Com_SimplerenewInstallerScript
     public function preFlight($type, $parent)
     {
         $this->initprops($parent);
+        $this->clearUpdateServers();
+
         return true;
     }
 
@@ -460,5 +462,23 @@ class Com_SimplerenewInstallerScript
             $table->params = $params->toString();
             $table->store();
         }
+    }
+
+    /**
+     * Use this in preflight to clear out obsolete update servers when the url has changed.
+     */
+    protected function clearUpdateServers()
+    {
+        $sr = JComponentHelper::getComponent('com_simplerenew');
+
+        $db = JFactory::getDbo();
+        $db->setQuery('Select update_site_id From #__update_sites_extensions where extension_id='.(int)$sr->id);
+        $list = $db->loadColumn();
+
+        $db->setQuery('Delete From #__update_sites_extensions where extension_id='.(int)$sr->id);
+        $db->execute();
+
+        $db->setQuery('Delete From #__update_sites Where update_site_id IN (' . join(',', $list) . ')');
+        $db->execute();
     }
 }
