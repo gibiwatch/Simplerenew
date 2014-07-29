@@ -68,7 +68,7 @@
         <server
             type="extension"
             priority="1"
-            name="Simplerenew Updates"><![CDATA[http://deploy.ostraining.com/osdeploy/hooks/joomla.php?extension=com_simplerenew]]>
+            name="Simplerenew Updates"><![CDATA[http://deploy.ostraining.com/updates/joomla/com_simplerenew.xml]]>
         </server>
     </updateservers>
 
