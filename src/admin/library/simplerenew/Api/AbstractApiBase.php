@@ -17,16 +17,13 @@ defined('_JEXEC') or die();
 abstract class AbstractApiBase extends Object
 {
     /**
-     * Test for valid configuration. Assumes that the implementation
-     * class is set to $this->imp. Returns false by default.
+     * Test for valid configuration. Meant to be overridden
+     * in sub classes. Otherwise will return false by default.
      *
      * @return bool
      */
     public function validConfiguration()
     {
-        if (!empty($this->imp) && $this->imp instanceof AbstractGatewayBase) {
-            return $this->imp->validConfiguration();
-        }
         return false;
     }
 }
