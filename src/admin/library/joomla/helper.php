@@ -113,6 +113,7 @@ abstract class SimplerenewHelper
         $errors   = array();
         $warnings = array();
 
+        // Test Gateway Configuration
         try {
             $plan = SimplerenewFactory::getContainer()->getPlan();
             if (!$plan->validConfiguration()) {
@@ -121,6 +122,14 @@ abstract class SimplerenewHelper
 
         } catch (Exception $e) {
             $errors[] = JText::_('COM_SIMPLERENEW_ERROR_GATEWAY_CONFIGURATION');
+        }
+
+        // Check critical support plugins
+        if (!JPluginHelper::isEnabled('user', 'simplerenew')) {
+            $errors[] = JText::sprintf('COM_SIMPLERENEW_WARN_PLUGIN_MISSING', 'user/simplerenew');
+        }
+        if (!JPluginHelper::isEnabled('system', 'simplerenew')) {
+            $errors[] = JText::sprintf('COM_SIMPLERENEW_WARN_PLUGIN_MISSING', 'system/simplerenew');
         }
 
         return (object)array(
