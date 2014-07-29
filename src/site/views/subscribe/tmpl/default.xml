@@ -30,9 +30,9 @@
                 label="COM_SIMPLERENEW_FIELD_COUPON_ALLOW_LABEL"
                 description="COM_SIMPLERENEW_FIELD_COUPON_ALLOW_DESC">
                 <option value="0">COM_SIMPLERENEW_OPTION_COUPON_NONE</option>
-                <option value="-1">COM_SIMPLERENEW_OPTION_COUPON_ALL</option>
                 <option value="1">COM_SIMPLERENEW_OPTION_COUPON_SUBSCRIBE</option>
                 <option value="2">COM_SIMPLERENEW_OPTION_COUPON_CHANGE</option>
+                <option value="-1">COM_SIMPLERENEW_OPTION_COUPON_ALL</option>
             </field>
 
             <field
