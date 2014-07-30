@@ -21,14 +21,14 @@ defined('_JEXEC') or die();
 
     <?php echo $this->loadTemplate('plans'); ?>
 
-    <?php echo $this->loadtemplate('billing'); ?>
-
     <?php
     $showCoupon = $this->get('State')->get('coupon.allow');
     if ($showCoupon <= 0 || $showCoupon == 2) {
         echo $this->loadTemplate('coupon');
     }
     ?>
+
+    <?php echo $this->loadtemplate('billing'); ?>
 
     <div class="m-bottom m-top">
         <input
