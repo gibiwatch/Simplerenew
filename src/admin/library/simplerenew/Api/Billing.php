@@ -65,7 +65,7 @@ class Billing extends AbstractApiBase
     /**
      * @var BillingInterface
      */
-    private $imp = null;
+    protected $imp = null;
 
     /**
      * @param BillingInterface $imp

@@ -38,7 +38,7 @@ class Coupon extends AbstractApiBase
     /**
      * @var CouponInterface
      */
-    private $imp = null;
+    protected $imp = null;
 
     public function __construct(CouponInterface $imp, array $config = array())
     {
