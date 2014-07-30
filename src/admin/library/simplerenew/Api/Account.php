@@ -76,7 +76,7 @@ class Account extends AbstractApiBase
     /**
      * @var AccountInterface
      */
-    private $imp = null;
+    protected $imp = null;
 
     /**
      * @var string
