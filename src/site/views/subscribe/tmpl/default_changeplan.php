@@ -23,7 +23,7 @@ defined('_JEXEC') or die();
 
     <?php
     $showCoupon = $this->get('State')->get('coupon.allow');
-    if ($showCoupon <= 0 || $showCoupon == 2) {
+    if ($showCoupon < 0 || $showCoupon == 2) {
         echo $this->loadTemplate('coupon');
     }
     ?>
