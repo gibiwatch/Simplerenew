@@ -121,6 +121,7 @@ class Com_SimplerenewInstallerScript
     public function preFlight($type, $parent)
     {
         $this->initprops($parent);
+        $this->clearUpdateServers();
         return true;
     }
 
