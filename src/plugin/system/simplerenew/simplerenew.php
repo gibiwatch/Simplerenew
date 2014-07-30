@@ -27,6 +27,16 @@ class plgSystemSimplerenew extends JPlugin
         $this->loadLanguage();
     }
 
+    public function onAfterInitialise()
+    {
+        $app    = JFactory::getApplication();
+        if ($app->input->getCmd('simplerenew') == 'notify') {
+            $app->input->set('option', 'com_simplerenew');
+            $app->input->set('task', 'notify.receive');
+            $app->input->set('format', 'raw');
+        }
+    }
+
     public function onAfterRoute()
     {
         $app = JFactory::getApplication();
