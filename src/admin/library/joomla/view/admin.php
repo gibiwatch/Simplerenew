@@ -192,9 +192,7 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
             'COM_SIMPLERENEW_VERSION_FOOTER',
             JText::_($info->name),
             $info->version,
-            $info->creationDate,
-            $info->copyright,
-            $info->authorEmail
+            $info->authorUrl
         );
     }
 }
