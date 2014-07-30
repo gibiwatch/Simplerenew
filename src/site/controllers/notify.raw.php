@@ -21,76 +21,27 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
         $post_xml = file_get_contents("php://input");
         $notification = new Recurly_PushNotification($post_xml);
 
+        // Recurly notifications
         switch ($notification->type) {
             case 'new_account_notification':
-                break;
-
             case 'canceled_account_notification':
-                $accountCode = (string)$notification->account->account_code;
-                $account     = new RecurlyApiAccount($accountCode);
-
-                RecurlyHelper::updateUser($account->userId);
-                RecurlyHelper::closeUser($account->userId);
-                break;
-
             case 'billing_info_updated_notification':
-                break;
-
             case 'reactivated_account_notification':
-                break;
+
+            case 'new_invoice_notification':
+            case 'closed_invoice_notification':
+            case 'past_due_invoice_notification':
 
             case 'new_subscription_notification':
-                // Fall through
             case 'updated_subscription_notification':
-                $accountCode = (string)$notification->account->account_code;
-                $planCode    = (string)$notification->subscription->plan->plan_code;
-
-                $account = new RecurlyApiAccount($accountCode);
-                RecurlyHelper::updateUser($account->userId, $planCode);
-                break;
-
             case 'canceled_subscription_notification':
-                break;
-
+            case 'expired_subscription_notification':
             case 'renewed_subscription_notification':
-                list ($userId) = preg_split('/_/', $notification->account->account_code);
-
-                $planCode = $notification->subscription->plan->plan_code . '';
-                RecurlyHelper::updateUser($userId, $planCode);
-                break;
 
             case 'successful_payment_notification':
-                RecurlyHelper::successInvoice($notification);
-                break;
-
             case 'failed_payment_notification':
-                // Change to Registered if payment is failed
-                RecurlyHelper::failedInvoice($notification);
-                $subscription = null;
-                try {
-                    $subscriptions = Recurly_SubscriptionList::getForAccount($notification->account->account_code);
-
-                    foreach ($subscriptions as $item) {
-                        $subscription = $item;
-                        break;
-                    }
-                    if ($subscription && $subscription->state == 'active') {
-                        break;
-                    }
-                } catch (Exception $e) {
-                }
-            // Fall through
-
-            case 'expired_subscription_notification':
-                list (, $userId) = preg_split("/_/", $notification->account->account_code);
-                RecurlyHelper::updateUser($userId);
-                break;
-
             case 'successful_refund_notification':
-                break;
-
             case 'void_payment_notification':
-                break;
         }
 */
     }
