@@ -32,7 +32,6 @@ defined('_JEXEC') or die();
 
     <?php echo $this->loadtemplate('billing'); ?>
 
-
     <div class="m-bottom m-top">
         <?php echo JHtml::_('sr.terms'); ?>
     </div>
