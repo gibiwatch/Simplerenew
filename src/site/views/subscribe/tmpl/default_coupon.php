@@ -21,7 +21,7 @@ $couponCode = $state->get('coupon.default');
 
 ?>
 <div class="ost-section">
-    <div class="block6">
+    <div class="block6 p-bottom b-bottom">
         <div class="coupon-toggle" data-content="#coupon-area">
             <?php echo JText::_('COM_SIMPLERENEW_COUPON_CODE_ASK'); ?>
         </div>
