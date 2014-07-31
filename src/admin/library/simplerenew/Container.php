@@ -11,11 +11,13 @@ namespace Simplerenew;
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Billing;
 use Simplerenew\Api\Coupon;
+use Simplerenew\Api\Notification;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
 use Simplerenew\Gateway\AccountInterface;
 use Simplerenew\Gateway\BillingInterface;
 use Simplerenew\Gateway\CouponInterface;
+use Simplerenew\Gateway\NotificationInterface;
 use Simplerenew\Gateway\PlanInterface;
 use Simplerenew\Gateway\SubscriptionInterface;
 use Simplerenew\Primitive\CreditCard;
@@ -183,6 +185,20 @@ class Container
         }
 
         return null;
+    }
+
+    /**
+     * Create notification object
+     *
+     * @param NotificationInterface $imp
+     *
+     * @return Notification
+     */
+    public function getNotification(NotificationInterface $imp = null)
+    {
+        $imp          = $imp ? : $this->createGatewayInstance('NotificationImp');
+        $notification = new Notification($imp);
+        return $notification;
     }
 
     /**
