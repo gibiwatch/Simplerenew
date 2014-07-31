@@ -8,7 +8,11 @@
 
 namespace Simplerenew\Api;
 
+use Simplerenew\Gateway\AccountInterface;
+use Simplerenew\Gateway\BillingInterface;
 use Simplerenew\Gateway\NotificationInterface;
+use Simplerenew\Gateway\SubscriptionInterface;
+use Simplerenew\User\Adapter\UserInterface;
 
 defined('_JEXEC') or die();
 
@@ -16,9 +20,11 @@ class Notification extends AbstractApiBase
 {
     // Notification types
     const TYPE_ACCOUNT      = 'account';
+    const TYPE_BILLING      = 'billing';
     const TYPE_INVOICE      = 'invoice';
     const TYPE_SUBSCRIPTION = 'subscription';
     const TYPE_PAYMENT      = 'payment';
+    const TYPE_UNKNOWN      = 'unknown';
 
     // Notification actions
     const ACTION_NEW        = 'new';
@@ -35,8 +41,30 @@ class Notification extends AbstractApiBase
     const ACTION_VOID       = 'void';
     const ACTION_UNKNOWN    = 'unknown';
 
+    /**
+     * @var string
+     */
     public $type = null;
+
+    /**
+     * @var string
+     */
     public $action = null;
+
+    /**
+     * @var object
+     */
+    public $account = null;
+
+    /**
+     * @var object
+     */
+    public $billing = null;
+
+    /**
+     * @var object
+     */
+    public $subscription = null;
 
     /**
      * @var NotificationInterface
