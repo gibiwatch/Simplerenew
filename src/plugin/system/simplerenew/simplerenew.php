@@ -29,28 +29,26 @@ class plgSystemSimplerenew extends JPlugin
 
     public function onAfterInitialise()
     {
-        $app    = JFactory::getApplication();
-        if ($app->input->getCmd('simplerenew') == 'notify') {
-            $app->input->set('option', 'com_simplerenew');
-            $app->input->set('task', 'notify.receive');
-            $app->input->set('format', 'raw');
+        // Catch push notifications from the gateway and direct to the receiver
+        $app = JFactory::getApplication();
+        if ($app->isSite()) {
+            $uri = JUri::getInstance();
+            if ($uri->getPath() == '/simplerenew/notify') {
+                $app->input->set('option', 'com_simplerenew');
+                $app->input->set('task', 'notify.receive');
+                $app->input->set('format', 'raw');
+            }
         }
     }
 
     public function onAfterRoute()
     {
-        $app = JFactory::getApplication();
-        if ($app->isAdmin()) {
-            $this->autoSyncPlans();
-        }
+        $this->autoSyncPlans();
     }
 
     public function onAfterRender()
     {
-        $app = JFactory::getApplication();
-        if ($app->isAdmin()) {
-            $this->onAfterConfigSave();
-        }
+        $this->onAfterConfigSave();
     }
 
     /**
@@ -61,7 +59,7 @@ class plgSystemSimplerenew extends JPlugin
     protected function autoSyncPlans()
     {
         $app = JFactory::getApplication();
-        if ($app->input->getCmd('option') == 'com_simplerenew') {
+        if ($app->isAdmin() && $app->input->getCmd('option') == 'com_simplerenew') {
             if ($this->isInstalled()) {
                 $planSync = abs((int)$this->params->get('planSync', 1)) * 60;
 
@@ -85,8 +83,8 @@ class plgSystemSimplerenew extends JPlugin
      */
     protected function onAfterConfigSave()
     {
-        if ($this->isInstalled()) {
-            $app = SimplerenewFactory::getApplication();
+        $app = JFactory::getApplication();
+        if ($app->isAdmin() && $this->isInstalled()) {
 
             $option    = $app->input->getCmd('option');
             $component = $app->input->getCmd('component');
