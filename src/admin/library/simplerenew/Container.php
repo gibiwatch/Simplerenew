@@ -95,10 +95,8 @@ class Container
      */
     public function getUser(UserInterface $adapter = null)
     {
-        if (!$adapter) {
-            $adapter = $this->configuration->get('user.adapter');
-        }
-        $user = new User($adapter);
+        $adapter = $adapter ? : $this->configuration->get('user.adapter');
+        $user    = new User($adapter);
         return $user;
     }
 
@@ -196,7 +194,8 @@ class Container
      */
     public function getNotification(NotificationInterface $imp = null)
     {
-        $imp          = $imp ? : $this->createGatewayInstance('NotificationImp');
+        $imp = $imp ? : $this->createGatewayInstance('NotificationImp');
+
         $notification = new Notification($imp);
         return $notification;
     }
