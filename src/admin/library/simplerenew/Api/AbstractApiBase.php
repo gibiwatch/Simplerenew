@@ -10,7 +10,6 @@ namespace Simplerenew\Api;
 
 use Simplerenew\Exception;
 use Simplerenew\Gateway\AbstractGatewayBase;
-use Simplerenew\Gateway\NotificationInterface;
 use Simplerenew\Object;
 
 defined('_JEXEC') or die();

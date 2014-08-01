@@ -186,18 +186,18 @@ class Container
     }
 
     /**
-     * Create notification object
+     * Create Notify object
      *
      * @param NotifyInterface $imp
      *
      * @return Notify
      */
-    public function getNotification(NotifyInterface $imp = null)
+    public function getNotify(NotifyInterface $imp = null)
     {
         $imp = $imp ? : $this->createGatewayInstance('NotifyImp');
 
-        $notification = new Notify($imp, $this);
-        return $notification;
+        $notify = new Notify($imp, $this);
+        return $notify;
     }
 
     /**

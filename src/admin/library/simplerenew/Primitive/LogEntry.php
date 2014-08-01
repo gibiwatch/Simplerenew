@@ -8,9 +8,6 @@
 
 namespace Simplerenew\Primitive;
 
-use Simplerenew\Api\Notification;
-use Simplerenew\Primitive\AbstractPrimitive;
-
 defined('_JEXEC') or die();
 
 class LogEntry extends AbstractPrimitive
