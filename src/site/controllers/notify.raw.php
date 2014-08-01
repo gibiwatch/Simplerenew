@@ -6,18 +6,74 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Exception\NotFound;
+
 defined('_JEXEC') or die();
 
 class SimplerenewControllerNotify extends SimplerenewControllerBase
 {
     public function receive()
     {
-        //$this->authenticate();
+        $app = SimplerenewFactory::getApplication();
 
-        $container    = SimplerenewFactory::getContainer();
-        //$package      = file_get_contents('php://input');
-        $notification = $container->getNotification();
+        $method = $app->input->getMethod();
+        switch ($method) {
+            case 'POST':
+                $this->authenticate();
+                $package = file_get_contents('php://input');
+                break;
 
+            case 'GET':
+                // @TODO: remove after dev done
+                $package = $this->samples();
+                break;
+            // Fall through
+
+            default:
+                throw new Exception('not accepting ' . $method);
+                break;
+        }
+
+        $container = SimplerenewFactory::getContainer();
+        $notify    = $container->getNotify();
+        $notify->process($package, $container);
+    }
+
+    /**
+     * Check credentials of caller
+     *
+     * @throws Exception
+     */
+    protected function authenticate()
+    {
+        $app       = SimplerenewFactory::getApplication();
+        $container = SimplerenewFactory::getContainer();
+
+        $username = $app->input->server->getUsername('PHP_AUTH_USER');
+        $password = $app->input->server->getString('PHP_AUTH_PW');
+
+        if ($username) {
+            // Check the password
+            try {
+                $user = $container->getUser()->loadByUsername($username);
+            } catch (NotFound $e) {
+                throw new Exception($e->getMessage(), 403);
+            }
+
+            if ($user->validate($password)) {
+                // Check for proper access
+                $jUser = SimplerenewFactory::getUser($user->id);
+                if ($jUser->authorise('core.manage', 'com_simplerenew')) {
+                    return;
+                }
+            }
+        }
+
+        throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
+    }
+
+    protected function samples()
+    {
         $newAccount = '<new_account_notification>
   <account>
     <account_code>J25_509</account_code>
@@ -70,42 +126,36 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
   </subscription>
 </new_subscription_notification>';
 
-        try {
-            $notification->loadPackage($newSub);
-        } catch (Exception $e) {
-            echo 'ERROR: ' . $e->getMessage();
-        }
-    }
+        $actSub = '<?xml version="1.0" encoding="UTF-8"?>
+<reactivated_account_notification>
+  <account>
+    <account_code>J25_512</account_code>
+    <username>wilma</username>
+    <email>wilma@ostraining.com</email>
+    <first_name>Wilma</first_name>
+    <last_name>Flintstone II</last_name>
+    <company_name>Slate Construction</company_name>
+  </account>
+  <subscription>
+    <plan>
+      <plan_code>plan-1</plan_code>
+      <name>Personal (Bimonthly)</name>
+    </plan>
+    <uuid>28fd460250fe8a63536b974274a94356</uuid>
+    <state>active</state>
+    <quantity type="integer">1</quantity>
+    <total_amount_in_cents type="integer">4700</total_amount_in_cents>
+    <subscription_add_ons type="array"/>
+    <activated_at type="datetime">2014-07-31T22:11:55Z</activated_at>
+    <canceled_at type="datetime" nil="true"></canceled_at>
+    <expires_at type="datetime" nil="true"></expires_at>
+    <current_period_started_at type="datetime">2014-07-31T22:11:55Z</current_period_started_at>
+    <current_period_ends_at type="datetime">2014-09-30T22:11:55Z</current_period_ends_at>
+    <trial_started_at type="datetime" nil="true"></trial_started_at>
+    <trial_ends_at type="datetime" nil="true"></trial_ends_at>
+  </subscription>
+</reactivated_account_notification>';
 
-    /**
-     * Check credentials of caller
-     *
-     * @throws Exception
-     */
-    protected function authenticate()
-    {
-        $app       = SimplerenewFactory::getApplication();
-        $container = SimplerenewFactory::getContainer();
-
-        $username = $app->input->server->getUsername('PHP_AUTH_USER');
-        $password = $app->input->server->getString('PHP_AUTH_PW');
-
-        if (!$username) {
-            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
-        }
-
-        // Check the password
-        try {
-            $user = $container->getUser()->loadByUsername($username);
-        } catch (Simplerenew\Exception\NotFound $e) {
-            throw new Exception($e->getMessage(), 403);
-        }
-        $user->validate($password);
-
-        // Check for proper access
-        $jUser = SimplerenewFactory::getUser($user->id);
-        if (!$jUser->authorise('core.manage', 'com_simplerenew')) {
-            throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
-        }
+        return $actSub;
     }
 }
