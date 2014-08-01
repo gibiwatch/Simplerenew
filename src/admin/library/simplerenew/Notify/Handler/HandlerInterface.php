@@ -16,7 +16,7 @@ defined('_JEXEC') or die();
 interface HandlerInterface
 {
     /**
-     * @param Notify $notice
+     * @param Notify    $notice
      * @param Container $container
      *
      * @return mixed

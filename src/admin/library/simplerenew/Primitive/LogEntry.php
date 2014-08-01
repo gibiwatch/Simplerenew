@@ -12,14 +12,49 @@ defined('_JEXEC') or die();
 
 class LogEntry extends AbstractPrimitive
 {
+    /**
+     * @var string
+     */
     public $type = '';
+
+    /**
+     * @var string
+     */
     public $action = '';
+
+    /**
+     * @var string
+     */
     public $handler = '';
+
+    /**
+     * @var string
+     */
     public $package = '';
+
+    /**
+     * @var string
+     */
     public $ipaddress = '';
+
+    /**
+     * @var string
+     */
     public $logtime = '';
+
+    /**
+     * @var string
+     */
     public $user_id = '';
+
+    /**
+     * @var string
+     */
     public $account_code = '';
+
+    /**
+     * @var string
+     */
     public $subscription_id = '';
 
     public function __construct($data)
