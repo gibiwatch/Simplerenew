@@ -246,6 +246,23 @@ class Account extends AbstractApiBase
     }
 
     /**
+     * Get the user ID from an account code
+     *
+     * @param string $accountCode
+     *
+     * @return int
+     */
+    public function getUserId($accountCode = null)
+    {
+        if (empty($accountCode)) {
+            $accountCode = $this->code;
+        }
+
+        $static = explode('%s', $this->getCodeMask());
+        return str_replace($static, '', $accountCode);
+    }
+
+    /**
      * @return User
      */
     public function getUser()
