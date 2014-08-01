@@ -70,9 +70,6 @@ class SimplerenewControllerTest extends SimplerenewControllerBase
             } elseif ($account != 'NoAccount') {
                 $plan = array_shift($plans);
                 $subscription = $this->createAccount($properties, $plan);
-                if ($account == 'NoBilling') {
-                    $container->getBilling()->load($subscription->account)->delete();
-                }
             } else {
                 $user = SimplerenewFactory::getContainer()->getUser();
                 $user->setProperties($properties)->create();

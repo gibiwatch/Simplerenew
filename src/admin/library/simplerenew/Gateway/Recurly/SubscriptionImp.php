@@ -66,7 +66,7 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
 
-        $this->bindToSubscription($subscription, $parent);
+        $this->bindSource($parent, $subscription);
     }
 
     /**
@@ -78,39 +78,58 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
     public function load(Subscription $parent)
     {
         $subscription = $this->getSubscription($parent->id);
-
-        $this->bindToSubscription($subscription, $parent);
+        $this->bindSource($parent, $subscription);
     }
 
     /**
-     * Set the API object properties from the native Recurly object
+     * Map raw data from the Gateway to SR fields
      *
-     * @param object       $subscription
-     * @param Subscription $target
+     * @param Subscription $parent
+     * @param mixed        $data
      *
      * @return void
      */
-    protected function bindToSubscription($subscription, Subscription $target)
+    public function bindSource(Subscription $parent, $data)
     {
-        $pending = array(
+        // Find account code
+        $account = $this->getKeyValue($data, 'account');
+
+        if ($account instanceof \Recurly_Stub) {
+            \Recurly_Client::$apiKey = $this->client->apiKey();
+            $rawAccount              = $data->account->get();
+            $accountCode             = $this->getKeyValue($rawAccount, 'account_code');
+        } else {
+            $accountCode = $this->getKeyValue($account, 'account_code');
+        }
+
+        // Look for a pending plan
+        $pendingPlan = array(
             'plan'   => null,
             'amount' => null
         );
-        if (isset($subscription->pending_subscription)) {
-            $pending = array(
-                'plan'   => $subscription->pending_subscription->plan->plan_code,
-                'amount' => $subscription->pending_subscription->unit_amount_in_cents / 100
+
+        $pending = $this->getKeyValue($data, 'pending_subscription');
+        if ($pending) {
+            $plan        = $this->getKeyValue($pending, 'plan');
+            $pendingPlan = array(
+                'plan'   => $this->getKeyValue($plan, 'plan_code'),
+                'amount' => $this->getKeyValue($pending, 'unit_amount_in_cents') / 100
             );
         }
-        $target->setProperties($subscription, $this->fieldMap);
-        $target->setProperties(
-            array(
-                'plan'           => $subscription->plan->plan_code,
-                'amount'         => $subscription->unit_amount_in_cents / 100,
-                'pending_plan'   => $pending['plan'],
-                'pending_amount' => $pending['amount']
-            )
-        );
+
+        $plan = $this->getKeyValue($data, 'plan');
+        $parent
+            ->clearProperties()
+            ->setProperties($data, $this->fieldMap)
+            ->setProperties(
+                array(
+                    'plan'           => $this->getKeyValue($plan, 'plan_code'),
+                    'amount'         => $this->getKeyValue($data, 'unit_amount_in_cents') / 100,
+                    'pending_plan'   => $pendingPlan['plan'],
+                    'pending_amount' => $pendingPlan['amount'],
+                    'account_code'   => $accountCode
+                )
+            );
     }
 
     /**
@@ -126,7 +145,7 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
         }
 
         try {
-            $subscription = \Recurly_Subscription::get($id, $this->client);
+            $subscription          = \Recurly_Subscription::get($id, $this->client);
 
         } catch (\Recurly_NotFoundError $e) {
             throw new NotFound($e->getMessage(), $e->getCode(), $e);
@@ -161,7 +180,7 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
         $list = \Recurly_SubscriptionList::getForAccount($account->code, null, $this->client);
         foreach ($list as $rawSubscription) {
             $subscription = clone $template;
-            $this->bindToSubscription($rawSubscription, $subscription);
+            $this->bindSource($subscription, $rawSubscription);
 
             $subscriptions[$subscription->id] = $subscription;
         }
@@ -192,7 +211,7 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
         }
 
         $current = array_shift($rawList);
-        $this->bindToSubscription($current, $parent);
+        $this->bindSource($parent, $current);
     }
 
     /**

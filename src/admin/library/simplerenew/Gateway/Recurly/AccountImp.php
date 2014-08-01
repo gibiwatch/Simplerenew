@@ -37,6 +37,34 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
     );
 
     /**
+     * Map raw data from the Gateway to SR fields
+     *
+     * @param Account $parent
+     * @param mixed   $data
+     *
+     * @return void
+     */
+    public function bindSource(Account $parent, $data)
+    {
+        $parent
+            ->clearProperties()
+            ->setProperties($data, $this->fieldMap);
+
+        $address = $this->getKeyValue($data, 'address');
+        if ($address && $parent->address instanceof Address) {
+            $parent->address
+                ->clearProperties()
+                ->setProperties(
+                    $address,
+                    array(
+                        'region' => 'state',
+                        'postal' => 'zip'
+                    )
+                );
+        }
+    }
+
+    /**
      * @param Account $parent
      *
      * @return array
@@ -45,17 +73,8 @@ class AccountImp extends AbstractRecurlyBase implements AccountInterface
     public function load(Account $parent)
     {
         $account = $this->getAccount($parent->code);
-        $parent->setProperties($account, $this->fieldMap);
 
-        if ($account->address && $parent->address instanceof Address) {
-            $parent->address->setProperties(
-                $account->address,
-                array(
-                    'region' => 'state',
-                    'postal' => 'zip'
-                )
-            );
-        }
+        $this->bindSource($parent, $account);
     }
 
     /**

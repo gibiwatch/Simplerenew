@@ -69,31 +69,36 @@ class CouponImp extends AbstractRecurlyBase implements CouponInterface
     }
 
     /**
-     * Set the API object properties from the native Recurly object
+     * Map raw data from the Gateway to SR fields
      *
-     * @param mixed  $coupon
-     * @param Coupon $target
+     * @param Coupon $parent
+     * @param mixed   $data
      *
      * @return void
      */
-    protected function bindToCoupon($coupon, Coupon $target)
+    public function bindSource(Coupon $parent, $data)
     {
-        $target
+        $parent
             ->clearProperties()
-            ->setProperties($coupon, $this->fieldMap);
+            ->setProperties($data, $this->fieldMap);
+        $parent->currency = $this->currency;
 
-        if ($coupon->applies_to_all_plans) {
-            $target->plans = array();
+        $allPlans = $this->getKeyValue($data, 'applies_to_all_plans');
+        if ($allPlans) {
+            $parent->plans = array();
         }
 
-        switch ($target->type) {
+        $type = $this->getKeyValue($parent, 'type');
+        switch ($type) {
             case Coupon::TYPE_AMOUNT:
-                $target->currency = $this->currency;
-                $target->amount   = $this->getCurrency($coupon->discount_in_cents);
+                $parent->amount = $this->getKeyValue($data, 'discount_in_cents');
+                if ($parent->amount instanceof \Recurly_CurrencyList) {
+                    $parent->amount   = $this->getCurrency($parent->amount);
+                }
                 break;
 
             case Coupon::TYPE_PERCENT:
-                $target->amount = $coupon->discount_percent;
+                $parent->amount = $this->getKeyValue($data, 'discount_percent');
                 break;
         }
     }

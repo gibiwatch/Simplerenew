@@ -39,31 +39,14 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
      */
     public function load(Billing $parent)
     {
-        $parent->clearProperties();
-
         $billing = $this->getBilling($parent->account->code);
-        if ($billing) {
-            $parent->setProperties($billing, $this->fieldMap);
 
-            // Recognize debugging url var
-            if (\SimplerenewFactory::getApplication()->input->getInt('ppdev', 0)) {
-                $billing->paypal_billing_agreement_id = '12345-TEST-54321';
-            }
-
-            if ($billing->paypal_billing_agreement_id) {
-                $payment = new PayPal();
-                $payment->setProperties($billing, $this->fieldMap);
-
-            } elseif ($billing->first_six && $billing->last_four) {
-                $payment = new CreditCard();
-                $payment->setProperties($billing, $this->fieldMap);
-
-            } else {
-                $payment = null;
-            }
-
-            $parent->setPayment($payment);
+        // Recognize debugging url var
+        if (\SimplerenewFactory::getApplication()->input->getInt('ppdev', 0)) {
+            $billing->paypal_billing_agreement_id = '12345-TEST-54321';
         }
+        $this->bindSource($parent, $billing);
+
     }
 
     /**
@@ -167,5 +150,38 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
         }
 
         return $billing;
+    }
+
+    /**
+     * Map raw data from the Gateway to SR fields
+     *
+     * @param Billing $parent
+     * @param mixed   $data
+     *
+     * @return void
+     */
+    public function bindSource(Billing $parent, $data)
+    {
+        $parent
+            ->clearProperties()
+            ->setProperties($data, $this->fieldMap);
+
+        $ppAgreement = $this->getKeyValue($data, 'paypal_billing_agreement_id');
+        $firstSix = $this->getKeyValue($data, 'first_six');
+        $lastFour = $this->getKeyValue($data, 'last_four');
+
+        if ($ppAgreement) {
+            $payment = new PayPal();
+            $payment->setProperties($data, $this->fieldMap);
+
+        } elseif ($firstSix && $lastFour) {
+            $payment = new CreditCard();
+            $payment->setProperties($data, $this->fieldMap);
+
+        } else {
+            $payment = null;
+        }
+
+        $parent->setPayment($payment);
     }
 }

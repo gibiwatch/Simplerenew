@@ -8,9 +8,6 @@
 
 namespace Simplerenew\Api;
 
-use Simplerenew\Api\Account;
-use Simplerenew\Api\Coupon;
-use Simplerenew\Api\Plan;
 use Simplerenew\Exception;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\Gateway\SubscriptionInterface;
@@ -28,6 +25,11 @@ class Subscription extends AbstractApiBase
      * @var string
      */
     public $id = null;
+
+    /**
+     * @var string
+     */
+    public $account_code = null;
 
     /**
      * @var string

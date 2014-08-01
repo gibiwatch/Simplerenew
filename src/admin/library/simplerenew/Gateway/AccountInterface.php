@@ -58,4 +58,14 @@ interface AccountInterface
      * @throws Exception
      */
     public function reopen(Account $parent);
+
+    /**
+     * Map raw data from the Gateway to SR fields
+     *
+     * @param Account $parent
+     * @param mixed   $data
+     *
+     * @return void
+     */
+    public function bindSource(Account $parent, $data);
 }

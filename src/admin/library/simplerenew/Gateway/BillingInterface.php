@@ -38,4 +38,15 @@ interface BillingInterface
      * @throws Exception
      */
     public function delete(Billing $parent);
+
+    /**
+     * Map raw data from the Gateway to SR fields
+     *
+     * @param Billing $parent
+     * @param mixed   $data
+     *
+     * @return void
+     */
+    public function bindSource(Billing $parent, $data);
+
 }

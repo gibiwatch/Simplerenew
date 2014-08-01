@@ -231,6 +231,8 @@ class Billing extends AbstractApiBase
         parent::clearProperties($publicOnly);
         $this->address->clearProperties($publicOnly);
         $this->payment = null;
+
+        return $this;
     }
 
     public function getPaymentType()

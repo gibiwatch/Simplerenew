@@ -50,4 +50,15 @@ interface PlanInterface
      * @throws Exception
      */
     public function getList(Plan $template);
+
+    /**
+     * Map raw data from the Gateway to SR fields
+     *
+     * @param Plan $parent
+     * @param mixed   $data
+     *
+     * @return void
+     */
+    public function bindSource(Plan $parent, $data);
+
 }

@@ -52,26 +52,36 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
     public function load(Plan $parent)
     {
         $plan = $this->getPlan($parent->code);
-        $this->bindToPlan($plan, $parent);
+        $this->bindSource($parent, $plan);
     }
 
     /**
-     * Set the API object properties from the native Recurly object
+     * Map raw data from the Gateway to SR fields
      *
-     * @param mixed $plan
-     * @param Plan  $target
+     * @param Plan  $parent
+     * @param mixed $data
      *
      * @return void
      */
-    protected function bindToPlan($plan, Plan $target)
+    public function bindSource(Plan $parent, $data)
     {
-        $target->setProperties($plan, $this->fieldMap);
+        $parent->setProperties($data, $this->fieldMap);
 
-        $target->setProperties(
+        $amount = $this->getKeyValue($data, 'unit_amount_in_cents');
+        if ($amount instanceof \Recurly_CurrencyList) {
+            $amount = $this->getCurrency($amount);
+        }
+
+        $setup = $this->getKeyValue($data, 'setup_fee_in_cents');
+        if ($setup instanceof \Recurly_CurrencyList) {
+            $setup = $this->getCurrency($setup);
+        }
+
+        $parent->setProperties(
             array(
                 'currency'   => $this->currency,
-                'amount'     => $this->getCurrency($plan->unit_amount_in_cents),
-                'setup_cost' => $this->getCurrency($plan->setup_fee_in_cents)
+                'amount'     => $amount,
+                'setup_cost' => $setup
             )
         );
     }
@@ -96,7 +106,7 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
 
         foreach ($rawObjects as $plan) {
             $nextPlan = clone $template;
-            $this->bindToPlan($plan, $nextPlan);
+            $this->bindSource($nextPlan, $plan);
             $this->plansLoaded[$plan->plan_code] = $nextPlan;
         }
 
@@ -176,7 +186,7 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
 
             $plan->update();
         }
-        $this->bindToPlan($plan, $parent);
+        $this->bindSource($parent, $plan);
     }
 
     /**

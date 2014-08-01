@@ -90,4 +90,15 @@ interface SubscriptionInterface
      * @throws Exception
      */
     public function update(Subscription $parent, Plan $plan, Coupon $coupon = null);
+
+    /**
+     * Map raw data from the Gateway to SR fields
+     *
+     * @param Subscription $parent
+     * @param mixed        $data
+     *
+     * @return void
+     */
+    public function bindSource(Subscription $parent, $data);
+
 }

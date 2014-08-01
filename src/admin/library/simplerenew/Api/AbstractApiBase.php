@@ -22,6 +22,23 @@ abstract class AbstractApiBase extends Object
     protected $imp = null;
 
     /**
+     * Map raw data from the Gateway to SR fields in $this
+     *
+     * @param mixed $data
+     *
+     * @return $this
+     */
+    public function bindSource($data)
+    {
+        if (method_exists($this->imp, 'bindSource')) {
+            $this->imp->bindSource($this, $data);
+        } else {
+            $this->setProperties($data);
+        }
+        return $this;
+    }
+
+    /**
      * Test for valid configuration of the gateway.
      *
      * @return bool

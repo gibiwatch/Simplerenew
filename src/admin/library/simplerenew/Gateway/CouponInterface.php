@@ -62,4 +62,14 @@ interface CouponInterface
      * @throws Exception
      */
     public function getList(Coupon $template, $status = null);
+
+    /**
+     * Map raw data from the Gateway to SR fields
+     *
+     * @param Coupon $parent
+     * @param mixed   $data
+     *
+     * @return void
+     */
+    public function bindSource(Coupon $parent, $data);
 }

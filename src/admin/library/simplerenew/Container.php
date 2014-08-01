@@ -208,7 +208,7 @@ class Container
      * @return mixed
      * @throws Exception
      */
-    protected function createGatewayInstance($name)
+    public function createGatewayInstance($name)
     {
         $namespace = $this->configuration->get('gateway.namespace');
         $className = $namespace . '\\' . $name;

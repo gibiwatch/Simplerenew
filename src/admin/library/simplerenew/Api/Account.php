@@ -154,22 +154,6 @@ class Account extends AbstractApiBase
     }
 
     /**
-     * Set the public properties from the passed array/object
-     *
-     * @param array|object $data Values to copy to $this
-     * @param array        $map  Use properties from $data translated using a field map
-     *
-     * @return Account
-     */
-    public function setProperties($data, array $map = null)
-    {
-        parent::setProperties($data, $map);
-        $this->address->setProperties($data, $map);
-
-        return $this;
-    }
-
-    /**
      * Close an account.
      *
      * @return Account
