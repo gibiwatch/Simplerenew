@@ -8,11 +8,11 @@
 
 namespace Simplerenew\Gateway;
 
-use Simplerenew\Api\Notification;
+use Simplerenew\Notify\Notify;
 
 defined('_JEXEC') or die();
 
-interface NotificationInterface
+interface NotifyInterface
 {
-    public function loadPackage(Notification $parent, $package);
+    public function loadPackage(Notify $parent, $package);
 }

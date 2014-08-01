@@ -6,17 +6,16 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\Api;
+namespace Simplerenew\Notify;
 
-use Simplerenew\Gateway\AccountInterface;
-use Simplerenew\Gateway\BillingInterface;
-use Simplerenew\Gateway\NotificationInterface;
-use Simplerenew\Gateway\SubscriptionInterface;
-use Simplerenew\User\Adapter\UserInterface;
+use Simplerenew\Container;
+use Simplerenew\Gateway\NotifyInterface;
+use Simplerenew\Notify\Handler\HandlerInterface;
+use Simplerenew\Object;
 
 defined('_JEXEC') or die();
 
-class Notification extends AbstractApiBase
+class Notify extends Object
 {
     // Notification types
     const TYPE_ACCOUNT      = 'account';
@@ -52,6 +51,11 @@ class Notification extends AbstractApiBase
     public $action = null;
 
     /**
+     * @var string
+     */
+    public $package = null;
+
+    /**
      * @var object
      */
     public $account = null;
@@ -67,17 +71,39 @@ class Notification extends AbstractApiBase
     public $subscription = null;
 
     /**
-     * @var NotificationInterface
+     * @var NotifyInterface
      */
     protected $imp = null;
 
-    public function __construct(NotificationInterface $imp, array $config = array())
+    /**
+     * @var Container
+     */
+    protected $container = null;
+
+    public function __construct(NotifyInterface $imp, Container $container)
     {
-        $this->imp = $imp;
+        $this->imp       = $imp;
+        $this->container = $container;
     }
 
-    public function loadPackage($package)
+    /**
+     * Process the push notification
+     *
+     * @param string    $package
+     */
+    public function process($package)
     {
         $this->imp->loadPackage($this, $package);
+
+        $classBase = '\\Simplerenew\\Notify\\Handler\\';
+        $this->handler = ucfirst(strtolower($this->type));
+        if (!class_exists($classBase . $this->handler)) {
+            $this->handler = 'None';
+        }
+        $handlerClass = $classBase . $this->handler;
+
+        /** @var HandlerInterface $handler */
+        $handler = new $handlerClass();
+        $handler->execute($this, $this->container);
     }
 }

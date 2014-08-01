@@ -11,15 +11,15 @@ namespace Simplerenew;
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Billing;
 use Simplerenew\Api\Coupon;
-use Simplerenew\Api\Notification;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
 use Simplerenew\Gateway\AccountInterface;
 use Simplerenew\Gateway\BillingInterface;
 use Simplerenew\Gateway\CouponInterface;
-use Simplerenew\Gateway\NotificationInterface;
+use Simplerenew\Gateway\NotifyInterface;
 use Simplerenew\Gateway\PlanInterface;
 use Simplerenew\Gateway\SubscriptionInterface;
+use Simplerenew\Notify\Notify;
 use Simplerenew\Primitive\CreditCard;
 use Simplerenew\Primitive\AbstractPayment;
 use Simplerenew\User\Adapter\UserInterface;
@@ -188,15 +188,15 @@ class Container
     /**
      * Create notification object
      *
-     * @param NotificationInterface $imp
+     * @param NotifyInterface $imp
      *
-     * @return Notification
+     * @return Notify
      */
-    public function getNotification(NotificationInterface $imp = null)
+    public function getNotification(NotifyInterface $imp = null)
     {
-        $imp = $imp ? : $this->createGatewayInstance('NotificationImp');
+        $imp = $imp ? : $this->createGatewayInstance('NotifyImp');
 
-        $notification = new Notification($imp);
+        $notification = new Notify($imp, $this);
         return $notification;
     }
 
@@ -206,14 +206,19 @@ class Container
      * @param $name
      *
      * @return mixed
+     * @throws Exception
      */
     protected function createGatewayInstance($name)
     {
         $namespace = $this->configuration->get('gateway.namespace');
         $className = $namespace . '\\' . $name;
-        $config    = $this->configuration->get('gateway.config');
-        $instance  = new $className($config);
+        if (class_exists($className)) {
+            $config    = $this->configuration->get('gateway.config');
+            $instance  = new $className($config);
 
-        return $instance;
+            return $instance;
+        }
+
+        throw new Exception('Unknown Gateway Object - ' . $className);
     }
 }

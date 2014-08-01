@@ -116,7 +116,7 @@ class Account extends AbstractApiBase
         $this->address->clearProperties();
 
         $this->user = $user;
-        $this->code = $this->getAccountCode($user);
+        $this->code = $this->getAccountCode($user->id);
 
         $this->imp->load($this);
         return $this;
@@ -141,7 +141,7 @@ class Account extends AbstractApiBase
 
         $this->setProperties(
             array(
-                'code'      => $this->code      ? : $this->getAccountCode($this->user),
+                'code'      => $this->code      ? : $this->getAccountCode($this->user->id),
                 'username'  => $this->username  ? : $this->user->username,
                 'email'     => $this->email     ? : $this->user->email,
                 'firstname' => $this->firstname ? : $this->user->firstname,
@@ -238,24 +238,24 @@ class Account extends AbstractApiBase
     }
 
     /**
-     * Get the account code for the selected user.
+     * Get the account code for the selected user ID.
      * Defaults to currently loaded user if there is one.
      *
-     * @param User $user
+     * @param int $id
      *
      * @return null|string
      */
-    public function getAccountCode(User $user = null)
+    public function getAccountCode($id = null)
     {
-        if (!$user) {
+        if (!$id) {
             if ($this->code) {
                 return $this->code;
             }
-            $user = $this->user;
+            $id = empty($this->user->id) ? null : $this->user->id;
         }
 
-        if ($user->id > 0) {
-            return sprintf($this->codeMask, $user->id);
+        if ($id > 0) {
+            return sprintf($this->codeMask, $id);
         }
 
         return null;
