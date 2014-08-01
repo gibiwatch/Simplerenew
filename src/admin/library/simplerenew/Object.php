@@ -128,33 +128,53 @@ class Object
         $result = array_fill_keys($keys, null);
         foreach ($keys as $srKey) {
             $value = null;
-            if (array_key_exists($srKey, $map)) {
-                if (is_array($map[$srKey])) {
+            if (!array_key_exists($srKey, $map)) {
+                $field = $srKey;
+                $value = $this->getKeyValue($source, $field);
+            } else {
+                // This is a mapped key
+                $field = $map[$srKey];
+
+                if (!is_array($field)) {
+                    $value = $this->getKeyValue($source, $field);
+                } else {
+                    // Mapped to field value
                     $values   = reset($map[$srKey]);
                     $field    = key($map[$srKey]);
-                    $selected = is_object($source) ? $source->$field : $source[$field];
-                    if (isset($values[$selected])) {
-                        $value = $values[$selected];
+                    $srcValue = $this->getKeyValue($source, $field);
+
+                    if (isset($values[$srcValue])) {
+                        $value = $values[$srcValue];
                     } elseif (isset($values[self::MAP_UNDEFINED])) {
                         $value = $values[self::MAP_UNDEFINED];
                     }
-                } elseif ($map[$srKey] === null) {
-                    $value = null;
-                } else {
-                    $field = $map[$srKey];
-                    $value = is_object($source) ? $source->$field : $source[$field];
                 }
-            } else {
-                $value = is_object($source) ? $source->$srKey : $source[$srKey];
             }
-
             $result[$srKey] = $value;
         }
-
         return $result;
     }
 
     /**
+     * Safely get a value from an object|array
+     *
+     * @param object|array $data
+     * @param string       $var
+     * @param mixed        $default
+     *
+     * @return mixed
+     */
+    public function getKeyValue($data, $var, $default = null)
+    {
+        if (is_object($data)) {
+            return isset($data->$var) ? $data->$var : $default;
+        } else {
+            return isset($data[$var]) ? $data[$var] : $default;
+        }
+    }
+
+    /**
+     *
      * Default string rendering for the object. Subclasses should feel
      * free to override as desired.
      *
