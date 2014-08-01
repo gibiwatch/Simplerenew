@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Notify;
 
+use Simplerenew\Api\AbstractApiBase;
 use Simplerenew\Container;
 use Simplerenew\Gateway\NotifyInterface;
 use Simplerenew\Notify\Handler\HandlerInterface;
@@ -56,6 +57,26 @@ class Notify extends Object
     public $package = null;
 
     /**
+     * @var string
+     */
+    public $user_id = null;
+
+    /**
+     * @var string
+     */
+    public $account_code = null;
+
+    /**
+     * @var string
+     */
+    public $subscription_id = null;
+
+    /**
+     * @var object
+     */
+    public $user = null;
+
+    /**
      * @var object
      */
     public $account = null;
@@ -94,6 +115,28 @@ class Notify extends Object
     public function process($package)
     {
         $this->imp->loadPackage($this, $package);
+
+        // Gateway sourced data to SR fields
+        if ($this->account) {
+            $account = $this->container->getAccount();
+            $account->bindSource($this->account);
+            $this->account = $account->getProperties();
+            $this->account_code = $account->code;
+        }
+
+        if ($this->billing) {
+            $billing = $this->container->getBilling();
+            $billing->bindSource($this->billing);
+            $this->billing = $billing->getProperties();
+        }
+
+        if ($this->subscription) {
+            $subscription = $this->container->getSubscription();
+            $subscription->bindSource($this->subscription);
+            $this->subscription = $subscription->getProperties();
+            $this->subscription_id = $subscription->id;
+        }
+
 
         $classBase = '\\Simplerenew\\Notify\\Handler\\';
         $this->handler = ucfirst(strtolower($this->type));

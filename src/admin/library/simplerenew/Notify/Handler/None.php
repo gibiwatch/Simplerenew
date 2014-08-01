@@ -19,12 +19,12 @@ class None extends Object implements HandlerInterface
 {
     /**
      * @param Notify    $notice
-     * @param Container $container
      *
      * @return mixed
      */
-    public function execute(Notify $notice, Container $container)
+    public function execute(Notify $notice)
     {
-        Logger::addEntry($notice);
+        $log = $notice->getProperties();
+        Logger::addEntry($log);
     }
 }

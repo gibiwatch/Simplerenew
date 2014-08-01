@@ -80,7 +80,6 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
             }
             $notice[$name] = $value;
         }
-
         $parent->setProperties($notice, $this->fieldMap);
     }
 
