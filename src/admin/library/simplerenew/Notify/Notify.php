@@ -10,6 +10,7 @@ namespace Simplerenew\Notify;
 
 use Simplerenew\Api\AbstractApiBase;
 use Simplerenew\Container;
+use Simplerenew\Exception\NotFound;
 use Simplerenew\Gateway\NotifyInterface;
 use Simplerenew\Notify\Handler\HandlerInterface;
 use Simplerenew\Object;
@@ -122,6 +123,18 @@ class Notify extends Object
             $account->bindSource($this->account);
             $this->account = $account->getProperties();
             $this->account_code = $account->code;
+
+            try {
+                $userId = $account->getUserId($account->code);
+                $user = $this->container->getUser();
+                $user->load($userId);
+
+                $this->user = $user->getProperties();
+                $this->user_id = $user->id;
+
+            } catch (NotFound $e) {
+                // User must have been deleted from system
+            }
         }
 
         if ($this->billing) {
