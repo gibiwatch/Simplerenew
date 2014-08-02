@@ -18,7 +18,7 @@ interface HandlerInterface
     /**
      * @param Notify    $notice
      *
-     * @return mixed
+     * @return string
      */
     public function execute(Notify $notice);
 }
