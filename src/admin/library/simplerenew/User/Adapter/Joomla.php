@@ -179,7 +179,8 @@ class Joomla implements UserInterface
             'name'     => trim($parent->firstname . ' ' . $parent->lastname),
             'email'    => $parent->email,
             'username' => $parent->username,
-            'groups'   => $parent->groups
+            'groups'   => $parent->groups,
+            'block'    => !$parent->enabled
         );
 
         if (!empty($parent->password)) {
@@ -249,14 +250,19 @@ class Joomla implements UserInterface
             'password' => $password
         );
 
-        $currentUser = SimplerenewFactory::getUser();
-        if ($currentUser->id > 0) {
+        try {
+            $currentUser = clone $parent;
+            $currentUser->load();
+
             if ($currentUser->username == $credentials['username']) {
                 // Already logged in
                 return;
             } else {
-                $this->logout();
+                $this->logout($currentUser);
             }
+
+        } catch (NotFound $e) {
+            // Not logged in
         }
 
         if ($force) {
@@ -380,17 +386,21 @@ class Joomla implements UserInterface
     }
 
     /**
-     * Log out the current user if possible
+     * Log out if possible
+     *
+     * @param User $parent
      *
      * @return void
      * @throws Exception
      */
-    public function logout()
+    public function logout(User $parent)
     {
-        $currentUser = SimplerenewFactory::getUser();
-        if ($currentUser->id > 0) {
-            if (!SimplerenewFactory::getApplication()->logout()) {
-                throw new Exception('Unable to logout from ' . $currentUser->username);
+        if ($parent->id > 0) {
+            $app     = SimplerenewFactory::getApplication();
+            $options = array('clientid' => 0);
+
+            if (!$app->logout($parent->id, $options)) {
+                throw new Exception('Unable to logout from ' . $parent->username);
             }
         }
     }

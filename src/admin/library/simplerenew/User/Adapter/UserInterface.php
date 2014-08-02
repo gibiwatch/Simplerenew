@@ -80,12 +80,14 @@ interface UserInterface
     public function login(User $parent, $password, $force = false);
 
     /**
-     * Log out the current user if possible
+     * Log out if possible
+     *
+     * @param User $parent
      *
      * @return void
      * @throws Exception
      */
-    public function logout();
+    public function logout(User $parent);
 
     /**
      * Set the user's group based on the plan

@@ -183,7 +183,7 @@ class User extends Object
      */
     public function logout()
     {
-        $this->adapter->logout();
+        $this->adapter->logout($this);
     }
     /**
      * Set the user group based on the plan
