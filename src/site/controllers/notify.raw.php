@@ -47,19 +47,20 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
         $password = $app->input->server->getString('PHP_AUTH_PW');
 
         if ($username) {
-            // Check the password
+            // Login
             try {
-                $user = $container->getUser()->loadByUsername($username);
-            } catch (NotFound $e) {
-                throw new Exception($e->getMessage(), 403);
-            }
+                $user = $container->getUser()
+                    ->loadByUsername($username);
 
-            if ($user->validate($password)) {
                 // Check for proper access
                 $jUser = SimplerenewFactory::getUser($user->id);
                 if ($jUser->authorise('core.manage', 'com_simplerenew')) {
+                    $user->login($password);
                     return;
                 }
+
+            } catch (Exception $e) {
+                throw new Exception($e->getMessage(), 403);
             }
         }
 
