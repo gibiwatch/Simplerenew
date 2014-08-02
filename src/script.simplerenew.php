@@ -15,7 +15,8 @@ class Com_SimplerenewInstallerScript
      */
     protected $obsoleteItems = array(
         '/admin/library/configuration.json',
-        '/media/js/tabs.js'
+        '/media/js/tabs.js',
+        '/admin/library/simplerenew/Notify/Handler/None.php'
     );
 
     /**

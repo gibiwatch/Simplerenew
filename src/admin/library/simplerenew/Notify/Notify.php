@@ -8,12 +8,17 @@
 
 namespace Simplerenew\Notify;
 
-use Simplerenew\Api\AbstractApiBase;
+use Simplerenew\Api\Account;
+use Simplerenew\Api\Billing;
+use Simplerenew\Api\Plan;
+use Simplerenew\Api\Subscription;
 use Simplerenew\Container;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\Gateway\NotifyInterface;
+use Simplerenew\Logger;
 use Simplerenew\Notify\Handler\HandlerInterface;
 use Simplerenew\Object;
+use Simplerenew\User\User;
 
 defined('_JEXEC') or die();
 
@@ -55,6 +60,11 @@ class Notify extends Object
     /**
      * @var string
      */
+    public $handler = null;
+
+    /**
+     * @var string
+     */
     public $package = null;
 
     /**
@@ -73,93 +83,110 @@ class Notify extends Object
     public $subscription_id = null;
 
     /**
-     * @var object
+     * @var User
      */
     public $user = null;
 
     /**
-     * @var object
+     * @var Account
      */
     public $account = null;
 
     /**
-     * @var object
+     * @var Billing
      */
     public $billing = null;
 
     /**
-     * @var object
+     * @var Subscription
      */
     public $subscription = null;
 
     /**
+     * @var Plan
+     */
+    public $plan = null;
+
+    /**
      * @var NotifyInterface
      */
-    protected $imp = null;
+    protected $adapter = null;
 
     /**
      * @var Container
      */
     protected $container = null;
 
-    public function __construct(NotifyInterface $imp, Container $container)
+    public function __construct(NotifyInterface $adapter, Container $container)
     {
-        $this->imp       = $imp;
+        $this->adapter   = $adapter;
         $this->container = $container;
     }
 
     /**
      * Process the push notification
      *
-     * @param string    $package
+     * @param string $package
      */
     public function process($package)
     {
-        $this->imp->loadPackage($this, $package);
+        $this->adapter->loadPackage($this, $package);
 
-        // Gateway sourced data to SR fields
+
+        // Convert gateway sourced account data to SR Api Objects
         if ($this->account) {
-            $account = $this->container->getAccount();
-            $account->bindSource($this->account);
-            $this->account = $account->getProperties();
-            $this->account_code = $account->code;
+            $this->account = $this->container
+                ->getAccount()
+                ->bindSource($this->account);
 
-            try {
-                $userId = $account->getUserId($account->code);
-                $user = $this->container->getUser();
-                $user->load($userId);
+            $this->account_code = $this->account->code;
 
-                $this->user = $user->getProperties();
-                $this->user_id = $user->id;
+            // Load the user for this account
+            $userId = $this->account->getUserId();
+            if ($userId) {
+                try {
+                    $this->user = $this->container
+                        ->getUser()
+                        ->load($userId);
 
-            } catch (NotFound $e) {
-                // User must have been deleted from system
+                    $this->user_id = $this->user->id;
+
+                } catch (NotFound $e) {
+                    // User must have been deleted from system
+                }
             }
         }
 
         if ($this->billing) {
-            $billing = $this->container->getBilling();
-            $billing->bindSource($this->billing);
-            $this->billing = $billing->getProperties();
+            $this->billing = $this->container
+                ->getBilling()
+                ->bindSource($this->billing);
         }
 
         if ($this->subscription) {
-            $subscription = $this->container->getSubscription();
-            $subscription->bindSource($this->subscription);
-            $this->subscription = $subscription->getProperties();
-            $this->subscription_id = $subscription->id;
+            $this->subscription = $this->container
+                ->getSubscription()
+                ->bindSource($this->subscription);
+
+            $this->subscription_id = $this->subscription->id;
         }
 
-
-        $classBase = '\\Simplerenew\\Notify\\Handler\\';
-        $this->handler = ucfirst(strtolower($this->type));
-        if (!class_exists($classBase . $this->handler)) {
+        $handlerClass = '\\Simplerenew\\Notify\\Handler\\' . ucfirst(strtolower($this->type));
+        if (!class_exists($handlerClass)) {
             $this->handler = 'None';
-        }
-        $handlerClass = $classBase . $this->handler;
+        } else {
+            /** @var HandlerInterface $handler */
+            $handler = new $handlerClass();
+            $handler->execute($this, $this->container);
 
-        /** @var HandlerInterface $handler */
-        $handler = new $handlerClass();
-        $handler->execute($this, $this->container);
+            $this->handler = get_class($handler);
+        }
+
+        Logger::addEntry($this);
+    }
+
+    public function getContainer()
+    {
+        return $this->container;
     }
 }
