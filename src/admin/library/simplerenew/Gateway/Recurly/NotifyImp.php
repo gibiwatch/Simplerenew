@@ -21,6 +21,7 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
             'type' => array(
                 'new_account_notification'           => Notify::TYPE_ACCOUNT,
                 'canceled_account_notification'      => Notify::TYPE_ACCOUNT,
+                'reactivated_account_notification'   => Notify::TYPE_ACCOUNT,
                 'billing_info_updated_notification'  => Notify::TYPE_BILLING,
                 'new_invoice_notification'           => Notify::TYPE_INVOICE,
                 'closed_invoice_notification'        => Notify::TYPE_INVOICE,
@@ -28,7 +29,6 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
                 'new_subscription_notification'      => Notify::TYPE_SUBSCRIPTION,
                 'updated_subscription_notification'  => Notify::TYPE_SUBSCRIPTION,
                 'canceled_subscription_notification' => Notify::TYPE_SUBSCRIPTION,
-                'reactivated_account_notification'   => Notify::TYPE_SUBSCRIPTION,
                 'expired_subscription_notification'  => Notify::TYPE_SUBSCRIPTION,
                 'renewed_subscription_notification'  => Notify::TYPE_SUBSCRIPTION,
                 'successful_payment_notification'    => Notify::TYPE_PAYMENT,
