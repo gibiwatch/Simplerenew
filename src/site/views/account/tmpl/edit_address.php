@@ -10,7 +10,8 @@ defined('_JEXEC') or die();
 
 /** @var SimplerenewViewAccount $this */
 
-$fields = SimplerenewRender::addressEdit('billing', $this->billing->address);
+$address = $this->billing ? $this->billing->address : new Simplerenew\Primitive\Address();
+$fields = SimplerenewRender::addressEdit('billing', $address);
 
 if ($fields) {
     $html        = array();
