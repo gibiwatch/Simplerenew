@@ -61,7 +61,7 @@ defined('_JEXEC') or die();
             <label><?php echo JText::_('COM_SIMPLERENEW_MEMBER_GROUP'); ?></label>
         </div>
         <div class="block9">
-            <?php echo $this->user->groupText; ?>
+            <?php echo $this->user->groupText ? : JText::_('COM_SIMPLERENEW_MEMBER_GROUP_NONE'); ?>
         </div>
     </div>
     <!-- /.ost-section -->
