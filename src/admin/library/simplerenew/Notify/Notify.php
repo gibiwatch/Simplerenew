@@ -184,7 +184,7 @@ class Notify extends Object
             $handler = new $handlerClass();
             $this->handler = get_class($handler);
 
-            $this->response = $handler->execute($this);
+            $this->response = $handler->execute($this) ? : 'None';
         }
 
         Logger::addEntry($this);
