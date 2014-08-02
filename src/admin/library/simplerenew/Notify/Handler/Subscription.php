@@ -22,6 +22,7 @@ class Subscription implements HandlerInterface
      */
     public function execute(Notify $notice)
     {
+        $message = 'None';
         if ($notice->user->id) {
             switch ($notice->action) {
                 case Notify::ACTION_NEW:
@@ -31,14 +32,16 @@ class Subscription implements HandlerInterface
                         ->getPlan()
                         ->load($notice->subscription->plan);
                     $notice->user->setGroup($plan);
+                    $message = 'Update User Group';
                     break;
 
                 case Notify::ACTION_EXPIRE:
                     $notice->user->setGroup();
-                    break;
-
+                    $message = 'Remove plan user group';
                     break;
             }
         }
+
+        return $message;
     }
 }

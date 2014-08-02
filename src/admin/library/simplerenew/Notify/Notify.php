@@ -65,6 +65,11 @@ class Notify extends Object
     /**
      * @var string
      */
+    public $response = null;
+
+    /**
+     * @var string
+     */
     public $package = null;
 
     /**
@@ -177,9 +182,9 @@ class Notify extends Object
         } else {
             /** @var HandlerInterface $handler */
             $handler = new $handlerClass();
-            $handler->execute($this, $this->container);
-
             $this->handler = get_class($handler);
+
+            $this->response = $handler->execute($this);
         }
 
         Logger::addEntry($this);

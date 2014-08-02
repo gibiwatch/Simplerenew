@@ -30,6 +30,11 @@ class LogEntry extends AbstractPrimitive
     /**
      * @var string
      */
+    public $response = '';
+
+    /**
+     * @var string
+     */
     public $package = '';
 
     /**

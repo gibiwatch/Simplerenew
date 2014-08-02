@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS `#__simplerenew_push_log` (
   `type` varchar(255) NOT NULL DEFAULT '',
   `action` varchar(255) NOT NULL DEFAULT '',
   `handler` varchar(255) NOT NULL DEFAULT '',
+  `response`  varchar(255) NOT NULL DEFAULT '',
   `package` text NOT NULL,
   `ipaddress` char(15) NOT NULL DEFAULT '',
   `logtime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
