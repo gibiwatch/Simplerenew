@@ -193,7 +193,7 @@ class User extends Object
      * @return void
      * @throws Exception
      */
-    public function setGroup(Plan $plan)
+    public function setGroup(Plan $plan = null)
     {
         $this->adapter->setGroup($this, $plan);
     }

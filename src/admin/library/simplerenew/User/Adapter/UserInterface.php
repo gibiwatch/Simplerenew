@@ -96,7 +96,7 @@ interface UserInterface
      * @return void
      * @throws Exception
      */
-    public function setGroup(User $parent, Plan $plan);
+    public function setGroup(User $parent, Plan $plan = null);
 
     /**
      * Get a human friendly version of group membership

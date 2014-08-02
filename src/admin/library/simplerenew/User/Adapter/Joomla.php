@@ -90,7 +90,7 @@ class Joomla implements UserInterface
         // Always load from DB to avoid session conflicts
         if ($id <= 0) {
             $session = SimplerenewFactory::getSession()->get('user');
-            $id = $session->get('id');
+            $id      = $session->get('id');
         }
         $user = new JUser($id);
 
@@ -325,26 +325,37 @@ class Joomla implements UserInterface
      * @return void
      * @throws Exception
      */
-    public function setGroup(User $parent, Plan $plan)
+    public function setGroup(User $parent, Plan $plan = null)
     {
-        $plans  = $this->getLocalPlans();
-        $filter = array();
-        if ($default = $this->userParams->get('new_usertype')) {
-            $filter[] = $default;
-        }
+        $filter  = array();
+        $default = $this->userParams->get('new_usertype');
 
+        // Get all user groups applying to plans
+        $plans = $this->getLocalPlans();
         foreach ($plans as $p) {
             $filter[] = $p->group_id;
         }
         $filter = array_unique($filter);
-
-        $newGroups = array_diff($parent->groups, $filter);
-        if (!isset($this->localPlans[$plan->code])) {
-            throw new Exception('Unable to find user group for - ' . $plan->code);
+        if (in_array($default, $filter)) {
+            // the default group is in a plan group
+            // @TODO: NO, NO, NO! - hardcoding is ALWAYS bad!!!
+            $default = 1;
         }
+        $filter[] = $default;
 
-        $gid             = $this->localPlans[$plan->code]->group_id;
-        $newGroups[$gid] = $gid;
+        // Filter them all out
+        $newGroups = array_diff($parent->groups, $filter);
+
+        if ($plan) {
+            if (!isset($this->localPlans[$plan->code])) {
+                throw new Exception('Unable to find user group for - ' . $plan->code);
+            }
+            $gid             = $this->localPlans[$plan->code]->group_id;
+            $newGroups[$gid] = $gid;
+        } else {
+            // Remove from any plan group
+            $newGroups[$default] = $default;
+        }
 
         $parent->groups = $newGroups;
         $this->update($parent);
