@@ -178,10 +178,11 @@ class Notify extends Object
 
         $handlerClass = '\\Simplerenew\\Notify\\Handler\\' . ucfirst(strtolower($this->type));
         if (!class_exists($handlerClass)) {
-            $this->handler = 'None';
+            $this->handler  = 'None';
+            $this->response = $this->handler;
         } else {
             /** @var HandlerInterface $handler */
-            $handler = new $handlerClass();
+            $handler       = new $handlerClass();
             $this->handler = get_class($handler);
 
             $this->response = $handler->execute($this) ? : 'None';
