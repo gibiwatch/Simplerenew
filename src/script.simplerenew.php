@@ -164,7 +164,7 @@ class Com_SimplerenewInstallerScript
                             $isNew   = empty($current);
 
                             $typeName = trim(($folder ? : '') . ' ' . $type);
-                            $text = 'COM_SIMPLERENEW_RELATED_' . ($isNew ? 'INSTALL' : 'UPDATE');
+                            $text     = 'COM_SIMPLERENEW_RELATED_' . ($isNew ? 'INSTALL' : 'UPDATE');
                             if ($installer->install($path)) {
                                 $this->setMessage(JText::sprintf($text, $typeName, $element));
                                 if ($isNew) {
@@ -472,10 +472,10 @@ class Com_SimplerenewInstallerScript
         $sr = JComponentHelper::getComponent('com_simplerenew');
 
         $db = JFactory::getDbo();
-        $db->setQuery('Select update_site_id From #__update_sites_extensions where extension_id='.(int)$sr->id);
+        $db->setQuery('Select update_site_id From #__update_sites_extensions where extension_id=' . (int)$sr->id);
         $list = $db->loadColumn();
 
-        $db->setQuery('Delete From #__update_sites_extensions where extension_id='.(int)$sr->id);
+        $db->setQuery('Delete From #__update_sites_extensions where extension_id=' . (int)$sr->id);
         $db->execute();
 
         $db->setQuery('Delete From #__update_sites Where update_site_id IN (' . join(',', $list) . ')');
