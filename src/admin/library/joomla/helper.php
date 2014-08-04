@@ -257,7 +257,6 @@ abstract class SimplerenewHelper
                     array(
                         'id'               => null,
                         'published'        => 1,
-                        'alias'            => SimplerenewApplicationHelper::stringURLSafe($plan->code),
                         'created_by_alias' => JText::_('COM_SIMPLERENEW_PLAN_SYNC_IMPORTED')
                     )
                 );

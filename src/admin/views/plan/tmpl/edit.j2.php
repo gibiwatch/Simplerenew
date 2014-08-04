@@ -47,10 +47,10 @@ SimplerenewFactory::getDocument()->addStyleDeclaration($style);
     <div class="width-100 inline">
         <fieldset class="adminform fltlft">
             <?php
+            echo $this->form->getLabel('name');
+            echo $this->form->getInput('name');
             echo $this->form->getLabel('code');
             echo $this->form->getInput('code');
-            echo $this->form->getLabel('alias');
-            echo $this->form->getInput('alias');
             ?>
         </fieldset>
     </div>

@@ -176,32 +176,26 @@ class SimplerenewTablePlans extends SimplerenewTable
 
     public function store($updateNulls = false)
     {
-        if (trim($this->alias) == '') {
-            $this->alias = $this->code;
+        if (trim($this->code) == '') {
+            $this->code = $this->name;
         }
 
-        $this->alias = SimplerenewApplicationHelper::stringURLSafe($this->alias);
+        $this->code = SimplerenewApplicationHelper::stringURLSafe($this->code);
 
-        // Verify that the code and alias are unique
+        // Verify that the code is unique
         $db    = $this->getDbo();
         $query = $db->getQuery(true)
             ->select('count(*)')
             ->from($this->_tbl);
 
         if ($this->id) {
-            $query->where('id <> ' . $db->quote($this->id));
-        }
-        $query->where(
-            '('
-            . join(
-                ' OR ',
+            $query->where(
                 array(
-                    'alias = ' . $db->quote($this->alias),
+                    'id <> ' . $db->quote($this->id),
                     'code = ' . $db->quote($this->code)
                 )
-            )
-            . ')'
-        );
+            );
+        }
 
         if ($db->setQuery($query)->loadResult() > 0) {
             $this->setError(JText::_('COM_SIMPLERENEW_ERROR_PLAN_DUPLICATE'));

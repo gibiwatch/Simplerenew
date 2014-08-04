@@ -4,7 +4,6 @@ CREATE TABLE IF NOT EXISTS `#__simplerenew_plans` (
   `accounting_code` varchar(45) NOT NULL,
   `code` varchar(45) NOT NULL,
   `name` varchar(45) NOT NULL,
-  `alias` varchar(45) NOT NULL,
   `description` text NOT NULL,
   `length` int(11) NOT NULL,
   `unit` varchar(45) NOT NULL,
