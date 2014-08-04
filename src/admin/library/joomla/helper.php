@@ -322,4 +322,26 @@ abstract class SimplerenewHelper
         }
         return static::$extensionTable;
     }
+
+    /**
+     * Render the modules in a position
+     *
+     * @param string $position
+     * @param mixed  $attribs
+     *
+     * @return string
+     */
+    public static function renderModule($position, $attribs = array())
+    {
+        $results = JModuleHelper::getModules($position);
+        $content = '';
+
+        ob_start();
+        foreach ($results as $result) {
+            $content .= JModuleHelper::renderModule($result, $attribs);
+        }
+        ob_end_clean();
+
+        return $content;
+    }
 }

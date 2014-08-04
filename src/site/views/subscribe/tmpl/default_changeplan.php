@@ -19,9 +19,11 @@ defined('_JEXEC') or die();
 
 <div class="ost-section">
 
-    <?php echo $this->loadTemplate('plans'); ?>
-
     <?php
+    echo SimplerenewHelper::renderModule('simplerenew_plans_top');
+    echo $this->loadTemplate('plans');
+    echo SimplerenewHelper::renderModule('simplerenew_plans_bottom');
+
     $showCoupon = $this->get('State')->get('coupon.allow');
     if ($showCoupon < 0 || $showCoupon == 2) {
         echo $this->loadTemplate('coupon');
@@ -30,12 +32,14 @@ defined('_JEXEC') or die();
 
     <?php echo $this->loadtemplate('billing'); ?>
 
+    <?php echo SimplerenewHelper::renderModule('simplerenew_submit_top'); ?>
     <div class="m-bottom m-top">
         <input
             type="submit"
             value="<?php echo JText::_('COM_SIMPLERENEW_CHANGE_BUTTON'); ?>"
             class="btn-main btn-big"/>
     </div>
+    <?php echo SimplerenewHelper::renderModule('simplerenew_submit_bottom'); ?>
 </div>
 <!-- /.ost-section -->
 
