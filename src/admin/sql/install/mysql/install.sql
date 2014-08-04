@@ -1,7 +1,6 @@
 CREATE TABLE IF NOT EXISTS `#__simplerenew_plans` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_id` int(11) NOT NULL,
-  `accounting_code` varchar(45) NOT NULL,
   `code` varchar(45) NOT NULL,
   `name` varchar(45) NOT NULL,
   `description` text NOT NULL,

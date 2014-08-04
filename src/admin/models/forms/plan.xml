@@ -40,12 +40,6 @@
         </field>
 
         <field
-            name="accounting_code"
-            type="text"
-            label="COM_SIMPLERENEW_PLAN_ACCOUNTING_CODE_LABEL"
-            description="COM_SIMPLERENEW_PLAN_ACCOUNTING_CODE_DESC"/>
-
-        <field
             name="length"
             type="integer"
             label="COM_SIMPLERENEW_PLAN_LENGTH_LABEL"

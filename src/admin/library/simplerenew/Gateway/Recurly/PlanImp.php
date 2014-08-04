@@ -161,7 +161,6 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
 
         $plan->name            = $parent->name;
         $plan->description     = $parent->description;
-        $plan->accounting_code = $parent->accounting_code;
 
         $this->convertLength($parent->length, $parent->unit);
         $plan->plan_interval_length = $parent->length;
