@@ -33,20 +33,32 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
         $notify->process($package, $container);
     }
 
-    /**
-     * Check credentials of caller
-     *
-     * @throws Exception
-     */
     protected function authenticate()
     {
         $app       = SimplerenewFactory::getApplication();
         $container = SimplerenewFactory::getContainer();
 
-        $username = $app->input->server->getUsername('PHP_AUTH_USER');
-        $password = $app->input->server->getString('PHP_AUTH_PW');
+        $this->gatewayLogin(
+            $app->input->server->getUsername('PHP_AUTH_USER'),
+            $app->input->server->getString('PHP_AUTH_PW')
+        );
 
-        if ($username) {
+    }
+
+    /**
+     * Check login credentials of caller if provided
+     *
+     * @param string $username
+     * @param string $password
+     *
+     * @return void
+     * @throws Exception
+     */
+    protected function gatewayLogin($username, $password)
+    {
+        if ($username && $password) {
+            $container = SimplerenewFactory::getContainer();
+
             // Login
             try {
                 $user = $container->getUser()
@@ -63,7 +75,5 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
                 throw new Exception($e->getMessage(), 403);
             }
         }
-
-        throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
     }
 }

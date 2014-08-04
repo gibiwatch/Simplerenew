@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Gateway\Recurly;
 
+use Simplerenew\Exception;
 use Simplerenew\Gateway\NotifyInterface;
 use Simplerenew\Notify\Notify;
 use Simplerenew\Object;
@@ -16,6 +17,8 @@ defined('_JEXEC') or die();
 
 class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
 {
+    protected $validIpAddresses = '75.98.92.96/28';
+
     protected $fieldMap = array(
         'type'   => array(
             'type' => array(
@@ -62,9 +65,24 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
         'user'   => null
     );
 
-
+    /**
+     * Translate a notification message from the gateway into
+     * a Notify object. All validation of the message and its
+     * source should be done here.
+     *
+     * @param Notify $parent
+     * @param mixed  $package
+     *
+     * @return void
+     * @throws Exception
+     */
     public function loadPackage(Notify $parent, $package)
     {
+        $ip = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
+        if (!$parent->cidrMatch($ip, $this->validIpAddresses)) {
+            throw new Exception('Notice came from unrecognized IP - ' . $ip);
+        }
+
         $xml    = simplexml_load_string($package);
         $notice = $parent->getProperties();
 
