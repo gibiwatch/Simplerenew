@@ -137,7 +137,6 @@ class Notify extends Object
     {
         $this->adapter->loadPackage($this, $package);
 
-
         // Convert gateway sourced account data to SR Api Objects
         if ($this->account) {
             $this->account = $this->container
@@ -191,8 +190,32 @@ class Notify extends Object
         Logger::addEntry($this);
     }
 
+    /**
+     * @return Container
+     */
     public function getContainer()
     {
         return $this->container;
+    }
+
+    /**
+     * Utility function to allow adapters to check IP addresses
+     * against CIDR formatted IP ranges
+     *
+     * @param $ip
+     * @param $range
+     *
+     * @return bool
+     */
+    public function cidrMatch($ip, $range)
+    {
+        list ($subNet, $bits) = explode('/', $range);
+        $ip     = ip2long($ip);
+        $subNet = ip2long($subNet);
+        $mask   = -1 << (32 - $bits);
+
+        $subNet &= $mask; # nb: in case the supplied subnet wasn't correctly aligned
+
+        return ($ip & $mask) == $subNet;
     }
 }
