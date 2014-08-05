@@ -95,10 +95,11 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
      *
      * @param string $fieldSet
      * @param array  $sameLine
+     * @param bool $tabbed
      *
      * @return string
      */
-    protected function renderFieldset($fieldSet, array $sameLine = array())
+    protected function renderFieldset($fieldSet, array $sameLine = array(), $tabbed = false)
     {
         $html = array();
         if (!empty($this->form) && $this->form instanceof JForm) {
@@ -106,77 +107,91 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
 
             if (!empty($fieldSets[$fieldSet])) {
                 $name  = $fieldSets[$fieldSet]->name;
-                $label = $fieldSets[$fieldSet]->label ? : 'COM_SIMPLERENEW_ADMIN_PAGE_' . $name;
+                $label = $fieldSets[$fieldSet]->label;
 
-                $joomla3 = version_compare(JVERSION, '3', 'ge');
-                if ($joomla3) {
-                    $html = array(
-                        JHtml::_('bootstrap.addTab', 'myTab', $name, JText::_($label)),
-                        '<div class="row-fluid">',
-                        '<fieldset class="adminform">'
-                    );
-
+                if (version_compare(JVERSION, '3', 'ge')) {
+                    $html = $this->renderFieldsetJ3($name, $label, $sameLine, $tabbed);
                 } else {
-                    $html = array(
-                        JHtml::_('tabs.panel', JText::_($label), $name . '-page'),
-                        '<div class="width-100">',
-                        '<fieldset class="adminform">',
-                        '<ul class="adminformlist">'
-                    );
+                    $html = $this->renderFieldsetJ2($name, $label, $sameLine, $tabbed);
                 }
-
-                foreach ($this->form->getFieldset($name) as $field) {
-                    if (in_array($field->fieldname, $sameLine)) {
-                        continue;
-                    }
-
-                    if ($joomla3) {
-                        $fieldHtml = array(
-                            '<div class="control-group">',
-                            '<div class="control-label">',
-                            $field->label,
-                            '</div>',
-                            '<div class="controls">',
-                            $field->input
-                        );
-
-                    } else {
-                        $fieldHtml = array(
-                            '<li>' . $field->label . $field->input . '</li>'
-                        );
-                    }
-
-                    $html = array_merge($html, $fieldHtml);
-
-                    if (isset($sameLine[$field->fieldname])) {
-                        $html[] = ' ' . $this->form->getField($sameLine[$field->fieldname])->input;
-                    }
-
-                    if ($joomla3) {
-                        $html[] = '</div>';
-                        $html[] = '</div>';
-                    }
-                }
-                if ($joomla3) {
-                    $endHtml = array(
-                        '</fieldset>',
-                        '</div>',
-                        JHtml::_('bootstrap.endTab')
-                    );
-
-                } else {
-                    $endHtml = array(
-                        '</ul>',
-                        '</fieldset>',
-                        '</div>',
-                        '<div class="clr"></div>'
-                    );
-                }
-
-                $html = array_merge($html, $endHtml);
             }
         }
         return join("\n", $html);
+    }
+
+    protected function renderFieldsetJ3($name, $label, array $sameLine = array(), $tabbed = false)
+    {
+        $html = array();
+        if ($tabbed) {
+            $html[] = JHtml::_('bootstrap.addTab', 'myTab', $name, JText::_($label));
+        }
+        $html[] = '<div class="row-fluid">';
+        $html[] = '<fieldset class="adminform">';
+
+        foreach ($this->form->getFieldset($name) as $field) {
+            if (in_array($field->fieldname, $sameLine)) {
+                continue;
+            }
+
+            $fieldHtml = array(
+                '<div class="control-group">',
+                '<div class="control-label">',
+                $field->label,
+                '</div>',
+                '<div class="controls">',
+                $field->input
+            );
+            $html = array_merge($html, $fieldHtml);
+
+            if (isset($sameLine[$field->fieldname])) {
+                $html[] = ' ' . $this->form->getField($sameLine[$field->fieldname])->input;
+            }
+
+            $html[] = '</div>';
+            $html[] = '</div>';
+        }
+        $html[] = '</fieldset>';
+        $html[] = '</div>';
+        if ($tabbed) {
+            $html[] = JHtml::_('bootstrap.endTab');
+        }
+
+        return $html;
+    }
+
+    protected function renderFieldsetJ2($name, $label, array $sameLine = array(), $tabbed = false)
+    {
+        $html = array();
+        if ($tabbed) {
+            $html[] = JHtml::_('tabs.panel', JText::_($label), $name . '-page');
+        }
+        $html[] = '<div class="width-100">';
+        $html[] = '<fieldset class="adminform">';
+        $html[] = '<ul class="adminformlist">';
+
+        foreach ($this->form->getFieldset($name) as $field) {
+            if (in_array($field->fieldname, $sameLine)) {
+                continue;
+            }
+
+            $fieldHtml = array(
+                '<li>' . $field->label . $field->input . '</li>'
+            );
+            $html = array_merge($html, $fieldHtml);
+
+            if (isset($sameLine[$field->fieldname])) {
+                $html[] = ' ' . $this->form->getField($sameLine[$field->fieldname])->input;
+            }
+
+        }
+        $endHtml = array(
+            '</ul>',
+            '</fieldset>',
+            '</div>',
+            '<div class="clr"></div>'
+        );
+
+        return array_merge($html, $endHtml);
     }
 
     /**
