@@ -42,6 +42,10 @@ class SimplerenewViewAccount extends SimplerenewViewSite
 
     public function display($tpl = null)
     {
+        if ($this->getLayout() == 'edit') {
+            $this->enforceSSL();
+        }
+
         try {
             $this->user = $this->get('User');
             if (!$this->user) {

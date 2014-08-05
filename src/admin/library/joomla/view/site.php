@@ -43,4 +43,21 @@ abstract class SimplerenewViewSite extends JViewLegacy
 
         return new JRegistry();
     }
+
+    /**
+     * For use on form pages that might contain sensitive information. Redirect
+     * to the SSL version of the page if necessary.
+     */
+    protected function enforceSSL()
+    {
+        $uri = JURI::getInstance();
+
+        $isSSL  = ($uri->getScheme() == 'https');
+        $useSSL = $this->getParams()->get('advanced.useSSL', true);
+
+        if (!$isSSL && $useSSL) {
+            $uri->setScheme('https');
+            SimplerenewFactory::getApplication()->redirect($uri->toString());
+        }
+    }
 }

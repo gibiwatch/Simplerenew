@@ -47,6 +47,8 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
 
     public function display($tpl = null)
     {
+        $this->enforceSSL();
+
         // Depending on user state, there may not be any plans to choose
         $this->plans = $this->get('Plans');
         if (!$this->plans) {
