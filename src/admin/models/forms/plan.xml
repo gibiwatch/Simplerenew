@@ -2,7 +2,18 @@
 <form
     addfieldpath="/administrator/components/com_simplerenew/models/fields"
     addrulepath="/administrator/components/com_simplerenew/models/rules">
-    <fieldset name="heading">
+
+    <fieldset name="main" label="COM_SIMPLERENEW_PLAN_PAGE_MAIN">
+        <field
+            name="id"
+            type="hidden"
+            class="readonly"
+            label="COM_SIMPLERENEW_ID_LABEL"
+            description="COM_SIMPLERENEW_ID_DESC"
+            size="10"
+            default="0"
+            readonly="true"/>
+
         <field
             name="name"
             type="text"
@@ -16,19 +27,6 @@
             label="COM_SIMPLERENEW_PLAN_CODE_LABEL"
             description="COM_SIMPLERENEW_PLAN_CODE_DESC"
             hint="COM_SIMPLERENEW_PLAN_CODE_PLACEHOLDER"/>
-
-    </fieldset>
-
-    <fieldset name="main" label="COM_SIMPLERENEW_PLAN_PAGE_MAIN">
-        <field
-            name="id"
-            type="hidden"
-            class="readonly"
-            label="COM_SIMPLERENEW_ID_LABEL"
-            description="COM_SIMPLERENEW_ID_DESC"
-            size="10"
-            default="0"
-            readonly="true"/>
 
         <field
             name="group_id"

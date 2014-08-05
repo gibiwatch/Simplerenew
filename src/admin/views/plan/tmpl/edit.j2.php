@@ -15,6 +15,7 @@ defined('_JEXEC') or die();
 
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
+JHtml::_('behavior.tooltip');
 
 $app = SimplerenewFactory::getApplication();
 $input = $app->input;
@@ -32,7 +33,6 @@ SimplerenewFactory::getDocument()->addStyleDeclaration($style);
 <script>
     Joomla.submitbutton = function (task) {
         if (task == 'plan.cancel' || document.formvalidator.isValid(document.id('item-form'))) {
-            <?php echo $this->form->getField('description')->save(); ?>
             Joomla.submitform(task, document.getElementById('item-form'));
         }
     }
@@ -44,21 +44,7 @@ SimplerenewFactory::getDocument()->addStyleDeclaration($style);
     id="item-form"
     class="form-validate">
 
-    <div class="width-100 inline">
-        <fieldset class="adminform fltlft">
-            <?php
-            echo $this->form->getLabel('name');
-            echo $this->form->getInput('name');
-            echo $this->form->getLabel('code');
-            echo $this->form->getInput('code');
-            ?>
-        </fieldset>
-    </div>
-    <div class="clr"></div>
-
     <?php
-    echo JHtml::_('tabs.start', 'plans-pane');
-
     echo $this->renderFieldset(
         'main',
         array(
@@ -66,21 +52,7 @@ SimplerenewFactory::getDocument()->addStyleDeclaration($style);
             'trial_length' => 'trial_unit'
         )
     );
-
-    echo JHtml::_(
-        'tabs.panel',
-        JText::_('COM_SIMPLERENEW_PLAN_DESCRIPTION_LABEL'),
-        'description-page'
-    );
     ?>
-    <div class="width-100">
-        <fieldset class="adminform">
-            <?php echo $this->form->getInput('description'); ?>
-        </fieldset>
-    </div>
-    <div class="clr"></div>
-
-    <?php echo JHtml::_('tabs.end'); ?>
 
     <input type="hidden" name="task" value=""/>
     <input type="hidden" name="return" value="<?php echo $input->getCmd('return'); ?>"/>
