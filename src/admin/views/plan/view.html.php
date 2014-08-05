@@ -34,7 +34,8 @@ class SimplerenewViewPlan extends SimplerenewViewAdmin
         $isNew = ($this->item->id == 0);
         SimplerenewFactory::getApplication()->input->set('hidemainmenu', true);
 
-        $this->setTitle('Plan');
+        $title = 'COM_SIMPLERENEW_PAGE_VIEW_PLAN_' . ($isNew ? 'ADD' : 'EDIT');
+        $this->setTitle($title);
 
         SimplerenewToolbarHelper::apply('plan.apply');
         SimplerenewToolbarHelper::save('plan.save');
