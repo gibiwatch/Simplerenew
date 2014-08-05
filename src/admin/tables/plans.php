@@ -189,13 +189,9 @@ class SimplerenewTablePlans extends SimplerenewTable
             ->from($this->_tbl);
 
         if ($this->id) {
-            $query->where(
-                array(
-                    'id <> ' . $db->quote($this->id),
-                    'code = ' . $db->quote($this->code)
-                )
-            );
+            $query->where('id <> ' . $db->quote($this->id));
         }
+        $query->where('code = ' . $db->quote($this->code));
 
         if ($db->setQuery($query)->loadResult() > 0) {
             $this->setError(JText::_('COM_SIMPLERENEW_ERROR_PLAN_DUPLICATE'));
