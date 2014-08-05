@@ -55,12 +55,7 @@ class SimplerenewViewAccount extends SimplerenewViewSite
             }
 
         } catch (Simplerenew\Exception $e) {
-            // @TODO: Decide what to do here, if anything
-            SimplerenewFactory::getApplication()->enqueueMessage(
-                'Houston, we have a problem: ' . $e->getMessage(),
-                'error'
-            );
-            echo $e->getTraceMessage();
+            SimplerenewFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
         }
 
         parent::display($tpl);

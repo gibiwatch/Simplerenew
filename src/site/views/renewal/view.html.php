@@ -38,11 +38,7 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
                 $this->subscription = $this->get('Subscription');
             }
         } catch (Exception $e) {
-            // @TODO: Decide what to do here, if anything
-            SimplerenewFactory::getApplication()->enqueueMessage(
-                'Houston, we have a problem: ' . $e->getMessage(),
-                'error'
-            );
+            SimplerenewFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
         }
 
         if ($this->subscription) {
