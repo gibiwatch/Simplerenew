@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `#__simplerenew_plans` (
+CREATE TABLE IF EXISTS `#__simplerenew_plans` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_id` int(11) NOT NULL,
   `code` varchar(45) NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `#__simplerenew_plans` (
   `amount` decimal(10,2) NOT NULL,
   `setup_cost` decimal(10,2) NOT NULL,
   `published` tinyint(4) NOT NULL,
-  `ordering`  int(11) NOT NULL,
+  `ordering` int(11) NOT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `created_by` int(10) unsigned NOT NULL DEFAULT '0',
   `created_by_alias` varchar(255) NOT NULL DEFAULT '',
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `#__simplerenew_push_log` (
   `type` varchar(255) NOT NULL DEFAULT '',
   `action` varchar(255) NOT NULL DEFAULT '',
   `handler` varchar(255) NOT NULL DEFAULT '',
-  `response`  varchar(255) NOT NULL DEFAULT '',
+  `response` varchar(255) NOT NULL DEFAULT '',
   `package` text NOT NULL,
   `ipaddress` char(15) NOT NULL DEFAULT '',
   `logtime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
