@@ -70,7 +70,7 @@ else:
                     $listOrder,
                     null,
                     'asc',
-                    'JGRID_HEADING_ORDERING',
+                    'COM_SIMPLERENEW_ORDERING',
                     'icon-menu-2'
                 ); ?>
             </th>
