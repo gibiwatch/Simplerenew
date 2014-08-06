@@ -10,6 +10,18 @@ defined('_JEXEC') or die();
 
 abstract class SimplerenewViewAdmin extends JViewLegacy
 {
+    /**
+     * @var JObject
+     */
+    protected $state = null;
+
+    public function __construct($config = array())
+    {
+        parent::__construct($config);
+
+        $this->state = $this->get('State');
+    }
+
     public function display($tpl = null)
     {
         if (version_compare(JVERSION, '3.0', 'ge')) {

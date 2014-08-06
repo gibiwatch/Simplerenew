@@ -36,6 +36,19 @@ class JFormFieldPlans extends JFormFieldCheckboxes
         if ($this->options === null) {
             $this->options = array();
 
+            // Recognized Field Attributes
+            $format = $this->element['format'] ? (string)$this->element['format'] : '%name%';
+
+            $orders    = array(
+                'ordering' => 'p.ordering',
+                'code'     => 'p.code',
+                'name'     => 'p.name',
+                'group'    => 'g.title'
+            );
+            $listOrder = $this->element['order'];
+            $listOrder = empty($orders[$listOrder]) ? $orders['ordering'] :  $orders[$listOrder];
+            $listDir = $this->element['direction'] ? (string)$this->element['direction'] : 'ASC';
+
             $db       = SimplerenewFactory::getDbo();
             $fields   = array_map(
                 array($db, 'quoteName'),
@@ -54,9 +67,7 @@ class JFormFieldPlans extends JFormFieldCheckboxes
                 ->select($fields)
                 ->from('#__simplerenew_plans p')
                 ->innerJoin('#__usergroups g on g.id = p.group_id')
-                ->order('code');
-
-            $format = $this->element['format'] ? (string)$this->element['format'] : '%name%';
+                ->order($listOrder . ' ' . $listDir);
 
             $list = $db->setQuery($query)->loadObjectList();
 

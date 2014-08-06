@@ -141,6 +141,27 @@ class Com_SimplerenewInstallerScript
         $this->setDefaultParams($type);
         $this->installRelated();
         $this->clearObsolete();
+
+        // Temporary check for new ordering field
+        // @TODO: Remove by 1st beta
+        $db = JFactory::getDbo();
+        $db->setQuery('Select name, id, ordering From #__simplerenew_plans order by name, code');
+        $list    = $db->loadObjectList();
+        $empties = array_filter(
+            $list,
+            function ($el) {
+                return ($el->ordering == 0);
+            }
+        );
+        if (count($empties) == count($list)) {
+            foreach ($list as $i => $plan) {
+                $plan->ordering = $i+1;
+                $db->updateObject('#__simplerenew_plans', $plan, 'id');
+            }
+            $this->setMessage('Plan ordering has been initialised to alphabetical by Plan Name');
+        }
+        // END ordering check
+
         $this->showMessages();
     }
 

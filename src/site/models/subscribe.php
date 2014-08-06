@@ -18,7 +18,7 @@ class SimplerenewModelSubscribe extends SimplerenewModelAccount
         $query = $db->getQuery(true)
             ->select('plans.*')
             ->from('#__simplerenew_plans plans')
-            ->order('code');
+            ->order('ordering ASC');
         $query->where('published = 1');
 
         if ($available = $this->getAvailable()) {

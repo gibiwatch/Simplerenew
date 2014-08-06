@@ -23,7 +23,6 @@ class JFormFieldPlanAccess extends JFormFieldPlans
     protected $pageClass = null;
     protected $groupControls = null;
 
-
     protected function getInput()
     {
         if (version_compare(JVERSION, '3', 'le')) {

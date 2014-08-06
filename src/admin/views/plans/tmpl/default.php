@@ -12,13 +12,36 @@ JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.multiselect');
 JHtml::_('formbehavior.chosen', 'select');
 
-$app       = SimplerenewFactory::getApplication();
-$user      = SimplerenewFactory::getUser();
-$userId    = $user->get('id');
+$app = SimplerenewFactory::getApplication();
+$user = SimplerenewFactory::getUser();
+$userId = $user->get('id');
 $listOrder = $this->escape($this->state->get('list.ordering'));
-$listDir   = $this->escape($this->state->get('list.direction'));
+$listDir = $this->escape($this->state->get('list.direction'));
+$saveOrder = $listOrder == 'plan.ordering';
+
+if ($saveOrder) {
+    $saveOrderingUrl = 'index.php?option=com_simplerenew&task=plans.saveOrderAjax&tmpl=component';
+    JHtml::_('sortablelist.sortable', 'planList', 'adminForm', strtolower($listDir), $saveOrderingUrl);
+}
 
 ?>
+<script type="text/javascript">
+    Joomla.orderTable = function () {
+        var dirn;
+
+        var table = document.getElementById("sortTable");
+        var direction = document.getElementById("directionTable");
+        var order = table.options[table.selectedIndex].value;
+        if (order != '<?php echo $listOrder; ?>') {
+            dirn = 'asc';
+        }
+        else {
+            dirn = direction.options[direction.selectedIndex].value;
+        }
+        Joomla.tableOrdering(order, dirn, '');
+    }
+</script>
+
 <form
     action="<?php echo JRoute::_('index.php?option=com_simplerenew&view=plans'); ?>"
     method="post"
@@ -35,8 +58,23 @@ if (empty($this->items)): ?>
 else:
     ?>
     <table class="table table-striped" id="planList">
-    <thead>
+        <thead>
         <tr>
+            <th width="1%" class="nowrap center hidden-phone">
+                <?php
+                echo JHtml::_(
+                    'searchtools.sort',
+                    '',
+                    'plan.ordering',
+                    $listDir,
+                    $listOrder,
+                    null,
+                    'asc',
+                    'JGRID_HEADING_ORDERING',
+                    'icon-menu-2'
+                ); ?>
+            </th>
+
             <th width="1%">
                 <?php echo JHtml::_('grid.checkall'); ?>
             </th>
@@ -117,30 +155,46 @@ else:
                 <?php echo JText::_('COM_SIMPLERENEW_PLAN_TRIAL_PERIOD_LABEL'); ?>
             </th>
         </tr>
-    </thead>
+        </thead>
 
-    <tbody>
-    <?php
-    foreach ($this->items as $i => $item):
-        $ordering = ($listOrder == 'plan.ordering');
-        $editLink = 'index.php?option=com_simplerenew&task=plan.edit&id=' . $item->id;
-        $editTitle = JText::_('JACTION_EDIT');
-        ?>
-        <tr class="<?php echo 'row' . ($i % 2); ?>">
-            <td class="center hidden-phone">
-                <?php echo JHtml::_('grid.id', $i, $item->id); ?>
-            </td>
-
-            <td class="center">
-                <div class="btn-group">
+        <tbody>
+        <?php
+        foreach ($this->items as $i => $item):
+            $ordering = ($listOrder == 'plan.ordering');
+            $editLink = 'index.php?option=com_simplerenew&task=plan.edit&id=' . $item->id;
+            $editTitle = JText::_('JACTION_EDIT');
+            ?>
+            <tr class="<?php echo 'row' . ($i % 2); ?>">
+                <td class="order nowrap center hidden-phone">
                     <?php
-                    echo JHtml::_(
-                        'jgrid.published',
-                        $item->published,
-                        $i,
-                        'plans.'
-                    );
+                    $iconClass = '';
+                    if (!$saveOrder) {
+                        $iconClass = ' inactive tip-top hasTooltip" title="' . JHtml::tooltipText('JORDERINGDISABLED');
+                    }
                     ?>
+                    <span class="sortable-handler<?php echo $iconClass ?>">
+								<i class="icon-menu"></i>
+							</span>
+                    <?php if ($saveOrder): ?>
+                        <input type="text" style="display:none" name="order[]" size="5"
+                               value="<?php echo $item->ordering; ?>" class="width-20 text-area-order "/>
+                    <?php endif; ?>
+                </td>
+
+                <td class="center hidden-phone">
+                    <?php echo JHtml::_('grid.id', $i, $item->id); ?>
+                </td>
+
+                <td class="center">
+                    <div class="btn-group">
+                        <?php
+                        echo JHtml::_(
+                            'jgrid.published',
+                            $item->published,
+                            $i,
+                            'plans.'
+                        );
+                        ?>
                     </div>
                 </td>
 
@@ -187,19 +241,19 @@ else:
                     <?php echo JHtml::_('currency.format', $item->setup_cost); ?>
                 </td>
 
-            <td>
-                <?php echo JHtml::_('plan.trial', $item) ? : JText::_('COM_SIMPLERENEW_PLAN_TRIAL_NONE'); ?>
-            </td>
+                <td>
+                    <?php echo JHtml::_('plan.trial', $item) ? : JText::_('COM_SIMPLERENEW_PLAN_TRIAL_NONE'); ?>
+                </td>
             </tr>
         <?php endforeach; ?>
         </tbody>
     </table>
-    <?php
+<?php
 endif;
 echo $this->pagination->getListFooter();
-    ?>
+?>
 
-    <input type="hidden" name="task" value=""/>
-    <input type="hidden" name="boxchecked" value="0"/>
-    <?php echo JHtml::_('form.token'); ?>
+<input type="hidden" name="task" value=""/>
+<input type="hidden" name="boxchecked" value="0"/>
+<?php echo JHtml::_('form.token'); ?>
 </form>
