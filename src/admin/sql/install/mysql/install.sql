@@ -1,4 +1,4 @@
-CREATE TABLE IF EXISTS `#__simplerenew_plans` (
+CREATE TABLE IF NOT EXISTS `#__simplerenew_plans` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_id` int(11) NOT NULL,
   `code` varchar(45) NOT NULL,
