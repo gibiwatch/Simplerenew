@@ -146,19 +146,20 @@ class Com_SimplerenewInstallerScript
         // @TODO: Remove by 1st beta
         $db = JFactory::getDbo();
         $db->setQuery('Select name, id, ordering From #__simplerenew_plans order by name, code');
-        $list    = $db->loadObjectList();
-        $empties = array_filter(
-            $list,
-            function ($el) {
-                return ($el->ordering == 0);
+        if ($list = $db->loadObjectList()) {
+            $empties = array_filter(
+                $list,
+                function ($el) {
+                    return ($el->ordering == 0);
+                }
+            );
+            if (count($empties) == count($list)) {
+                foreach ($list as $i => $plan) {
+                    $plan->ordering = $i + 1;
+                    $db->updateObject('#__simplerenew_plans', $plan, 'id');
+                }
+                $this->setMessage('Plan ordering has been initialised to alphabetical by Plan Name');
             }
-        );
-        if (count($empties) == count($list)) {
-            foreach ($list as $i => $plan) {
-                $plan->ordering = $i+1;
-                $db->updateObject('#__simplerenew_plans', $plan, 'id');
-            }
-            $this->setMessage('Plan ordering has been initialised to alphabetical by Plan Name');
         }
         // END ordering check
 
@@ -498,12 +499,12 @@ class Com_SimplerenewInstallerScript
 
         $db = JFactory::getDbo();
         $db->setQuery('Select update_site_id From #__update_sites_extensions where extension_id=' . (int)$sr->id);
-        $list = $db->loadColumn();
+        if ($list = $db->loadColumn()) {
+            $db->setQuery('Delete From #__update_sites_extensions where extension_id=' . (int)$sr->id);
+            $db->execute();
 
-        $db->setQuery('Delete From #__update_sites_extensions where extension_id=' . (int)$sr->id);
-        $db->execute();
-
-        $db->setQuery('Delete From #__update_sites Where update_site_id IN (' . join(',', $list) . ')');
-        $db->execute();
+            $db->setQuery('Delete From #__update_sites Where update_site_id IN (' . join(',', $list) . ')');
+            $db->execute();
+        }
     }
 }
