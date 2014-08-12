@@ -3,6 +3,11 @@
     "description"      : "Subscription management made simple",
     "minimum-stability": "stable",
     "license"          : "GPL-2+",
+    "type"             : "component",
+    "extra"            : {
+        "element": "com_simplerenew",
+        "name":    "SimpleRenew"
+    },
     "authors"          : [
         {
             "name" : "Open Source Training",
