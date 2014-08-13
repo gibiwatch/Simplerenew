@@ -242,8 +242,9 @@ abstract class SimplerenewHelper
         }
 
         // Update/Add plans found on the gateway
-
         /** @var Simplerenew\Api\Plan $plan */
+
+        $nextOrder = $plansTable->getNextOrder();
         foreach ($plansRemote as $code => $plan) {
             if (array_key_exists($code, $plansUpdate)) {
                 // Refresh old plan if changes found
@@ -257,6 +258,7 @@ abstract class SimplerenewHelper
                     array(
                         'id'               => null,
                         'published'        => 1,
+                        'ordering'         => $nextOrder++,
                         'created_by_alias' => JText::_('COM_SIMPLERENEW_PLAN_SYNC_IMPORTED')
                     )
                 );
