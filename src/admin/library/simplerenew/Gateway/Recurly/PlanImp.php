@@ -110,7 +110,6 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
             $this->plansLoaded[$plan->plan_code] = $nextPlan;
         }
 
-        ksort($this->plansLoaded);
         return $this->plansLoaded;
     }
 

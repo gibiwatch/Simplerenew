@@ -112,6 +112,7 @@ class Plan extends AbstractApiBase
         $template->clearProperties();
 
         $plans = $this->imp->getList($template);
+        ksort($plans);
         return $plans;
     }
 
