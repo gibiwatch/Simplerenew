@@ -142,26 +142,9 @@ class Com_SimplerenewInstallerScript
         $this->installRelated();
         $this->clearObsolete();
 
-        // Temporary check for new ordering field
-        // @TODO: Remove by 1st beta
-        $db = JFactory::getDbo();
-        $db->setQuery('Select name, id, ordering From #__simplerenew_plans order by name, code');
-        if ($list = $db->loadObjectList()) {
-            $empties = array_filter(
-                $list,
-                function ($el) {
-                    return ($el->ordering == 0);
-                }
-            );
-            if (count($empties) == count($list)) {
-                foreach ($list as $i => $plan) {
-                    $plan->ordering = $i + 1;
-                    $db->updateObject('#__simplerenew_plans', $plan, 'id');
-                }
-                $this->setMessage('Plan ordering has been initialised to alphabetical by Plan Name');
-            }
-        }
-        // END ordering check
+        // Temporary fix for table changes
+        // @TODO: Remove by 1st Beta
+        $this->checkDB();
 
         $this->showMessages();
     }
@@ -505,6 +488,59 @@ class Com_SimplerenewInstallerScript
 
             $db->setQuery('Delete From #__update_sites Where update_site_id IN (' . join(',', $list) . ')');
             $db->execute();
+        }
+    }
+
+    /**
+     * Temporary check of DB structure during alpha releases.
+     * @TODO: Remove by 1st Beta
+     *
+     * @return void
+     */
+    protected function checkDB()
+    {
+        $db = JFactory::getDbo();
+
+        $plans = $db->getTableColumns('#__simplerenew_plans');
+        $cmds  = array();
+        $drops = array('accounting_code', 'alias', 'description');
+        foreach ($drops as $field) {
+            if (isset($plans[$field])) {
+                $cmds[] = 'Drop Column ' . $db->quoteName($field);
+            }
+        }
+        if (!isset($plans['ordering'])) {
+            $cmds[] = 'Add Column '
+                . $db->quoteName('ordering')
+                . ' int NOT NULL AFTER '
+                . $db->quoteName('published');
+        }
+
+        if ($cmds) {
+            $query = 'Alter Table '
+                . $db->quoteName('#__simplerenew_plans') . ' '
+                . join(', ', $cmds);
+            $db->setQuery($query)->execute();
+        }
+
+        // If ordering field just added, initialise the ordering
+        $query   = $db->getQuery(true)
+            ->select('name, id, ordering')
+            ->from('#__simplerenew_plans')
+            ->order('name, code');
+        $list    = $db->setQuery($query)->loadObjectList();
+        $empties = array_filter(
+            $list,
+            function ($el) {
+                return ($el->ordering == 0);
+            }
+        );
+        if (count($empties) == count($list)) {
+            foreach ($list as $i => $plan) {
+                $plan->ordering = $i + 1;
+                $db->updateObject('#__simplerenew_plans', $plan, 'id');
+            }
+            $this->setMessage('Plan ordering has been initialised to alphabetical by Plan Name');
         }
     }
 }
