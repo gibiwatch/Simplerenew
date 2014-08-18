@@ -41,7 +41,7 @@ class JFormFieldPlanAccess extends JFormFieldPlans
         } else {
             JHtml::_('bootstrap.tooltip');
 
-            $pages['GROUP']  = $this->fieldname . '-group';
+            $pages['GROUP'] = $this->fieldname . '-group';
         }
 
         $pageOptions = array();
@@ -143,7 +143,7 @@ class JFormFieldPlanAccess extends JFormFieldPlans
     protected function planSelect()
     {
         $plans = $this->getOptions();
-        $html = array();
+        $html  = array();
 
         if (version_compare(JVERSION, '3', 'ge')) {
             $html[] = $this->pageDescription(JText::_('COM_SIMPLERENEW_PLANACCESS_SELECT_DESC'));
