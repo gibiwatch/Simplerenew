@@ -25,22 +25,24 @@ class JFormFieldPlanAccess extends JFormFieldPlans
 
     protected function getInput()
     {
-        if (version_compare(JVERSION, '3', 'lt')) {
-            // Use only a simple selection for J2.x
-            return $this->planSelect();
-        }
+        JHtml::_('sr.jquery');
 
         $this->pageControl   = $this->fieldname . '-pagecontrol';
         $this->pageClass     = $this->fieldname . '-pagetype';
         $this->groupControls = $this->fieldname . '-group-control';
 
-        JHtml::_('bootstrap.tooltip');
-
         $pages = array(
             'ALL'    => $this->fieldname . '-all',
-            'SELECT' => $this->fieldname . '-select',
-            'GROUP'  => $this->fieldname . '-group'
+            'SELECT' => $this->fieldname . '-select'
         );
+
+        if (version_compare(JVERSION, '3', 'lt')) {
+            JHtml::_('behavior.tooltip');
+        } else {
+            JHtml::_('bootstrap.tooltip');
+
+            $pages['GROUP']  = $this->fieldname . '-group';
+        }
 
         $pageOptions = array();
         foreach ($pages as $key => $value) {
@@ -67,9 +69,12 @@ class JFormFieldPlanAccess extends JFormFieldPlans
         $html[] = '<div class="' . $this->pageClass . '" id="' . $pages['SELECT'] . '">';
         $html[] = $this->planSelect();
         $html[] = '</div>';
-        $html[] = '<div class="' . $this->pageClass . '" id="' . $pages['GROUP'] . '">';
-        $html[] = $this->groupPager();
-        $html[] = '</div>';
+
+        if (isset($pages['GROUP'])) {
+            $html[] = '<div class="' . $this->pageClass . '" id="' . $pages['GROUP'] . '">';
+            $html[] = $this->groupPager();
+            $html[] = '</div>';
+        }
 
         $this->addJs();
 
@@ -138,15 +143,11 @@ class JFormFieldPlanAccess extends JFormFieldPlans
     protected function planSelect()
     {
         $plans = $this->getOptions();
+        $html = array();
 
-        if (version_compare(JVERSION, '3', 'lt')) {
-            $header = '<br/>' . JText::_('COM_SIMPLERENEW_PLANACCESS_SELECT_J2X_DESC');
-        } else {
-            $header = JText::_('COM_SIMPLERENEW_PLANACCESS_SELECT_DESC');
+        if (version_compare(JVERSION, '3', 'ge')) {
+            $html[] = $this->pageDescription(JText::_('COM_SIMPLERENEW_PLANACCESS_SELECT_DESC'));
         }
-        $html = array(
-            $this->pageDescription($header)
-        );
 
         $class  = sprintf('class="%s"', empty($this->class) ? 'checkboxes' : 'checkboxes ' . $this->class);
         $html[] = '<fieldset id="" ' . $class . '>';
