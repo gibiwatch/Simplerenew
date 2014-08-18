@@ -21,7 +21,7 @@ $app = SimplerenewFactory::getApplication();
         <h1><?php echo JText::_('COM_SIMPLERENEW_RENEWAL_CANCEL'); ?></h1>
     </div>
 
-    <?php echo $this->params->get('cancelMessage'); ?>
+    <?php echo SimplerenewHelper::renderModule('simplerenew_cancel'); ?>
 
     <form
         name="renewCancel"
