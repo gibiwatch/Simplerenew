@@ -65,7 +65,7 @@ class CouponImp extends AbstractRecurlyBase implements CouponInterface
     public function load(Coupon $parent)
     {
         $coupon = $this->getCoupon($parent->code);
-        $this->bindToCoupon($coupon, $parent);
+        $this->bindSource($parent, $coupon);
     }
 
     /**
