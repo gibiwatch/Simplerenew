@@ -440,34 +440,7 @@ class Com_SimplerenewInstallerScript
             $setParams = true;
         }
 
-        // Check for older versions of params and fix
-        $data = $params->toArray();
-        if (!empty($data['advanced'])) {
-            $data['themes'] = $data['advanced'];
-            unset($data['advanced']);
-            $setParams = true;
-        }
-
-        $codeMask = $params->get('basic.codeMask', $params->get('account.codeMask'));
-        if ($codeMask) {
-            $setParams = true;
-
-            if (empty($data['account'])) {
-                $data['account'] = array();
-            }
-            if (!empty($data['basic']['codeMask'])) {
-                unset($data['basic']['codeMask']);
-            }
-            if (!empty($data['account']['codeMask'])) {
-                unset($data['account']['codeMask']);
-            }
-            $prefix = substr($codeMask, 0, strpos($codeMask, '%s'));
-
-            $data['account']['prefix'] = $prefix;
-        }
-
         if ($setParams) {
-            $params        = new JRegistry($data);
             $table->params = $params->toString();
             $table->store();
         }
