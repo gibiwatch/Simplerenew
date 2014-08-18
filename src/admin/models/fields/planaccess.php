@@ -147,6 +147,8 @@ class JFormFieldPlanAccess extends JFormFieldPlans
 
         if (version_compare(JVERSION, '3', 'ge')) {
             $html[] = $this->pageDescription(JText::_('COM_SIMPLERENEW_PLANACCESS_SELECT_DESC'));
+        } else {
+            $html[] = '<br style="clear: both;"/>';
         }
 
         $class  = sprintf('class="%s"', empty($this->class) ? 'checkboxes' : 'checkboxes ' . $this->class);
