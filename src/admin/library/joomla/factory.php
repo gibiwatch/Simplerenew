@@ -39,9 +39,6 @@ abstract class SimplerenewFactory extends JFactory
                 ),
                 'gateway' => array(
                     'recurly' => (array)$params->get('gateway.recurly')
-                ),
-                'account' => array(
-                    'codeMask' => $params->get('account.prefix', '') . '%s'
                 )
             );
             self::$SimplerenewContainers[$key] = new Container($config);

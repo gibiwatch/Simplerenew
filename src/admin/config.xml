@@ -40,13 +40,6 @@
             description="COM_SIMPLERENEW_CONFIG_FIELDSET_ACCOUNT_DESC">
 
             <field
-                name="prefix"
-                label="COM_SIMPLERENEW_CONFIG_ACCOUNT_PREFIX_LABEL"
-                description="COM_SIMPLERENEW_CONFIG_ACCOUNT_PREFIX_DESC"
-                type="text"
-                default="%s"/>
-
-            <field
                 name="billingAddress"
                 label="COM_SIMPLERENEW_CONFIG_ACCOUNT_BILLING_ADDRESS_LABEL"
                 description="COM_SIMPLERENEW_CONFIG_ACCOUNT_BILLING_ADDRESS_DESC"

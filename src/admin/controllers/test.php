@@ -6,7 +6,6 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-use Simplerenew\Api\Account;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
 
@@ -41,9 +40,9 @@ class SimplerenewControllerTest extends SimplerenewControllerBase
             'NoAccount'
         );
 
-        $prefix = SimplerenewComponentHelper::getParams()->get('account.prefix');
         $container = SimplerenewFactory::getContainer();
         $plans = $container->getPlan()->getList();
+        $company = SimplerenewFactory::getConfig()->get('sitename');
 
         foreach ($accounts as $account) {
             $username = 'demo-' . strtolower($account);
@@ -54,7 +53,7 @@ class SimplerenewControllerTest extends SimplerenewControllerBase
                 'lastname'  => 'Demo',
                 'username'  => $username,
                 'email'     => $email,
-                'company'   => 'Site Prefix: ' . $prefix,
+                'company'   => $company,
                 'password'  => 'test',
                 'password2' => 'test',
                 'cc' => array(
