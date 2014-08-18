@@ -25,7 +25,7 @@ class JFormFieldPlanAccess extends JFormFieldPlans
 
     protected function getInput()
     {
-        if (version_compare(JVERSION, '3', 'le')) {
+        if (version_compare(JVERSION, '3', 'lt')) {
             // Use only a simple selection for J2.x
             return $this->planSelect();
         }
@@ -139,7 +139,7 @@ class JFormFieldPlanAccess extends JFormFieldPlans
     {
         $plans = $this->getOptions();
 
-        if (version_compare(JVERSION, '3', 'le')) {
+        if (version_compare(JVERSION, '3', 'lt')) {
             $header = '<br/>' . JText::_('COM_SIMPLERENEW_PLANACCESS_SELECT_J2X_DESC');
         } else {
             $header = JText::_('COM_SIMPLERENEW_PLANACCESS_SELECT_DESC');
