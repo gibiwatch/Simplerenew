@@ -80,6 +80,9 @@ class Billing extends AbstractApiBase
         } else {
             $this->address = new Address();
         }
+
+        // Default to credit card
+        $this->payment = new CreditCard();
     }
 
     /**

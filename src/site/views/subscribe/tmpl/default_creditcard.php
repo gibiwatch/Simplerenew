@@ -10,11 +10,6 @@ use Simplerenew\Primitive as Payment;
 
 defined('_JEXEC') or die();
 
-if ($this->billing->payment instanceof Payment\CreditCard) {
-    $creditCard = $this->billing->payment;
-} else {
-    $creditCard = new Payment\CreditCard();
-}
 ?>
 <div id="content_card" class="content-enabled">
     <input type="hidden" name="payment_method" value="cc"/>
