@@ -41,8 +41,8 @@ class SimplerenewControllerTest extends SimplerenewControllerBase
         );
 
         $container = SimplerenewFactory::getContainer();
-        $plans = $container->getPlan()->getList();
-        $company = SimplerenewFactory::getConfig()->get('sitename');
+        $plans     = $container->getPlan()->getList();
+        $company   = SimplerenewFactory::getConfig()->get('sitename');
 
         foreach ($accounts as $account) {
             $username = 'demo-' . strtolower($account);
@@ -56,27 +56,25 @@ class SimplerenewControllerTest extends SimplerenewControllerBase
                 'company'   => $company,
                 'password'  => 'test',
                 'password2' => 'test',
-                'cc' => array(
+                'cc'        => array(
                     'number' => '4111111111111111',
-                    'cvv' => '123',
-                    'year' => date('Y')+5,
-                    'month' => 12
+                    'cvv'    => '123',
+                    'year'   => date('Y') + 5,
+                    'month'  => 12
                 )
             );
 
             if ($account == 'NoSubs') {
                 $this->createAccount($properties);
             } elseif ($account != 'NoAccount') {
-                $plan = array_shift($plans);
-                $subscription = $this->createAccount($properties, $plan);
+                $plan         = array_shift($plans);
+                $this->createAccount($properties, $plan);
             } else {
                 $user = SimplerenewFactory::getContainer()->getUser();
                 $user->setProperties($properties)->create();
 
-                $juser = SimplerenewFactory::getUser($user->id);
-                $juser->activation = '';
-                $juser->block = 0;
-                $juser->save(true);
+                $user->enabled = true;
+                $user->update();
             }
         }
 
@@ -84,7 +82,7 @@ class SimplerenewControllerTest extends SimplerenewControllerBase
 
     /**
      * @param array $properties
-     * @param Plan $plan
+     * @param Plan  $plan
      *
      * @return Subscription
      */
@@ -95,10 +93,8 @@ class SimplerenewControllerTest extends SimplerenewControllerBase
         $user = $container->getUser();
         $user->setProperties($properties)->create();
 
-        $juser = SimplerenewFactory::getUser($user->id);
-        $juser->activation = '';
-        $juser->block = 0;
-        $juser->save(true);
+        $user->enabled = true;
+        $user->update();
 
         $account = $container->getAccount();
         $account
