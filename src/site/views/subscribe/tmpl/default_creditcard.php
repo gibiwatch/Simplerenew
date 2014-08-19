@@ -51,7 +51,6 @@ defined('_JEXEC') or die();
                     }
                     ?>
                     id="billing_cc_number"
-                    name="billing[cc][number]"
                     type="text"
                     value=""
                     placeholder="<?php echo JHtml::_('creditcard.mask', $creditCard->lastFour); ?>"
@@ -68,7 +67,6 @@ defined('_JEXEC') or die();
                     }
                     ?>
                     id="billing_cc_cvv"
-                    name="billing[cc][cvv]"
                     type="text"
                     value=""
                     class="small-width"
