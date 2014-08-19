@@ -182,6 +182,9 @@ class Joomla implements UserInterface
             'groups'   => $parent->groups,
             'block'    => !$parent->enabled
         );
+        if ($parent->enabled) {
+            $data['activation'] = '';
+        }
 
         if (!empty($parent->password)) {
             $data['password']  = $parent->password;
