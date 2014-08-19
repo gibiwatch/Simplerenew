@@ -141,7 +141,9 @@ abstract class JHtmlSr
             $js = <<<VALIDATE
 (function($) {
     $(document).ready(function() {
-        $('{$selector}').validate();
+        $('{$selector}').validate({
+            errorClass: 'ost_error'
+        });
     });
 })(jQuery);
 VALIDATE;
