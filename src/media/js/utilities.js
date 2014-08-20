@@ -35,12 +35,12 @@
                 .css('cursor', 'pointer')
                 .each(function (idx, active) {
                     $(this)
-                        .prop('contentPanel', $($(this).attr('data-content')))
+                        .data('contentPanel', $($(this).attr('data-content')))
                         .on('click', function (evt) {
                             headers.each(function (idx) {
                                 $(this)
                                     .toggleClass('tab-enabled', active === this)
-                                    .prop('contentPanel').closePanel(active !== this)
+                                    .data('contentPanel').closePanel(active !== this)
                             });
                         });
                 });
@@ -65,12 +65,12 @@
             $(selector).each(function () {
                 $(this)
                     .css('cursor', 'pointer')
-                    .prop('contentPanel', $($(this).attr('data-content')))
+                    .data('contentPanel', $($(this).attr('data-content')))
                     .on('click', function (evt) {
-                        var contentPanel = $(this).prop('contentPanel');
+                        var contentPanel = $(this).data('contentPanel');
                         contentPanel.closePanelSlide(contentPanel.is(':visible'));
                     })
-                    .prop('contentPanel').closePanel(!options.visible);
+                    .data('contentPanel').closePanel(!options.visible);
             });
         }
     });
