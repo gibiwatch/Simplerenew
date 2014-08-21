@@ -14,6 +14,8 @@ defined('_JEXEC') or die();
  * @var SimplerenewViewSubscribe $this ;
  */
 
+JHtml::_('sr.validation', '#subscribeForm');
+
 $app = SimplerenewFactory::getApplication();
 ?>
 <div class="ost-container simplerenew-subscribe">
@@ -42,7 +44,9 @@ $app = SimplerenewFactory::getApplication();
             name="Itemid"
             value="<?php echo $app->input->getInt('Itemid'); ?>"/>
 
-        <?php echo JHtml::_('form.token'); ?>
+        <span id="token">
+            <?php echo JHtml::_('form.token'); ?>
+        </span>
     </form>
 
 </div>

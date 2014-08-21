@@ -29,10 +29,12 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             type="text"
             value="<?php echo $this->user->firstname; ?>"
             required="true"
+            data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_FIRSTNAME_REQUIRED'); ?>"
             autofocus/>
     </div>
     <div class="block6">
-        <label for="lastname"><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?>
+        <label for="lastname">
+            <?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?>
             <?php echo $requiredTag; ?>
         </label>
         <input
@@ -40,7 +42,8 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             name="lastname"
             type="text"
             value="<?php echo $this->user->lastname; ?>"
-            required="true"/>
+            required="true"
+            data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_LASTNAME_REQUIRED'); ?>"/>
     </div>
 </div>
 <!-- /.ost-section -->
@@ -59,9 +62,12 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             ?>
             id="username"
             name="username"
+            class="unique_user"
             type="text"
             value="<?php echo $this->user->username; ?>"
-            required="true"/>
+            required="true"
+            data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_USERNAME_REQUIRED'); ?>"
+            data-msg-remote="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_USERNAME_REMOTE'); ?>"/>
     </div>
     <div class="block6">
         <label for="email">
@@ -72,50 +78,46 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             id="email"
             name="email"
             type="email"
+            class="unique_email"
             value="<?php echo $this->user->email; ?>"
-            required=""/>
+            required="true"
+            data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_EMAIL_REQUIRED'); ?>"
+            data-msg-email="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_EMAIL_FORMAT'); ?>"
+            data-msg-remote="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_EMAIL_REMOTE'); ?>"
+/>
     </div>
 </div>
+
+<?php if (!$loggedIn): ?>
 <div class="ost-section p-bottom b-bottom">
     <div class="block6">
         <label for="password">
-            <?php
-            echo JText::_('COM_SIMPLERENEW_PASSWORD');
-            if (!$loggedIn) {
-                echo ' ' . $requiredTag;
-            }
-            ?>
+            <?php echo JText::_('COM_SIMPLERENEW_PASSWORD'); ?>
+            <?php echo $requiredTag; ?>
         </label>
         <input
-            <?php
-            if (!$loggedIn) {
-                echo ' required="true"';
-            }
-            ?>
             id="password"
             name="password"
             type="password"
-            value=""/>
+            value=""
+            required="true"
+            data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_PASSWORD_REQUIRED'); ?>"
+/>
     </div>
     <div class="block6">
         <label for="password2">
-            <?php
-            echo JText::_('COM_SIMPLERENEW_PASSWORD2');
-            if (!$loggedIn) {
-                echo ' ' . $requiredTag;
-            }
-            ?>
+            <?php echo JText::_('COM_SIMPLERENEW_PASSWORD2'); ?>
+            <?php echo $requiredTag; ?>
         </label>
         <input
-            <?php
-            if (!$loggedIn) {
-                echo ' required="true"';
-            }
-            ?>
             id="password2"
             name="password2"
             type="password"
-            value=""/>
+            value=""
+            required="true"
+            data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_PASSWORD2_REQUIRED'); ?>"
+/>
     </div>
 </div>
+<?php endif; ?>
 <!-- /.ost-section -->
