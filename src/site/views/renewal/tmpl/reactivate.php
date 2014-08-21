@@ -45,10 +45,10 @@ $app = SimplerenewFactory::getApplication();
             name="task"
             value="renewal.reactivate"/>
 
-        <input
-            type="submit"
-            value="<?php echo JText::_('COM_SIMPLERENEW_RENEWAL_REACTIVATE_BUTTON'); ?>"
-            class="btn-main btn-big"/>
+        <button type="submit" class="btn-main btn-big">
+            <i class="fa fa-check"></i> 
+            <?php echo JText::_('COM_SIMPLERENEW_RENEWAL_REACTIVATE_BUTTON'); ?>
+        </button>
 
         <?php echo JHtml::_('form.token'); ?>
     </form>

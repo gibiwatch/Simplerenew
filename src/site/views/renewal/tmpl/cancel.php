@@ -48,10 +48,10 @@ $app = SimplerenewFactory::getApplication();
             name="task"
             value="renewal.cancel"/>
 
-        <input
-            type="submit"
-            value="<?php echo JText::_('COM_SIMPLERENEW_RENEWAL_CANCEL_BUTTON'); ?>"
-            class="btn-main btn-big"/>
+        <button type="submit" class="btn-main btn-big btn-warning">
+            <i class="fa fa-times"></i> 
+            <?php echo JText::_('COM_SIMPLERENEW_RENEWAL_CANCEL_BUTTON'); ?>
+        </button>
 
         <?php echo JHtml::_('form.token'); ?>
     </form>
