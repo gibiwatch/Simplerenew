@@ -215,21 +215,21 @@
 
 /* Help classes
  ========================================================================== */
-.ost-alert-warning{
+div.ost-alert-warning{
     background: #fff1f0;
     color: #d85030;
     padding: 15px;
     margin: 2px 0;
 }
 
-.ost-alert-success{
+div.ost-alert-success{
     background: #f2fae3;
     color: #659f13;
     padding: 15px;
     margin: 2px 0;
 }
 
-.ost-alert-notify{
+div.ost-alert-notify{
     background: #ebf7fd;
     color: #2d7091;
     padding: 15px;

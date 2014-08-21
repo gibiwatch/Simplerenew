@@ -215,7 +215,7 @@
 
 /* Help classes
  ========================================================================== */
-.ost-alert-warning{
+div.ost-alert-warning{
     background: #fff1f0;
     border: 1px solid rgba(216,80,48, 0.2);
     color: #d85030;
@@ -223,7 +223,7 @@
     margin: 2px 0;
 }
 
-.ost-alert-success{
+div.ost-alert-success{
     background: #f2fae3;
     border: 1px solid rgba(101,159,19, 0.2);
     color: #659f13;
@@ -231,7 +231,7 @@
     margin: 2px 0;
 }
 
-.ost-alert-notify{
+div.ost-alert-notify{
     background: #ebf7fd;
     border: 1px solid rgba(45,112,145,0.2);
     color: #2d7091;
