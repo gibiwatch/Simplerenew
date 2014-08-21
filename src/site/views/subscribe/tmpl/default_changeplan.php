@@ -35,7 +35,7 @@ defined('_JEXEC') or die();
     <?php echo SimplerenewHelper::renderModule('simplerenew_submit_top'); ?>
     <div class="m-bottom m-top">
         <button type="submit" class="btn-main btn-big">
-            <i class="fa fa-check"></i> 
+            <i class="fa fa-refresh"></i> 
             <?php echo JText::_('COM_SIMPLERENEW_CHANGE_BUTTON'); ?>
         </button>
     </div>
