@@ -2,7 +2,6 @@
     $.Simplerenew = $.extend({}, $.Simplerenew, {
         validate: {
             options: {
-                debug: true,
                 errorClass: 'ost_error'
             },
 
