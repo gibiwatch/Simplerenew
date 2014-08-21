@@ -1,7 +1,12 @@
 (function ($) {
     $.Simplerenew = $.extend({}, $.Simplerenew, {
         validate: {
-            classRules: {
+            options: {
+                debug: true,
+                errorClass: 'ost_error'
+            },
+
+            rules: {
                 unique_user: {
                     remote: {
                         url: 'index.php',
@@ -27,34 +32,37 @@
                 }
             },
 
-            subscribe: function (selector) {
+            subscribe: function (selector, options) {
                 var form = $(selector);
 
                 if (form) {
-                    var token = form.find('span#token input[type=hidden]');
+                    var rules = applyRules(
+                        form,
+                        this.rules,
+                        form.find('span#token input[type=hidden]')
+                    );
 
-                    var rules = {};
-                    if (token) {
-                        $.each(this.classRules, function (cls, rule) {
-                            if (rule.remote) {
-                                rule.remote.data[token.attr('name')] = token.val();
-                            }
-
-                            $('.' + cls).each(function(idx, el) {
-                                rules[el.name] = rule;
-                            });
-                        });
-                    }
-
-                    console.log(rules);
-
-                    form.validate({
-                        debug: true,
-                        errorClass: 'ost_error',
-                        rules: rules
-                    });
+                    options = $.extend(this.options, {rules: rules}, options);
+                    form.validate(options);
                 }
             }
         }
     });
+
+    var applyRules =  function (form, methods, token) {
+        var rules = {};
+
+        $.each(methods, function (cls, rule) {
+            if (rule.remote && token) {
+                rule.remote.data[token.attr('name')] = token.val();
+            }
+
+            $('.' + cls).each(function (idx, el) {
+                rules[el.name] = rule;
+            });
+        });
+
+        return rules;
+    };
+
 })(jQuery);
