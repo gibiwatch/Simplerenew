@@ -86,11 +86,9 @@ abstract class JHtmlSr
         JHtml::_('script', 'com_simplerenew/utilities.js', false, true);
 
         $js = array(
-            "(function($) {",
-            "   $(document).ready(function () {",
-            "       $.Simplerenew.tabs('{$selector}');",
-            "    });",
-            "})(jQuery);"
+            "jQuery(document).ready(function () {",
+            "   jQuery.Simplerenew.tabs('{$selector}');",
+            "});"
         );
         SimplerenewFactory::getDocument()->addScriptDeclaration(join("\n", $js));
     }
@@ -115,11 +113,9 @@ abstract class JHtmlSr
         );
 
         $js = array(
-            "(function($) {",
-            "   $(document).ready(function () {",
-            "      $.Simplerenew.sliders('{$selector}', {$options});",
-            "   });",
-            "})(jQuery);"
+            "   jQuery(document).ready(function () {",
+            "      jQuery.Simplerenew.sliders('{$selector}', {$options});",
+            "   });"
         );
         SimplerenewFactory::getDocument()->addScriptDeclaration(join("\n", $js));
     }
@@ -136,18 +132,16 @@ abstract class JHtmlSr
         static::jquery();
 
         JHtml::_('script', 'com_simplerenew/validation/jquery.validate.js', false, true);
+        JHtml::_('script', 'com_simplerenew/validation.js', false, true);
 
         if ($selector) {
-            $js = <<<VALIDATE
-(function($) {
-    $(document).ready(function() {
-        $('{$selector}').validate({
-            errorClass: 'ost_error'
-        });
-    });
-})(jQuery);
-VALIDATE;
-            SimplerenewFactory::getDocument()->addScriptDeclaration($js);
+            $js = array(
+                "jQuery(document).ready(function() {",
+                "   jQuery.Simplerenew.validate.subscribe('{$selector}');",
+                "});"
+            );
+
+            SimplerenewFactory::getDocument()->addScriptDeclaration(join("\n", $js));
         }
     }
 }

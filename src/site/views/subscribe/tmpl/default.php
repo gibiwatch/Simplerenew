@@ -44,7 +44,9 @@ $app = SimplerenewFactory::getApplication();
             name="Itemid"
             value="<?php echo $app->input->getInt('Itemid'); ?>"/>
 
-        <?php echo JHtml::_('form.token'); ?>
+        <span id="token">
+            <?php echo JHtml::_('form.token'); ?>
+        </span>
     </form>
 
 </div>

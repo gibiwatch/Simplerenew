@@ -7,3 +7,13 @@
  */
 
 defined('_JEXEC') or die();
+
+class SimplerenewControllerJson extends JControllerLegacy
+{
+    protected function checkToken()
+    {
+        if (!JSession::checkToken()) {
+            throw new Exception(JText::_('JINVALID_TOKEN'));
+        }
+    }
+}
