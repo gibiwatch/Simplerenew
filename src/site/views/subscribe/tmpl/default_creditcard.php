@@ -16,7 +16,7 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
     $creditCard = new Payment\CreditCard();
 }
 ?>
-<div id="content_card">
+<div id="content_card" class="content-enabled">
     <input type="hidden" name="payment_method" value="cc"/>
 
     <div class="p-full">

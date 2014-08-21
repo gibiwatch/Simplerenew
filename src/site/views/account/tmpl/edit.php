@@ -49,11 +49,11 @@ $app = SimplerenewFactory::getApplication();
             name="task"
             value="account.save"/>
 
-        <input
-            type="submit"
-            value="<?php echo JText::_('COM_SIMPLERENEW_SAVE'); ?>"
-            class="btn-main btn-big"/>
-
+        <button type="submit" class="btn-main btn-big">
+            <i class="fa fa-check"></i> 
+            <?php echo JText::_('COM_SIMPLERENEW_SAVE'); ?>
+        </button>
+        
         <?php echo JHtml::_('form.token'); ?>
     </form>
 
