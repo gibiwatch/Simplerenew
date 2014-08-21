@@ -40,10 +40,10 @@ defined('_JEXEC') or die();
 
     <?php echo SimplerenewHelper::renderModule('simplerenew_submit_top'); ?>
     <div class="m-bottom">
-        <input
-            type="submit"
-            value="<?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE'); ?>"
-            class="btn-main btn-big"/>
+        <button type="submit" class="btn-main btn-big">
+            <i class="fa fa-check"></i> 
+            <?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE'); ?>
+        </button>
     </div>
     <?php echo SimplerenewHelper::renderModule('simplerenew_submit_bottom'); ?>
 </div>
