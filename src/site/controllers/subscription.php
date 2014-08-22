@@ -11,13 +11,13 @@ use Simplerenew\Api\Subscription;
 
 defined('_JEXEC') or die();
 
+/**
+ * Process non-Credit Card subscription/change forms
+ *
+ * Class SimplerenewControllerSubscription
+ */
 class SimplerenewControllerSubscription extends SimplerenewControllerBase
 {
-    /**
-     * @var SimplerenewModelGateway
-     */
-    protected $gatewayModel = null;
-
     public function display($cachable = false, $urlparams = array())
     {
         $app = SimplerenewFactory::getApplication();
@@ -27,9 +27,6 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
         );
     }
 
-    /**
-     * New Subscriptions including expired
-     */
     public function create()
     {
         $this->checkToken();
@@ -45,6 +42,16 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
         );
 
         $app      = SimplerenewFactory::getApplication();
+
+        $method   = $app->input->getCmd('payment_method');
+        if ($method == 'cc') {
+            $this->callerReturn(
+                JText::_('COM_SIMPLERENEW_ERROR_NO_CREDITCARD'),
+                'error'
+            );
+            return;
+        }
+
         $planCode = $app->input->getString('planCode');
         if (!$planCode) {
             $this->callerReturn(
@@ -54,67 +61,19 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             return;
         }
 
-        $model = $this->getGatewayModel();
-
-        // Create/Load the user
-        try {
-            $user = $model->saveUser();
-
-        } catch (Exception $e) {
-            $this->callerReturn($e->getMessage(), 'error');
-            return;
-        }
-
-        // Create the account
-        try {
-            $account = $model->saveAccount($user);
-
-        } catch (Exception $e) {
-            $this->callerReturn(
-                JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_ACCOUNT', $e->getMessage()),
-                'error'
-            );
-            return;
-        }
-
-        // Create the subscription based on payment type
-        try {
-            $method = $app->input->getCmd('payment_method');
-            switch ($method) {
-                case 'pp':
-                    throw new Exception('Payment via PayPal is not yet implemented');
-                    break;
-
-                case 'cc':
-                    $this->subscribeByCreditCard($account);
-                    break;
-
-                default:
-                    throw new Exception(JText::sprintf('COM_SIMPLERENEW_ERROR_UNKNOWN_PAYMENT_METHOD', $method));
-                    break;
-            }
-        } catch (Exception $e) {
-            $this->callerReturn($e->getMessage(), 'error');
-            return;
-        }
-
-        $link = SimplerenewRoute::get('account');
-        $this->setRedirect(
-            JRoute::_($link),
-            JText::_('COM_SIMPLERENEW_SUBSCRIPTION_SUCCESS')
+        $this->callerReturn(
+            'Payment via PayPal is not yet implemented',
+            'error'
         );
     }
 
-    /**
-     * Change from one active subscription to another
-     */
     public function change()
     {
         $this->checkToken();
 
         $app = SimplerenewFactory::getApplication();
-        $id  = $app->input->getString('id');
 
+        $id  = $app->input->getString('id');
         if (!$id) {
             $this->callerReturn(
                 JText::_('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_NOID'),
@@ -123,127 +82,18 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             return;
         }
 
-        $container = SimplerenewFactory::getContainer();
-        try {
-            $user    = $container->getUser()->load();
-            $account = $container->getAccount()->load($user);
-
-            // Update the billing info
-            $this->getGatewayModel()->saveBilling($account);
-
-            $subscription = $container
-                ->getSubscription()
-                ->getValidSubscription($account, $id);
-
-            if ($subscription->status == Subscription::STATUS_CANCELED) {
-                $subscription->reactivate();
-            }
-
-            $planCode = $app->input->getString('planCode');
-            $oldPlan  = $container->getPlan()->load($subscription->plan);
-            $newPlan  = $container->getPlan()->load($planCode);
-
-            $couponCode = $app->input->getString('couponCode');
-            $coupon     = $couponCode ? $container->getCoupon()->load($couponCode) : null;
-
-            $subscription->update($newPlan, $coupon);
-
-        } catch (Exception $e) {
+        $method = $app->input->getCmd('payment_method');
+        if ($method == 'cc') {
             $this->callerReturn(
-                JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_CHANGE', $e->getMessage()),
+                JText::_('COM_SIMPLERENEW_ERROR_NO_CREDITCARD'),
                 'error'
             );
             return;
         }
 
-        $link = SimplerenewRoute::get('account');
-        $this->setRedirect(
-            JRoute::_($link),
-            JText::sprintf(
-                'COM_SIMPLERENEW_SUBSCRIPTION_CHANGE_SUCCESS',
-                $oldPlan->name,
-                $newPlan->name,
-                $subscription->period_end->format('F, j, Y')
-            )
+        $this->callerReturn(
+            'Payment via PayPal is not yet implemented',
+            'error'
         );
-    }
-
-    /**
-     * Subscribe a new member using CC info in input stream
-     *
-     * @param Account $account
-     *
-     * @return void
-     * @throws Exception
-     */
-    protected function subscribeByCreditCard(Account $account)
-    {
-        $app   = SimplerenewFactory::getApplication();
-        $model = $this->getGatewayModel();
-
-        // Update billing
-        try {
-            $model->saveBilling($account);
-        } catch (Exception $e) {
-            throw new Exception(
-                JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_BILLING', $e->getMessage()),
-                $e->getCode(),
-                $e
-            );
-        }
-
-        // All went well! Valid billing information confirms the user so login them in
-        try {
-            $currentUser = SimplerenewFactory::getContainer()->getUser();
-            try {
-                $currentUser->load();
-
-            } catch (Exception $e) {
-                // No one logged in
-            }
-
-            // Logout current user if there is one
-            if ($currentUser->id > 0 && $currentUser->id != $account->user->id) {
-                $currentUser->logout();
-            }
-
-            //Regardless of Joomla settings, log in the user if not already logged in
-            $password = $app->input->getString('password');
-            $account->user->login($password, true);
-
-            $currentUser->load();
-
-        } catch (Exception $e) {
-            // Not a big deal but leave a message
-            $app->enqueueMessage(
-                JText::_('COM_SIMPLERENEW_WARN_SUBSCRIPTION_USER_LOGIN_FAILED'),
-                'notice'
-            );
-        }
-
-        // Create the subscription
-        try {
-            $planCode   = $app->input->getString('planCode');
-            $couponCode = $app->input->getString('couponCode');
-
-            $model->createSubscription($account, $planCode, $couponCode);
-        } catch (Exception $e) {
-            throw new Exception(
-                JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_CREATE', $e->getMessage()),
-                $e->getCode(),
-                $e
-            );
-        }
-    }
-
-    /**
-     * @return SimplerenewModelGateway
-     */
-    protected function getGatewayModel()
-    {
-        if ($this->gatewayModel === null) {
-            $this->gatewayModel = SimplerenewModel::getInstance('Gateway');
-        }
-        return $this->gatewayModel;
     }
 }
