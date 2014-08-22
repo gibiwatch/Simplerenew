@@ -33,18 +33,22 @@ abstract class SimplerenewRender
                 $attribs = array_merge(
                     $attribs,
                     array(
-                        'id'       => $id,
-                        'name'     => $prefix . '[' . $name . ']',
-                        'type'     => 'text',
-                        'value'    => $address->$name,
-                        'required' => 'true'
+                        'id'                => $id,
+                        'name'              => $prefix . '[' . $name . ']',
+                        'type'              => 'text',
+                        'value'             => $address->$name,
+                        'required'          => 'true',
+                        'data-msg-required' => JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_' . $name . '_REQUIRED')
                     )
                 );
 
                 switch ($name) {
                     case 'address1':
                         if (!in_array('address2', $required)) {
-                            $label = 'COM_SIMPLERENEW_BILLING_STREET';
+                            $label                        = 'COM_SIMPLERENEW_BILLING_STREET';
+                            $attribs['data-msg-required'] = JText::_(
+                                'COM_SIMPLERENEW_VALIDATE_BILLING_STREET_REQUIRED'
+                            );
                         }
                         $field = '<input ' . JArrayHelper::toString($attribs) . '/>';
                         break;
@@ -70,7 +74,7 @@ abstract class SimplerenewRender
 
     public static function addressDisplay(Address $address)
     {
-        $fields = array();
+        $fields   = array();
         $required = self::addressRequired();
         foreach ($required as $name) {
             if (isset($address->$name)) {
