@@ -10,10 +10,32 @@ defined('_JEXEC') or die();
 
 class SimplerenewControllerJson extends JControllerLegacy
 {
+    /**
+     * Standard token checking for json controllers
+     *
+     * @return void
+     * @throws Exception
+     */
     protected function checkToken()
     {
         if (!JSession::checkToken()) {
             throw new Exception(JText::_('JINVALID_TOKEN'));
         }
+    }
+
+    /**
+     * Return a standard JSON error message
+     *
+     * @param $message
+     *
+     * @return void
+     */
+    protected function returnError($message)
+    {
+        echo json_encode(
+            array(
+                'error' => $message
+            )
+        );
     }
 }
