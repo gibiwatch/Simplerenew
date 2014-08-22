@@ -129,6 +129,22 @@
     -o-box-shadow: none;
 }
 
+.ost-container input[type="text"]:focus,
+.ost-container input[type="email"]:focus,
+.ost-container input[type="password"]:focus,
+.ost-container textarea:focus,
+.ost-container select:focus, 
+.ost-container input:focus:invalid:focus, 
+.ost-container textarea:focus:invalid:focus, 
+.ost-container select:focus:invalid:focus{
+    color: #444444;
+    border: none;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    -o-box-shadow: none;
+}
+
 .ost-container select {
     height: 38px;
 }
@@ -229,6 +245,29 @@
     color:#ffffff;
 }
 
+/* Validation form
+ ========================================================================== */
+.ost-container input.ost_error, 
+.ost-container textarea.ost_error, 
+.ost-container select.ost_error{
+    border-color: #ff0000;
+}
+.ost-container input.ost_valid, 
+.ost-container textarea.ost_valid, 
+.ost-container select.ost_valid{
+    border-color: #8cc14c;
+}
+.ost-container label.ost_error{
+    background: #ff0000;
+    color: #ffffff;
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: -21px;
+    padding: 1px 5px;
+    position: absolute;
+}  
+
 /* Help classes
  ========================================================================== */
 div.ost-alert-warning{
@@ -295,7 +334,7 @@ span.simplerenew-plan.plan-selected{
 #billing_cc_cvv,
 #billing_cc_year,
 #billing_cc_month {
-    margin-bottom: 4px;
+    
 }
 
 .ost-alert-notify.m-bottom{
