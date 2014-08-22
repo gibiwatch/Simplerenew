@@ -28,7 +28,8 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
                     name="billing[firstname]"
                     type="text"
                     value="<?php echo $this->billing->firstname; ?>"
-                    required="true"/>
+                    required="true"
+                    data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_FIRSTNAME_REQUIRED'); ?>"/>
             </div>
             <div class="block6">
                 <label for="billing_lastname"><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
@@ -37,7 +38,8 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
                     name="billing[lastname]"
                     type="text"
                     value="<?php echo $this->billing->lastname; ?>"
-                    required="true"/>
+                    required="true"
+                    data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_LASTNAME_REQUIRED'); ?>"/>
             </div>
         </div>
         <!-- /.ost-section -->
@@ -57,7 +59,8 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
                     name="billing[cc][number]"
                     type="text"
                     value=""
-                    placeholder="<?php echo JHtml::_('creditcard.mask', $creditCard->lastFour); ?>"/>
+                    placeholder="<?php echo JHtml::_('creditcard.mask', $creditCard->lastFour); ?>"
+                    data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_CC_NUMBER_REQUIRED'); ?>"/>
             </div>
             <div class="block2">
                 <label for="billing_cc_cvv">
@@ -73,7 +76,8 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
                     name="billing[cc][cvv]"
                     type="text"
                     value=""
-                    class="small-width"/>
+                    class="small-width"
+                    data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_CC_CVV_REQUIRED'); ?>"/>
             </div>
             <div class="block4">
                 <label><?php echo JText::_('COM_SIMPLERENEW_CC_EXPIRATION'); ?></label>
