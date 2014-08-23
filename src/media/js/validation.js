@@ -1,4 +1,31 @@
 (function ($) {
+    $.fn.serializeObject = function() {
+        var result = {};
+        $(this.serializeArray()).each(function(idx, obj) {
+            if (obj.name) {
+                result[obj.name] = obj.value;
+            }
+        });
+        return result;
+    };
+
+    $.fn.ajaxSubmit = function(data) {
+        data = $.extend(this.serializeObject(), data);
+        $.ajax({
+            url: 'index.php',
+            type: 'post',
+            async: false,
+            data: data,
+            error: function(request, status, error) {
+                alert(request.status + ': ' + error);
+            },
+            success: function(data, status, request) {
+                console.log(data, 'done');
+            }
+        });
+        console.log('next step?');
+    };
+
     $.Simplerenew = $.extend({}, $.Simplerenew, {
         validate: {
             options: {
@@ -42,7 +69,27 @@
                         form.find('span#token input[type=hidden]')
                     );
 
-                    options = $.extend(this.options, {rules: rules}, options);
+                    options = $.extend(
+                        this.options,
+                        {
+                            rules: rules,
+                            submitHandler: function(form) {
+                                var method = $(form).find('input[name=payment_method]:enabled');
+
+                                if (method.val() != 'cc') {
+                                    // non Credit Card billing
+                                    form.submit();
+                                } else {
+                                    // Credit Card billing requires special handling
+                                    $(form).ajaxSubmit({
+                                        task: 'subscribe.account',
+                                        format: 'json'
+                                    });
+                                }
+                            }
+                        },
+                        options
+                    );
                     form.validate(options);
                 }
             }

@@ -19,23 +19,7 @@ class SimplerenewControllerJson extends JControllerLegacy
     protected function checkToken()
     {
         if (!JSession::checkToken()) {
-            throw new Exception(JText::_('JINVALID_TOKEN'));
+            throw new Exception(JText::_('JINVALID_TOKEN'), 403);
         }
-    }
-
-    /**
-     * Return a standard JSON error message
-     *
-     * @param $message
-     *
-     * @return void
-     */
-    protected function returnError($message)
-    {
-        echo json_encode(
-            array(
-                'error' => $message
-            )
-        );
     }
 }
