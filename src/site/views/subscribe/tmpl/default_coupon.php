@@ -25,7 +25,7 @@ $couponCode = $state->get('coupon.default');
         <div class="ost-alert-notify">
             
             <div class="coupon-toggle" data-content="#coupon-area">
-                <p><?php echo JText::_('COM_SIMPLERENEW_COUPON_CODE_ASK'); ?></p>
+                <?php echo JText::_('COM_SIMPLERENEW_COUPON_CODE_ASK'); ?>
             </div>
 
             <div id="coupon-area">
