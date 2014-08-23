@@ -199,23 +199,36 @@ class Notify extends Object
     }
 
     /**
-     * Utility function to allow adapters to check IP addresses
-     * against CIDR formatted IP ranges
+     * Utility function testing for allowable IP addresses
      *
-     * @param $ip
-     * @param $range
+     * @param string       $ip      The target IP to test
+     * @param array|string $allowed IP addresses or CIDRs
      *
      * @return bool
      */
-    public function cidrMatch($ip, $range)
+    public function IPAllowed($ip, $allowed)
     {
-        list ($subNet, $bits) = explode('/', $range);
-        $ip     = ip2long($ip);
-        $subNet = ip2long($subNet);
-        $mask   = -1 << (32 - $bits);
+        $allowed = (array)$allowed;
+        $ipLong  = ip2long($ip);
 
-        $subNet &= $mask; # nb: in case the supplied subnet wasn't correctly aligned
+        foreach ($allowed as $range) {
+            if (strpos($range, '/')) {
+                // CIDR test
+                list ($subNet, $bits) = explode('/', $range);
+                $subNet = ip2long($subNet);
+                $mask   = -1 << (32 - $bits);
 
-        return ($ip & $mask) == $subNet;
+                $subNet &= $mask; # nb: in case the supplied subnet wasn't correctly aligned
+                if (($ipLong & $mask) == $subNet) {
+                    return true;
+                }
+            } else {
+                // Single IP
+                if ($ip == $range) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

@@ -17,7 +17,12 @@ defined('_JEXEC') or die();
 
 class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
 {
-    protected $validIpAddresses = '75.98.92.96/28';
+    protected $validIpAddresses = array(
+        '75.98.92.96/28',  // < 2014-09-10
+        '74.201.212.0/24',
+        '64.74.141.0/24',
+        '75.98.92.96/28'
+    );
 
     protected $fieldMap = array(
         'type'   => array(
@@ -79,7 +84,7 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
     public function loadPackage(Notify $parent, $package)
     {
         $ip = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
-        if (!$parent->cidrMatch($ip, $this->validIpAddresses)) {
+        if (!$parent->IPAllowed($ip, $this->validIpAddresses)) {
             throw new Exception('Notice came from unrecognized IP - ' . $ip);
         }
 
