@@ -14,11 +14,16 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
     {
         $this->checkToken();
 
+        $user = SimplerenewFactory::getUser();
         if ($username = SimplerenewFactory::getApplication()->input->getUsername('username')) {
             $db = SimplerenewFactory::getDbo();
 
             $db->setQuery('Select id From #__users Where username=' . $db->quote($username));
-            $id = $db->loadColumn();
+            $id = $db->loadResult();
+            if ($id && $id == $user->id) {
+                // Current user requested, so we're cool
+                $id = 0;
+            }
         }
 
         echo json_encode(empty($id));
@@ -28,11 +33,15 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
     {
         $this->checkToken();
 
+        $user = SimplerenewFactory::getUser();
         if ($email = SimplerenewFactory::getApplication()->input->getString('email')) {
             $db = SimplerenewFactory::getDbo();
 
             $db->setQuery('Select id From #__users Where email=' . $db->quote($email));
-            $id = $db->loadColumn();
+            $id = $db->loadResult();
+            if ($id && $id == $user->id) {
+                $id = 0;
+            }
         }
 
         echo json_encode(empty($id));
