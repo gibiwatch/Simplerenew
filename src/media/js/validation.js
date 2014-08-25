@@ -1,7 +1,7 @@
 (function ($) {
-    $.fn.serializeObject = function() {
+    $.fn.serializeObject = function () {
         var result = {};
-        $(this.serializeArray()).each(function(idx, obj) {
+        $(this.serializeArray()).each(function (idx, obj) {
             if (obj.name) {
                 result[obj.name] = obj.value;
             }
@@ -9,18 +9,19 @@
         return result;
     };
 
-    $.fn.ajaxSubmit = function(data) {
-        data = $.extend(this.serializeObject(), data);
+    $.fn.ajaxSubmit = function (data) {
+        data = $.extend($(this).serializeObject(), data);
         $.ajax({
             url: 'index.php',
             type: 'post',
             async: false,
             data: data,
-            error: function(request, status, error) {
+            error: function (request, status, error) {
                 alert(request.status + ': ' + error);
             },
-            success: function(data, status, request) {
-                console.log(data, 'done');
+            success: function (result, status, request) {
+                console.log(data);
+                console.log(result);
             }
         });
         console.log('next step?');
@@ -29,8 +30,9 @@
     $.Simplerenew = $.extend({}, $.Simplerenew, {
         validate: {
             options: {
-                errorClass: 'ost_error',
-                validClass: 'ost_valid'
+                debug      : true,
+                errorClass : 'ost_error',
+                validClass : 'ost_valid'
             },
 
             rules: {
@@ -61,19 +63,11 @@
 
             subscribe: function (selector, options) {
                 var form = $(selector);
-
                 if (form) {
-                    var rules = applyRules(
-                        form,
-                        this.rules,
-                        form.find('span#token input[type=hidden]')
-                    );
-
                     options = $.extend(
                         this.options,
                         {
-                            rules: rules,
-                            submitHandler: function(form) {
+                            submitHandler: function (form) {
                                 var method = $(form).find('input[name=payment_method]:enabled');
 
                                 if (method.val() != 'cc') {
@@ -81,22 +75,21 @@
                                     form.submit();
                                 } else {
                                     // Credit Card billing requires special handling
-                                    $(form).ajaxSubmit({
-                                        task: 'subscribe.account',
-                                        format: 'json'
-                                    });
+                                    $(form).ajaxSubmit();
                                 }
                             }
                         },
                         options
                     );
                     form.validate(options);
+
+                    applyRules(form, this.rules, form.find('span#token input[type=hidden]'));
                 }
             }
         }
     });
 
-    var applyRules =  function (form, methods, token) {
+    var applyRules = function (form, methods, token) {
         var rules = {};
 
         $.each(methods, function (cls, rule) {
@@ -104,8 +97,8 @@
                 rule.remote.data[token.attr('name')] = token.val();
             }
 
-            $('.' + cls).each(function (idx, el) {
-                rules[el.name] = rule;
+            $('.' + cls + ':not([readonly=true]').each(function (idx, el) {
+                $(el).rules('add', rule);
             });
         });
 

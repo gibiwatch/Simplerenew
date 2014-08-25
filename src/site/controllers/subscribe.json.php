@@ -24,27 +24,8 @@ class SimplerenewControllerSubscribe extends SimplerenewControllerJson
             JText::sprintf(
                 'COM_SIMPLERENEW_ERROR_UNKNOWN_TASK',
                 $this->getTask()
-            ),
-            'error'
+            )
         );
-    }
-
-    /**
-     * Create/update the Joomla user and gateway account
-     */
-    public function account()
-    {
-        $this->checkToken();
-
-        echo json_encode('Here we go');
-    }
-
-    /**
-     * Create/Change subscription plan
-     */
-    public function plan()
-    {
-
     }
 
     /**
@@ -54,25 +35,15 @@ class SimplerenewControllerSubscribe extends SimplerenewControllerJson
     {
         $this->checkToken();
 
-        SimplerenewHelper::saveFormData(
-            'subscribe.create',
-            array(
-                'password',
-                'password2',
-                'billing.cc.number',
-                'billing.cc.cvv'
-            )
-        );
+        $app = SimplerenewFactory::getApplication();
 
-        $app      = SimplerenewFactory::getApplication();
         $planCode = $app->input->getString('planCode');
         if (!$planCode) {
-            $this->callerReturn(
-                JText::_('COM_SIMPLERENEW_ERROR_NOPLAN_SELECTED'),
-                'error'
-            );
-            return;
+            throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_NOPLAN_SELECTED'));
         }
+
+        $user = SimplerenewFactory::getUser()->getProperties();
+        throw new Exception(JArrayHelper::toString($user));
 
         $model = $this->getGatewayModel();
 
