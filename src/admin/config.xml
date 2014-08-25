@@ -76,7 +76,15 @@
                     name="testApikey"
                     label="COM_SIMPLERENEW_CONFIG_RECURLY_APIKEY_LABEL"
                     description="COM_SIMPLERENEW_CONFIG_RECURLY_APIKEY_DESC"
-                    type="text"/>
+                    type="text"
+                    size="50"/>
+
+                <field
+                    name="testPublickey"
+                    label="COM_SIMPLERENEW_CONFIG_RECURLY_PUBLICKEY_LABEL"
+                    description="COM_SIMPLERENEW_CONFIG_RECURLY_PUBLICKEY_DESC"
+                    type="text"
+                    size="50"/>
 
                 <field
                     name="testSubdomain"
@@ -94,7 +102,15 @@
                     name="liveApikey"
                     label="COM_SIMPLERENEW_CONFIG_RECURLY_APIKEY_LABEL"
                     description="COM_SIMPLERENEW_CONFIG_RECURLY_APIKEY_DESC"
-                    type="text"/>
+                    type="text"
+                    size="50"/>
+
+                <field
+                    name="livePublickey"
+                    label="COM_SIMPLERENEW_CONFIG_RECURLY_PUBLICKEY_LABEL"
+                    description="COM_SIMPLERENEW_CONFIG_RECURLY_PUBLICKEY_DESC"
+                    type="text"
+                    size="50"/>
 
                 <field
                     name="liveSubdomain"
