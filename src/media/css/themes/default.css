@@ -147,20 +147,20 @@
 
 .ost-container input.small-width,
 .ost-container textarea.small-width {
-    width: 50px;
+    width: 55px;
 }
 
 .ost-container select.small-width {
-    width: 80px;
+    width: 90px;
 }
 
 .ost-container input.medium-width,
 .ost-container textarea.medium-width {
-    width: 110px;
+    width: 130px;
 }
 
 .ost-container select.medium-width {
-    width: 115px;
+    width: 140px;
 }
 
 .ost-container input[type="radio"] {
