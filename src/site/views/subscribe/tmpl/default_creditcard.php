@@ -47,7 +47,7 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
         <?php echo $this->loadTemplate('address'); ?>
 
         <div class="ost-section">
-            <div class="block6">
+            <div class="block5">
                 <label><?php echo JText::_('COM_SIMPLERENEW_CC_NUMBER'); ?></label>
                 <input
                     <?php
@@ -79,7 +79,7 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
                     class="small-width"
                     data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_CC_CVV_REQUIRED'); ?>"/>
             </div>
-            <div class="block4">
+            <div class="block5">
                 <label><?php echo JText::_('COM_SIMPLERENEW_CC_EXPIRATION'); ?></label>
                 <?php
                 echo JHtml::_(
