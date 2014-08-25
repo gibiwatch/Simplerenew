@@ -245,6 +245,10 @@
     color:#ffffff;
 }
 
+.ost-container #coupon_code{
+    margin-bottom:0;
+}
+
 /* Validation form
  ========================================================================== */
 .ost-container input.ost_error, 
