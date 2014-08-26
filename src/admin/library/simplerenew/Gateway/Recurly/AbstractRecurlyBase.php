@@ -28,27 +28,17 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
      */
     protected $currency = 'USD';
 
-    /**
-     * @var string
-     */
-    protected $transparentUrl = 'https://api.recurly.com/transparent/';
+    protected $mode = null;
 
     public function __construct(Configuration $config = null)
     {
         parent::__construct($config);
 
         // Initialise the native Recurly API
-        $mode = $this->gatewayConfig->get('mode', 'test');
-
-        if ($apiKey = $this->gatewayConfig->get($mode.'Apikey')) {
+        if ($apiKey = $this->getCache('Apikey')) {
             $this->client = new \Recurly_Client($apiKey);
         }
-
-        if ($subDomain = $this->gatewayConfig->get($mode . 'Subdomain')) {
-            $this->transparentUrl .= $subDomain;
-        }
-
-        $this->currency = $this->gatewayConfig->get('currency', 'USD');
+        $this->currency = $this->getCfg('currency', 'USD');
     }
 
     /**
@@ -72,11 +62,24 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
     }
 
     /**
-     * @return string
+     * Convenience method for retrieving gateway config items
+     *
+     * @param string $key
+     * @param mixed  $default
+     *
+     * @return mixed
      */
-    public function getTransparentUrl()
+    protected function getCfg($key, $default = null)
     {
-        return $this->transparentUrl;
+        if ($this->mode === null) {
+            $this->mode = $this->gatewayConfig->get('mode', 'test');
+        }
+
+        $key     = strtolower($key);
+        $modeKey = $this->mode . ucfirst($key);
+
+        $default = $this->gatewayConfig->get($key, $default);
+        return $this->gatewayConfig->get($modeKey, $default);
     }
 
     /**
