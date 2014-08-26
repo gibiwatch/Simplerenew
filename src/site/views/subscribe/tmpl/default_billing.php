@@ -62,6 +62,8 @@ endif; ?>
 </div>
 <!-- /.ost-section -->
 
+<input type="hidden" id="billing_token" name="billing[token]" value=""/>
+
 <?php
 if (in_array('cc', $paymentOptions)) {
     echo $this->loadTemplate('creditcard');

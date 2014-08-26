@@ -1,38 +1,25 @@
 (function ($) {
-    $.fn.serializeObject = function () {
-        var result = {};
-        $(this.serializeArray()).each(function (idx, obj) {
-            if (obj.name) {
-                result[obj.name] = obj.value;
-            }
-        });
-        return result;
-    };
+    $.fn.applyRules = function (methods, token) {
+        var rules = {};
+        var form = $(this[0]);
 
-    $.fn.ajaxSubmit = function (data) {
-        data = $.extend($(this).serializeObject(), data);
-        $.ajax({
-            url: 'index.php',
-            type: 'post',
-            async: false,
-            data: data,
-            error: function (request, status, error) {
-                alert(request.status + ': ' + error);
-            },
-            success: function (result, status, request) {
-                console.log(data);
-                console.log(result);
+        $.each(methods, function (cls, rule) {
+            if (rule.remote && token) {
+                rule.remote.data[token.attr('name')] = token.val();
             }
+
+            form.find('.' + cls + ':not([readonly=true])')
+                .each(function (idx, el) {
+                    $(el).rules('add', rule);
+                });
         });
-        console.log('next step?');
     };
 
     $.Simplerenew = $.extend({}, $.Simplerenew, {
         validate: {
             options: {
-                debug      : true,
-                errorClass : 'ost_error',
-                validClass : 'ost_valid'
+                errorClass: 'ost_error',
+                validClass: 'ost_valid'
             },
 
             rules: {
@@ -64,45 +51,27 @@
             subscribe: function (selector, options) {
                 var form = $(selector);
                 if (form) {
-                    options = $.extend(
-                        this.options,
-                        {
-                            submitHandler: function (form) {
-                                var method = $(form).find('input[name=payment_method]:enabled');
+                    if ($.Simplerenew.form.init) {
+                        $.Simplerenew.form.init(form);
+                    }
 
-                                if (method.val() != 'cc') {
-                                    // non Credit Card billing
-                                    form.submit();
-                                } else {
-                                    // Credit Card billing requires special handling
-                                    $(form).ajaxSubmit();
-                                }
+                    options = $.extend(this.options, options, {
+                        submitHandler: function(form) {
+                            if ($.Simplerenew.form.submit) {
+                                $.Simplerenew.form.submit(form);
+                            } else {
+                                form.submit();
                             }
-                        },
-                        options
-                    );
-                    form.validate(options);
+                        }
+                    });
 
-                    applyRules(form, this.rules, form.find('span#token input[type=hidden]'));
+                    form.validate(options);
+                    form.applyRules(
+                        this.rules,
+                        form.find('span#token input[type=hidden]')
+                    );
                 }
             }
         }
     });
-
-    var applyRules = function (form, methods, token) {
-        var rules = {};
-
-        $.each(methods, function (cls, rule) {
-            if (rule.remote && token) {
-                rule.remote.data[token.attr('name')] = token.val();
-            }
-
-            $('.' + cls + ':not([readonly=true]').each(function (idx, el) {
-                $(el).rules('add', rule);
-            });
-        });
-
-        return rules;
-    };
-
 })(jQuery);

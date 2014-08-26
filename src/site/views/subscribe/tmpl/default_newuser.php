@@ -52,9 +52,4 @@ defined('_JEXEC') or die();
 <input
     type="hidden"
     name="task"
-    value="subscribe.create"/>
-
-<input
-    type="hidden"
-    name="format"
-    value="json"/>
+    value="subscription.create"/>
