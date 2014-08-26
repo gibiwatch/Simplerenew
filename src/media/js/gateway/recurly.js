@@ -27,11 +27,23 @@
 
         submit: function(form) {
             var method = $(form).find('input[name=payment_method]:enabled').val();
-            var billing_token = document.getElementById('billing_token');
+            var billing_token = $(form).find('#billing_token');
 
-            billing_token.value = '';
+            billing_token.val('');
             switch (method) {
+                case 'pp':
+                    recurly.paypal({description: 'This is my test'}, function(err, token) {
+                        if (err) {
+                            alert(err.message);
+                        } else {
+                            billing_token.val(token.id);
+                            form.submit();
+                        }
+                    });
+                    break;
+
                 case 'cc':
+                default:
                     var number = $(form).find('#billing_cc_number').val();
 
                     if (number) {
@@ -39,29 +51,13 @@
                             if (err) {
                                 alert(err.message);
                             } else {
-                                billing_token.value = token.id;
+                                billing_token.val(token.id);
                                 form.submit();
                             }
                         });
                     } else {
-                        billing_token.value = '';
                         form.submit();
                     }
-                    break;
-
-                case 'pp':
-                    recurly.paypal({description: 'This is my test'}, function(err, token) {
-                        if (err) {
-                            alert(err.message);
-                        } else {
-                            billing_token.value = token.id;
-                            form.submit();
-                        }
-                    });
-                    break;
-
-                default:
-                    alert('unsupported payment method - ' + method);
                     break;
             }
         }
