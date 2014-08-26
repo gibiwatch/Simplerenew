@@ -33,7 +33,6 @@ class SimplerenewControllerAccount extends SimplerenewControllerBase
         }
 
         $container = SimplerenewFactory::getContainer();
-
         try {
             // Update User
             $user     = $container->getUser();
@@ -42,7 +41,8 @@ class SimplerenewControllerAccount extends SimplerenewControllerBase
             $user->update();
 
             // Update Subscription account
-            $account = $container->getAccount();
+            $account      = $container->getAccount();
+            $billingToken = $data->get('billing.token');
             try {
                 $account
                     ->load($user)
@@ -51,7 +51,7 @@ class SimplerenewControllerAccount extends SimplerenewControllerBase
 
             } catch (NotFound $e) {
                 // Create an account only if they supplied a credit card
-                if ($data->get('billing.cc.number')) {
+                if ($billingToken) {
                     $account
                         ->setUser($user)
                         ->setProperties($data->toArray())
@@ -63,7 +63,7 @@ class SimplerenewControllerAccount extends SimplerenewControllerBase
             if ($account->status === Account::STATUS_ACTIVE) {
                 $container->getBilling()->setAccount($account)
                     ->setProperties($data->get('billing'))
-                    ->save();
+                    ->save($billingToken);
             }
 
         } catch (Exception $e) {

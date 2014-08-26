@@ -16,7 +16,10 @@ defined('_JEXEC') or die();
  * @var Payment\CreditCard     $creditCard
  */
 
+JHtml::_('sr.validation.billing');
+
 $billing = $this->billing;
+
 if (!$billing) {
     $billing = (object)array(
         'firstname' => null,
@@ -82,7 +85,6 @@ endif; ?>
                 <label><?php echo JText::_('COM_SIMPLERENEW_CC_NUMBER'); ?></label>
                 <input
                     id="billing_cc_number"
-                    name="billing[cc][number]"
                     type="text"
                     value=""
                     placeholder="<?php echo JHtml::_('creditcard.mask', $creditCard->lastFour); ?>"/>
@@ -91,7 +93,6 @@ endif; ?>
                 <label><?php echo JText::_('COM_SIMPLERENEW_CC_CVV'); ?></label>
                 <input
                     id="billing_cc_cvv"
-                    name="billing[cc][cvv]"
                     type="text"
                     value=""
                     class="small-width"/>
@@ -119,3 +120,5 @@ endif; ?>
         <!-- /.ost-section -->
     </div>
 </div>
+
+<input type="hidden" name="billing[token]" id="billing_token" value=""/>

@@ -13,6 +13,7 @@ defined('_JEXEC') or die();
  */
 $app = SimplerenewFactory::getApplication();
 
+JHtml::_('sr.validation.init', '#accountForm');
 ?>
 <div class="ost-container simplerenew-edit-account">
 
@@ -50,11 +51,13 @@ $app = SimplerenewFactory::getApplication();
             value="account.save"/>
 
         <button type="submit" class="btn-main btn-big">
-            <i class="fa fa-check"></i> 
+            <i class="fa fa-check"></i>
             <?php echo JText::_('COM_SIMPLERENEW_SAVE'); ?>
         </button>
-        
-        <?php echo JHtml::_('form.token'); ?>
+
+        <span id="token">
+            <?php echo JHtml::_('form.token'); ?>
+        </span>
     </form>
 
 </div>

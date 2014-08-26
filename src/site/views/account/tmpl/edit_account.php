@@ -53,9 +53,10 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
         <input
             id="email"
             name="email"
-            type="text"
+            type="email"
             value="<?php echo $this->user->email; ?>"
-            required=""/>
+            required="true"
+            class="unique_email"/>
     </div>
 </div>
 <div class="ost-section p-bottom b-bottom">
