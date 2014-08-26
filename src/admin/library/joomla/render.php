@@ -17,7 +17,7 @@ defined('_JEXEC') or die();
  */
 abstract class SimplerenewRender
 {
-    public static function addressEdit($prefix, Address $address, $attribs = array())
+    public static function addressEdit($prefix, Address $address, $attribs = array(), $suppressRequired = false)
     {
         $fields = array();
         if ($required = self::addressRequired()) {
@@ -31,16 +31,18 @@ abstract class SimplerenewRender
                 $label = 'COM_SIMPLERENEW_BILLING_' . $name;
 
                 $attribs = array_merge(
-                    $attribs,
+                    (array)$attribs,
                     array(
                         'id'                => $id,
                         'name'              => $prefix . '[' . $name . ']',
                         'type'              => 'text',
                         'value'             => $address->$name,
-                        'required'          => 'true',
                         'data-msg-required' => JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_' . $name . '_REQUIRED')
                     )
                 );
+                if (!$suppressRequired) {
+                    $attribs['required'] = 'true';
+                }
 
                 switch ($name) {
                     case 'address1':
