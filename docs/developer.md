@@ -54,3 +54,15 @@ also require template overrides for all Simplerenew views.
     + Adding a new .css file in the themes folder will automatically appear in the dropdown selector
     + You must also add a language string for a new theme - COM_SIMPLERENEW_OPTION_STYLESHEET_&lt;name&gt;
     + All css files are loaded using standard Joomla media loading. Templates can therefore employ any matching override files.
+
+PCI Compliance
+==============
+Taking the cue from Recurly. A system for using encrypted Billing Tokens is implemented. Simplerenew is designed to never
+accept either Credit Card Number or CVV number directly in php. The gateway implementations are expected to handle the
+creation and use of tokens generated in javascript directly between the user's browser and the gateway site over a SSL
+connection. This prevents any sensitive financial data from passing through the server on which Simplerenew is running.
+This limits the need for users of this application to go through PCI certification. For further reading:
+
++ [Tokenization Guidelines](https://www.pcisecuritystandards.org/documents/Tokenization_Guidelines_Info_Supplement.pdf)
+by the [PCI Security Standards Council](https://www.pcisecuritystandards.org)
++ Google search on [PCI Tokenization](https://www.google.com/search?q=pci+tokenization)
