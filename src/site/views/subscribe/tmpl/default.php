@@ -14,7 +14,7 @@ defined('_JEXEC') or die();
  * @var SimplerenewViewSubscribe $this ;
  */
 
-JHtml::_('sr.validation.subscribe');
+JHtml::_('sr.validation.init', '#subscribeForm');
 
 $app = SimplerenewFactory::getApplication();
 ?>

@@ -1,6 +1,5 @@
 (function ($) {
     $.fn.applyRules = function (methods, token) {
-        var rules = {};
         var form = $(this[0]);
 
         $.each(methods, function (cls, rule) {
@@ -48,17 +47,24 @@
                 }
             },
 
-            subscribe: function (selector, options) {
+            gateway: {
+                init: null,
+                submit: null
+            },
+
+            init: function (selector, options) {
                 var form = $(selector);
                 if (form) {
-                    if ($.Simplerenew.form && $.Simplerenew.form.init) {
-                        $.Simplerenew.form.init(form);
+                    var gateway = this.gateway;
+
+                    if (typeof gateway.init === 'function') {
+                        gateway.init(form);
                     }
 
                     options = $.extend(this.options, options, {
                         submitHandler: function(form) {
-                            if ($.Simplerenew.form && $.Simplerenew.form.submit) {
-                                $.Simplerenew.form.submit(form);
+                            if (typeof gateway.submit === 'function') {
+                                gateway.submit(form);
                             } else {
                                 form.submit();
                             }

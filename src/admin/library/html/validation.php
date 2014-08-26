@@ -11,22 +11,26 @@ defined('_JEXEC') or die();
 abstract class SrValidation
 {
     /**
-     * Add validation scripts for the subscribe screen
+     * Load js support for jQuery form validation
      *
-     * @return void
+     * @param string $selector
+     *
+     * @return void;
      */
-    public static function subscribe()
+    public static function init($selector)
     {
-        JHtml::_('sr.validation');
+        JHtml::_('sr.jquery');
+
+        JHtml::_('script', 'com_simplerenew/validation/jquery.validate.js', false, true);
+        JHtml::_('script', 'com_simplerenew/validation.js', false, true);
 
         $js = array(
             "jQuery(document).ready(function() {",
-            "   jQuery.Simplerenew.validate.subscribe('#subscribeForm');",
+            "   jQuery.Simplerenew.validate.init('{$selector}');",
             "});"
         );
         SimplerenewFactory::getDocument()
             ->addScriptDeclaration(join("\n", $js));
-
     }
 
     /**

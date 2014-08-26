@@ -1,17 +1,15 @@
 (function($) {
-    $.Simplerenew = $.extend({}, $.Simplerenew);
-    $.Simplerenew.form = $.extend({}, $.Simplerenew.form, {
-        options: {},
+    $.Simplerenew.validate.gateway = $.extend({}, $.Simplerenew.validate.gateway, {
+        options: {
+            key: null
+        },
 
-        init: function(form, options) {
-            options = $.extend(this.options, options);
-
-            if (!options.publicKey) {
+        init: function(form) {
+            if (!this.options.key) {
                 alert('System error: No public key defined');
                 return;
             }
-
-            recurly.configure(options.publicKey);
+            recurly.configure(this.options.key);
 
             $(document.getElementById('billing_cc_number')).attr('data-recurly', 'number');
             $(document.getElementById('billing_cc_month')).attr('data-recurly', 'month');
@@ -59,7 +57,7 @@
                             billing_token.value = token.id;
                             form.submit();
                         }
-                    })
+                    });
                     break;
 
                 default:
