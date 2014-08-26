@@ -35,7 +35,7 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
         parent::__construct($config);
 
         // Initialise the native Recurly API
-        if ($apiKey = $this->getCache('Apikey')) {
+        if ($apiKey = $this->getCfg('Apikey')) {
             $this->client = new \Recurly_Client($apiKey);
         }
         $this->currency = $this->getCfg('currency', 'USD');
