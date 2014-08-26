@@ -86,6 +86,25 @@ class Billing extends AbstractApiBase
     }
 
     /**
+     * Get the javascript assets needed for processing
+     * sensitive financial data on a web form.
+     *
+     * If values in returned array begin with:
+     *
+     * http : treated as external script
+     * /    : treated as local script
+     *
+     * Anything else will be added as an inline script
+     *
+     *
+     * @return array
+     */
+    public function getJSAssets()
+    {
+        return $this->imp->getJSAssets();
+    }
+
+    /**
      * @param Account $account
      *
      * @return Billing
@@ -103,33 +122,43 @@ class Billing extends AbstractApiBase
     }
 
     /**
-     * Save the current billing information.
+     * Save billing information. Data can either be currently
+     * set property values or using a gateway token.
+     *
+     * Since this class handles sensitive financial information
+     * (like credit card numbers and cvv), we accommodate the use
+     * of gateway generated tokens to limit the need for
+     * PCI certification by users of this application.
+     *
+     * @param string $token
      *
      * @return Billing
      * @throws Exception
      */
-    public function save()
+    public function save($token = null)
     {
         if (!$this->account || empty($this->account->code)) {
             throw new Exception('No account specified for Billing Info');
         }
 
-        $this->setProperties(
-            array(
-                'firstname' => $this->firstname ? : $this->account->firstname,
-                'lastname'  => $this->lastname  ? : $this->account->lastname,
-                'ipaddress' => filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP)
-            )
-        );
+        if (!$token) {
+            $this->setProperties(
+                array(
+                    'firstname' => $this->firstname ? : $this->account->firstname,
+                    'lastname'  => $this->lastname  ? : $this->account->lastname,
+                    'ipaddress' => filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP)
+                )
+            );
 
-        // Copy account address if billing address is empty
-        if (!array_filter($this->address->getProperties())) {
-            $address = $this->account->address->getProperties();
-            $this->address->setProperties($address);
+            // Copy account address if billing address is empty
+            if (!array_filter($this->address->getProperties())) {
+                $address = $this->account->address->getProperties();
+                $this->address->setProperties($address);
+            }
         }
 
         try {
-            $this->imp->save($this);
+            $this->imp->save($this, $token);
             $this->imp->load($this);
 
         } catch (NotFound $e) {

@@ -31,6 +31,11 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
         'agreementId' => 'paypal_billing_agreement_id'
     );
 
+    protected $jsScripts = array(
+        'https://js.recurly.com/v3/recurly.js',
+        '/recurly.js'
+    );
+
     /**
      * @param Billing $parent
      *
@@ -51,49 +56,56 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
 
     /**
      * @param Billing $parent
+     * @param string  $token
      *
      * @return void
      * @throws Exception
      */
-    public function save(Billing $parent)
+    public function save(Billing $parent, $token = null)
     {
         $accountCode = $parent->account->code;
 
-        /** @var CreditCard $cc */
-        if ($parent->payment instanceof CreditCard) {
-            $cc = $parent->payment;
-        }
-
-        try {
-            $billing = $this->getBilling($accountCode);
-
-        } catch (NotFound $e) {
-            // Let's see if we have what it takes to create
-            if (empty($cc) || empty($cc->number)) {
-                return;
+        if ($token) {
+            $billing = new \Recurly_BillingInfo(null, $this->client);
+            $billing->account_code = $accountCode;
+            $billing->token_id = $token;
+        } else {
+            /** @var CreditCard $cc */
+            if ($parent->payment instanceof CreditCard) {
+                $cc = $parent->payment;
             }
 
-            $billing               = new \Recurly_BillingInfo(null, $this->client);
-            $billing->account_code = $accountCode;
-        }
+            try {
+                $billing = $this->getBilling($accountCode);
 
-        $billing->first_name = $parent->firstname;
-        $billing->last_name  = $parent->lastname;
-        $billing->phone      = $parent->phone;
-        $billing->ip_address = $parent->ipaddress;
+            } catch (NotFound $e) {
+                // Let's see if we have what it takes to create
+                if (empty($cc) || empty($cc->number)) {
+                    return;
+                }
 
-        $billing->address1 = $parent->address->address1;
-        $billing->address2 = $parent->address->address2;
-        $billing->city     = $parent->address->city;
-        $billing->state    = $parent->address->region;
-        $billing->country  = $parent->address->country;
-        $billing->zip      = $parent->address->postal;
+                $billing               = new \Recurly_BillingInfo(null, $this->client);
+                $billing->account_code = $accountCode;
+            }
 
-        if ($cc) {
-            $billing->number             = $cc->number;
-            $billing->verification_value = $cc->cvv;
-            $billing->month              = $cc->month;
-            $billing->year               = $cc->year;
+            $billing->first_name = $parent->firstname;
+            $billing->last_name  = $parent->lastname;
+            $billing->phone      = $parent->phone;
+            $billing->ip_address = $parent->ipaddress;
+
+            $billing->address1 = $parent->address->address1;
+            $billing->address2 = $parent->address->address2;
+            $billing->city     = $parent->address->city;
+            $billing->state    = $parent->address->region;
+            $billing->country  = $parent->address->country;
+            $billing->zip      = $parent->address->postal;
+
+            if ($cc) {
+                $billing->number             = $cc->number;
+                $billing->verification_value = $cc->cvv;
+                $billing->month              = $cc->month;
+                $billing->year               = $cc->year;
+            }
         }
 
         try {
@@ -167,8 +179,8 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
             ->setProperties($data, $this->fieldMap);
 
         $ppAgreement = $this->getKeyValue($data, 'paypal_billing_agreement_id');
-        $firstSix = $this->getKeyValue($data, 'first_six');
-        $lastFour = $this->getKeyValue($data, 'last_four');
+        $firstSix    = $this->getKeyValue($data, 'first_six');
+        $lastFour    = $this->getKeyValue($data, 'last_four');
 
         if ($ppAgreement) {
             $payment = new PayPal();
@@ -183,5 +195,30 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
         }
 
         $parent->setPayment($payment);
+    }
+
+    /**
+     * Get the javascript assets needed for processing
+     * sensitive financial data on a web form.
+     *
+     * If values in returned array begin with:
+     *
+     * http : treated as external script
+     * /    : treated as local script
+     *
+     * Anything else will be added as an inline script
+     *
+     * @return array
+     */
+    public function getJSAssets()
+    {
+        $js = $this->jsScripts;
+
+        $key = $this->getCfg('Publickey');
+        $js[] = "jQuery.Simplerenew.form.options"
+            . " = jQuery.extend({},"
+            . " jQuery.Simplerenew.form.options,"
+            . " {publicKey: '{$key}'});";
+        return $js;
     }
 }

@@ -135,11 +135,13 @@ class SimplerenewModelGateway extends SimplerenewModelSite
             // this is not a problem here
         }
 
-        // Save changes only when Credit Card Number has been entered
-        if (!empty($data['cc']['number'])) {
+        // Always check for billing token
+        $token = empty($data['token']) ? null : $data['token'];
+        if (!$token) {
+            // If no token, attempt a non-token update
             $billing->setProperties($data);
-            $billing->save();
         }
+        $billing->save($token);
 
         return $billing;
     }
@@ -181,6 +183,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
             'password'  => $app->input->getString('password'),
             'password2' => $app->input->getString('password2'),
             'billing'   => array(
+                'token'     => $billingData->getString('token'),
                 'firstname' => $billingData->getString('firstname'),
                 'lastname'  => $billingData->getString('lastname'),
                 'phone'     => $billingData->getString('phone'),

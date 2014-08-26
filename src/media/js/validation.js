@@ -51,13 +51,13 @@
             subscribe: function (selector, options) {
                 var form = $(selector);
                 if (form) {
-                    if ($.Simplerenew.form.init) {
+                    if ($.Simplerenew.form && $.Simplerenew.form.init) {
                         $.Simplerenew.form.init(form);
                     }
 
                     options = $.extend(this.options, options, {
                         submitHandler: function(form) {
-                            if ($.Simplerenew.form.submit) {
+                            if ($.Simplerenew.form && $.Simplerenew.form.submit) {
                                 $.Simplerenew.form.submit(form);
                             } else {
                                 form.submit();

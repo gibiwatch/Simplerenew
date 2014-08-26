@@ -77,22 +77,9 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             return;
         }
 
-        // Create the subscription based on payment type
         try {
-            $method = $app->input->getCmd('payment_method');
-            switch ($method) {
-                case 'pp':
-                    throw new Exception('Payment via PayPal is not yet implemented');
-                    break;
+            $this->subscribeByToken($account);
 
-                case 'cc':
-                    $this->subscribeByCreditCard($account);
-                    break;
-
-                default:
-                    throw new Exception(JText::sprintf('COM_SIMPLERENEW_ERROR_UNKNOWN_PAYMENT_METHOD', $method));
-                    break;
-            }
         } catch (Exception $e) {
             $this->callerReturn($e->getMessage(), 'error');
             return;
@@ -169,14 +156,14 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
     }
 
     /**
-     * Subscribe a new member using CC info in input stream
+     * Subscribe a new member using Billing Token in input stream
      *
      * @param Account $account
      *
      * @return void
      * @throws Exception
      */
-    protected function subscribeByCreditCard(Account $account)
+    protected function subscribeByToken(Account $account)
     {
         $app   = SimplerenewFactory::getApplication();
         $model = $this->getGatewayModel();

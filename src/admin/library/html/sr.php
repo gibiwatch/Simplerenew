@@ -123,25 +123,14 @@ abstract class JHtmlSr
     /**
      * Load js support for jQuery form validation
      *
-     * @param string $selector
-     *
      * @return void;
      */
-    public static function validation($selector = null)
+    public static function validation()
     {
         static::jquery();
 
         JHtml::_('script', 'com_simplerenew/validation/jquery.validate.js', false, true);
         JHtml::_('script', 'com_simplerenew/validation.js', false, true);
-
-        if ($selector) {
-            $js = array(
-                "jQuery(document).ready(function() {",
-                "   jQuery.Simplerenew.validate.subscribe('{$selector}');",
-                "});"
-            );
-
-            SimplerenewFactory::getDocument()->addScriptDeclaration(join("\n", $js));
-        }
     }
+
 }
