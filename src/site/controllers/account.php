@@ -35,10 +35,10 @@ class SimplerenewControllerAccount extends SimplerenewControllerBase
         $container = SimplerenewFactory::getContainer();
         try {
             // Update User
-            $user     = $container->getUser();
-            $user->id = $userId;
-            $user->setProperties($data->toArray());
-            $user->update();
+            $user = $container->getUser()
+                ->load($userId)
+                ->setProperties($data->toArray())
+                ->update();
 
             // Update Subscription account
             $account      = $container->getAccount();
