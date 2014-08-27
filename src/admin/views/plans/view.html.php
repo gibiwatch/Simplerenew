@@ -61,7 +61,7 @@ class SimplerenewViewPlans extends SimplerenewViewAdmin
         SimplerenewToolbarHelper::editList('plan.edit');
         SimplerenewToolbarHelper::publish('plans.publish', 'JTOOLBAR_PUBLISH', true);
         SimplerenewToolbarHelper::unpublish('plans.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-        SimplerenewToolbarHelper::deleteList('', 'plans.delete');
+        SimplerenewToolbarHelper::deleteList('COM_SIMPLERENEW_PLAN_DELETE_CONFIRM', 'plans.delete');
 
         parent::setToolBar($addDivider);
     }
