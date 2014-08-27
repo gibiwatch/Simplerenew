@@ -283,6 +283,9 @@ class Joomla implements UserInterface
                 if (!$user->save(true)) {
                     throw new Exception('Unable to activate or unblock user for logging in - ' . $user->username);
                 }
+
+                // Update the parent setting
+                $parent->enabled = true;
             }
         }
 
@@ -366,6 +369,8 @@ class Joomla implements UserInterface
             $newGroups[$default] = $default;
         }
 
+        // Let's make sure we have current data
+        $this->load($parent);
         $parent->groups = $newGroups;
         $this->update($parent);
     }
