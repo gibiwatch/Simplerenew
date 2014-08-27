@@ -29,6 +29,7 @@
      * except the one(s) controlled by the active tab.
      *
      * @param options
+     *        selector : A jQuery selector for the tab headers
      */
     $.Simplerenew.tabs = function (options) {
         options = $.extend(this.tabs.options, options);
@@ -62,8 +63,8 @@
      * data-content attribute to select the content
      * panels to slide Up/Down on clicking the control.
      *
-     * @param selector
      * @param options
+     *        selector : a jQuery selector for the slider headers
      *        visible : bool - initial visible state (default: false)
      */
     $.Simplerenew.sliders = function (options) {
