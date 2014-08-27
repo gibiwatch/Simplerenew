@@ -1,0 +1,16 @@
+/* Dashboard
+ ========================================================================== */
+.ost-container .ost-steps{
+    text-align: center;
+}
+.ost-container .ost-connector{
+    display:table-cell;
+    height:100px;
+}
+.ost-container .ost-step{
+    margin-top:15px;
+}
+.ost-container .ost-steps img{
+    position: relative;
+    top: 50%;
+}
