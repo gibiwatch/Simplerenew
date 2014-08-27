@@ -12,6 +12,8 @@ defined('_JEXEC') or die();
  * @var SimplerenewViewSubscribe $this
  */
 
+JHtml::_('sr.clickarea', '.simplerenew-plan');
+
 echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count($this->plans)));
 ?>
 <div class="ost-section">

@@ -85,5 +85,27 @@
         selector : null,
         visible  : false
     };
+
+    /**
+     * Create a clickable area for a radio button or checkbox somewhere inside it
+     *
+     * @param options
+     *        selector : A jQuery selector for the area
+     *        target   : alternative selector for the radio/checkbox(es)
+     */
+    $.Simplerenew.clickArea = function(options) {
+        options = $.extend(this.clickArea.options, options);
+
+        $(options.selector).on('click', function(evt) {
+            var target = $(this).find(options.target);
+            if (target) {
+                target.prop('checked', true);
+            }
+        });
+    };
+    $.Simplerenew.clickArea.options = {
+        selector : null,
+        target   : '[type=radio],[type=checkbox]'
+    };
 })(jQuery);
 
