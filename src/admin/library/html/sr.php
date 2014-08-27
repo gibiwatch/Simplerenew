@@ -85,12 +85,13 @@ abstract class JHtmlSr
         static::jquery();
         JHtml::_('script', 'com_simplerenew/utilities.js', false, true);
 
-        $js = array(
-            "jQuery(document).ready(function () {",
-            "   jQuery.Simplerenew.tabs('{$selector}');",
-            "});"
+        $options = json_encode(
+            array(
+                'selector' => $selector
+            )
         );
-        SimplerenewFactory::getDocument()->addScriptDeclaration(join("\n", $js));
+
+        static::onready("jQuery.Simplerenew.tabs({$options});");
     }
 
     /**
@@ -108,15 +109,24 @@ abstract class JHtmlSr
 
         $options = json_encode(
             array(
-                'visible' => (bool)$visible
+                'selector' => $selector,
+                'visible'  => (bool)$visible
             )
         );
 
-        $js = array(
-            "   jQuery(document).ready(function () {",
-            "      jQuery.Simplerenew.sliders('{$selector}', {$options});",
-            "   });"
-        );
-        SimplerenewFactory::getDocument()->addScriptDeclaration(join("\n", $js));
+        static::onready("jQuery.Simplerenew.sliders({$options});");
+    }
+
+    /**
+     * Add a script to run when dom ready
+     *
+     * @param string $js
+     *
+     * @return void
+     */
+    public static function onready($js)
+    {
+        $js = "jQuery(document).ready(function () { " . $js . " });";
+        SimplerenewFactory::getDocument()->addScriptDeclaration($js);
     }
 }

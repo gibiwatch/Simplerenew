@@ -19,60 +19,70 @@
         }
     });
 
-    $.Simplerenew = $.extend({}, $.Simplerenew, {
-        /**
-         * Simple tabs. Define tab headings with any selector
-         * and include the attribute data-content with a selector
-         * for the content area it controls. All tabs selected by
-         * the passed selector will hide all content panels
-         * except the one(s) controlled by the active tab.
-         *
-         * @param selector
-         */
-        tabs: function (selector) {
-            var headers = $(selector);
-            headers
-                .css('cursor', 'pointer')
-                .each(function (idx, active) {
-                    $(this)
-                        .data('contentPanel', $($(this).attr('data-content')))
-                        .on('click', function (evt) {
-                            headers.each(function (idx) {
-                                $(this)
-                                    .toggleClass('tab-enabled', active === this)
-                                    .data('contentPanel').closePanel(active !== this)
-                            });
-                        });
-                });
+    $.Simplerenew = $.extend({}, $.Simplerenew);
 
-            // Start with first panel active
-            $(headers[0]).trigger('click');
-        },
+    /**
+     * Simple tabs. Define tab headings with any selector
+     * and include the attribute data-content with a selector
+     * for the content area it controls. All tabs selected by
+     * the passed selector will hide all content panels
+     * except the one(s) controlled by the active tab.
+     *
+     * @param options
+     */
+    $.Simplerenew.tabs = function (options) {
+        options = $.extend(this.tabs.options, options);
 
-        /**
-         * Independent sliding panels. Use any selector
-         * to select one or more slide controls. Use the
-         * data-content attribute to select the content
-         * panels to slide Up/Down on clicking the control.
-         *
-         * @param selector
-         * @param options
-         *        visible : bool - initial visible state (default: false)
-         */
-        sliders: function (selector, options) {
-            options = $.extend({'visible': false}, options);
-
-            $(selector).each(function () {
+        var headers = $(options.selector);
+        headers
+            .css('cursor', 'pointer')
+            .each(function (idx, active) {
                 $(this)
-                    .css('cursor', 'pointer')
                     .data('contentPanel', $($(this).attr('data-content')))
                     .on('click', function (evt) {
-                        var contentPanel = $(this).data('contentPanel');
-                        contentPanel.closePanelSlide(contentPanel.is(':visible'));
-                    })
-                    .data('contentPanel').closePanel(!options.visible);
+                        headers.each(function (idx) {
+                            $(this)
+                                .toggleClass('tab-enabled', active === this)
+                                .data('contentPanel').closePanel(active !== this)
+                        });
+                    });
             });
-        }
-    });
+
+        // Start with first panel active
+        $(headers[options.active]).trigger('click');
+    };
+    $.Simplerenew.tabs.options = {
+        selector : null,
+        active   : 0
+    };
+
+    /**
+     * Independent sliding panels. Use any selector
+     * to select one or more slide controls. Use the
+     * data-content attribute to select the content
+     * panels to slide Up/Down on clicking the control.
+     *
+     * @param selector
+     * @param options
+     *        visible : bool - initial visible state (default: false)
+     */
+    $.Simplerenew.sliders = function (options) {
+        options = $.extend(this.sliders.options, options);
+
+        $(options.selector).each(function () {
+            $(this)
+                .css('cursor', 'pointer')
+                .data('contentPanel', $($(this).attr('data-content')))
+                .on('click', function (evt) {
+                    var contentPanel = $(this).data('contentPanel');
+                    contentPanel.closePanelSlide(contentPanel.is(':visible'));
+                })
+                .data('contentPanel').closePanel(!options.visible);
+        });
+    };
+    $.Simplerenew.sliders.options = {
+        selector : null,
+        visible  : false
+    };
 })(jQuery);
 

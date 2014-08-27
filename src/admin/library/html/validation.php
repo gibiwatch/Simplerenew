@@ -24,13 +24,7 @@ abstract class SrValidation
         JHtml::_('script', 'com_simplerenew/validation/jquery.validate.js', false, true);
         JHtml::_('script', 'com_simplerenew/validation.js', false, true);
 
-        $js = array(
-            "jQuery(document).ready(function() {",
-            "   jQuery.Simplerenew.validate.init('{$selector}');",
-            "});"
-        );
-        SimplerenewFactory::getDocument()
-            ->addScriptDeclaration(join("\n", $js));
+        JHtml::_('sr.onready', "jQuery.Simplerenew.validate.init('{$selector}');");
     }
 
     /**
