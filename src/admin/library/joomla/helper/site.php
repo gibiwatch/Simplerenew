@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 
 abstract class SimplerenewHelperSite
 {
-    protected static $awesomeCDN = 'https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css';
+    protected static $awesomeCDN = 'https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css';
 
     protected static $googleFonts = 'https://fonts.googleapis.com';
 
@@ -84,9 +84,6 @@ abstract class SimplerenewHelperSite
                 JHtml::stylesheet(self::$awesomeCDN);
                 break;
         }
-
-        // Load fontello with Paypal icon by separate
-        JHtml::stylesheet('com_simplerenew/fontello/css/fontello.css', null, true);
 
         // Load responsive grids
         JHtml::stylesheet('com_simplerenew/grid.css', null, true);
