@@ -95,13 +95,16 @@
      *        selector : A jQuery selector for the area
      *        target   : alternative selector for the radio/checkbox(es)
      */
-    $.Simplerenew.clickArea = function(options) {
+    $.Simplerenew.clickArea = function (options) {
         options = $.extend(this.clickArea.options, options);
 
-        $(options.selector).on('click', function(evt) {
-            var target = $(this).find(options.target);
-            if (target) {
-                target.prop('checked', true);
+        $(options.selector).on('click', function (evt) {
+            var target = $($(this).find(options.target));
+            target.prop('checked', true);
+
+            // Prevent bubbling to trigger click event
+            if (!$(evt.target).is('input')) {
+                target.trigger('click');
             }
         });
     };
