@@ -120,6 +120,7 @@
                                     errors, message, submitted;
 
                                 validator.settings.messages[ element.name ].coupon = previous.originalMessage;
+                                $('label[id=' + element.id + '-message]').remove();
                                 if (valid) {
                                     submitted = validator.formSubmitted;
                                     validator.prepareElement(element);
@@ -127,6 +128,11 @@
                                     validator.successList.push(element);
                                     delete validator.invalid[ element.name ];
                                     validator.showErrors();
+                                    $(element).after($('<label>', {
+                                        id: element.id + '-message',
+                                        for: element.id,
+                                        class: validator.settings.validClass
+                                    }).html(response.message));
                                 } else {
                                     errors = {};
                                     message = response.error || validator.defaultMessage(element, 'coupon');

@@ -57,7 +57,7 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
 
         $result = array(
             'valid'    => false,
-            'discount' => 0,
+            'message'  => 0,
             'error'    => null
         );
 
@@ -68,7 +68,7 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
             $discount = '$' . number_format($coupon->getDiscount($plan), 2);
 
             $result['valid']    = $coupon->isAvailable($plan);
-            $result['discount'] = JText::sprintf('COM_SIMPLERENEW_COUPON_PLAN_DISCOUNT', $discount);
+            $result['message'] = JText::sprintf('COM_SIMPLERENEW_COUPON_PLAN_DISCOUNT', $discount);
             if (!$result['valid']) {
                 $result['error'] = JText::_('COM_SIMPLERENEW_ERROR_COUPON_UNAVAILABLE');
             }
