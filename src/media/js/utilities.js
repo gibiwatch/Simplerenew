@@ -5,6 +5,7 @@
                 $(this).hide().find(':input').attr('disabled', true);
             } else {
                 $(this).show().find(':input').attr('disabled', false);
+                $(this).find(':input:visible').first().focus();
             }
             return this;
         },
@@ -14,6 +15,7 @@
                 $(this).slideUp().find(':input').attr('disabled', true);
             } else {
                 $(this).slideDown().find(':input').attr('disabled', false);
+                $(this).find(':input:visible').first().focus();
             }
             return this;
         }
