@@ -59,4 +59,44 @@ class Coupon extends AbstractApiBase
 
         return $this;
     }
+
+    /**
+     * Validate the coupon against the selected plan
+     *
+     * @param Plan $plan
+     *
+     * @return bool
+     */
+    public function isAvailable(Plan $plan)
+    {
+        return ($this->status == self::STATUS_ACTIVE
+            && (!$this->plans || in_array($plan->code, $this->plans))
+        );
+    }
+
+    /**
+     * Calculate the discount amount for the selected plan
+     *
+     * @param Plan $plan
+     *
+     * @return float
+     */
+    public function getDiscount(Plan $plan)
+    {
+        $amount = 0;
+
+        if ($this->isAvailable($plan)) {
+            switch ($this->type) {
+                case self::TYPE_AMOUNT:
+                    $amount = $this->amount;
+                    break;
+
+                case self::TYPE_PERCENT:
+                    $amount = $plan->amount * ($this->amount / 100);
+                    break;
+            }
+        }
+
+        return $amount;
+    }
 }
