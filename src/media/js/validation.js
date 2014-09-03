@@ -63,6 +63,14 @@
 
                     form.validate(options);
                     form.applyRules(this.rules);
+
+                    // Back link plan selection to coupons
+                    // @TODO: Find a better way to init coupon method
+                    $('.check_coupon[data-plan]').each(function (idx, coupon) {
+                        $($(this).attr('data-plan')).on('click', function(evt) {
+                            $(coupon).valid();
+                        });
+                    });
                 }
             },
 
@@ -163,10 +171,6 @@
                 },
 
                 check_coupon: 'coupon'
-            },
-
-            request: function (value, el, data) {
-                console.log(data);
             }
         }
     });
