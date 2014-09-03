@@ -23,7 +23,7 @@ $couponCode = $state->get('coupon.default');
 <div class="ost-section">
     <div class="block6 m-top p-bottom b-bottom">
         <div class="ost-alert-notify">
-            
+
             <div class="coupon-toggle" data-content="#coupon-area">
                 <?php echo JText::_('COM_SIMPLERENEW_COUPON_CODE_ASK'); ?>
             </div>
@@ -34,10 +34,11 @@ $couponCode = $state->get('coupon.default');
                         type="text"
                         name="couponCode"
                         id="coupon_code"
-                        value="<?php echo $couponCode; ?>"/>
+                        value="<?php echo $couponCode; ?>"
+                        class="check_coupon"
+                        data-plan=".plan_code input"/>
                 </div>
             </div>
-            
         </div>
     </div>
 </div>

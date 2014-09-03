@@ -46,4 +46,40 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
 
         echo json_encode(empty($id));
     }
+
+    public function coupon()
+    {
+        $app       = SimplerenewFactory::getApplication();
+        $container = SimplerenewFactory::getContainer();
+
+        $couponCode = $app->input->getString('coupon');
+        $planCode   = $app->input->getCmd('plan');
+
+        $result = array(
+            'valid'    => false,
+            'discount' => 0,
+            'error'    => null
+        );
+
+        try {
+            $coupon = $container->getCoupon()->load($couponCode);
+            $plan   = $container->getPlan()->load($planCode);
+
+            $discount = '$' . number_format($coupon->getDiscount($plan), 2);
+
+            $result['valid']    = $coupon->isAvailable($plan);
+            $result['discount'] = JText::sprintf('COM_SIMPLERENEW_COUPON_PLAN_DISCOUNT', $discount);
+            if (!$result['valid']) {
+                $result['error'] = JText::_('COM_SIMPLERENEW_ERROR_COUPON_UNAVAILABLE');
+            }
+
+        } catch (Simplerenew\Exception\NotFound $e) {
+            $result['error'] = JText::_('COM_SIMPLERENEW_ERROR_COUPON_INVALID');
+
+        } catch (Exception $e) {
+            $result['error'] = JText::sprintf('COM_SIMPLERENEW_ERROR_COUPON_LOOKUP', $e->getCode());
+        }
+
+        echo json_encode($result);
+    }
 }
