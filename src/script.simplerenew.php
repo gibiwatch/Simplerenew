@@ -408,6 +408,14 @@ class Com_SimplerenewInstallerScript
 
         $setParams = ($type == 'install');
 
+        if ($type == 'update') {
+            $paramArray = $params->toArray();
+            if (!isset($paramArray['basic']['billingAddress'])) {
+                $params->set('basic.billingAddress', $params->get('account.billingAddress'));
+                $setParams = true;
+            }
+        }
+
         // On initial installation, set some defaults
         if ($setParams) {
             // Set defaults based on config.xml construction

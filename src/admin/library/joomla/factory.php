@@ -37,6 +37,9 @@ abstract class SimplerenewFactory extends JFactory
                 'user'    => array(
                     'adapter' => 'joomla'
                 ),
+                'account' => array(
+                    'billingAddress' => $params->get('basic.billingAddress')
+                ),
                 'gateway' => array(
                     'recurly' => (array)$params->get('gateway.recurly')
                 )
