@@ -67,6 +67,11 @@
                     // Back link plan selection to coupons
                     // @TODO: Find a better way to init coupon method
                     $('.check_coupon[data-plan]').each(function (idx, coupon) {
+                        $(coupon).on('focusout', function (evt) {
+                            if ($(this).val().length == 0) {
+                                $('label[id^=' + this.id + ']').remove();
+                            }
+                        });
                         $($(this).attr('data-plan')).on('click', function(evt) {
                             $(coupon).valid();
                         });
@@ -78,7 +83,7 @@
                 coupon: {
                     method: function (value, element) {
                         if (this.optional(element)) {
-                            return "dependency-mismatch";
+                            return 'dependency-mismatch';
                         }
 
                         var previous = this.previousValue(element),
@@ -115,7 +120,6 @@
                             },
                             context: validator.currentForm,
                             success: function (response) {
-
                                 var valid = response.valid && response.valid === true,
                                     errors, message, submitted;
 
