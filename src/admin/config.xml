@@ -79,12 +79,6 @@
                     size="50"/>
 
                 <field
-                    name="testSubdomain"
-                    label="COM_SIMPLERENEW_CONFIG_RECURLY_SUBDOMAIN_LABEL"
-                    description="COM_SIMPLERENEW_CONFIG_RECURLY_SUBDOMAIN_DESC"
-                    type="text"/>
-
-                <field
                     name="LiveHead"
                     label="COM_SIMPLERENEW_CONFIG_GATEWAY_HEAD_LIVE"
                     type="heading"
@@ -103,12 +97,6 @@
                     description="COM_SIMPLERENEW_CONFIG_RECURLY_PUBLICKEY_DESC"
                     type="text"
                     size="50"/>
-
-                <field
-                    name="liveSubdomain"
-                    label="COM_SIMPLERENEW_CONFIG_RECURLY_SUBDOMAIN_LABEL"
-                    description="COM_SIMPLERENEW_CONFIG_RECURLY_SUBDOMAIN_DESC"
-                    type="text"/>
             </fieldset>
         </fields>
     </fields>
