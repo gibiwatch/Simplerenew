@@ -20,7 +20,12 @@
             options: {
                 errorClass: 'ost_error',
                 validClass: 'ost_valid',
-                onkeyup: false
+                onkeyup: false,
+                rules: {
+                    password2: {
+                        equalTo: '#password'
+                    }
+                }
             },
 
             gateway: {

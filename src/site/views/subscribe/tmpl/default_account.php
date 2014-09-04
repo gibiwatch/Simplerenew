@@ -113,7 +113,8 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             type="password"
             value=""
             required="true"
-            data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_PASSWORD2_REQUIRED'); ?>"/>
+            data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_PASSWORD2_REQUIRED'); ?>"
+            data-msg-equalto="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_PASSWORD2_MISMATCH'); ?>"/>
     </div>
 </div>
 <?php endif; ?>
