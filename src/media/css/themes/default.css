@@ -245,8 +245,8 @@
     color:#ffffff;
 }
 
-.ost-container #coupon_code{
-    margin-bottom:0;
+.ost-container #coupon-area{
+	margin-top: 8px;
 }
 
 /* Validation form
