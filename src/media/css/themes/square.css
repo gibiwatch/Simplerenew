@@ -274,13 +274,18 @@
 	margin-top: 8px;
 }
 
-#coupon_code-message{
+.ost-container #coupon_code-message{
 	color: #659f13;
 	background: #f2fae3;
 	padding: 15px;
 	border: 1px solid rgba(101,159,19, 0.2);
 	font-weight: 400;
 	font-size: 13px;
+}
+
+.ost-container .coupon-toggle{
+	font-weight: 700;
+	font-size: 14px;
 }
 
 /* Help classes
