@@ -30,7 +30,8 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
                         type="radio"
                         name="planCode"
                         id="<?php echo $planId; ?>"
-                        value="<?php echo $plan->code; ?>"/>
+                        value="<?php echo $plan->code; ?>"
+                        data-description="<?php echo $plan->name; ?>"/>
                     <?php
                     echo JHtml::_(
                         'plan.name',

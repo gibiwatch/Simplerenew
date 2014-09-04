@@ -4,6 +4,10 @@
             key: null
         },
 
+        pricing: function() {
+            alert('gotcha');
+        },
+
         init: function(form) {
             if (!this.options.key) {
                 alert('System error: No public key defined');
@@ -11,18 +15,21 @@
             }
             recurly.configure(this.options.key);
 
-            $(document.getElementById('billing_cc_number')).attr('data-recurly', 'number');
-            $(document.getElementById('billing_cc_month')).attr('data-recurly', 'month');
-            $(document.getElementById('billing_cc_year')).attr('data-recurly', 'year');
-            $(document.getElementById('billing_cc_cvv')).attr('data-recurly', 'cvv');
-            $(document.getElementById('billing_firstname')).attr('data-recurly', 'first_name');
-            $(document.getElementById('billing_lastname')).attr('data-recurly', 'last_name');
-            $(document.getElementById('billing_address1')).attr('data-recurly', 'address1');
-            $(document.getElementById('billing_address2')).attr('data-recurly', 'address2');
-            $(document.getElementById('billing_city')).attr('data-recurly', 'city');
-            $(document.getElementById('billing_region')).attr('data-recurly', 'state');
-            $(document.getElementById('billing_postal')).attr('data-recurly', 'postal_code');
-            $(document.getElementById('billing_country')).attr('data-recurly', 'country');
+
+            $('[name=planCode]').attr('data-recurly', 'plan');
+            $('#coupon_code').attr('data-recurly', 'coupon');
+            $('#billing_cc_number').attr('data-recurly', 'number');
+            $('#billing_cc_month').attr('data-recurly', 'month');
+            $('#billing_cc_year').attr('data-recurly', 'year');
+            $('#billing_cc_cvv').attr('data-recurly', 'cvv');
+            $('#billing_firstname').attr('data-recurly', 'first_name');
+            $('#billing_lastname').attr('data-recurly', 'last_name');
+            $('#billing_address1').attr('data-recurly', 'address1');
+            $('#billing_address2').attr('data-recurly', 'address2');
+            $('#billing_city').attr('data-recurly', 'city');
+            $('#billing_region').attr('data-recurly', 'state');
+            $('#billing_postal').attr('data-recurly', 'postal_code');
+            $('#billing_country').attr('data-recurly', 'country');
         },
 
         submit: function(form) {
@@ -32,14 +39,29 @@
             billing_token.val('');
             switch (method) {
                 case 'pp':
-                    recurly.paypal({description: 'This is my test'}, function(err, token) {
-                        if (err) {
+                    var pricing     = recurly.Pricing(),
+                        plan        = $('[data-recurly=plan]:checked'),
+                        coupon      = $('[data-recurly=coupon]:enabled'),
+                        description = plan.attr('data-description') || 'Subscription';
+
+                    pricing
+                        .plan(plan.val())
+                        .coupon(coupon.val())
+                        .catch(function (err) {
                             alert(err.message);
-                        } else {
-                            billing_token.val(token.id);
-                            form.submit();
-                        }
-                    });
+                        })
+                        .done(function (price) {
+                            description += ' ' + price.currency.symbol + price.now.total;
+                            console.log(description);
+                            recurly.paypal({'description': description}, function(err, token) {
+                                if (err) {
+                                    alert(err.message);
+                                } else {
+                                    billing_token.val(token.id);
+                                    form.submit();
+                                }
+                            });
+                        });
                     break;
 
                 case 'cc':
