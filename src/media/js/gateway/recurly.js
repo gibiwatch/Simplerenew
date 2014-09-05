@@ -52,7 +52,6 @@
                         })
                         .done(function (price) {
                             description += ' ' + price.currency.symbol + price.now.total;
-                            console.log(description);
                             recurly.paypal({'description': description}, function(err, token) {
                                 if (err) {
                                     alert(err.message);
