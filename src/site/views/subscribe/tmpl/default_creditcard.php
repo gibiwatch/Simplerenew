@@ -92,7 +92,11 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
                 echo JHtml::_(
                     'srselect.ccyear',
                     'billing[cc][year]',
-                    'class="small-width"',
+                    array(
+                        'class'           => 'check_date small-width',
+                        'data-partner'    => '#billing_cc_month',
+                        'data-msg-ccdate' => JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_CC_DATE_INVALID')
+                    ),
                     $creditCard->year,
                     'billing_cc_year'
                 ); ?>

@@ -121,6 +121,16 @@
                             $(coupon).valid();
                         });
                     });
+
+                    // Add special validation events for date dropdowns
+                    $('select[class*=check_date]').each(function(idx, element) {
+                        $(element).on('change', function(evt) {
+                            $(this).valid();
+                        });
+                        $($(element).attr('data-partner')).on('change', function(evt) {
+                            $(element).valid();
+                        });
+                    });
                 }
             },
 
@@ -210,14 +220,48 @@
                 },
 
                 cvv: {
-                    method: function (value, element) {
-                        var ccnumber = $(element).attr('data-ccnumber');
+                    method: function (value, element, params) {
+                        var ccnumber = $(element).attr(params.partner);
                         if (ccnumber) {
                             return $.Simplerenew.creditCard.verifyCVV($(ccnumber).val(), value);
                         }
                         return true;
                     },
                     message: 'Invalid CVV'
+                },
+
+                ccdate: {
+                    method: function (value, element, params) {
+                        var partner = $(element).attr(params.partner),
+                            result = false;
+
+                        if (partner) {
+                            if (element.id.match(/month/i)) {
+                                result = $.Simplerenew.creditCard.verifyDate(value, $(partner).val());
+                            } else {
+                                result = $.Simplerenew.creditCard.verifyDate($(partner).val(), value);
+                            }
+
+                            if (result) {
+                                this.settings.unhighlight.call(
+                                    this,
+                                    $(partner),
+                                    this.settings.errorClass,
+                                    this.settings.validClass
+                                );
+                            } else {
+                                this.settings.highlight.call(
+                                    this,
+                                    $(partner),
+                                    this.settings.errorClass,
+                                    this.settings.validClass
+                                );
+                            }
+                        }
+
+                        return result;
+                    },
+                    message: 'Invalid Date'
                 }
             },
 
@@ -250,8 +294,20 @@
                 },
 
                 check_coupon: 'coupon',
+
                 check_ccnumber: 'ccnumber',
-                check_cvv: 'cvv'
+
+                check_cvv: {
+                    cvv: {
+                        partner: 'data-ccnumber'
+                    }
+                },
+
+                check_date: {
+                    ccdate: {
+                        partner: 'data-partner'
+                    }
+                }
             }
         }
     });
