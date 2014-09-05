@@ -104,7 +104,7 @@
             target.prop('checked', true);
 
             areas.removeClass(options.selectClass);
-            this.addClass(options.selectClass);
+            $(this).addClass(options.selectClass);
 
             // Prevent bubbling to trigger click event
             if (!$(evt.target).is('input')) {
