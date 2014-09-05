@@ -1,4 +1,9 @@
 (function ($) {
+    /**
+     * Custom method for assigning validation by class
+     *
+     * @param rules
+     */
     $.fn.applyRules = function (rules) {
         var form = $(this[0]);
         var token = form.data('csrfToken');
@@ -10,9 +15,32 @@
 
             form.find('.' + cls + ':not([readonly=true])')
                 .each(function (idx, el) {
-                    $(el).rules('add', rule);
+                    $(el)
+                        .tempName()
+                        .rules('add', rule);
                 });
         });
+    };
+
+    /**
+     * This will give us a chance to validate no-name fields like
+     * CC Number and CVV
+     *
+     * @param clear
+     * @returns {$.fn}
+     */
+    $.fn.tempName = function(clear) {
+        var self = $(this);
+        if (self.is('input')) {
+            if (clear && self.data('clearName')) {
+                self.attr('name', null);
+            } else if (!self.attr('name')) {
+                self
+                    .attr('name', self.attr('id'))
+                    .data('clearName', true);
+            }
+        }
+        return this;
     };
 
     $.Simplerenew = $.extend({}, $.Simplerenew, {
@@ -33,6 +61,13 @@
                 submit: null
             },
 
+            /**
+             * Initialize a form for validation.
+             * Passes the Joomla session token for ajax calls
+             *
+             * @param selector
+             * @param options
+             */
             init: function (selector, options) {
                 var form = $(selector);
                 if (form) {
@@ -57,6 +92,12 @@
 
                     options = $.extend(this.options, options, {
                         submitHandler: function (form) {
+
+                            // Clear out any temporary names to prevent being sent to server
+                            $(form).find(':input').each(function(idx, element) {
+                                $(element).tempName(true);
+                            });
+
                             if (typeof gateway.submit === 'function') {
                                 // Gateway is handling form submit
                                 gateway.submit(form);
@@ -70,7 +111,6 @@
                     form.applyRules(this.rules);
 
                     // Back link plan selection to coupons
-                    // @TODO: Find a better way to init coupon method
                     $('.check_coupon[data-plan]').each(function (idx, coupon) {
                         $(coupon).on('focusout', function (evt) {
                             if ($(this).val().length == 0) {
@@ -84,6 +124,9 @@
                 }
             },
 
+            /**
+             * Custom methods
+             */
             methods: {
                 coupon: {
                     method: function (value, element) {
@@ -157,9 +200,30 @@
                         return 'pending';
                     },
                     message: 'Invalid Coupon'
+                },
+
+                ccnumber: {
+                    method: function (value, element) {
+                        return $.Simplerenew.creditCard.verifyNumber(value);
+                    },
+                    message: 'Invalid card number'
+                },
+
+                cvv: {
+                    method: function (value, element) {
+                        var ccnumber = $(element).attr('data-ccnumber');
+                        if (ccnumber) {
+                            return $.Simplerenew.creditCard.verifyCVV($(ccnumber).val(), value);
+                        }
+                        return true;
+                    },
+                    message: 'Invalid CVV'
                 }
             },
 
+            /**
+             * Class rules to be applied via $.applyRules()
+             */
             rules: {
                 unique_user: {
                     remote: {
@@ -185,7 +249,9 @@
                     }
                 },
 
-                check_coupon: 'coupon'
+                check_coupon: 'coupon',
+                check_ccnumber: 'ccnumber',
+                check_cvv: 'cvv'
             }
         }
     });
