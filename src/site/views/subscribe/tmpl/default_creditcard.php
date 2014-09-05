@@ -63,8 +63,8 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
                     id="billing_cc_number"
                     type="text"
                     value=""
-                    class="check_ccnumber"
                     placeholder="<?php echo JHtml::_('creditcard.mask', $creditCard->lastFour); ?>"
+                    class="check_ccnumber"
                     data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_CC_NUMBER_REQUIRED'); ?>"
                     data-msg-ccnumber="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_CC_NUMBER_INVALID'); ?>"/>
             </div>
@@ -82,9 +82,9 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
                     type="text"
                     value=""
                     class="check_cvv small-width"
+                    data-ccnumber="#billing_cc_number"
                     data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_CC_CVV_REQUIRED'); ?>"
-                    data-msg-cvv="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_CC_CVV_INVALID'); ?>"
-                    data-ccnumber="#billing_cc_number"/>
+                    data-msg-cvv="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_CC_CVV_INVALID'); ?>"/>
             </div>
             <div class="block5">
                 <label><?php echo JText::_('COM_SIMPLERENEW_CC_EXPIRATION'); ?></label>

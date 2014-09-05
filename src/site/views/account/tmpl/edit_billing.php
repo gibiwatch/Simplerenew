@@ -87,7 +87,9 @@ endif; ?>
                     id="billing_cc_number"
                     type="text"
                     value=""
-                    placeholder="<?php echo JHtml::_('creditcard.mask', $creditCard->lastFour); ?>"/>
+                    placeholder="<?php echo JHtml::_('creditcard.mask', $creditCard->lastFour); ?>"
+                    class="check_ccnumber"
+                    data-msg-ccnumber="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_CC_NUMBER_INVALID'); ?>"/>
             </div>
             <div class="block2">
                 <label><?php echo JText::_('COM_SIMPLERENEW_CC_CVV'); ?></label>
@@ -95,7 +97,9 @@ endif; ?>
                     id="billing_cc_cvv"
                     type="text"
                     value=""
-                    class="small-width"/>
+                    class="check_cvv small-width"
+                    data-ccnumber="#billing_cc_number"
+                    data-msg-cvv="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_CC_CVV_INVALID'); ?>"/>
             </div>
             <div class="block4">
                 <label><?php echo JText::_('COM_SIMPLERENEW_CC_EXPIRATION'); ?></label>
@@ -103,7 +107,11 @@ endif; ?>
                 echo JHtml::_(
                     'srselect.ccyear',
                     'billing[cc][year]',
-                    'class="small-width"',
+                    array(
+                        'class'           => 'check_date small-width',
+                        'data-partner'    => '#billing_cc_month',
+                        'data-msg-ccdate' => JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_CC_DATE_INVALID')
+                    ),
                     $creditCard->year,
                     'billing_cc_year'
                 ); ?>
