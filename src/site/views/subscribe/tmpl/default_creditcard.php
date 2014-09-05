@@ -27,7 +27,10 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
     <div class="p-full">
         <div class="ost-section">
             <div class="block6">
-                <label for="billing_firstname"><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?> <span>*</span></label>
+                <label for="billing_firstname">
+                    <?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?>
+                    <span>*</span>
+                </label>
                 <input
                     id="billing_firstname"
                     name="billing[firstname]"
@@ -37,7 +40,10 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
                     data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_FIRSTNAME_REQUIRED'); ?>"/>
             </div>
             <div class="block6">
-                <label for="billing_lastname"><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?> <span>*</span></label>
+                <label for="billing_lastname">
+                    <?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?>
+                    <span>*</span>
+                </label>
                 <input
                     id="billing_lastname"
                     name="billing[lastname]"
@@ -53,7 +59,10 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
 
         <div class="ost-section">
             <div class="block5">
-                <label><?php echo JText::_('COM_SIMPLERENEW_CC_NUMBER'); ?> <span>*</span></label>
+                <label>
+                    <?php echo JText::_('COM_SIMPLERENEW_CC_NUMBER'); ?>
+                    <span>*</span>
+                </label>
                 <input
                     <?php
                     if (!$this->billing->payment->exists()) {
@@ -70,7 +79,8 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
             </div>
             <div class="block2">
                 <label for="billing_cc_cvv">
-                    <?php echo JText::_('COM_SIMPLERENEW_CC_CVV'); ?> <span>*</span>
+                    <?php echo JText::_('COM_SIMPLERENEW_CC_CVV'); ?>
+                    <span>*</span>
                 </label>
                 <input
                     <?php
@@ -87,7 +97,10 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
                     data-msg-cvv="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_CC_CVV_INVALID'); ?>"/>
             </div>
             <div class="block5">
-                <label><?php echo JText::_('COM_SIMPLERENEW_CC_EXPIRATION'); ?> <span>*</span></label>
+                <label>
+                    <?php echo JText::_('COM_SIMPLERENEW_CC_EXPIRATION'); ?>
+                    <span>*</span>
+                </label>
                 <?php
                 echo JHtml::_(
                     'srselect.ccyear',

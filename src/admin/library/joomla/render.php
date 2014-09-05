@@ -17,8 +17,12 @@ defined('_JEXEC') or die();
  */
 abstract class SimplerenewRender
 {
-    public static function addressEdit($prefix, Address $address, $attribs = array(), $suppressRequired = false)
-    {
+    public static function addressEdit(
+        $prefix,
+        Address $address,
+        $attribs = array(),
+        $requiredText = ' <span>*</span>'
+    ) {
         $fields = array();
         if ($required = self::addressRequired()) {
             if (is_string($attribs)) {
@@ -40,7 +44,7 @@ abstract class SimplerenewRender
                         'data-msg-required' => JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_' . $name . '_REQUIRED')
                     )
                 );
-                if (!$suppressRequired) {
+                if ($requiredText) {
                     $attribs['required'] = 'true';
                 }
 
@@ -67,6 +71,7 @@ abstract class SimplerenewRender
 
                 $fields[] = '<label for="' . $id . '">'
                     . JText::_($label)
+                    . $requiredText
                     . '</label>'
                     . $field;
             }
