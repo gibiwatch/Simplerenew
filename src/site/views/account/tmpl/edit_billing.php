@@ -81,7 +81,7 @@ endif; ?>
         <?php echo $this->loadTemplate('address'); ?>
 
         <div class="ost-section">
-            <div class="block6">
+            <div class="block5">
                 <label><?php echo JText::_('COM_SIMPLERENEW_CC_NUMBER'); ?></label>
                 <input
                     id="billing_cc_number"
@@ -101,7 +101,7 @@ endif; ?>
                     data-ccnumber="#billing_cc_number"
                     data-msg-cvv="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_CC_CVV_INVALID'); ?>"/>
             </div>
-            <div class="block4">
+            <div class="block5">
                 <label><?php echo JText::_('COM_SIMPLERENEW_CC_EXPIRATION'); ?></label>
                 <?php
                 echo JHtml::_(
