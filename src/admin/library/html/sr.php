@@ -123,20 +123,28 @@ abstract class JHtmlSr
     /**
      * Create a clickable area for radio buttons and checkboxes
      *
-     * @param      $selector
+     * @param mixed $options
      *
      * @return void
      */
-    public static function clickarea($selector)
+    public static function clickarea($options)
     {
         static::jquery(true);
 
-        $options = json_encode(
-            array(
-                'selector' => $selector,
-            )
-        );
-        static::onready("jQuery.Simplerenew.clickArea({$options});");
+        $arrayOptions = array();
+        if (is_string($options)) {
+            $arrayOptions = json_decode($options, true);
+            if (!$arrayOptions) {
+                $arrayOptions = array(
+                    'selector' => $options
+                );
+            }
+        } elseif (is_array($options)) {
+            $arrayOptions = $options;
+        }
+
+        $jsonOptions = json_encode($arrayOptions);
+        static::onready("jQuery.Simplerenew.clickArea({$jsonOptions});");
     }
 
     /**
