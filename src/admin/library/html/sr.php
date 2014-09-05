@@ -121,7 +121,9 @@ abstract class JHtmlSr
     }
 
     /**
-     * Create a clickable area for radio buttons and checkboxes
+     * Create a clickable area for radio buttons and checkboxes.
+     * Will accept a string as the jQuery selector for areas or
+     * more detailed options as either json string or an array
      *
      * @param mixed $options
      *
