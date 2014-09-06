@@ -28,29 +28,32 @@ class plgUserSimplerenew extends JPlugin
     {
         if ($success && !$isNew && $this->isInstalled()) {
             $container = SimplerenewFactory::getContainer();
-            $user = $container->getUser();
             $account = $container->getAccount();
 
-            try {
-                $user->load($data['id']);
-                $account->load($user);
+            if ($account->validConfiguration()) {
+                $user = $container->getUser();
 
-                // Allow API to turn Joomla name into first/last
-                $account->firstname = null;
-                $account->lastname = null;
-                $account->setProperties($user->getProperties());
+                try {
+                    $user->load($data['id']);
+                    $account->load($user);
 
-                $account->save(false);
+                    // Allow API to turn Joomla name into first/last
+                    $account->firstname = null;
+                    $account->lastname = null;
+                    $account->setProperties($user->getProperties());
 
-            } catch (NotFound $e) {
-                // Non-subscription user can be ignored
+                    $account->save(false);
 
-            } catch (Exception $e) {
-                SimplerenewFactory::getApplication()
-                    ->enqueueMessage(
-                        JText::sprintf('COM_SIMPLERENEW_ERROR_ACCOUNT_SAVE', $e->getMessage()),
-                        'notice'
-                    );
+                } catch (NotFound $e) {
+                    // Non-subscription user can be ignored
+
+                } catch (Simplerenew\Exception $e) {
+                    SimplerenewFactory::getApplication()
+                        ->enqueueMessage(
+                            JText::sprintf('COM_SIMPLERENEW_ERROR_ACCOUNT_SAVE', $e->getMessage()),
+                            'notice'
+                        );
+                }
             }
         }
     }
