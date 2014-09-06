@@ -34,13 +34,18 @@ class Exception extends \Exception
         return trim($result . ' ' . $this->message);
     }
 
+    /**
+     * Get single line listing of call stack
+     *
+     * @return array
+     */
     public function getCallStack()
     {
         $trace = $this->getTrace();
         $stack = array();
 
         foreach ($trace as $caller) {
-            $row = 'Line ' . $caller['line'] . ' - ';
+            $row = 'Line ' . (empty($caller['line']) ? '' : $caller['line'] . ' - ');
             if (!empty($caller['class'])) {
                 $row .= $caller['class'] . '::';
             }
@@ -48,7 +53,10 @@ class Exception extends \Exception
                 $row .= $caller['function'] . '()';
             }
 
-            $stack[] = $row . ' [' . $caller['file'] . ']';
+            if (!empty($caller['file'])) {
+                $row .= ' [' . $caller['file'] . ']';
+            }
+            $stack[] = $row;
         }
 
         return $stack;
