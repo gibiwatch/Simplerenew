@@ -17,7 +17,8 @@ class Com_SimplerenewInstallerScript
         '/admin/library/configuration.json',
         '/media/js/tabs.js',
         '/admin/library/simplerenew/Notify/Handler/None.php',
-        '/site/views/change'
+        '/site/views/change',
+        '/admin/views/dashboard'
     );
 
     /**

@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die();
 
-class SimplerenewViewDashboard extends SimplerenewViewAdmin
+class SimplerenewViewWelcome extends SimplerenewViewAdmin
 {
     public function display($tpl = null)
     {
