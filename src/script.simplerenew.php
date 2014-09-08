@@ -149,6 +149,13 @@ class Com_SimplerenewInstallerScript
         $this->checkDB();
 
         $this->showMessages();
+
+        // Show welcome message on initial installation
+        if (strpos($type, 'install') !== false) {
+            JFactory::getLanguage()->load('com_simplerenew', JPATH_ADMINISTRATOR . '/components/com_simplerenew');
+            $path = JPATH_ADMINISTRATOR . '/components/com_simplerenew/views/welcome/tmpl/default.php';
+            require_once $path;
+        }
     }
 
     /**
@@ -538,7 +545,7 @@ class Com_SimplerenewInstallerScript
                 return ($el->ordering == 0);
             }
         );
-        if (count($empties) == count($list)) {
+        if (count($list) && count($empties) == count($list)) {
             foreach ($list as $i => $plan) {
                 $plan->ordering = $i + 1;
                 $db->updateObject('#__simplerenew_plans', $plan, 'id');
