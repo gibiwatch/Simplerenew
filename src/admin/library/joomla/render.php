@@ -64,6 +64,15 @@ abstract class SimplerenewRender
                         $field = '<input ' . JArrayHelper::toString($attribs) . '/>';
                         break;
 
+                    case 'country':
+                        $name = $attribs['name'];
+                        $id = $attribs['id'];
+                        $selected = $attribs['value'];
+                        unset($attribs['name'], $attribs['id'], $attribs['value']);
+
+                        $field = JHtml::_('srselect.country', $name, $attribs, $selected, $id);
+                        break;
+
                     default:
                         $field = '<input ' . JArrayHelper::toString($attribs) . '/>';
                         break;

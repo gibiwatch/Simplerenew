@@ -59,17 +59,48 @@ abstract class JHtmlSrselect
         return JHtml::_('select.genericlist', $data, $name, $attribs, 'value', 'text', $selected, $idtag, $translate);
     }
 
+    /**
+     * Create country field as dropdown or text input depending
+     * on existence of country list asset
+     *
+     * @param string $name
+     * @param mixed  $attribs
+     * @param string $selected
+     * @param mixed  $idtag
+     * @param bool   $translate
+     *
+     * @return string
+     */
     public static function country($name, $attribs = null, $selected = null, $idtag = false, $translate = false)
     {
         if ($attribs && !is_array($attribs)) {
             $attribs = JUtility::parseAttributes($attribs);
         }
-        $attribs['name'] = $name;
-        $attribs['id'] = $idtag ? : preg_replace('/(\[\]|\[|\])/', '_', $name);
-        $attribs['type'] = 'text';
-        $attribs['value'] = $selected;
-        $html = '<input ' . JArrayHelper::toString($attribs) . '/>';
 
-        return $html;
+        if (!$selected) {
+            $selected = 'US';
+        }
+
+        $path = SIMPLERENEW_MEDIA . '/assets/iso3166-2.json';
+        if (file_exists($path)) {
+            $countries = json_decode(file_get_contents($path));
+            return JHtml::_(
+                'select.genericlist',
+                $countries,
+                $name,
+                $attribs,
+                'code',
+                'country',
+                $selected,
+                $idtag,
+                $translate
+            );
+        }
+
+        $attribs['name']  = $name;
+        $attribs['id']    = $idtag ? : preg_replace('/(\[\]|\[|\])/', '_', $name);
+        $attribs['type']  = 'text';
+        $attribs['value'] = $selected;
+        return '<input ' . JArrayHelper::toString($attribs) . '/>';
     }
 }

@@ -31,6 +31,7 @@
     </update>
 
     <media destination="com_simplerenew" folder="media">
+        <folder>assets</folder>
         <folder>css</folder>
         <folder>images</folder>
         <folder>js</folder>
