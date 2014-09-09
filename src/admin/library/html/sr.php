@@ -161,4 +161,28 @@ abstract class JHtmlSr
         $js = "jQuery(document).ready(function () { " . $js . " });";
         SimplerenewFactory::getDocument()->addScriptDeclaration($js);
     }
+
+    /**
+     * Create an input form field
+     *
+     * @param string      $name
+     * @param mixed $attribs
+     * @param string $selected
+     * @param mixed $idtag
+     *
+     * @return string
+     */
+    public static function inputfield($name, $attribs = null, $selected = null, $idtag = false)
+    {
+
+        if ($attribs && !is_array($attribs)) {
+            $attribs = JUtility::parseAttributes($attribs);
+        }
+
+        $attribs['name']  = $name;
+        $attribs['id']    = $idtag ? : preg_replace('/(\[\]|\[|\])/', '_', $name);
+        $attribs['type']  = 'text';
+        $attribs['value'] = $selected;
+        return '<input ' . JArrayHelper::toString($attribs) . '/>';
+    }
 }

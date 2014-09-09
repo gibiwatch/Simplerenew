@@ -67,16 +67,11 @@ abstract class JHtmlSrselect
      * @param mixed  $attribs
      * @param string $selected
      * @param mixed  $idtag
-     * @param bool   $translate
      *
      * @return string
      */
-    public static function country($name, $attribs = null, $selected = null, $idtag = false, $translate = false)
+    public static function country($name, $attribs = null, $selected = null, $idtag = false)
     {
-        if ($attribs && !is_array($attribs)) {
-            $attribs = JUtility::parseAttributes($attribs);
-        }
-
         if (!$selected) {
             $selected = 'US';
         }
@@ -84,23 +79,9 @@ abstract class JHtmlSrselect
         $path = SIMPLERENEW_MEDIA . '/assets/iso3166-2.json';
         if (file_exists($path)) {
             $countries = json_decode(file_get_contents($path));
-            return JHtml::_(
-                'select.genericlist',
-                $countries,
-                $name,
-                $attribs,
-                'code',
-                'country',
-                $selected,
-                $idtag,
-                $translate
-            );
+            return JHtml::_('select.genericlist', $countries, $name, $attribs, 'code', 'country', $selected, $idtag);
         }
 
-        $attribs['name']  = $name;
-        $attribs['id']    = $idtag ? : preg_replace('/(\[\]|\[|\])/', '_', $name);
-        $attribs['type']  = 'text';
-        $attribs['value'] = $selected;
-        return '<input ' . JArrayHelper::toString($attribs) . '/>';
+        return JHtml::_('sr.inputfield', $name, $attribs, $selected, $idtag);
     }
 }
