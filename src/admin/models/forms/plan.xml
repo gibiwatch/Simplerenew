@@ -88,6 +88,7 @@
             name="published"
             type="list"
             default="1"
+            class="chzn-color-state"
             label="COM_SIMPLERENEW_COMMON_PUBLISHED_LABEL">
             <option value="0">JUNPUBLISHED</option>
             <option value="1">JPUBLISHED</option>

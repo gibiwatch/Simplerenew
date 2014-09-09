@@ -15,6 +15,7 @@ defined('_JEXEC') or die();
 
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
+JHtml::_('formbehavior.chosen', 'select');
 
 $app = SimplerenewFactory::getApplication();
 $input = $app->input;
