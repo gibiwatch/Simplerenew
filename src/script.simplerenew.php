@@ -143,27 +143,15 @@ class Com_SimplerenewInstallerScript
         $this->setDefaultParams($type);
         $this->installRelated();
         $this->clearObsolete();
-
-        // Temporary fix for table changes
-        // @TODO: Remove by 1st Beta
         $this->checkDB();
 
         $this->showMessages();
 
-        // Show welcome message on initial installation
-        if (strpos($type, 'install') !== false) {
+        // Show additional installation messages
+        $file = strpos($type, 'install') === false ? $type : 'install';
+        $path = JPATH_ADMINISTRATOR . '/components/com_simplerenew/views/welcome/tmpl/' . $file . '.php';
+        if (file_exists($path)) {
             JFactory::getLanguage()->load('com_simplerenew', JPATH_ADMINISTRATOR . '/components/com_simplerenew');
-
-            $cssPaths = array(
-                JHtml::_('stylesheet', 'com_simplerenew/grid.css', null, true, true),
-                JHtml::_('stylesheet', 'com_simplerenew/grid-responsive.css', null, true, true),
-                JHtml::_('stylesheet', 'com_simplerenew/admin.css', null, true, true)
-            );
-            foreach ($cssPaths as $path) {
-                echo '<link rel="stylesheet" href="' . $path . '" type="text/css" />' . "\n";
-            }
-
-            $path = JPATH_ADMINISTRATOR . '/components/com_simplerenew/views/welcome/tmpl/default.php';
             require_once $path;
         }
     }

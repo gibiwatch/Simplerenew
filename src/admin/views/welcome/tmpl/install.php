@@ -8,13 +8,19 @@
 
 defined('_JEXEC') or die();
 
-// Load admin CSS
-JHtml::stylesheet('com_simplerenew/grid.css', null, true);
-JHtml::stylesheet('com_simplerenew/grid-responsive.css', null, true);
-JHtml::stylesheet('com_simplerenew/admin.css', null, true);
-
+/**
+ * This file is used in the installation script so we have to load
+ * assets in line as the document head will not be modified at this point
+ */
+$cssPaths = array(
+    JHtml::_('stylesheet', 'com_simplerenew/grid.css', null, true, true),
+    JHtml::_('stylesheet', 'com_simplerenew/grid-responsive.css', null, true, true),
+    JHtml::_('stylesheet', 'com_simplerenew/admin.css', null, true, true)
+);
+foreach ($cssPaths as $path) {
+    echo '<link rel="stylesheet" href="' . $path . '" type="text/css" />' . "\n";
+}
 ?>
-
 <div class="alert alert-success">
     <?php echo JText::_('COM_SIMPLERENEW_WELCOME'); ?>
 </div>
