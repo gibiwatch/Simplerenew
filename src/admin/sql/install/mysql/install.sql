@@ -1,3 +1,9 @@
+CREATE TABLE IF NOT EXISTS `#__simplerenew_countries` (
+  `code` char(2) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS `#__simplerenew_plans` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_id` int(11) NOT NULL,
@@ -34,4 +40,11 @@ CREATE TABLE IF NOT EXISTS `#__simplerenew_push_log` (
   `account_code` varchar(50) NOT NULL DEFAULT '',
   `subscription_id` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `#__simplerenew_regions` (
+  `code` char(2) NOT NULL,
+  `country_code` char(2) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  PRIMARY KEY (`code`,`country_code`)
 ) ENGINE=InnoDB;

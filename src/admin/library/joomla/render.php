@@ -30,25 +30,23 @@ abstract class SimplerenewRender
             }
 
             $required = array_intersect(self::addressFieldNames(), $required);
-            foreach ($required as $name) {
-                $id    = $prefix . '_' . $name;
-                $label = 'COM_SIMPLERENEW_BILLING_' . $name;
+            foreach ($required as $fieldName) {
+                $name  = $prefix . '[' . $fieldName . ']';
+                $id    = $prefix . '_' . $fieldName;
+                $value = $address->$fieldName;
+                $label = 'COM_SIMPLERENEW_BILLING_' . $fieldName;
 
                 $attribs = array_merge(
                     (array)$attribs,
                     array(
-                        'id'                => $id,
-                        'name'              => $prefix . '[' . $name . ']',
-                        'type'              => 'text',
-                        'value'             => $address->$name,
-                        'data-msg-required' => JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_' . $name . '_REQUIRED')
+                        'data-msg-required' => JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_' . $fieldName . '_REQUIRED')
                     )
                 );
                 if ($requiredText) {
                     $attribs['required'] = 'true';
                 }
 
-                switch ($name) {
+                switch ($fieldName) {
                     case 'address1':
                         if (!in_array('address2', $required)) {
                             $label                        = 'COM_SIMPLERENEW_BILLING_STREET';
@@ -56,31 +54,30 @@ abstract class SimplerenewRender
                                 'COM_SIMPLERENEW_VALIDATE_BILLING_STREET_REQUIRED'
                             );
                         }
-                        $field = '<input ' . JArrayHelper::toString($attribs) . '/>';
+                        $field = JHtml::_('sr.inputfield', $name, $attribs, $value, $id);
                         break;
 
                     case 'address2':
                         unset($attribs['required']);
-                        $field = '<input ' . JArrayHelper::toString($attribs) . '/>';
+                        $field = JHtml::_('sr.inputfield', $name, $attribs, $value, $id);
+                        break;
+
+                    case 'region':
+                        $field = JHtml::_('srselect.region', $name, $attribs, $value, $id, $prefix . '_country');
                         break;
 
                     case 'country':
-                        $name = $attribs['name'];
-                        $id = $attribs['id'];
-                        $selected = $attribs['value'];
-                        unset($attribs['name'], $attribs['id'], $attribs['value']);
-
-                        $field = JHtml::_('srselect.country', $name, $attribs, $selected, $id);
+                        $field = JHtml::_('srselect.country', $name, $attribs, $value, $id);
                         break;
 
                     default:
-                        $field = '<input ' . JArrayHelper::toString($attribs) . '/>';
+                        $field = JHtml::_('sr.inputfield', $name, $attribs, $value, $id);
                         break;
                 }
 
                 $fields[] = '<label for="' . $id . '">'
                     . JText::_($label)
-                    . $requiredText
+                    . (empty($attribs['required']) ? '' : $requiredText)
                     . '</label>'
                     . $field;
             }

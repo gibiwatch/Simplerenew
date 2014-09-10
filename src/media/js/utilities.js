@@ -67,7 +67,7 @@
      *
      * @param options
      *        selector : a jQuery selector for the slider headers
-     *        visible : bool - initial visible state (default: false)
+     *        visible  : bool - initial visible state (default: false)
      */
     $.Simplerenew.sliders = function (options) {
         options = $.extend(this.sliders.options, options);
@@ -118,11 +118,68 @@
             .filter(':checked')
             .trigger('click');
     };
-
     $.Simplerenew.clickArea.options = {
         selector    : null,
         target      : '[type=radio],[type=checkbox]',
         selectClass : 'simplerenew-selected'
     };
+
+    /**
+     * use combination of input/select fields for controlling region/country values
+     *
+     * @param options
+     */
+    $.Simplerenew.region = function (options) {
+        options = $.extend(this.region.options, options);
+
+        var region = $(options.region),
+            regionLists = $('select[id^=' + options.region.substr(1) + '_]'),
+            country = $(options.country);
+
+        regionLists.hide();
+        if (!country) {
+            return;
+        }
+
+        var updateValues = function(newValue) {
+            var selected = findSelected();
+
+            newValue = newValue ? newValue : '';
+            regionLists.hide().val(newValue.toUpperCase());
+            region.val(newValue);
+
+            if (selected[0]) {
+                region.hide();
+                selected.show();
+            } else {
+                region.show();
+            }
+        };
+
+        var findSelected = function() {
+            return $(options.region + '_' + country.val());
+        };
+
+        region.add(regionLists).on('change', function(evt) {
+            updateValues($(this).val());
+        });
+
+        country.on('change', function(evt) {
+            var selected = findSelected(),
+                newValue;
+
+            if (selected[0]) {
+                newValue = selected.val();
+            } else {
+                newValue = region.val();
+            }
+            updateValues(newValue);
+        });
+    };
+    $.Simplerenew.region.options = {
+        region: null,
+        country: null
+    };
+
 })(jQuery);
 
