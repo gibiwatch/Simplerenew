@@ -59,17 +59,90 @@ abstract class JHtmlSrselect
         return JHtml::_('select.genericlist', $data, $name, $attribs, 'value', 'text', $selected, $idtag, $translate);
     }
 
-    public static function country($name, $attribs = null, $selected = null, $idtag = false, $translate = false)
+    /**
+     * Create country field as dropdown or text input depending
+     * on existence of country list asset
+     *
+     * @param string $name
+     * @param mixed  $attribs
+     * @param string $selected
+     * @param string $idTag
+     *
+     * @return string
+     */
+    public static function country($name, $attribs = null, $selected = null, $idTag = null)
     {
-        if ($attribs && !is_array($attribs)) {
-            $attribs = JUtility::parseAttributes($attribs);
-        }
-        $attribs['name'] = $name;
-        $attribs['id'] = $idtag ? : preg_replace('/(\[\]|\[|\])/', '_', $name);
-        $attribs['type'] = 'text';
-        $attribs['value'] = $selected;
-        $html = '<input ' . JArrayHelper::toString($attribs) . '/>';
+        JHtml::_('sr.jquery', true);
 
-        return $html;
+        $id = $idTag ?: str_replace(array('[', ']'), array('_', ''), $idTag);
+
+        if (!$selected) {
+            $selected = 'US';
+        }
+
+        $countries = SimplerenewFactory::getDbo()
+            ->setQuery('Select * From #__simplerenew_countries order By name')
+            ->loadObjectList();
+        if (count($countries)) {
+            return JHtml::_('select.genericlist', $countries, $name, $attribs, 'code', 'name', $selected, $id);
+        }
+
+        return JHtml::_('sr.inputfield', $name, $attribs, $selected, $id);
+    }
+
+    /**
+     * Create a state/province dropdown and input field linked to a country
+     * dropdown if region list asset exists
+     *
+     * @param string $name
+     * @param mixed  $attribs
+     * @param string $selected
+     * @param string $idTag
+     * @param string $countryId
+     *
+     * @return string
+     */
+    public static function region($name, $attribs = null, $selected = null, $idTag = null, $countryId = null)
+    {
+        JHtml::_('sr.jquery', true);
+
+        $id = $idTag ?: str_replace(array('[', ']'), array('_', ''), $name);
+
+        $html = array(
+            JHtml::_('sr.inputfield', $name, $attribs, $selected, $id)
+        );
+
+        if ($countryId) {
+            $regions = SimplerenewFactory::getDbo()
+                ->setQuery('Select * From #__simplerenew_regions Order By name')
+                ->loadObjectList();
+
+            if (count($regions)) {
+                $options = array();
+                foreach ($regions as $region) {
+                    $countryCode = $region->country_code;
+                    if (!isset($options[$countryCode])) {
+                        $options[$countryCode] = array(
+                            (object)array('code' => '', 'name' => '')
+                        );
+                    }
+                    $options[$countryCode][] = $region;
+                }
+
+                foreach ($options as $country => $regionOptions) {
+                    $name = $id . '_' . $country;
+                    $html[] = JHtml::_('select.genericlist', $regionOptions, $name, $attribs, 'code', 'name', $selected);
+                }
+
+                $jsonOptions = json_encode(
+                    array(
+                        'region'  => '#' . $id,
+                        'country' => '#' . $countryId
+                    )
+                );
+                JHtml::_('sr.onready', "jQuery.Simplerenew.region({$jsonOptions});");
+            }
+        }
+        return join("\n", $html);
     }
 }

@@ -474,8 +474,7 @@ class Com_SimplerenewInstallerScript
     }
 
     /**
-     * Temporary check of DB structure during alpha releases.
-     * @TODO: Remove by 1st Beta
+     * Check DB structure/entries
      *
      * @return void
      */
@@ -483,6 +482,27 @@ class Com_SimplerenewInstallerScript
     {
         $db = JFactory::getDbo();
 
+        $path = $this->installer->getPath('extension_administrator') . '/sql';
+
+        $countries = $db->setQuery('Select count(*) From #__simplerenew_countries')->loadResult();
+        $file      = $path . '/iso3166-2.json';
+        if ($countries == 0 && file_exists($file)) {
+            $countries = json_decode(file_get_contents($file));
+            foreach ($countries as $country) {
+                $db->insertObject('#__simplerenew_countries', $country);
+            }
+        }
+
+        $regions = $db->setQuery('Select count(*) From #__simplerenew_regions')->loadResult();
+        $file = $path . '/regions.json';
+        if ($regions == 0 && file_exists($file)) {
+            $regions = json_decode(file_get_contents($file));
+            foreach ($regions as $region) {
+                $db->insertObject('#__simplerenew_regions', $region);
+            }
+        }
+
+        // @TODO: All the rest should be removed on 1st beta
         $plans = $db->getTableColumns('#__simplerenew_plans');
         $cmds  = array();
         $drops = array('accounting_code', 'alias', 'description');
