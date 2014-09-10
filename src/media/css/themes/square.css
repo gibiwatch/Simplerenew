@@ -328,9 +328,9 @@ span.simplerenew-plan{
     -o-border-radius: 0;
 }
 
-/* plan-selected class is added when plan is selected. Use js (maybe) to add the class */
 span.simplerenew-plan:hover,
-span.simplerenew-plan.plan-selected{
+span.simplerenew-plan:focus,
+span.simplerenew-plan.simplerenew-plan-selected{
     background: #8cc14c;
 }
 
