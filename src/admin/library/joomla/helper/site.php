@@ -10,8 +10,6 @@ defined('_JEXEC') or die();
 
 abstract class SimplerenewHelperSite
 {
-    protected static $awesomeCDN = 'https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css';
-
     protected static $googleFonts = 'https://fonts.googleapis.com';
 
     /**
@@ -75,14 +73,8 @@ abstract class SimplerenewHelperSite
         }
 
         // Load font Awesome
-        switch ($params->get('themes.fontAwesome', 'local')) {
-            case 'local':
-                JHtml::stylesheet('com_simplerenew/awesome/css/font-awesome.min.css', null, true);
-                break;
-
-            case 'cdn':
-                JHtml::stylesheet(self::$awesomeCDN);
-                break;
+        if ($params->get('themes.fontAwesome') == 'yes') {
+            JHtml::stylesheet('com_simplerenew/awesome/css/font-awesome.min.css', null, true);
         }
 
         // Load responsive grids
