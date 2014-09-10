@@ -1,4 +1,4 @@
-/* Dashboard
+/* Admin
  ========================================================================== */
 .ost-container .ost-steps{
     text-align: center;
@@ -13,4 +13,13 @@
 .ost-container .ost-steps img{
     position: relative;
     top: 50%;
+}
+.ost-container .ost-steps .btn{
+    margin-top: 6px;
+}
+.ost-container .ost-error{
+    color: #b94a48;
+}
+.ost-container .ost-ok{
+    color: #468847;
 }

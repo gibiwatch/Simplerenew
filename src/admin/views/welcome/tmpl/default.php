@@ -15,14 +15,6 @@ JHtml::stylesheet('com_simplerenew/admin.css', null, true);
 
 ?>
 
-<div class="alert alert-success">
-    <?php echo JText::_('Use this area to notify everything is done.'); ?>
-</div>
-
-<div class="alert alert-danger">
-    <?php echo JText::_('Use this area to notify something is missing.'); ?>
-</div>
-
 <div class="ost-container">
 
     <div class="ost-section ost-steps">
@@ -33,22 +25,17 @@ JHtml::stylesheet('com_simplerenew/admin.css', null, true);
             <img src="../media/com_simplerenew/images/points.png" alt="" />
         </div>
         <div class="block2">
-            <img src="../media/com_simplerenew/images/step1.png" alt="" />
-            <p class="ost-step"><?php echo JText::_('Gateway configured'); ?></p>
-        </div>
-        <div class="block1 ost-connector">
-            <img src="../media/com_simplerenew/images/raquo.png" alt="" />
+            <img src="../media/com_simplerenew/images/ok.png" alt="" />
+            <p class="ost-step ost-ok"><?php echo JText::_('Gateway configured'); ?></p>
         </div>
         <div class="block2">
-            <img src="../media/com_simplerenew/images/step2.png" alt="" />
-            <p class="ost-step"><?php echo JText::_('Plans created'); ?></p>
-        </div>
-        <div class="block1 ost-connector">
-            <img src="../media/com_simplerenew/images/raquo.png" alt="" />
+            <img src="../media/com_simplerenew/images/error.png" alt="" />
+            <p class="ost-step ost-error"><?php echo JText::_('You do not have plans.
+            <br/><a class="btn btn-small" href="#"><span class="icon-plus"></span> Add a new plan</a>'); ?></p>
         </div>
         <div class="block2">
-            <img src="../media/com_simplerenew/images/step3.png" alt="" />
-            <p class="ost-step"><?php echo JText::_('Subscribe view created'); ?></p>
+            <img src="../media/com_simplerenew/images/ok.png" alt="" />
+            <p class="ost-step ost-ok"><?php echo JText::_('Subscribe view created'); ?></p>
         </div>
     </div>
     <!-- /.ost-section -->
