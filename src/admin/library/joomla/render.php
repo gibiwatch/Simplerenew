@@ -148,6 +148,6 @@ abstract class SimplerenewRender
      */
     public static function addressFieldNames()
     {
-        return array('address1', 'address2', 'city', 'region', 'postal', 'country');
+        return array('address1', 'address2', 'country', 'postal', 'city', 'region');
     }
 }
