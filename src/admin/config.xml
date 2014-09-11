@@ -114,8 +114,7 @@
                 default="local"
                 label="COM_SIMPLERENEW_CONFIG_FONTAWESOME_LABEL"
                 description="COM_SIMPLERENEW_CONFIG_FONTAWESOME_DESC">
-                <option value="cdn">COM_SIMPLERENEW_OPTION_YES_CDN</option>
-                <option value="local">COM_SIMPLERENEW_OPTION_YES_LOCAL</option>
+                <option value="yes">JYES</option>
                 <option value="no">JNO</option>
             </field>
 
