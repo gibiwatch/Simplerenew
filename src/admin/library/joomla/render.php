@@ -13,10 +13,20 @@ defined('_JEXEC') or die();
 /**
  * @TODO: Consider moving this to a new Simplerenew set of classes for display classes
  *
- * Class SimplerenewFields
+ * Class SimplerenewRender
  */
 abstract class SimplerenewRender
 {
+    /**
+     * Get correct form field inputs for configured addressses
+     *
+     * @param string  $prefix
+     * @param Address $address
+     * @param mixed   $attribs
+     * @param string  $requiredText
+     *
+     * @return array
+     */
     public static function addressEdit(
         $prefix,
         Address $address,
@@ -85,6 +95,13 @@ abstract class SimplerenewRender
         return $fields;
     }
 
+    /**
+     * @TODO: This could be moved to the __string() method of the address object
+     *
+     * @param Address $address
+     *
+     * @return array
+     */
     public static function addressDisplay(Address $address)
     {
         $fields   = array();
@@ -106,6 +123,11 @@ abstract class SimplerenewRender
         return $fields;
     }
 
+    /**
+     * Get the list of required address fields from configuration
+     *
+     * @return array
+     */
     public static function addressRequired()
     {
         $params   = SimplerenewComponentHelper::getParams();
@@ -119,6 +141,11 @@ abstract class SimplerenewRender
         return explode(',', $required);
     }
 
+    /**
+     * All address fields in the order we want to see them
+     *
+     * @return array
+     */
     public static function addressFieldNames()
     {
         return array('address1', 'address2', 'city', 'region', 'postal', 'country');
