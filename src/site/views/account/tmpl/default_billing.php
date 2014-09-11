@@ -11,37 +11,35 @@ use Simplerenew\Primitive as Payment;
 defined('_JEXEC') or die();
 ?>
 
-<h3><span><i class="fa fa-file-excel-o"></i></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_BILLING'); ?></h3>
-
 <?php
 if ($this->billing):
     $payment = $this->billing->payment;
 
     ?>
 
-    <div class="ost-section ost-row-one">
-        <div class="block3">
-            <label><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
-        </div>
-        <div class="block9">
-            <?php echo $this->billing->firstname; ?>
-        </div>
-    </div>
-    <!-- /.ost-section -->
-
-    <div class="ost-section ost-row-two m-bottom b-bottom">
-        <div class="block3">
-            <label><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
-        </div>
-        <div class="block9">
-            <?php echo $this->billing->lastname; ?>
-        </div>
-    </div>
-    <!-- /.ost-section -->
-
     <?php
     if ($payment instanceof Payment\CreditCard): ?>
         <h3><span><i class="fa fa-credit-card"></i></span> <?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?></h3>
+
+        <div class="ost-section ost-row-one">
+            <div class="block3">
+                <label><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
+            </div>
+            <div class="block9">
+                <?php echo $this->billing->firstname; ?>
+            </div>
+        </div>
+        <!-- /.ost-section -->
+
+        <div class="ost-section ost-row-two">
+            <div class="block3">
+                <label><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
+            </div>
+            <div class="block9">
+                <?php echo $this->billing->lastname; ?>
+            </div>
+        </div>
+        <!-- /.ost-section -->
 
         <div class="ost-section ost-row-one">
             <div class="block3">
@@ -78,6 +76,26 @@ if ($this->billing):
     <?php
     elseif ($payment instanceof Payment\PayPal): ?>
         <h3><span><i class="fa fa-paypal"></i></span> <?php echo JText::_('COM_SIMPLERENEW_PAYPAL'); ?></h3>
+
+        <div class="ost-section ost-row-one">
+            <div class="block3">
+                <label><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
+            </div>
+            <div class="block9">
+                <?php echo $this->billing->firstname; ?>
+            </div>
+        </div>
+        <!-- /.ost-section -->
+
+        <div class="ost-section ost-row-two">
+            <div class="block3">
+                <label><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
+            </div>
+            <div class="block9">
+                <?php echo $this->billing->lastname; ?>
+            </div>
+        </div>
+        <!-- /.ost-section -->
 
         <div class="ost-alert-notify m-bottom">
             <?php echo JText::sprintf('COM_SIMPLERENEW_PAYPAL_AGREEMENTID', $payment->agreementId); ?>
