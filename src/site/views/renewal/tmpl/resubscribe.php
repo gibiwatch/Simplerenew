@@ -9,5 +9,7 @@
 defined('_JEXEC') or die();
 ?>
 <div class="ost-container simplerenew-renewal">
-    Instructions to re-subscribe will go here
+    <div class="ost-alert-notify">
+        <?php echo JText::_('COM_SIMPLERENEW_RENEWAL_RESUBSCRIBE_INSTRUCTIONS'); ?>
+    </div>
 </div>
