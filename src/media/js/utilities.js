@@ -136,11 +136,6 @@
             regionLists = $('select[id^=' + options.region.substr(1) + '_]'),
             country = $(options.country);
 
-        regionLists.hide();
-        if (!country) {
-            return;
-        }
-
         var updateValues = function(newValue) {
             var selected = findSelected();
 
@@ -160,6 +155,11 @@
             return $(options.region + '_' + country.val());
         };
 
+        if (!country) {
+            regionLists.hide();
+            return;
+        }
+
         region.add(regionLists).on('change', function(evt) {
             updateValues($(this).val());
         });
@@ -174,7 +174,8 @@
                 newValue = region.val();
             }
             updateValues(newValue);
-        });
+        }).trigger('change');
+
     };
     $.Simplerenew.region.options = {
         region: null,
