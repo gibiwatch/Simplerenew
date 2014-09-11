@@ -15,11 +15,17 @@ $fields = SimplerenewRender::addressDisplay($this->billing->address);
 $html        = array();
 $lastSection = 0;
 foreach ($fields as $i => $field) {
-        $row = 'ost-row-' . (($i%2) ? 'one' : 'two');
+    $class  = array(
+        'ost-section',
+        'ost-row-' . (($i % 2) ? 'one' : 'two')
+    );
+    if ($i+1 == count($fields)) {
+        $class[] = 'm-bottom b-bottom';
+    }
     $html = array_merge(
         $html,
         array(
-            '<div class="ost-section ' . $row . '">',
+            '<div class="' . join(' ', $class) . '">',
             '   <div class="block3">',
             '      <label>' . $field->label . '</label>',
             '   </div>',
