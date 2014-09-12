@@ -25,7 +25,7 @@ foreach ($cssPaths as $path) {
     <?php echo JText::_('COM_SIMPLERENEW_WELCOME'); ?>
 </div>
 
-<div class="ost-container">
+<div class="ost-container ost-container-welcome">
 
     <div class="ost-section ost-steps">
         <div class="block2">
