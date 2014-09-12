@@ -168,9 +168,9 @@ class Object
     {
         if (is_object($data)) {
             return isset($data->$var) ? $data->$var : $default;
-        } else {
-            return isset($data[$var]) ? $data[$var] : $default;
         }
+
+        return isset($data[$var]) ? $data[$var] : $default;
     }
 
     /**

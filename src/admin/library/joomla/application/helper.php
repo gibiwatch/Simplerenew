@@ -12,10 +12,10 @@ abstract class SimplerenewApplicationHelper extends JApplicationHelper
 {
     public static function stringURLSafe($string)
     {
-        if (version_compare(JVERSION, '3.0', 'ge')) {
-            return parent::stringURLSafe($string);
-        } else {
+        if (version_compare(JVERSION, '3.0', 'lt')) {
             return JApplication::stringURLSafe($string);
         }
+
+        return parent::stringURLSafe($string);
     }
 }

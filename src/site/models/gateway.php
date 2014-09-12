@@ -27,7 +27,6 @@ class SimplerenewModelGateway extends SimplerenewModelSite
      */
     public function saveUser(array $data = null)
     {
-        $app       = SimplerenewFactory::getApplication();
         $container = SimplerenewFactory::getContainer();
         $data      = new JRegistry($data ? : $this->getState()->getProperties());
         $user      = $container->getUser();

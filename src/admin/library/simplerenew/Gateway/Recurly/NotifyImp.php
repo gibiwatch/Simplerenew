@@ -20,8 +20,7 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
     protected $validIpAddresses = array(
         '75.98.92.96/28',  // < 2014-09-10
         '74.201.212.0/24',
-        '64.74.141.0/24',
-        '75.98.92.96/28'
+        '64.74.141.0/24'
     );
 
     protected $fieldMap = array(
