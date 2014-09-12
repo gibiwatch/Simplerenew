@@ -21,9 +21,6 @@ foreach ($cssPaths as $path) {
     echo '<link rel="stylesheet" href="' . $path . '" type="text/css" />' . "\n";
 }
 ?>
-<div class="alert alert-success">
-    <?php echo JText::_('COM_SIMPLERENEW_WELCOME'); ?>
-</div>
 
 <div class="ost-container ost-container-welcome">
 
