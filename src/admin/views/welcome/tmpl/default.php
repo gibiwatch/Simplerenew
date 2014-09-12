@@ -8,34 +8,58 @@
 
 defined('_JEXEC') or die();
 
-// Load admin CSS
-JHtml::stylesheet('com_simplerenew/grid.css', null, true);
-JHtml::stylesheet('com_simplerenew/grid-responsive.css', null, true);
-JHtml::stylesheet('com_simplerenew/admin.css', null, true);
+/** @var SimplerenewViewWelcome $this */
 
+// Load support assets
+JHtml::_('behavior.modal');
+JHtml::_('stylesheet', 'com_simplerenew/grid.css', null, true);
+JHtml::_('stylesheet', 'com_simplerenew/grid-responsive.css', null, true);
+JHtml::_('stylesheet', 'com_simplerenew/admin.css', null, true);
+
+$status = new SimplerenewStatus();
 ?>
 
 <div class="ost-container">
 
     <div class="ost-section ost-steps">
         <div class="block2">
-            <img src="../media/com_simplerenew/images/logo.png" alt="" />
+            <?php echo JHtml::_('image', 'com_simplerenew/logo.png', '', null, true); ?>
         </div>
         <div class="block1 ost-connector">
-            <img src="../media/com_simplerenew/images/points.png" alt="" />
+            <?php echo JHtml::_('image', 'com_simplerenew/points.png', '', null, true); ?>
         </div>
         <div class="block2">
-            <img src="../media/com_simplerenew/images/ok.png" alt="" />
-            <p class="ost-step ost-ok"><?php echo JText::_('Gateway configured'); ?></p>
+            <?php
+            echo $this->renderStep(
+                $status->gateway,
+                'gateway',
+                JRoute::_('index.php?option=com_config&view=component&component=com_simplerenew&path=&tmpl=component'),
+                array(
+                    'class' => 'btn btn-small modal',
+                    'rel'   => "{handler: 'iframe', size: {x: 875, y: 550}, onClose: function() {}}"
+                )
+            );
+            ?>
         </div>
         <div class="block2">
-            <img src="../media/com_simplerenew/images/error.png" alt="" />
-            <p class="ost-step ost-error"><?php echo JText::_('You do not have plans.
-            <br/><a class="btn btn-small" href="#"><span class="icon-plus"></span> Add a new plan</a>'); ?></p>
+            <?php
+            echo $this->renderStep(
+                $status->plans,
+                'plans',
+                JRoute::_('index.php?option=com_simplerenew&task=plan.add'),
+                'class="btn btn-small"'
+            );
+            ?>
         </div>
         <div class="block2">
-            <img src="../media/com_simplerenew/images/ok.png" alt="" />
-            <p class="ost-step ost-ok"><?php echo JText::_('Subscribe view created'); ?></p>
+            <?php
+            echo $this->renderStep(
+                $status->subscribe,
+                'subscribeform',
+                JRoute::_('index.php?option=com_menus'),
+                'class="btn btn-small"'
+            );
+            ?>
         </div>
     </div>
     <!-- /.ost-section -->
