@@ -171,7 +171,6 @@ class Object
         }
 
         return isset($data[$var]) ? $data[$var] : $default;
-
     }
 
     /**

@@ -39,7 +39,6 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
             $app->input->server->getUsername('PHP_AUTH_USER'),
             $app->input->server->getString('PHP_AUTH_PW')
         );
-
     }
 
     /**

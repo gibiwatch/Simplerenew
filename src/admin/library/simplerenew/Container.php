@@ -83,7 +83,6 @@ class Container
             throw new Exception('Gateway namespace not found - ' . $namespace);
         }
         $this->configuration->set('gateway.namespace', $namespace);
-
     }
 
     /**

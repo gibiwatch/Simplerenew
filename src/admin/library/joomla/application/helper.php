@@ -17,6 +17,5 @@ abstract class SimplerenewApplicationHelper extends JApplicationHelper
         }
 
         return parent::stringURLSafe($string);
-
     }
 }
