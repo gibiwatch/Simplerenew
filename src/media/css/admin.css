@@ -23,6 +23,7 @@
 .ost-container .ost-ok{
     color: #468847;
 }
-.ost-container-welcome{
+.ost-container-welcome,
+.ost-container-dashboard{
     margin: 25px 0;
 }

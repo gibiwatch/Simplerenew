@@ -19,7 +19,7 @@ JHtml::_('stylesheet', 'com_simplerenew/admin.css', null, true);
 $status = new SimplerenewStatus();
 ?>
 
-<div class="ost-container">
+<div class="ost-container ost-container-dashboard">
 
     <div class="ost-section ost-steps">
         <div class="block2">
