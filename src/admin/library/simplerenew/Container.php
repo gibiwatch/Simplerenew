@@ -67,22 +67,23 @@ class Container
         $gateway = $config->get('gateway', array());
         if (empty($gateway)) {
             throw new Exception('No gateway has been defined');
-        } else {
-            $namespace = key($gateway);
-            if (empty($gateway[$namespace])) {
-                throw new Exception('Gateway has not been selected');
-            }
-            $gatewayConfig = new Configuration($gateway[$namespace]);
-            $this->configuration->set('gateway.config', $gatewayConfig);
-
-            if (strpos($namespace, '\\') === false) {
-                $namespace = '\\Simplerenew\\Gateway\\' . ucfirst(strtolower($namespace));
-            }
-            if (!class_exists($namespace . '\\AccountImp')) {
-                throw new Exception('Gateway namespace not found - ' . $namespace);
-            }
-            $this->configuration->set('gateway.namespace', $namespace);
         }
+
+        $namespace = key($gateway);
+        if (empty($gateway[$namespace])) {
+            throw new Exception('Gateway has not been selected');
+        }
+        $gatewayConfig = new Configuration($gateway[$namespace]);
+        $this->configuration->set('gateway.config', $gatewayConfig);
+
+        if (strpos($namespace, '\\') === false) {
+            $namespace = '\\Simplerenew\\Gateway\\' . ucfirst(strtolower($namespace));
+        }
+        if (!class_exists($namespace . '\\AccountImp')) {
+            throw new Exception('Gateway namespace not found - ' . $namespace);
+        }
+        $this->configuration->set('gateway.namespace', $namespace);
+
     }
 
     /**

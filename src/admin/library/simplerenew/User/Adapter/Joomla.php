@@ -154,7 +154,7 @@ class Joomla implements UserInterface
             'password1' => $parent->password
         );
 
-        if ($id = $model->register($data)) {
+        if ($model->register($data)) {
             $parent->loadByUsername($parent->username);
             return;
         }

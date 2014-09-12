@@ -6,8 +6,6 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-use Simplerenew\Exception\NotFound;
-
 defined('_JEXEC') or die();
 
 class SimplerenewControllerNotify extends SimplerenewControllerBase
@@ -36,7 +34,6 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
     protected function authenticate()
     {
         $app       = SimplerenewFactory::getApplication();
-        $container = SimplerenewFactory::getContainer();
 
         $this->gatewayLogin(
             $app->input->server->getUsername('PHP_AUTH_USER'),
