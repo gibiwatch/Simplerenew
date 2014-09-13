@@ -33,12 +33,12 @@ class SimplerenewStatus
     /**
      * @var int
      */
-    protected $plans = null;
+    protected $plans = 0;
 
     /**
      * @var int
      */
-    protected $subscribe = null;
+    protected $subscribe = 0;
 
     public function __construct()
     {
@@ -54,9 +54,8 @@ class SimplerenewStatus
             ->loadResult();
 
         // Find all instances of the subscribe view
-        $this->subscribe = 0;
-        $site            = JApplication::getInstance('site');
-        $menus           = $site->getMenu()->getItems('component', 'com_simplerenew');
+        $site  = JApplication::getInstance('site');
+        $menus = $site->getMenu()->getItems('component', 'com_simplerenew');
         foreach ($menus as $menu) {
             if (!empty($menu->query['view']) && $menu->query['view'] == 'subscribe') {
                 $this->subscribe++;

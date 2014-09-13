@@ -121,7 +121,6 @@ abstract class SimplerenewHelper
             if (self::isConfigured()) {
                 try {
                     $valid = SimplerenewFactory::getContainer()->getAccount()->validConfiguration();
-                    var_dump($valid);
                     if (!$valid) {
                         $message->errors[] = JText::_('COM_SIMPLERENEW_ERROR_GATEWAY_CONFIGURATION');
                     }

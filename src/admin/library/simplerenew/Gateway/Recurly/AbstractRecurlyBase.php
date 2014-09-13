@@ -89,9 +89,33 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
      */
     public function validConfiguration()
     {
-        if ($this->client instanceof \Recurly_Client) {
-            return ($this->client->apiKey() != '');
+        if (
+            $this->client instanceof \Recurly_Client
+            && ($this->client->apiKey() != '')
+        ) {
+
+            $url = sprintf($this->client->baseUri() . '/accounts');
+            $ch  = curl_init($url);
+            curl_setopt_array(
+                $ch,
+                array(
+                    CURLOPT_SSL_VERIFYPEER => false,
+                    CURLOPT_SSL_VERIFYHOST => 2,
+                    CURLOPT_FOLLOWLOCATION => false,
+                    CURLOPT_MAXREDIRS      => 1,
+                    CURLOPT_HEADER         => true,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_USERPWD        => $this->getCfg('Apikey') . ': '
+                )
+            );
+
+            curl_exec($ch);
+            $info = curl_getinfo($ch);
+            curl_close($ch);
+
+            return ($info['http_code'] == 200);
         }
+
         return false;
     }
 }
