@@ -120,22 +120,23 @@ abstract class SimplerenewHelper
             // Test Gateway Configuration
             if (self::isConfigured()) {
                 try {
-                    $plan = SimplerenewFactory::getContainer()->getPlan();
-                    if (!$plan->validConfiguration()) {
-                        $message['errors'] = JText::_('COM_SIMPLERENEW_ERROR_GATEWAY_CONFIGURATION');
+                    $valid = SimplerenewFactory::getContainer()->getAccount()->validConfiguration();
+                    var_dump($valid);
+                    if (!$valid) {
+                        $message->errors[] = JText::_('COM_SIMPLERENEW_ERROR_GATEWAY_CONFIGURATION');
                     }
 
                 } catch (Exception $e) {
-                    $message['errors'] = JText::_('COM_SIMPLERENEW_ERROR_GATEWAY_CONFIGURATION');
+                    $message->errors[] = JText::_('COM_SIMPLERENEW_ERROR_GATEWAY_CONFIGURATION');
                 }
             }
 
             // Check critical support plugins
             if (!JPluginHelper::isEnabled('user', 'simplerenew')) {
-                $message['errors'] = JText::sprintf('COM_SIMPLERENEW_WARN_PLUGIN_MISSING', 'user/simplerenew');
+                $message->errors[] = JText::sprintf('COM_SIMPLERENEW_WARN_PLUGIN_MISSING', 'user/simplerenew');
             }
             if (!JPluginHelper::isEnabled('system', 'simplerenew')) {
-                $message['errors'] = JText::sprintf('COM_SIMPLERENEW_WARN_PLUGIN_MISSING', 'system/simplerenew');
+                $message->errors[] = JText::sprintf('COM_SIMPLERENEW_WARN_PLUGIN_MISSING', 'system/simplerenew');
             }
         }
 
