@@ -28,8 +28,6 @@ class JFormFieldFilteredgroup extends JFormFieldList
         if (!isset(static::$options[$hash])) {
             static::$options[$hash] = parent::getOptions();
 
-            $options = array();
-
             $db    = JFactory::getDbo();
             $query = $db->getQuery(true)
                 ->select('a.id AS value')
@@ -49,13 +47,17 @@ class JFormFieldFilteredgroup extends JFormFieldList
             }
         }
 
+        $defaultGroup = JComponentHelper::getParams('com_users')->get('new_usertype');
+
         $options = static::$options[$hash];
         if ($exclude = explode(',', (string)$this->element['exclude'])) {
             $filtered = array();
             foreach ($options as $option) {
                 foreach ($exclude as $action) {
                     if (JAccess::checkGroup($option->value, $action)) {
-                        break 2;
+                        continue 2;
+                    } elseif ($action == 'default' && $option->value == $defaultGroup) {
+                        continue 2;
                     }
                 }
                 $filtered[] = $option;
