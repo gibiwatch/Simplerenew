@@ -244,10 +244,6 @@ abstract class SimplerenewHelper
 
         // Load the default group in case we add plans from the gateway
         $defaultGroup = $params->get('basic.defaultGroup');
-        if ($defaultGroup <= 0) {
-            $message->errors[] = JText::_('COM_SIMPLERENEW_ERROR_DEFAULTGROUP');
-            return $message;
-        }
 
         // Update/Add plans found on the gateway
         /** @var Simplerenew\Api\Plan $plan */
@@ -265,18 +261,15 @@ abstract class SimplerenewHelper
                 $plansTable->setProperties(
                     array(
                         'id'               => null,
-                        'published'        => 1,
+                        'group_id'         => $plansTable->group_id ? : $defaultGroup,
                         'ordering'         => $nextOrder++,
                         'created_by_alias' => JText::_('COM_SIMPLERENEW_PLAN_SYNC_IMPORTED')
                     )
                 );
+                $plansTable->published = (int)(bool)$plansTable->group_id;
             }
+
             $plansTable->bind($plan->getProperties());
-
-            if ($plansTable->group_id <= 0) {
-                $plansTable->group_id = $defaultGroup;
-            }
-
             if (!$plansTable->store()) {
                 $message->errors = array_merge(
                     $message->errors,
