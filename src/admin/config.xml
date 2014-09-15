@@ -10,6 +10,15 @@
                 label="COM_SIMPLERENEW_CONFIG_DEFAULT_GROUP_LABEL"
                 description="COM_SIMPLERENEW_CONFIG_DEFAULT_GROUP_DESC"
                 type="filteredgroup"
+                exclude="core.admin,default">
+                <option value="">COM_SIMPLERENEW_OPTION_NONE</option>
+            </field>
+
+            <field
+                name="expirationGroup"
+                label="COM_SIMPLERENEW_CONFIG_EXPIRATION_GROUP_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_EXPIRATION_GROUP_DESC"
+                type="filteredgroup"
                 exclude="core.admin"/>
 
             <field
