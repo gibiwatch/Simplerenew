@@ -43,12 +43,13 @@ class Container
     public function __construct(array $config)
     {
         $this->configuration = new Configuration(array());
+        $config              = new Configuration($config);
 
-        $config  = new Configuration($config);
+        // Load account settings
         $account = $config->get('account', array());
         $this->configuration->set('account.config', $account);
 
-        // Verify valid user adapter
+        // Load and verify user settings
         $userAdapter = $config->get('user.adapter');
         if (is_string($userAdapter)) {
             if (strpos($userAdapter, '\\') === false) {
@@ -62,8 +63,9 @@ class Container
             throw new Exception('User adapter not found - ' . $userAdapter);
         }
         $this->configuration->set('user.adapter', $userAdapter);
+        $this->configuration->set('user.config', $config->get('user', array()));
 
-        // Get and verify Gateway configurations
+        // Load and verify Gateway configurations
         $gateway = $config->get('gateway', array());
         if (empty($gateway)) {
             throw new Exception('No gateway has been defined');
@@ -96,7 +98,7 @@ class Container
     public function getUser(UserInterface $adapter = null)
     {
         $adapter = $adapter ? : $this->configuration->get('user.adapter');
-        $user    = new User($adapter);
+        $user    = new User($adapter, $this->configuration->get('user.config'));
         return $user;
     }
 
@@ -213,8 +215,8 @@ class Container
         $namespace = $this->configuration->get('gateway.namespace');
         $className = $namespace . '\\' . $name;
         if (class_exists($className)) {
-            $config    = $this->configuration->get('gateway.config');
-            $instance  = new $className($config);
+            $config   = $this->configuration->get('gateway.config');
+            $instance = new $className($config);
 
             return $instance;
         }

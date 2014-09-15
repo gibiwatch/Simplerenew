@@ -339,8 +339,7 @@ class Joomla implements UserInterface
      */
     public function setGroup(User $parent, Plan $plan = null)
     {
-        $filter  = array();
-        $default = $this->userParams->get('new_usertype');
+        $filter = array();
 
         // Get all user groups applying to plans
         $plans = $this->getLocalPlans();
@@ -348,26 +347,16 @@ class Joomla implements UserInterface
             $filter[] = $p->group_id;
         }
         $filter = array_unique($filter);
-        if (in_array($default, $filter)) {
-            // the default group is in a plan group
-            // @TODO: NO, NO, NO! - hardcoding is ALWAYS bad!!!
-            $default = 1;
-        }
-        $filter[] = $default;
 
         // Filter them all out
         $newGroups = array_diff($parent->groups, $filter);
 
-        if ($plan) {
-            if (!isset($this->localPlans[$plan->code])) {
-                throw new Exception('Unable to find user group for - ' . $plan->code);
-            }
-            $gid             = $this->localPlans[$plan->code]->group_id;
-            $newGroups[$gid] = $gid;
+        if ($plan && isset($this->localPlans[$plan->code])) {
+            $gid = $this->localPlans[$plan->code]->group_id;
         } else {
-            // Remove from any plan group
-            $newGroups[$default] = $default;
+            $gid = $parent->getExpirationGroup();
         }
+        $newGroups[$gid] = $gid;
 
         // Let's make sure we have current data
         $this->load($parent);

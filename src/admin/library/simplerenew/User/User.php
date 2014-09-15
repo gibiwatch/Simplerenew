@@ -72,9 +72,19 @@ class User extends Object
      */
     protected $adapter = null;
 
-    public function __construct(Adapter\UserInterface $adapter)
+    /**
+     * @var int
+     */
+    protected $expirationGroup = null;
+
+    public function __construct(Adapter\UserInterface $adapter, array $config = array())
     {
-        $this->adapter = $adapter;
+        $this->adapter       = $adapter;
+
+        if (empty($config['expirationGroup'])) {
+            throw new Exception('Configuration problem - Expiration user group is required');
+        }
+        $this->expirationGroup = $config['expirationGroup'];
     }
 
     /**
@@ -185,6 +195,7 @@ class User extends Object
     {
         $this->adapter->logout($this);
     }
+
     /**
      * Set the user group based on the plan
      *
@@ -206,5 +217,13 @@ class User extends Object
     public function getGroupText()
     {
         return $this->adapter->getGroupText($this);
+    }
+
+    /**
+     * Returns the user group used when a subscription expires
+     */
+    public function getExpirationGroup()
+    {
+        return $this->expirationGroup;
     }
 }

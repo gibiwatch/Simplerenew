@@ -30,12 +30,14 @@ abstract class SimplerenewFactory extends JFactory
     public static function getContainer(JRegistry $params = null)
     {
         $params = $params ? : SimplerenewComponentHelper::getParams();
-        $key = sha1($params->toString());
+        $key    = sha1($params->toString());
 
         if (empty(self::$SimplerenewContainers[$key])) {
             $config = array(
                 'user'    => array(
-                    'adapter' => 'joomla'
+                    'adapter'         => 'joomla',
+                    'defaultGroup'    => $params->get('basic.defaultGroup'),
+                    'expirationGroup' => $params->get('basic.expirationGroup')
                 ),
                 'account' => array(
                     'billingAddress' => $params->get('basic.billingAddress')
@@ -44,6 +46,7 @@ abstract class SimplerenewFactory extends JFactory
                     'recurly' => (array)$params->get('gateway.recurly')
                 )
             );
+
             self::$SimplerenewContainers[$key] = new Container($config);
         }
         return self::$SimplerenewContainers[$key];
