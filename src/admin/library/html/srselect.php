@@ -76,14 +76,20 @@ abstract class JHtmlSrselect
 
         $id = $idTag ? : str_replace(array('[', ']'), array('_', ''), $idTag);
 
-        if (!$selected) {
-            $selected = 'US';
-        }
-
         $countries = SimplerenewFactory::getDbo()
             ->setQuery('Select * From #__simplerenew_countries order By name')
             ->loadObjectList();
         if (count($countries)) {
+            array_unshift(
+                $countries,
+                JHtml::_(
+                    'select.option',
+                    '',
+                    JText::_('COM_SIMPLERENEW_OPTION_SELECT_COUNTRY'),
+                    'code',
+                    'name'
+                )
+            );
             return JHtml::_('select.genericlist', $countries, $name, $attribs, 'code', 'name', $selected, $id);
         }
 
