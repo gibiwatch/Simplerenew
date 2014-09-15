@@ -412,9 +412,16 @@ class Com_SimplerenewInstallerScript
 
         $params = new JRegistry($table->params);
 
-        $setParams = ($type == 'install');
+        $setParams    = ($type == 'install');
+        $defaultGroup = JComponentHelper::getParams('com_users')->get('new_usertype');
 
         if ($type == 'update') {
+            // v0.0.47: Clear up old setting that might be invalid
+            if ($params->get('basic.defaultGroup') == $defaultGroup) {
+                $params->set('basic.defaultGroup', '');
+                $setParams = true;
+            }
+
             $paramArray = $params->toArray();
             if (!isset($paramArray['basic']['billingAddress'])) {
                 $params->set('basic.billingAddress', $params->get('account.billingAddress'));
@@ -442,10 +449,9 @@ class Com_SimplerenewInstallerScript
             }
         }
 
-        // Must have the default plan group set
-        if ($params->get('basic.defaultGroup') == '') {
-            $defaultGroup = JComponentHelper::getParams('com_users')->get('new_usertype');
-            $params->set('basic.defaultGroup', $defaultGroup);
+        // Must have the expiration plan group set
+        if ($params->get('basic.expirationGroup') == '') {
+            $params->set('basic.expirationGroup', $defaultGroup);
             $setParams = true;
         }
 
@@ -500,7 +506,7 @@ class Com_SimplerenewInstallerScript
         }
 
         $regions = $db->setQuery('Select count(*) From #__simplerenew_regions')->loadResult();
-        $file = $path . '/regions.json';
+        $file    = $path . '/regions.json';
         if ($regions == 0 && file_exists($file)) {
             $regions = json_decode(file_get_contents($file));
             foreach ($regions as $region) {
