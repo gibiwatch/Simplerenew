@@ -23,7 +23,7 @@ class JFormFieldFilteredgroup extends JFormFieldList
     protected function getOptions()
     {
         // Hash for caching
-        $hash = md5($this->element);
+        $hash = md5($this->element->asXML());
 
         if (!isset(static::$options[$hash])) {
             static::$options[$hash] = parent::getOptions();
