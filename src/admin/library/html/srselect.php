@@ -74,7 +74,7 @@ abstract class JHtmlSrselect
     {
         JHtml::_('sr.jquery', true);
 
-        $id = $idTag ?: str_replace(array('[', ']'), array('_', ''), $idTag);
+        $id = $idTag ? : str_replace(array('[', ']'), array('_', ''), $idTag);
 
         if (!$selected) {
             $selected = 'US';
@@ -106,7 +106,7 @@ abstract class JHtmlSrselect
     {
         JHtml::_('sr.jquery', true);
 
-        $id = $idTag ?: str_replace(array('[', ']'), array('_', ''), $name);
+        $id = $idTag ? : str_replace(array('[', ']'), array('_', ''), $name);
 
         $html = array(
             JHtml::_('sr.inputfield', $name, $attribs, $selected, $id)
@@ -130,8 +130,16 @@ abstract class JHtmlSrselect
                 }
 
                 foreach ($options as $country => $regionOptions) {
-                    $name = $id . '_' . $country;
-                    $html[] = JHtml::_('select.genericlist', $regionOptions, $name, $attribs, 'code', 'name', $selected);
+                    $name   = $id . '_' . $country;
+                    $html[] = JHtml::_(
+                        'select.genericlist',
+                        $regionOptions,
+                        $name,
+                        $attribs,
+                        'code',
+                        'name',
+                        $selected
+                    );
                 }
 
                 $jsonOptions = json_encode(
