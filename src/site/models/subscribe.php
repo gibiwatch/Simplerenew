@@ -19,7 +19,7 @@ class SimplerenewModelSubscribe extends SimplerenewModelAccount
             ->select('plans.*')
             ->from('#__simplerenew_plans plans')
             ->order('ordering ASC');
-        $query->where('published = 1');
+        $query->where('published = 1 AND group_id > 0');
 
         if ($available = $this->getAvailable()) {
             $available = array_map(array($db, 'quote'), $available);
