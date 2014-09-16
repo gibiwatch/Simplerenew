@@ -68,9 +68,9 @@ abstract class SimplerenewHelper
                     }
                 } else {
                     $tree   = explode('.', $key);
-                    $target = & $source[$tree[0]];
+                    $target = &$source[$tree[0]];
                     for ($i = 1; $i < count($tree) - 1; $i++) {
-                        $target = & $target[$tree[$i]];
+                        $target = &$target[$tree[$i]];
                     }
                     if (isset($target[$tree[$i]])) {
                         unset($target[$tree[$i]]);
@@ -132,10 +132,45 @@ abstract class SimplerenewHelper
 
             // Check critical support plugins
             if (!JPluginHelper::isEnabled('user', 'simplerenew')) {
-                $message->errors[] = JText::sprintf('COM_SIMPLERENEW_WARN_PLUGIN_MISSING', 'user/simplerenew');
+                $message->errors[] = JText::sprintf('COM_SIMPLERENEW_ERROR_PLUGIN_MISSING', 'user/simplerenew');
             }
             if (!JPluginHelper::isEnabled('system', 'simplerenew')) {
-                $message->errors[] = JText::sprintf('COM_SIMPLERENEW_WARN_PLUGIN_MISSING', 'system/simplerenew');
+                $message->errors[] = JText::sprintf('COM_SIMPLERENEW_ERROR_PLUGIN_MISSING', 'system/simplerenew');
+            }
+
+            // Check user group settings
+            $params          = SimplerenewComponentHelper::getParams();
+            $defaultGroup    = $params->get('basic.defaultGroup');
+            $expirationGroup = $params->get('basic.expirationGroup');
+
+            if (!$defaultGroup) {
+                $message->warnings[] = JText::_('COM_SIMPLERENEW_WARN_NO_DEFAULTGROUP');
+            }
+            if ($defaultGroup == $expirationGroup) {
+                $message->warnings[] = JText::_('COM_SIMPLERENEW_WARN_GROUPS_EQUAL');
+            }
+
+            $db    = SimplerenewFactory::getDbo();
+
+            // Check for plans set to the expiration group
+            $plans = $db
+                ->setQuery('Select name From #__simplerenew_plans Where group_id=' . $db->quote($expirationGroup))
+                ->loadColumn();
+
+            if (count($plans) > 1) {
+                $message->warnings[] = JText::sprintf('COM_SIMPLERENEW_WARN_PLANS_EXPIRATION_GROUP', count($plans));
+            } elseif (count($plans) > 0) {
+                $message->warnings[] = JText::sprintf('COM_SIMPLERENEW_WARN_PLANS_EXPIRATION_GROUP_1', $plans[0]);
+            }
+
+            // Check for plans with no subscription group
+            $plans = $db
+                ->setQuery('Select name From #__simplerenew_plans Where group_id=0')
+                ->loadColumn();
+            if (count($plans) > 1) {
+                $message->warnings[] = JText::sprintf('COM_SIMPLERENEW_WARN_PLANS_NO_GROUP', count($plans));
+            } elseif (count($plans) > 0) {
+                $message->warnings[] = JText::sprintf('COM_SIMPLERENEW_WARN_PLANS_NO_GROUP_1', $plans[0]);
             }
         }
 
@@ -261,7 +296,7 @@ abstract class SimplerenewHelper
                 $plansTable->setProperties(
                     array(
                         'id'               => null,
-                        'group_id'         => $plansTable->group_id ? : $defaultGroup,
+                        'group_id'         => $plansTable->group_id ?: $defaultGroup,
                         'ordering'         => $nextOrder++,
                         'created_by_alias' => JText::_('COM_SIMPLERENEW_PLAN_SYNC_IMPORTED')
                     )
