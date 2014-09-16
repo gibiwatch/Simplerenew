@@ -37,9 +37,7 @@ $status = new SimplerenewStatus();
         <div class="block2">
             <?php echo JHtml::_('image', 'com_simplerenew/logo.png', '', null, true); ?>
         </div>
-        <div class="block1 ost-connector">
-            <?php echo JHtml::_('image', 'com_simplerenew/points.png', '', null, true); ?>
-        </div>
+        <div class="block1 ost-connector"> </div>
         <div class="block2">
             <?php echo $this->renderStep($status->gateway, 'gateway', $optionsLink, $optionsAttribs);?>
         </div>
