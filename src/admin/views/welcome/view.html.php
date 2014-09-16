@@ -65,4 +65,9 @@ class SimplerenewViewWelcome extends SimplerenewViewAdmin
         }
         return join("\n", $html);
     }
+
+    protected function displayFooter()
+    {
+        // Don't show footer on these views
+    }
 }
