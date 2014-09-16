@@ -52,16 +52,6 @@ $status = new SimplerenewStatus();
             );
             ?>
         </div>
-        <div class="block2">
-            <?php
-            echo $this->renderStep(
-                $status->subscribe,
-                'subscribeform',
-                JRoute::_('index.php?option=com_menus'),
-                'class="btn btn-small"'
-            );
-            ?>
-        </div>
     </div>
     <!-- /.ost-section -->
 </div>
