@@ -18,7 +18,7 @@ JHtml::_('stylesheet', 'com_simplerenew/admin.css', null, true);
 // Setup for configuration options
 $optionsLink = JRoute::_('index.php?option=com_config&view=component&component=com_simplerenew&path=&tmpl=component');
 if (version_compare(JVERSION, '3', 'ge')) {
-    $optionsAttribs = 'class ="btn btn-small';
+    $optionsAttribs = 'class ="btn btn-small"';
 } else {
     JHtml::_('behavior.modal');
     $optionsAttribs = array(
