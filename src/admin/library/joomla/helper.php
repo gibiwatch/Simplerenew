@@ -194,7 +194,7 @@ abstract class SimplerenewHelper
 
         if (!empty($messages->warnings)) {
             foreach ($messages->warnings as $warning) {
-                $app->enqueueMessage($warning, 'notice');
+                $app->enqueueMessage($warning, 'warning');
             }
         }
 
