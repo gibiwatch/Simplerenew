@@ -7,7 +7,7 @@
     <license>GPL v3</license>
     <authorEmail>info@simplerenew.com</authorEmail>
     <authorUrl>https://simplerenew.com</authorUrl>
-    <version>0.0.48</version>
+    <version>0.1.0</version>
     <description>COM_SIMPLERENEW_COMPONENT_DESCRIPTION</description>
 
     <scriptfile>script.simplerenew.php</scriptfile>
