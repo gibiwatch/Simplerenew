@@ -213,13 +213,6 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
      */
     protected function displayFooter()
     {
-        $info = SimplerenewHelper::getInfo()->toObject();
-
-        echo JText::sprintf(
-            'COM_SIMPLERENEW_VERSION_FOOTER',
-            JText::_($info->name),
-            $info->version,
-            $info->authorUrl
-        );
+        // Don't show footer on these views
     }
 }
