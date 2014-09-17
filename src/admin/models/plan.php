@@ -31,7 +31,13 @@ class SimplerenewModelPlan extends SimplerenewModelAdmin
 
         if (empty($data)) {
             $data = $this->getItem();
+
+            if (!$data->get('id')) {
+                $gid = SimplerenewComponentHelper::getParams()->get('basic.defaultGroup');
+                $data->set('group_id', $gid);
+            }
         }
+
         return $data;
     }
 }
