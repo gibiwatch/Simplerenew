@@ -120,11 +120,11 @@
             <field
                 name="fontAwesome"
                 type="list"
-                default="local"
+                default="1"
                 label="COM_SIMPLERENEW_CONFIG_FONTAWESOME_LABEL"
                 description="COM_SIMPLERENEW_CONFIG_FONTAWESOME_DESC">
-                <option value="yes">JYES</option>
-                <option value="no">JNO</option>
+                <option value="1">JYES</option>
+                <option value="0">JNO</option>
             </field>
 
             <field

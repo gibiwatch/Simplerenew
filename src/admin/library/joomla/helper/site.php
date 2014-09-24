@@ -73,7 +73,7 @@ abstract class SimplerenewHelperSite
         }
 
         // Load font Awesome
-        if ($params->get('themes.fontAwesome') == 'yes') {
+        if ($params->get('themes.fontAwesome', true)) {
             JHtml::stylesheet('com_simplerenew/awesome/css/font-awesome.min.css', null, true);
         }
 
