@@ -18,7 +18,7 @@ class Subscription extends AbstractApiBase
 {
     const STATUS_ACTIVE   = 1;
     const STATUS_CANCELED = 2;
-    const STATUS_EXPIRED  = 3;
+    const STATUS_EXPIRED  = 4;
     const STATUS_UNKNOWN  = 0;
 
     /**
@@ -137,13 +137,13 @@ class Subscription extends AbstractApiBase
      * Get list of subscriptions for the selected account
      *
      * @param Account $account
-     * @param int     $status One of the Simplerenew\Api\Subscription status codes
+     * @param int     $bitMask Subscription status codes to retrieve
      *
      * @return array()
      */
-    public function getList(Account $account, $status = null)
+    public function getList(Account $account, $bitMask = null)
     {
-        return $this->imp->getList($this, $account, $status);
+        return $this->imp->getList($this, $account, $bitMask);
     }
 
     /**

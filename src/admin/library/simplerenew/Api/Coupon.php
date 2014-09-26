@@ -19,9 +19,10 @@ class Coupon extends AbstractApiBase
     const TYPE_PERCENT = 1;
     const TYPE_AMOUNT  = 2;
 
+    // Status bit masks
     const STATUS_ACTIVE  = 1;
     const STATUS_EXPIRED = 2;
-    const STATUS_MAX     = 3;
+    const STATUS_MAX     = 4;
     const STATUS_UNKNOWN = 0;
 
     public $code = null;

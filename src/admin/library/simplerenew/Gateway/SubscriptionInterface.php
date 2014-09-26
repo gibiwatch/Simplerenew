@@ -42,11 +42,11 @@ interface SubscriptionInterface
     /**
      * @param Subscription $template
      * @param Account      $account
-     * @param int          $status One of the Simplerenew\Api\Subscription status codes
+     * @param int          $bitMask Subscription status codes to retrieve
      *
      * @return array
      */
-    public function getList(Subscription $template, Account $account, $status = null);
+    public function getList(Subscription $template, Account $account, $bitMask = null);
 
     /**
      * Get the most recent subscription
