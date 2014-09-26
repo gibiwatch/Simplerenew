@@ -83,6 +83,8 @@ class SimplerenewModelAccount extends SimplerenewModelSite
 
     /**
      * @return null|Subscription
+     *
+     * @deprecated 0.2.0
      */
     public function getSubscription()
     {
@@ -101,6 +103,35 @@ class SimplerenewModelAccount extends SimplerenewModelSite
         }
 
         return $subscription;
+    }
+
+    /**
+     * Get array of subscriptions for the account. Use the
+     * status.subscription bitmask to choose selected status codes
+     *
+     * @return array
+     */
+    public function getSubscriptions()
+    {
+        $subscriptions = $this->getState('subscriptions', null);
+        if ($subscriptions === null) {
+            $subscriptions = array();
+
+            if ($account = $this->getAccount()) {
+                try {
+                    $status = (int)$this->getState('status.subscription', null);
+                    $subscriptions = $this->getContainer()
+                        ->getSubscription()
+                        ->getList($account, $status);
+
+                } catch (NotFound $e) {
+                    // no subs, no problem
+                }
+            }
+            $this->setState('subscriptions', $subscriptions);
+        }
+
+        return $subscriptions;
     }
 
     /**
