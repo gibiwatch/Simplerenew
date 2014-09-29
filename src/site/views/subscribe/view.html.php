@@ -40,6 +40,11 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
      */
     protected $subscriptions = null;
 
+    /**
+     * @var bool
+     */
+    protected $allowMultiple = false;
+
     public function display($tpl = null)
     {
         $this->enforceSSL();
@@ -54,8 +59,8 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
 
         try {
             if ($this->user = $this->get('User')) {
-                $this->account      = $this->get('Account');
-                $this->billing      = $this->get('billing');
+                $this->account       = $this->get('Account');
+                $this->billing       = $this->get('billing');
                 $this->subscriptions = $this->get('Subscriptions');
             }
 
@@ -65,10 +70,10 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
 
         // Set blank objects as needed
         $container           = SimplerenewFactory::getContainer();
-        $this->user          = $this->user ? : $container->getUser();
-        $this->account       = $this->account ? : $container->getAccount();
-        $this->billing       = $this->billing ? : $container->getBilling();
-        $this->subscriptions = $this->subscriptions ? : array();
+        $this->user          = $this->user ?: $container->getUser();
+        $this->account       = $this->account ?: $container->getAccount();
+        $this->billing       = $this->billing ?: $container->getBilling();
+        $this->subscriptions = $this->subscriptions ?: array();
 
         // Fill in data from previous form attempt if any
         if ($formData = SimplerenewHelper::loadFormData('subscribe')) {
@@ -81,25 +86,36 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
         }
 
         if (!empty($formData['planCode'])) {
-            $selectedPlans = array_fill_keys((array)$formData['planCode'], null);
+            // Plans selected on last form submit
+            $selectedPlans = array_fill_keys((array)$formData['planCode'], true);
         } elseif (!$this->subscriptions) {
-            $plan = current($this->plans);
-            $selectedPlans = array($plan->code => null);
+            // By default select the first shown plan
+            $plan          = current($this->plans);
+            $selectedPlans = array($plan->code => true);
         }
+        // Fill with list of current active/canceled subscriptions
         foreach ($this->subscriptions as $subscription) {
             $selectedPlans[$subscription->plan] = $subscription->id;
         }
 
-        $allowMultiple = $this->getParams()->get('basic.allowMultiple', false);
+        $this->allowMultiple = $this->getParams()->get('basic.allowMultiple');
         foreach ($this->plans as $plan) {
-            if ($plan->selected = !empty($selectedPlans[$plan->code])) {
-                $plan->subscription = $selectedPlans[$plan->code];
-                if ($allowMultiple) {
-                    $subscription = $this->subscriptions[$plan->subscription];
+            $plan->subscription = empty($selectedPlans[$plan->code]) ? null : $selectedPlans[$plan->code];
+            if ($plan->subscription === true) {
+                $plan->selected = true;
+            } elseif ($this->allowMultiple) {
+                if (empty($this->subscriptions[$plan->subscription])) {
+                    $plan->selected = false;
+                } else {
+                    $subscription   = $this->subscriptions[$plan->subscription];
                     $plan->selected = (bool)($subscription->status & Subscription::STATUS_ACTIVE);
                 }
+            } else {
+                $plan->selected = !empty($this->subscriptions[$plan->subscription]);
             }
         }
+
+
 
         parent::display($tpl);
     }
