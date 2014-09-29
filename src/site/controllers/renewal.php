@@ -88,7 +88,7 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
             $subscriptions = $container->getSubscription()->getList($account);
 
             if (!isset($subscriptions[$id])) {
-                throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_NOTAUTH'));
+                throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_NOAUTH'));
             }
 
             return $subscriptions[$id];
