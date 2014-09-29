@@ -339,7 +339,8 @@ class Joomla implements UserInterface
      */
     public function setGroup(User $parent, Plan $plan = null)
     {
-        $filter = array();
+        $expId = $parent->getExpirationGroup();
+        $filter = array($expId);
 
         // Get all user groups applying to plans
         $plans = $this->getLocalPlans();
@@ -354,7 +355,7 @@ class Joomla implements UserInterface
         if ($plan && isset($this->localPlans[$plan->code])) {
             $gid = $this->localPlans[$plan->code]->group_id;
         } else {
-            $gid = $parent->getExpirationGroup();
+            $gid = $expId;
         }
         $newGroups[$gid] = $gid;
 
