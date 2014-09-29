@@ -29,7 +29,7 @@ $app = SimplerenewFactory::getApplication();
         <input
             type="hidden"
             name="id"
-            value="<?php echo $this->subscription->id; ?>"/>
+            value="<?php echo $this->subscriptions[0]->id; ?>"/>
 
         <input
             type="hidden"
@@ -46,7 +46,7 @@ $app = SimplerenewFactory::getApplication();
             value="renewal.reactivate"/>
 
         <button type="submit" class="btn-main btn-big">
-            <i class="fa fa-check"></i> 
+            <i class="fa fa-check"></i>
             <?php echo JText::_('COM_SIMPLERENEW_RENEWAL_REACTIVATE_BUTTON'); ?>
         </button>
 

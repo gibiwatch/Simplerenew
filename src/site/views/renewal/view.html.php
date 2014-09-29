@@ -19,14 +19,9 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
     protected $user = null;
 
     /**
-     * @var JRegistry
+     * @var array
      */
-    protected $params = null;
-
-    /**
-     * @var Subscription
-     */
-    protected $subscription = null;
+    protected $subscriptions = null;
 
     public function display($tpl = null)
     {
@@ -35,14 +30,20 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
             if (!$this->user) {
                 $this->setLayout('login');
             } else {
-                $this->subscription = $this->get('Subscription');
+                $this->subscriptions = $this->get('Subscriptions');
             }
         } catch (Exception $e) {
             SimplerenewFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
         }
 
-        if ($this->subscription) {
-            switch ($this->subscription->status) {
+        if ($this->getParams()->get('basic.allowMultiple')) {
+            $this->setLayout('multiple');
+
+        } elseif ($this->subscriptions) {
+            // convert to integer keys for single sub sites
+            $this->subscriptions = (array_values($this->subscriptions));
+
+            switch ($this->subscriptions[0]->status) {
                 case Subscription::STATUS_ACTIVE:
                     $this->setLayout('cancel');
                     break;
@@ -56,8 +57,6 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
                     break;
             }
         }
-
-        $this->params = $this->getParams();
 
         parent::display($tpl);
     }

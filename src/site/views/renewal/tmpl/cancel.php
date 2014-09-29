@@ -32,7 +32,7 @@ $app = SimplerenewFactory::getApplication();
         <input
             type="hidden"
             name="id"
-            value="<?php echo $this->subscription->id; ?>"/>
+            value="<?php echo $this->subscriptions[0]->id; ?>"/>
 
         <input
             type="hidden"
@@ -49,7 +49,7 @@ $app = SimplerenewFactory::getApplication();
             value="renewal.cancel"/>
 
         <button type="submit" class="btn-main btn-big btn-warning">
-            <i class="fa fa-times"></i> 
+            <i class="fa fa-times"></i>
             <?php echo JText::_('COM_SIMPLERENEW_RENEWAL_CANCEL_BUTTON'); ?>
         </button>
 
