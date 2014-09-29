@@ -35,7 +35,7 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
         $this->checkToken();
 
         SimplerenewHelper::saveFormData(
-            'subscribe.create',
+            'subscribe',
             array(
                 'password',
                 'password2',

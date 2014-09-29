@@ -115,8 +115,6 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
             }
         }
 
-
-
         parent::display($tpl);
     }
 }
