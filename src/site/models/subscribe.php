@@ -81,10 +81,6 @@ class SimplerenewModelSubscribe extends SimplerenewModelAccount
     {
         parent::populateState();
 
-        // We're only interested in current subscriptions
-        $currentSubs = Subscription::STATUS_ACTIVE | Subscription::STATUS_CANCELED;
-        $this->setState('status.subscription', $currentSubs);
-
         if ($params = $this->state->get('parameters.menu')) {
             $plans = new JRegistry($params->get('plans'));
             $this->setState('filter.plans', $plans->toArray());
