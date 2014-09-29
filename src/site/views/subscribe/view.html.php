@@ -38,7 +38,7 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
     /**
      * @var array
      */
-    protected $subscriptions = null;
+    protected $subscriptions = array();
 
     /**
      * @var bool
@@ -93,7 +93,7 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
             $plan          = current($this->plans);
             $selectedPlans = array($plan->code => true);
         }
-        // Fill with list of current active/canceled subscriptions
+        // Load current active/canceled subscriptions
         foreach ($this->subscriptions as $subscription) {
             $selectedPlans[$subscription->plan] = $subscription->id;
         }

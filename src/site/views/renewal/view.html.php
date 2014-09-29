@@ -21,7 +21,7 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
     /**
      * @var array
      */
-    protected $subscriptions = null;
+    protected $subscriptions = array();
 
     public function display($tpl = null)
     {
