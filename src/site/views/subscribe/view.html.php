@@ -36,14 +36,9 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
     protected $billing = null;
 
     /**
-     * @var Subscription
+     * @var array
      */
-    protected $subscription = null;
-
-    /**
-     * @var bool
-     */
-    protected $newSubscription = null;
+    protected $subscriptions = null;
 
     public function display($tpl = null)
     {
@@ -61,7 +56,7 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
             if ($this->user = $this->get('User')) {
                 $this->account      = $this->get('Account');
                 $this->billing      = $this->get('billing');
-                $this->subscription = $this->get('Subscription');
+                $this->subscriptions = $this->get('Subscriptions');
             }
 
         } catch (Exception $e) {
@@ -69,23 +64,14 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
         }
 
         // Set blank objects as needed
-        $container          = SimplerenewFactory::getContainer();
-        $this->user         = $this->user ? : $container->getUser();
-        $this->account      = $this->account ? : $container->getAccount();
-        $this->billing      = $this->billing ? : $container->getBilling();
-        $this->subscription = $this->subscription ? : $container->getSubscription();
-
-        $this->newSubscription = in_array(
-            $this->subscription->status,
-            array(
-                Subscription::STATUS_EXPIRED,
-                Subscription::STATUS_UNKNOWN
-            )
-        );
+        $container           = SimplerenewFactory::getContainer();
+        $this->user          = $this->user ? : $container->getUser();
+        $this->account       = $this->account ? : $container->getAccount();
+        $this->billing       = $this->billing ? : $container->getBilling();
+        $this->subscriptions = $this->subscriptions ? : array();
 
         // Fill in data from previous form attempt if any
-        $dataSource = 'subscribe.' . ($this->newSubscription ? 'create' : 'change');
-        if ($formData = SimplerenewHelper::loadFormData($dataSource)) {
+        if ($formData = SimplerenewHelper::loadFormData('subscribe')) {
             $this->user->setProperties($formData);
 
             $this->account->setProperties($formData);
@@ -95,16 +81,24 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
         }
 
         if (!empty($formData['planCode'])) {
-            $selectedPlan = $formData['planCode'];
-        } elseif ($this->subscription->plan) {
-            $selectedPlan = $this->subscription->plan;
-        } else {
+            $selectedPlans = array_fill_keys((array)$formData['planCode'], null);
+        } elseif (!$this->subscriptions) {
             $plan = current($this->plans);
-            $selectedPlan = $plan->code;
+            $selectedPlans = array($plan->code => null);
+        }
+        foreach ($this->subscriptions as $subscription) {
+            $selectedPlans[$subscription->plan] = $subscription->id;
         }
 
+        $allowMultiple = $this->getParams()->get('basic.allowMultiple', false);
         foreach ($this->plans as $plan) {
-            $plan->selected = ($selectedPlan == $plan->code);
+            if ($plan->selected = !empty($selectedPlans[$plan->code])) {
+                $plan->subscription = $selectedPlans[$plan->code];
+                if ($allowMultiple) {
+                    $subscription = $this->subscriptions[$plan->subscription];
+                    $plan->selected = (bool)($subscription->status & Subscription::STATUS_ACTIVE);
+                }
+            }
         }
 
         parent::display($tpl);
