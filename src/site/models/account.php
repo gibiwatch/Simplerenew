@@ -189,9 +189,5 @@ class SimplerenewModelAccount extends SimplerenewModelSite
     {
         $userId = SimplerenewFactory::getUser()->get('id');
         $this->setState('user.id', $userId);
-
-        // We're only interested in current subscriptions
-        $currentSubs = Subscription::STATUS_ACTIVE | Subscription::STATUS_CANCELED;
-        $this->setState('status.subscription', $currentSubs);
     }
 }
