@@ -27,14 +27,10 @@ $app = SimplerenewFactory::getApplication();
         method="post">
 
         <?php
-        if ($this->allowMultiple) {
-            echo $this->loadTemplate('multiple');
-
-        } elseif (count($this->subscriptions)) {
-            echo $this->loadTemplate('changeplan');
-
-        } else {
+        if ($this->allowMultiple || !count($this->subscriptions)) {
             echo $this->loadTemplate('newuser');
+        } else {
+            echo $this->loadTemplate('changeplan');
         }
         ?>
 

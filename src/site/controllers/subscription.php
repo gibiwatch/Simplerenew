@@ -78,7 +78,22 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
         }
 
         try {
-            $this->subscribeByToken($account);
+            $this->updateBilling($account);
+
+            // Create the subscription
+            try {
+                $planCode   = $app->input->getString('planCode');
+                $couponCode = $app->input->getString('couponCode');
+
+                $model->createSubscription($account, $planCode, $couponCode);
+            } catch (Exception $e) {
+                throw new Exception(
+                    JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_CREATE', $e->getMessage()),
+                    $e->getCode(),
+                    $e
+                );
+            }
+
 
         } catch (Exception $e) {
             $this->callerReturn($e->getMessage(), 'error');
@@ -156,14 +171,14 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
     }
 
     /**
-     * Subscribe a new member using Billing Token in input stream
+     * Update billing from the Billing Token in input stream
      *
      * @param Account $account
      *
      * @return void
      * @throws Exception
      */
-    protected function subscribeByToken(Account $account)
+    protected function updateBilling(Account $account)
     {
         $app   = SimplerenewFactory::getApplication();
         $model = $this->getGatewayModel();
@@ -205,20 +220,6 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             $app->enqueueMessage(
                 JText::_('COM_SIMPLERENEW_WARN_SUBSCRIPTION_USER_LOGIN_FAILED'),
                 'notice'
-            );
-        }
-
-        // Create the subscription
-        try {
-            $planCode   = $app->input->getString('planCode');
-            $couponCode = $app->input->getString('couponCode');
-
-            $model->createSubscription($account, $planCode, $couponCode);
-        } catch (Exception $e) {
-            throw new Exception(
-                JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_CREATE', $e->getMessage()),
-                $e->getCode(),
-                $e
             );
         }
     }

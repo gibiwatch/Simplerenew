@@ -88,14 +88,17 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
         if (!empty($formData['planCode'])) {
             // Plans selected on last form submit
             $selectedPlans = array_fill_keys((array)$formData['planCode'], true);
-        } elseif (!$this->subscriptions) {
+
+        } elseif ($this->subscriptions) {
+            // Load current active/canceled subscriptions
+            foreach ($this->subscriptions as $subscription) {
+                $selectedPlans[$subscription->plan] = $subscription->id;
+            }
+
+        } else {
             // By default select the first shown plan
             $plan          = current($this->plans);
             $selectedPlans = array($plan->code => true);
-        }
-        // Load current active/canceled subscriptions
-        foreach ($this->subscriptions as $subscription) {
-            $selectedPlans[$subscription->plan] = $subscription->id;
         }
 
         $this->allowMultiple = $this->getParams()->get('basic.allowMultiple');
