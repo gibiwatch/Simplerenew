@@ -44,7 +44,7 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
                 <span class="simplerenew-plan <?php echo $planId; ?>">
                     <input<?php echo $checked; ?>
                         type="checkbox"
-                        name="planCode"
+                        name="planCodes[]"
                         id="<?php echo $planId; ?>"
                         value="<?php echo $plan->code; ?>"
                         data-description="<?php echo $plan->name; ?>"/>

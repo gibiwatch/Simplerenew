@@ -101,6 +101,7 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
             $selectedPlans = array($plan->code => true);
         }
 
+        // Collect all active/canceled subscriptions and add info to plans list
         $this->allowMultiple = $this->getParams()->get('basic.allowMultiple');
         foreach ($this->plans as $plan) {
             $plan->subscription = empty($selectedPlans[$plan->code]) ? null : $selectedPlans[$plan->code];
