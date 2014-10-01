@@ -101,10 +101,17 @@
         var areas = $(options.selector);
         areas.on('click', function (evt) {
             var target = $($(this).find(options.target));
-            target.prop('checked', true);
-
-            areas.removeClass(options.selectClass);
-            $(this).addClass(options.selectClass);
+            if (target.attr('type') == 'radio') {
+                target.prop('checked', true);
+                areas.removeClass(options.selectClass);
+                $(this).addClass(options.selectClass);
+            } else {
+                if (target.prop('checked')) {
+                    $(this).addClass(options.selectClass);
+                } else {
+                    $(this).removeClass(options.selectClass);
+                }
+            }
 
             // Prevent bubbling to trigger click event
             if (!$(evt.target).is('input')) {
@@ -113,14 +120,18 @@
         });
 
         // Set initial state
-        areas
-            .find(options.target)
-            .filter(':checked')
-            .trigger('click');
+        areas.each(function(idx, element) {
+            var area = $(element);
+            if (area.find(options.target).is(':checked')) {
+                area.addClass(options.selectClass);
+            } else {
+                area.removeClass(options.selectClass);
+            }
+        });
     };
     $.Simplerenew.clickArea.options = {
         selector    : null,
-        target      : '[type=radio],[type=checkbox]',
+        target      : 'input:radio,input:checkbox',
         selectClass : 'simplerenew-selected'
     };
 
