@@ -64,6 +64,7 @@ abstract class SimplerenewHelperSite
                 '.ost-container label,',
                 '.ost-container td,',
                 '.ost-container input,',
+                '.ost-container button,',
                 '.ost-container textarea,',
                 '.ost-container select {',
                 "   font-family: '" . $font[0] . "', " . $font[1] . ';',
