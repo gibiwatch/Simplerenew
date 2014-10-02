@@ -79,7 +79,7 @@ class User extends Object
 
     public function __construct(Adapter\UserInterface $adapter, array $config = array())
     {
-        $this->adapter       = $adapter;
+        $this->adapter = $adapter;
 
         if (empty($config['expirationGroup'])) {
             throw new Exception('Configuration problem - Expiration user group is required');
@@ -197,16 +197,30 @@ class User extends Object
     }
 
     /**
-     * Set the user group based on the plan
+     * Add user groups based on selected plans
      *
-     * @param Plan $plan
+     * @param mixed $planCodes Plan code or array of plan codes to add to user
+     * @param bool  $replace   Clear all subscriber groups
      *
-     * @return void
+     * @return User
      * @throws Exception
      */
-    public function setGroup(Plan $plan = null)
+    public function addGroups($planCodes, $replace = false)
     {
-        $this->adapter->setGroup($this, $plan);
+        $this->adapter->addGroups($this, (array)$planCodes, $replace);
+        return $this;
+    }
+
+    /**
+     * @param mixed $planCodes Plan code or array of plan codes
+     *
+     * @return User
+     * @throws Exception
+     */
+    public function removeGroups($planCodes)
+    {
+        $this->adapter->removeGroups($this, (array)$planCodes);
+        return $this;
     }
 
     /**

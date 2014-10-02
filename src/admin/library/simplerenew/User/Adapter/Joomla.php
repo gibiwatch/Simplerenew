@@ -329,42 +329,87 @@ class Joomla implements UserInterface
     }
 
     /**
-     * Set the user's group based on the plan
+     * Add user groups based on plans
      *
-     * @param User $parent
-     * @param Plan $plan
+     * @param User  $parent
+     * @param array $planCodes
+     * @param bool  $replace   Clear all current plan groups
      *
      * @return void
      * @throws Exception
      */
-    public function setGroup(User $parent, Plan $plan = null)
+    public function addGroups(User $parent, array $planCodes, $replace = false)
     {
-        $expId = $parent->getExpirationGroup();
-        $filter = array($expId);
-
-        // Get all user groups applying to plans
-        $plans = $this->getLocalPlans();
-        foreach ($plans as $p) {
-            $filter[] = $p->group_id;
-        }
-        $filter = array_unique($filter);
-
-        // Filter them all out
-        $newGroups = array_diff($parent->groups, $filter);
-
-        if ($plan && isset($this->localPlans[$plan->code])) {
-            $gid = $this->localPlans[$plan->code]->group_id;
-        } else {
-            $gid = $expId;
-        }
-        $newGroups[$gid] = $gid;
-
         // Let's make sure we have current data
         $this->load($parent);
+
+        $localPlans = $this->getLocalPlans();
+        $expireId   = $parent->getExpirationGroup();
+
+        $newGroups = array_values(
+            array_diff(
+                $parent->groups,
+                array($expireId)
+            )
+        );
+        if ($replace) {
+            $newGroups = $this->filterPlanGroups($newGroups);
+        }
+
+        foreach ($planCodes as $planCode) {
+            if (is_string($planCode) && isset($localPlans[$planCode])) {
+                $plan = $localPlans[$planCode];
+                $newGroups[] = $plan->group_id;
+            }
+        }
+        $newGroups = array_unique($newGroups);
+        if (count($newGroups)  == 0) {
+            $newGroups[] = $expireId;
+        }
+
         $parent->groups = $newGroups;
         $this->update($parent);
     }
 
+    /**
+     * Remove groups from the user's profile based on the selected plans
+     *
+     * @param User  $parent
+     * @param array $planCodes
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function removeGroups(User $parent, array $planCodes)
+    {
+        // Let's make sure we have current data
+        $this->load($parent);
+
+        $localPlans = $this->getLocalPlans();
+
+        $newGroups = array_flip(array_values($parent->groups));
+        foreach ($planCodes as $planCode) {
+            $gid = isset($localPlans[$planCode]) ? $localPlans[$planCode]->group_id : null;
+            if ($gid && isset($newGroups[$gid])) {
+                unset($newGroups[$gid]);
+            }
+        }
+        $newGroups = array_keys($newGroups);
+        if (count($newGroups)  == 0) {
+            $newGroups[] = $parent->getExpirationGroup();
+        }
+
+        $parent->groups = $newGroups;
+        $this->update($parent);
+    }
+
+    /**
+     * Get a human friendly version of group membership
+     *
+     * @param User $parent
+     *
+     * @return string
+     */
     public function getGroupText(User $parent)
     {
         $plans  = $this->getLocalPlans();
@@ -401,5 +446,20 @@ class Joomla implements UserInterface
                 throw new Exception('Unable to logout from ' . $parent->username);
             }
         }
+    }
+
+    protected function filterPlanGroups(array $groups)
+    {
+        $filter = array();
+
+        // Get all user groups applying to plans
+        $plans = $this->getLocalPlans();
+        foreach ($plans as $p) {
+            $filter[] = $p->group_id;
+        }
+        $filter = array_unique($filter);
+
+        // Filter them all out
+        return array_values(array_diff($groups, $filter));
     }
 }

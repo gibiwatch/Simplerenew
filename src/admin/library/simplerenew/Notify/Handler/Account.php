@@ -31,10 +31,7 @@ class Account implements HandlerInterface
 
 
                 case Notify::ACTION_REACTIVATE:
-                    $plan = $notice->getContainer()
-                        ->getPlan()
-                        ->load($notice->subscription->plan);
-                    $notice->user->setGroup($plan);
+                    $notice->user->addGroups($notice->subscription->plan);
                     $notice->user->enabled = true;
                     $notice->user->update();
                     return $notice->user->username . ': Enabled';

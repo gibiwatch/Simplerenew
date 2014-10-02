@@ -175,7 +175,7 @@ class Subscription extends AbstractApiBase
         $this->clearProperties();
 
         $this->imp->create($this, $account, $plan, $coupon);
-        $account->user->setGroup($plan);
+        $account->user->addGroups($plan->code);
 
         return $this;
     }

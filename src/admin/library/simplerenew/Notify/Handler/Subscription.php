@@ -27,15 +27,12 @@ class Subscription implements HandlerInterface
                 case Notify::ACTION_NEW:
                 case Notify::ACTION_UPDATE:
                 case Notify::ACTION_RENEW:
-                    $plan = $notice->getContainer()
-                        ->getPlan()
-                        ->load($notice->subscription->plan);
-                    $notice->user->setGroup($plan);
+                    $notice->user->addGroups($notice->subscription->plan);
                     return $notice->user->username . ': Update User Group';
                     break;
 
                 case Notify::ACTION_EXPIRE:
-                    $notice->user->setGroup();
+                    $notice->user->removeGroups($notice->subscription->plan);
                     return $notice->user->username . ': Remove plan user group';
                     break;
             }

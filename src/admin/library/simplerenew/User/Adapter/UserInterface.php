@@ -90,15 +90,27 @@ interface UserInterface
     public function logout(User $parent);
 
     /**
-     * Set the user's group based on the plan
+     * Add user groups based on plans
      *
-     * @param User $parent
-     * @param Plan $plan
+     * @param User  $parent
+     * @param array $planCodes
+     * @param bool  $replace   Clear all current plan groups
      *
      * @return void
      * @throws Exception
      */
-    public function setGroup(User $parent, Plan $plan = null);
+    public function addGroups(User $parent, array $planCodes, $replace = false);
+
+    /**
+     * Remove groups from the user's profile based on the selected plans
+     *
+     * @param User  $parent
+     * @param array $planCodes
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function removeGroups(User $parent, array $planCodes);
 
     /**
      * Get a human friendly version of group membership
