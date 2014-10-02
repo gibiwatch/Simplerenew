@@ -82,30 +82,6 @@ class SimplerenewModelAccount extends SimplerenewModelSite
     }
 
     /**
-     * @return null|Subscription
-     *
-     * @deprecated 0.2.0
-     */
-    public function getSubscription()
-    {
-        $subscription = $this->getState('subscription', null);
-        if (!$subscription instanceof Subscription) {
-            if ($account = $this->getAccount()) {
-                try {
-                    $subscription = $this->getContainer()
-                        ->getSubscription()
-                        ->loadLast($account);
-                    $this->setState('subscription', $subscription);
-                } catch (NotFound $e) {
-                    // No Subscription is fine
-                }
-            }
-        }
-
-        return $subscription;
-    }
-
-    /**
      * Get array of subscriptions for the account. Use the
      * status.subscription bitmask to choose selected status codes
      *
@@ -132,44 +108,6 @@ class SimplerenewModelAccount extends SimplerenewModelSite
         }
 
         return $subscriptions;
-    }
-
-    /**
-     * @return null|Plan
-     */
-    public function getPlan()
-    {
-        $plan = $this->getState('subscription.plan', null);
-        if (!$plan instanceof Plan) {
-            if ($subscription = $this->getSubscription()) {
-                $plan = $this->getContainer()
-                    ->getPlan()
-                    ->load($subscription->plan);
-                $this->setState('subscription.plan', $plan);
-            }
-        }
-        return $plan;
-    }
-
-    /**
-     * @return null|Plan
-     */
-    public function getPending()
-    {
-        if ($subscription = $this->getSubscription()) {
-            if ($subscription->pending_plan) {
-                $pending = $this->getState('subscription.pending', null);
-                if (!$pending instanceof Plan || $pending->plan_code != $subscription->pending_plan) {
-                    $pending = $this->getContainer()
-                        ->getPlan()
-                        ->load($subscription->pending_plan);
-                    $pending->amount = $subscription->pending_amount;
-                    $this->setState('subscription.pending', $pending);
-                }
-            }
-        }
-
-        return empty($pending) ? null : $pending;
     }
 
     /**
