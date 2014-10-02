@@ -51,26 +51,40 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
     {
         $app       = SimplerenewFactory::getApplication();
         $container = SimplerenewFactory::getContainer();
+        $filter    = JFilterInput::getInstance();
 
         $couponCode = $app->input->getString('coupon');
-        $planCode   = $app->input->getCmd('plan');
+
+        $planCodes = $app->input->get('plans', array(), 'array');
+        $planCodes = array_map(
+            function ($code) use ($filter) {
+                return $filter->clean($code, 'cmd');
+            },
+            $planCodes
+        );
 
         $result = array(
-            'valid'    => false,
-            'message'  => 0,
-            'error'    => null
+            'valid'   => false,
+            'message' => 0,
+            'error'   => null
         );
 
         try {
             $coupon = $container->getCoupon()->load($couponCode);
-            $plan   = $container->getPlan()->load($planCode);
 
-            $discount = '$' . number_format($coupon->getDiscount($plan), 2);
+            $discount = 0;
+            foreach ($planCodes as $planCode) {
+                $plan   = $container->getPlan()->load($planCode);
+                if ($coupon->isAvailable($plan)) {
+                    $discount += $coupon->getDiscount($plan);
+                    $result['valid'] = true;
+                }
+            }
+            $discount = '$' . number_format($discount, 2);
 
-            $result['valid']    = $coupon->isAvailable($plan);
             $result['message'] = JText::sprintf('COM_SIMPLERENEW_COUPON_PLAN_DISCOUNT', $discount);
             if (!$result['valid']) {
-                $result['error'] = JText::_('COM_SIMPLERENEW_ERROR_COUPON_UNAVAILABLE');
+                $result['error'] = JText::plural('COM_SIMPLERENEW_ERROR_COUPON_UNAVAILABLE', count($planCodes));
             }
 
         } catch (Simplerenew\Exception\NotFound $e) {
