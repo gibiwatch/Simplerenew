@@ -19,7 +19,10 @@ class Com_SimplerenewInstallerScript
         '/admin/library/simplerenew/Notify/Handler/None.php',
         '/site/views/change',
         '/admin/views/dashboard',
-        '/admin/controllers/test.php'
+        '/admin/controllers/test.php',
+        '/site/views/renewal/tmpl/multiple.php',
+        '/site/views/renewal/tmpl/reactivate.php',
+        '/site/views/renewal/tmpl/cancel.php'
     );
 
     /**
