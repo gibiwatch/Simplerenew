@@ -8,4 +8,8 @@
 
 defined('_JEXEC') or die();
 ?>
-<h1>Multiple subs under construction</h1>
+<div class="ost-container simplerenew-renewal">
+    <div class="ost-alert-warning">
+        <?php echo JText::_('COM_SIMPLERENEW_RENEWAL_NON_SUBSCRIBER'); ?>
+    </div>
+</div>

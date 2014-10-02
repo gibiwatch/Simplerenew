@@ -23,6 +23,16 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
      */
     protected $subscriptions = array();
 
+    /**
+     * @var Simplerenew\Api\Subscription
+     */
+    protected $subscription = null;
+
+    /**
+     * @var Simplerenew\Api\Plan
+     */
+    protected $plan = null;
+
     public function display($tpl = null)
     {
         try {
@@ -34,28 +44,6 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
             }
         } catch (Exception $e) {
             SimplerenewFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
-        }
-
-        if ($this->getParams()->get('basic.allowMultiple')) {
-            $this->setLayout('multiple');
-
-        } elseif ($this->subscriptions) {
-            // convert to integer keys for single sub sites
-            $this->subscriptions = (array_values($this->subscriptions));
-
-            switch ($this->subscriptions[0]->status) {
-                case Subscription::STATUS_ACTIVE:
-                    $this->setLayout('cancel');
-                    break;
-
-                case Subscription::STATUS_CANCELED:
-                    $this->setLayout('reactivate');
-                    break;
-
-                case Subscription::STATUS_EXPIRED:
-                    $this->setLayout('resubscribe');
-                    break;
-            }
         }
 
         parent::display($tpl);

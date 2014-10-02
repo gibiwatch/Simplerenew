@@ -6,12 +6,61 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-/** @var SimplerenewViewRenewal $this */
-
 defined('_JEXEC') or die();
-?>
-<div class="ost-container simplerenew-renewal">
-    <div class="ost-alert-warning">
-        <?php echo JText::_('COM_SIMPLERENEW_RENEWAL_NON_SUBSCRIBER'); ?>
+
+/**
+ * @var SimplerenewViewRenewal       $this
+ * @var Simplerenew\Api\Subscription $subscription
+ */
+$app = SimplerenewFactory::getApplication();
+
+if (!$this->subscriptions):
+    echo $this->loadTemplate('nosub');
+else:
+    ?>
+    <div class="ost-container simplerenew-renewal">
+
+        <div class="page-header">
+            <h1><?php echo JText::plural('COM_SIMPLERENEW_RENEWAL_UPDATE', count($this->subscriptions)); ?></h1>
+        </div>
+
+        <form
+            name="renewalForm"
+            id="renewalForm"
+            action=""
+            method="post">
+
+    <?php
+        foreach ($this->subscriptions as $id => $subscription):
+            $this->subscription = $subscription;
+            ?>
+            <div class="ost-section ost-row-one">
+                <?php echo $this->loadTemplate('plan'); ?>
+            </div>
+        <?php
+        endforeach;
+    ?>
+            <input
+                type="hidden"
+                name="option"
+                value="com_simplerenew"/>
+            <input
+                type="hidden"
+                name="Itemid"
+                value="<?php echo $app->input->getInt('Itemid'); ?>"/>
+
+            <input
+                type="hidden"
+                name="task"
+                value="renewal.update"/>
+
+            <button type="submit" class="btn-main btn-big">
+                <i class="fa fa-check"></i>
+                <?php echo JText::_('COM_SIMPLERENEW_RENEWAL_UPDATE_BUTTON'); ?>
+            </button>
+
+            <?php echo JHtml::_('form.token'); ?>
+        </form>
     </div>
-</div>
+<?php
+endif;

@@ -13,61 +13,24 @@ defined('_JEXEC') or die();
 
 class SimplerenewControllerRenewal extends SimplerenewControllerBase
 {
-    public function cancel()
+    public function update()
     {
         $this->checkToken();
 
-        $app = SimplerenewFactory::getApplication();
-        $id  = $app->input->getString('id');
+        $app    = SimplerenewFactory::getApplication();
+        $filter = JFilterInput::getInstance();
 
-        if ($subscription = $this->getValidSubscription($id)) {
-            try {
-                $subscription->cancel();
+        $ids = array_map(
+            function ($id) use ($filter) {
+                return $filter->clean($id, 'string');
+            },
+            $app->input->get('ids', array(), 'array')
+        );
 
-            } catch (Exception $e) {
-                $this->callerReturn(
-                    JText::sprintf('COM_SIMPLERENEW_ERROR_RENEWAL', $e->getMessage()),
-                    'error'
-                );
-                return;
-            }
+        echo '<pre>';
+        print_r($ids);
+        echo '</pre>';
 
-            $link = SimplerenewRoute::get('account');
-            $this->setRedirect(
-                JRoute::_($link),
-                JText::sprintf(
-                    'COM_SIMPLERENEW_RENEWAL_CANCEL_SUCCESS',
-                    $subscription->period_end->format('F, j, Y')
-                )
-            );
-        }
-    }
-
-    public function reactivate()
-    {
-        $this->checkToken();
-
-        $app = SimplerenewFactory::getApplication();
-        $id  = $app->input->getString('id');
-
-        if ($subscription = $this->getValidSubscription($id)) {
-            try {
-                $subscription->reactivate();
-
-            } catch (Exception $e) {
-                $this->callerReturn(
-                    JText::sprintf('COM_SIMPLERENEW_ERROR_RENEWAL', $e->getMessage()),
-                    'error'
-                );
-                return;
-            }
-
-            $link = SimplerenewRoute::get('account');
-            $this->setRedirect(
-                JRoute::_($link),
-                JText::_('COM_SIMPLERENEW_RENEWAL_REACTIVATE_SUCCESS')
-            );
-        }
     }
 
     /**
