@@ -74,7 +74,10 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
             }
 
         } catch (Exception $e) {
-            $this->callerReturn(JText::sprintf('COM_SIMPLERENEW_ERROR_RENEWAL', $e->getMessage()));
+            $this->callerReturn(
+                JText::sprintf('COM_SIMPLERENEW_ERROR_RENEWAL', $e->getMessage()),
+                'error'
+            );
             return;
         }
 
