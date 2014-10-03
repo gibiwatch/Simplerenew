@@ -11,6 +11,12 @@ defined('_JEXEC') or die();
 <div class="ost-container simplerenew-subscribe">
 
     <div class="ost-alert-warning">
-        <?php echo JText::_('COM_SIMPLERENEW_SUBSCRIPTION_NOPLANS_AVAILABLE'); ?>
+        <?php
+        if ($this->getParams()->get('basic.allowMultiple')) {
+            echo JText::_('COM_SIMPLERENEW_SUBSCRIPTION_ALL_SUBSCRIBED');
+        } else {
+            echo JText::_('COM_SIMPLERENEW_SUBSCRIPTION_NOPLANS_AVAILABLE');
+        }
+        ?>
     </div>
 </div>

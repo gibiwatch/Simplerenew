@@ -31,23 +31,23 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
             $planId  = 'plan_code_' . $code;
             $classes = array('plan_code', $planId);
 
-            $active = false;
-            if ($plan->subscription && !empty($this->subscriptions[$plan->subscription])) {
+            $active = $plan->subscription && !empty($this->subscriptions[$plan->subscription]);
+            if ($active) {
                 $classes[] = 'subscriber';
-
-                $subscription = $this->subscriptions[$plan->subscription];
-                $active = ($subscription->status == Subscription::STATUS_ACTIVE);
             }
             $checked = $plan->selected && $active ? ' checked' : '';
             ?>
             <div class="<?php echo join(' ', $classes); ?>">
                 <span class="simplerenew-plan <?php echo $planId; ?>">
                     <input<?php echo $checked; ?>
-                        type="checkbox"
-                        name="planCodes[]"
                         id="<?php echo $planId; ?>"
+                        name="planCodes[]"
+                        type="checkbox"
                         value="<?php echo $plan->code; ?>"
-                        data-description="<?php echo $plan->name; ?>"/>
+                        required
+                        data-description="<?php echo $plan->name; ?>"
+                        data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_PLAN_REQUIRED'); ?>"
+                        data-error-placement="#plancode-error"/>
                     <?php
                     echo JHtml::_(
                         'plan.name',
@@ -64,6 +64,7 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
 
         <?php
         endforeach; ?>
+        <div id="plancode-error"></div>
     </div>
 </div>
 <!-- /.ost-section -->

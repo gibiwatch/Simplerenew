@@ -49,14 +49,7 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
     {
         $this->enforceSSL();
 
-        // Depending on user state, there may not be any plans to choose
         $this->plans = $this->get('Plans');
-        if (!$this->plans) {
-            $this->setLayout('noplans');
-            parent::display($tpl);
-            return;
-        }
-
         try {
             if ($this->user = $this->get('User')) {
                 $this->account       = $this->get('Account');
@@ -75,6 +68,19 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
         $this->billing       = $this->billing ?: $container->getBilling();
         $this->subscriptions = $this->subscriptions ?: array();
 
+        // Depending on conditions, there may not be any plans to choose
+        foreach ($this->subscriptions as $subscription) {
+            if (isset($this->plans[$subscription->plan])) {
+                unset($this->plans[$subscription->plan]);
+            }
+        }
+
+        if (!$this->plans) {
+            $this->setLayout('noplans');
+            parent::display($tpl);
+            return;
+        }
+
         // Fill in data from previous form attempt if any
         if ($formData = SimplerenewHelper::loadFormData('subscribe')) {
             $this->user->setProperties($formData);
@@ -85,6 +91,7 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
             }
         }
 
+        // Determine which plans to show pre-selected
         if (!empty($formData['planCode'])) {
             // Plans selected on last form submit
             $selectedPlans = array_fill_keys((array)$formData['planCode'], true);
@@ -107,13 +114,6 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
             $plan->subscription = empty($selectedPlans[$plan->code]) ? null : $selectedPlans[$plan->code];
             if ($plan->subscription === true) {
                 $plan->selected = true;
-            } elseif ($this->allowMultiple) {
-                if (empty($this->subscriptions[$plan->subscription])) {
-                    $plan->selected = false;
-                } else {
-                    $subscription   = $this->subscriptions[$plan->subscription];
-                    $plan->selected = (bool)($subscription->status & Subscription::STATUS_ACTIVE);
-                }
             } else {
                 $plan->selected = !empty($this->subscriptions[$plan->subscription]);
             }

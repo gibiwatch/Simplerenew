@@ -53,6 +53,14 @@
                     password2: {
                         equalTo: '#password'
                     }
+                },
+                errorPlacement: function(place, element) {
+                    var placeId = $(element).attr('data-error-placement');
+                    if (placeId) {
+                        $(placeId).append(place);
+                    } else {
+                        place.insertAfter( element );
+                    }
                 }
             },
 

@@ -28,7 +28,7 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
     }
 
     /**
-     * Create new Subscriptions and modify existing subscriptions on multi-sub sites
+     * Create new Subscriptions
      */
     public function create()
     {
@@ -44,10 +44,8 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             )
         );
 
-        $app           = SimplerenewFactory::getApplication();
-        $model         = $this->getGatewayModel();
-        $params        = $model->getParams();
-        $allowMultiple = $params->get('basic.allowMultiple');
+        $app   = SimplerenewFactory::getApplication();
+        $model = $this->getGatewayModel();
 
         $planCodes = $app->input->get('planCodes', array(), 'array');
         $planCodes = array_filter(
@@ -56,7 +54,7 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
                 $planCodes
             )
         );
-        if (!$planCodes && !$allowMultiple) {
+        if (!$planCodes) {
             $this->callerReturn(
                 JText::_('COM_SIMPLERENEW_ERROR_NOPLAN_SELECTED'),
                 'error'
@@ -73,7 +71,7 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             return;
         }
 
-        // Create the account
+        // Update/Create the account
         try {
             $account = $model->saveAccount($user);
 
@@ -94,69 +92,25 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             return;
         }
 
-        // Manage the subscriptions
+        // Add subscriptions
         /** @var Subscription $subscription */
         $couponCode = $app->input->getString('couponCode');
-        if ($allowMultiple) {
-            try {
-                // On multiple sub sites, manage the various possibilities
-                $container     = SimplerenewFactory::getContainer();
-                $subscriptions = $container
-                    ->getSubscription()
-                    ->getList($account, Subscription::STATUS_ACTIVE | Subscription::STATUS_CANCELED);
+        try {
+            $container = SimplerenewFactory::getContainer();
 
-                foreach ($subscriptions as $id => $subscription) {
-                    $msg = null;
-                    $key = array_search($subscription->plan, $planCodes);
-                    if ($key !== false) {
-                        if ($subscription->status !== Subscription::STATUS_ACTIVE) {
-                            $subscription->reactivate();
-                            $msg = 'COM_SIMPLERENEW_SUBSCRIPTION_PLAN_REACTIVATED';
-                        }
-                        unset($planCodes[$key]);
-                    } else {
-                        if ($subscription->status !== Subscription::STATUS_CANCELED) {
-                            $subscription->cancel();
-                            $msg = 'COM_SIMPLERENEW_SUBSCRIPTION_PLAN_CANCELED';
-                        }
-
-                    }
-                    if ($msg) {
-                        $plan = $container->getPlan()->load($subscription->plan);
-                        $app->enqueueMessage(JText::sprintf($msg, $plan->name));
-                    }
+            foreach ($planCodes as $planCode) {
+                if ($model->createSubscription($account, $planCode, $couponCode)) {
+                    $plan = $container->getPlan()->load($planCode);
+                    $app->enqueueMessage(JText::sprintf('COM_SIMPLERENEW_SUBSCRIPTION_PLAN_ADDED', $plan->name));
                 }
-                foreach ($planCodes as $planCode) {
-                    if ($model->createSubscription($account, $planCode, $couponCode)) {
-                        $plan = $container->getPlan()->load($planCode);
-                        $app->enqueueMessage(JText::sprintf('COM_SIMPLERENEW_SUBSCRIPTION_PLAN_ADDED', $plan->name));
-                    }
-                }
-
-            } catch (Exception $e) {
-                throw new Exception(
-                    JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_MANAGE', $e->getMessage()),
-                    $e->getCode(),
-                    $e
-                );
             }
 
-        } else {
-            try {
-                // On single-sub sites we're only creating a new subscription
-                $planCode = array_shift($planCodes);
-                $model->createSubscription($account, $planCode, $couponCode);
-
-                $app->enqueueMessage(JText::_('COM_SIMPLERENEW_SUBSCRIPTION_SUCCESS'));
-
-            } catch (Exception $e) {
-                throw new Exception(
-                    JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_CREATE', $e->getMessage()),
-                    $e->getCode(),
-                    $e
-                );
-            }
-
+        } catch (Exception $e) {
+            $this->callerReturn(
+                JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_CREATE', $e->getMessage()),
+                'error'
+            );
+            return;
         }
 
         $link = SimplerenewRoute::get('account');
