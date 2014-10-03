@@ -315,14 +315,21 @@ class Joomla implements UserInterface
         throw new Exception($error);
     }
 
+    /**
+     * Get the list of plans stored locally and containing non-gateway
+     * data like user group assignments.
+     *
+     * @return array
+     */
     protected function getLocalPlans()
     {
         if ($this->localPlans === null) {
-            $db               = \SimplerenewFactory::getDbo();
-            $query            = $db->getQuery(true)
+            $db    = \SimplerenewFactory::getDbo();
+            $query = $db->getQuery(true)
                 ->select('p.code, p.name, p.group_id, g.title group_name')
                 ->from('#__simplerenew_plans p')
                 ->innerJoin('#__usergroups g on g.id = p.group_id');
+
             $this->localPlans = $db->setQuery($query)->loadObjectList('code');
         }
         return $this->localPlans;
@@ -358,12 +365,12 @@ class Joomla implements UserInterface
 
         foreach ($planCodes as $planCode) {
             if (is_string($planCode) && isset($localPlans[$planCode])) {
-                $plan = $localPlans[$planCode];
+                $plan        = $localPlans[$planCode];
                 $newGroups[] = $plan->group_id;
             }
         }
         $newGroups = array_unique($newGroups);
-        if (count($newGroups)  == 0) {
+        if (count($newGroups) == 0) {
             $newGroups[] = $expireId;
         }
 
@@ -395,7 +402,7 @@ class Joomla implements UserInterface
             }
         }
         $newGroups = array_keys($newGroups);
-        if (count($newGroups)  == 0) {
+        if (count($newGroups) == 0) {
             $newGroups[] = $parent->getExpirationGroup();
         }
 
@@ -448,6 +455,13 @@ class Joomla implements UserInterface
         }
     }
 
+    /**
+     * Remove all groups that are assigned to plans
+     *
+     * @param array $groups
+     *
+     * @return array
+     */
     protected function filterPlanGroups(array $groups)
     {
         $filter = array();
