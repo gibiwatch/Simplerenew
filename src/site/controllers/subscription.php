@@ -28,14 +28,14 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
     }
 
     /**
-     * New Subscriptions including expired
+     * Create new Subscriptions
      */
     public function create()
     {
         $this->checkToken();
 
         SimplerenewHelper::saveFormData(
-            'subscribe.create',
+            'subscribe',
             array(
                 'password',
                 'password2',
@@ -44,17 +44,23 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             )
         );
 
-        $app      = SimplerenewFactory::getApplication();
-        $planCode = $app->input->getString('planCode');
-        if (!$planCode) {
+        $app   = SimplerenewFactory::getApplication();
+        $model = $this->getGatewayModel();
+
+        $planCodes = $app->input->get('planCodes', array(), 'array');
+        $planCodes = array_filter(
+            array_map(
+                array('SimplerenewApplicationHelper', 'stringURLSafe'),
+                $planCodes
+            )
+        );
+        if (!$planCodes) {
             $this->callerReturn(
                 JText::_('COM_SIMPLERENEW_ERROR_NOPLAN_SELECTED'),
                 'error'
             );
             return;
         }
-
-        $model = $this->getGatewayModel();
 
         // Create/Load the user
         try {
@@ -65,7 +71,7 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             return;
         }
 
-        // Create the account
+        // Update/Create the account
         try {
             $account = $model->saveAccount($user);
 
@@ -77,19 +83,38 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             return;
         }
 
+        // Update Billing
         try {
-            $this->subscribeByToken($account);
+            $this->updateBilling($account);
 
         } catch (Exception $e) {
             $this->callerReturn($e->getMessage(), 'error');
             return;
         }
 
+        // Add subscriptions
+        /** @var Subscription $subscription */
+        $couponCode = $app->input->getString('couponCode');
+        try {
+            $container = SimplerenewFactory::getContainer();
+
+            foreach ($planCodes as $planCode) {
+                if ($model->createSubscription($account, $planCode, $couponCode)) {
+                    $plan = $container->getPlan()->load($planCode);
+                    $app->enqueueMessage(JText::sprintf('COM_SIMPLERENEW_SUBSCRIPTION_PLAN_ADDED', $plan->name));
+                }
+            }
+
+        } catch (Exception $e) {
+            $this->callerReturn(
+                JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_CREATE', $e->getMessage()),
+                'error'
+            );
+            return;
+        }
+
         $link = SimplerenewRoute::get('account');
-        $this->setRedirect(
-            JRoute::_($link),
-            JText::_('COM_SIMPLERENEW_SUBSCRIPTION_SUCCESS')
-        );
+        $this->setRedirect(JRoute::_($link));
     }
 
     /**
@@ -100,8 +125,16 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
         $this->checkToken();
 
         $app = SimplerenewFactory::getApplication();
-        $id  = $app->input->getString('id');
 
+        // We only accept a single Subscription ID
+        $ids = $app->input->get('ids', array(), 'array');
+        $ids = array_filter(
+            array_map(
+                array('SimplerenewApplicationHelper', 'stringURLSafe'),
+                $ids
+            )
+        );
+        $id  = array_shift($ids);
         if (!$id) {
             $this->callerReturn(
                 JText::_('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_NOID'),
@@ -109,6 +142,16 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             );
             return;
         }
+
+        // Only accept a single plan code
+        $planCodes = $app->input->get('planCodes', array(), 'array');
+        $planCodes = array_filter(
+            array_map(
+                array('SimplerenewApplicationHelper', 'stringURLSafe'),
+                $planCodes
+            )
+        );
+        $planCode  = array_shift($planCodes);
 
         $container = SimplerenewFactory::getContainer();
         try {
@@ -126,9 +169,8 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
                 $subscription->reactivate();
             }
 
-            $planCode = $app->input->getString('planCode');
-            $oldPlan  = $container->getPlan()->load($subscription->plan);
-            $newPlan  = $container->getPlan()->load($planCode);
+            $newPlan = $container->getPlan()->load($planCode);
+            $oldPlan = $container->getPlan()->load($subscription->plan);
 
             $couponCode = $app->input->getString('couponCode');
             $coupon     = $couponCode ? $container->getCoupon()->load($couponCode) : null;
@@ -156,14 +198,14 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
     }
 
     /**
-     * Subscribe a new member using Billing Token in input stream
+     * Update billing from the Billing Token in input stream
      *
      * @param Account $account
      *
      * @return void
      * @throws Exception
      */
-    protected function subscribeByToken(Account $account)
+    protected function updateBilling(Account $account)
     {
         $app   = SimplerenewFactory::getApplication();
         $model = $this->getGatewayModel();
@@ -171,6 +213,7 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
         // Update billing
         try {
             $model->saveBilling($account);
+
         } catch (Exception $e) {
             throw new Exception(
                 JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_BILLING', $e->getMessage()),
@@ -205,20 +248,6 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             $app->enqueueMessage(
                 JText::_('COM_SIMPLERENEW_WARN_SUBSCRIPTION_USER_LOGIN_FAILED'),
                 'notice'
-            );
-        }
-
-        // Create the subscription
-        try {
-            $planCode   = $app->input->getString('planCode');
-            $couponCode = $app->input->getString('couponCode');
-
-            $model->createSubscription($account, $planCode, $couponCode);
-        } catch (Exception $e) {
-            throw new Exception(
-                JText::sprintf('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_CREATE', $e->getMessage()),
-                $e->getCode(),
-                $e
             );
         }
     }

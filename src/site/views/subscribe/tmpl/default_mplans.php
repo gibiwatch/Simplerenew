@@ -6,6 +6,8 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Api\Subscription;
+
 defined('_JEXEC') or die();
 
 /**
@@ -27,17 +29,25 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
         <?php
         foreach ($this->plans as $code => $plan):
             $planId  = 'plan_code_' . $code;
-            $classes = 'plan_code ' . $planId;
-            $checked = $plan->selected ? ' checked' : '';
+            $classes = array('plan_code', $planId);
+
+            $active = $plan->subscription && !empty($this->subscriptions[$plan->subscription]);
+            if ($active) {
+                $classes[] = 'subscriber';
+            }
+            $checked = $plan->selected && $active ? ' checked' : '';
             ?>
-            <div class="<?php echo $classes; ?>">
+            <div class="<?php echo join(' ', $classes); ?>">
                 <span class="simplerenew-plan <?php echo $planId; ?>">
                     <input<?php echo $checked; ?>
-                        type="radio"
-                        name="planCodes"
                         id="<?php echo $planId; ?>"
+                        name="planCodes[]"
+                        type="checkbox"
                         value="<?php echo $plan->code; ?>"
-                        data-description="<?php echo $plan->name; ?>"/>
+                        required
+                        data-description="<?php echo $plan->name; ?>"
+                        data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_PLAN_REQUIRED'); ?>"
+                        data-error-placement="#plancode-error"/>
                     <?php
                     echo JHtml::_(
                         'plan.name',
@@ -54,7 +64,7 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
 
         <?php
         endforeach; ?>
+        <div id="plancode-error"></div>
     </div>
 </div>
 <!-- /.ost-section -->
-

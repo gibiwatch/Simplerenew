@@ -13,99 +13,82 @@ defined('_JEXEC') or die();
 
 class SimplerenewControllerRenewal extends SimplerenewControllerBase
 {
-    public function cancel()
+    public function update()
     {
+        /**
+         * @var Subscription $subscription
+         */
         $this->checkToken();
 
-        $app = SimplerenewFactory::getApplication();
-        $id  = $app->input->getString('id');
+        $app    = SimplerenewFactory::getApplication();
+        $filter = JFilterInput::getInstance();
 
-        if ($subscription = $this->getValidSubscription($id)) {
-            try {
-                $subscription->cancel();
+        $ids = array_map(
+            function ($id) use ($filter) {
+                return $filter->clean($id, 'string');
+            },
+            $app->input->get('ids', array(), 'array')
+        );
 
-            } catch (Exception $e) {
-                $this->callerReturn(
-                    JText::sprintf('COM_SIMPLERENEW_ERROR_RENEWAL', $e->getMessage()),
-                    'error'
-                );
-                return;
-            }
-
-            $link = SimplerenewRoute::get('account');
-            $this->setRedirect(
-                JRoute::_($link),
-                JText::sprintf(
-                    'COM_SIMPLERENEW_RENEWAL_CANCEL_SUCCESS',
-                    $subscription->period_end->format('F, j, Y')
-                )
-            );
-        }
-    }
-
-    public function reactivate()
-    {
-        $this->checkToken();
-
-        $app = SimplerenewFactory::getApplication();
-        $id  = $app->input->getString('id');
-
-        if ($subscription = $this->getValidSubscription($id)) {
-            try {
-                $subscription->reactivate();
-
-            } catch (Exception $e) {
-                $this->callerReturn(
-                    JText::sprintf('COM_SIMPLERENEW_ERROR_RENEWAL', $e->getMessage()),
-                    'error'
-                );
-                return;
-            }
-
-            $link = SimplerenewRoute::get('account');
-            $this->setRedirect(
-                JRoute::_($link),
-                JText::_('COM_SIMPLERENEW_RENEWAL_REACTIVATE_SUCCESS')
-            );
-        }
-    }
-
-    /**
-     * Get a specific subscription that is valid
-     * for the current user to edit
-     *
-     * @param $id
-     *
-     * @return null|Subscription
-     */
-    protected function getValidSubscription($id)
-    {
         $container = SimplerenewFactory::getContainer();
+        $messages = array();
 
         try {
-            $user          = $container->getUser()->load();
-            $account       = $container->getAccount()->load($user);
-            $subscriptions = $container->getSubscription()->getList($account);
+            $user    = $container->getUser()->load();
+            $account = $container->getAccount()->load($user);
 
-            if (!isset($subscriptions[$id])) {
-                throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_NOTAUTH'));
+            $subscriptions = $container
+                ->getSubscription()
+                ->getList($account, Subscription::STATUS_ACTIVE | Subscription::STATUS_CANCELED);
+
+            $cancel   = array_diff(array_keys($subscriptions), $ids);
+            $activate = array_intersect($ids, array_keys($subscriptions));
+            foreach ($subscriptions as $subscription) {
+                if (
+                    $subscription->status == Subscription::STATUS_ACTIVE
+                    && in_array($subscription->id, $cancel)
+                ) {
+                    $subscription->cancel();
+
+                    $plan      = $container->getPlan()->load($subscription->plan);
+                    $messages[] = JText::sprintf(
+                        'COM_SIMPLERENEW_RENEWAL_CANCELED',
+                        $plan->name,
+                        $subscription->period_end->format('F, j, Y')
+                    );
+
+                } elseif (
+                    $subscription->status == Subscription::STATUS_CANCELED
+                    && in_array($subscription->id, $activate)
+                ) {
+                    $subscription->reactivate();
+
+                    $plan = $container->getPlan()->load($subscription->plan);
+                    $messages[] = JText::sprintf(
+                        'COM_SIMPLERENEW_RENEWAL_REACTIVATED',
+                        $plan->name,
+                        $subscription->period_end->format('F, j, Y')
+                    );
+
+                }
             }
-
-            return $subscriptions[$id];
-
-        } catch (NotFound $e) {
-            $this->callerReturn(
-                JText::_('COM_SIMPLERENEW_WARN_RENEWAL_NOTFOUND'),
-                'notice'
-            );
 
         } catch (Exception $e) {
             $this->callerReturn(
                 JText::sprintf('COM_SIMPLERENEW_ERROR_RENEWAL', $e->getMessage()),
                 'error'
             );
+            return;
         }
 
-        return null;
+        if (!$messages) {
+            $messages[] = JText::_('COM_SIMPLERENEW_RENEWAL_NO_CHANGE');
+        }
+        foreach ($messages as $message) {
+            $app->enqueueMessage($message);
+        }
+
+        $link = SimplerenewRoute::get('account');
+        $this->setRedirect(JRoute::_($link));
     }
 }

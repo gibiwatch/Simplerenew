@@ -19,14 +19,19 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
     protected $user = null;
 
     /**
-     * @var JRegistry
+     * @var array
      */
-    protected $params = null;
+    protected $subscriptions = array();
 
     /**
-     * @var Subscription
+     * @var Simplerenew\Api\Subscription
      */
     protected $subscription = null;
+
+    /**
+     * @var Simplerenew\Api\Plan
+     */
+    protected $plan = null;
 
     public function display($tpl = null)
     {
@@ -35,29 +40,11 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
             if (!$this->user) {
                 $this->setLayout('login');
             } else {
-                $this->subscription = $this->get('Subscription');
+                $this->subscriptions = $this->get('Subscriptions');
             }
         } catch (Exception $e) {
             SimplerenewFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
         }
-
-        if ($this->subscription) {
-            switch ($this->subscription->status) {
-                case Subscription::STATUS_ACTIVE:
-                    $this->setLayout('cancel');
-                    break;
-
-                case Subscription::STATUS_CANCELED:
-                    $this->setLayout('reactivate');
-                    break;
-
-                case Subscription::STATUS_EXPIRED:
-                    $this->setLayout('resubscribe');
-                    break;
-            }
-        }
-
-        $this->params = $this->getParams();
 
         parent::display($tpl);
     }

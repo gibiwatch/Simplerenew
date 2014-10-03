@@ -6,6 +6,8 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Api\Subscription;
+
 defined('_JEXEC') or die();
 
 require_once __DIR__ . '/account.php';
@@ -78,6 +80,10 @@ class SimplerenewModelSubscribe extends SimplerenewModelAccount
     protected function populateState()
     {
         parent::populateState();
+
+        // We're only interested in current subscriptions
+        $currentSubs = Subscription::STATUS_ACTIVE | Subscription::STATUS_CANCELED;
+        $this->setState('status.subscription', $currentSubs);
 
         if ($params = $this->state->get('parameters.menu')) {
             $plans = new JRegistry($params->get('plans'));

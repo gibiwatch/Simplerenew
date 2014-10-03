@@ -50,6 +50,16 @@
                 <option value="cc">COM_SIMPLERENEW_OPTION_CREDITCARD</option>
                 <option value="pp">COM_SIMPLERENEW_OPTION_PAYPAL</option>
             </field>
+
+            <field
+                name="allowMultiple"
+                label="COM_SIMPLERENEW_CONFIG_ALLOW_MULTIPLE_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_ALLOW_MULTIPLE_DESC"
+                type="list"
+                default="0">
+                <option value="1">COM_SIMPLERENEW_OPTION_MULTIPLE_ALLOWED</option>
+                <option value="0">COM_SIMPLERENEW_OPTION_MULTIPLE_NOT_ALLOWED</option>
+            </field>
         </fieldset>
     </fields>
 
@@ -119,19 +129,19 @@
 
             <field
                 name="fontAwesome"
-                type="list"
-                default="1"
                 label="COM_SIMPLERENEW_CONFIG_FONTAWESOME_LABEL"
-                description="COM_SIMPLERENEW_CONFIG_FONTAWESOME_DESC">
+                description="COM_SIMPLERENEW_CONFIG_FONTAWESOME_DESC"
+                type="list"
+                default="1">
                 <option value="1">JYES</option>
                 <option value="0">JNO</option>
             </field>
 
             <field
                 name="fontFamily"
-                type="list"
                 label="COM_SIMPLERENEW_CONFIG_FONTFAMILY_LABEL"
-                description="COM_SIMPLERENEW_CONFIG_FONTFAMILY_DESC">
+                description="COM_SIMPLERENEW_CONFIG_FONTFAMILY_DESC"
+                type="list">
                 <option value="none">COM_SIMPLERENEW_OPTION_FONT_NONE</option>
                 <option value="Arial, Helvetica|sans-serif">COM_SIMPLERENEW_OPTION_FONT_ARIAL</option>
                 <option value="Times New Roman|serif">COM_SIMPLERENEW_OPTION_FONT_TIMES_NEW_ROMAN</option>
@@ -144,10 +154,10 @@
 
             <field
                 name="theme"
-                type="themes"
-                default="default.css"
                 label="COM_SIMPLERENEW_CONFIG_THEME_LABEL"
-                description="COM_SIMPLERENEW_CONFIG_THEME_DESC">
+                description="COM_SIMPLERENEW_CONFIG_THEME_DESC"
+                type="themes"
+                default="default.css">
             </field>
 
         </fieldset>
@@ -160,20 +170,20 @@
             description="COM_SIMPLERENEW_CONFIG_FIELDSET_ADVANCED_DESC">
             <field
                 name="jquery"
-                type="list"
-                default="local"
                 label="COM_SIMPLERENEW_CONFIG_JQUERY_LABEL"
-                description="COM_SIMPLERENEW_CONFIG_JQUERY_DESC">
+                description="COM_SIMPLERENEW_CONFIG_JQUERY_DESC"
+                type="list"
+                default="local">
                 <option value="1">JYES</option>
                 <option value="0">JNO</option>
             </field>
 
             <field
                 name="useSSL"
-                type="list"
-                default="1"
                 label="COM_SIMPLERENEW_CONFIG_USESSL_LABEL"
-                description="COM_SIMPLERENEW_CONFIG_USESSL_DESC">
+                description="COM_SIMPLERENEW_CONFIG_USESSL_DESC"
+                type="list"
+                default="1">
                 <option value="0">JNO</option>
                 <option value="1">JYES</option>
             </field>
@@ -186,8 +196,8 @@
         description="JCONFIG_PERMISSIONS_DESC">
         <field
             name="rules"
-            type="rules"
             label="JCONFIG_PERMISSIONS_LABEL"
+            type="rules"
             class="inputbox"
             filter="rules"
             validate="rules"

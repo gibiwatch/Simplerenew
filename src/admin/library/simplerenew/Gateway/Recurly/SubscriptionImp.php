@@ -160,29 +160,26 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
     /**
      * @param Subscription $template
      * @param Account      $account
-     * @param int          $status One of the Simplerenew\Api\Subscription status codes
+     * @param int          $bitMask Subscription status codes to retrieve
      *
      * @return array
      */
-    public function getList(Subscription $template, Account $account, $status = null)
+    public function getList(Subscription $template, Account $account, $bitMask = null)
     {
         /**
          * @var \Recurly_Subscription $rawSubscription
          */
         $subscriptions = array();
-        $params        = array();
-
-        $state = array_search($status, $this->fieldMap['status']['state']);
-        if ($state) {
-            $params['state'] = $state;
-        }
 
         $list = \Recurly_SubscriptionList::getForAccount($account->code, null, $this->client);
         foreach ($list as $rawSubscription) {
-            $subscription = clone $template;
-            $this->bindSource($subscription, $rawSubscription);
+            $status = $this->translateState($rawSubscription->state);
+            if (!$bitMask || ($bitMask & $status)) {
+                $subscription = clone $template;
+                $this->bindSource($subscription, $rawSubscription);
 
-            $subscriptions[$subscription->id] = $subscription;
+                $subscriptions[$subscription->id] = $subscription;
+            }
         }
         return $subscriptions;
     }

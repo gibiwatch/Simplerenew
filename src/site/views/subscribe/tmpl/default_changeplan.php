@@ -12,6 +12,8 @@ defined('_JEXEC') or die();
  * @var SimplerenewViewSubscribe $this
  */
 
+$current = array_shift($this->subscriptions);
+
 ?>
 <div class="page-header">
     <h1><?php echo JText::_('COM_SIMPLERENEW_CHANGE_PLAN'); ?></h1>
@@ -35,7 +37,7 @@ defined('_JEXEC') or die();
     <?php echo SimplerenewHelper::renderModule('simplerenew_submit_top'); ?>
     <div class="m-bottom m-top">
         <button type="submit" class="btn-main btn-big">
-            <i class="fa fa-refresh"></i> 
+            <i class="fa fa-refresh"></i>
             <?php echo JText::_('COM_SIMPLERENEW_CHANGE_BUTTON'); ?>
         </button>
     </div>
@@ -51,4 +53,4 @@ defined('_JEXEC') or die();
 <input
     type="hidden"
     name="id"
-    value="<?php echo $this->subscription->id; ?>"/>
+    value="<?php echo $current->id; ?>"/>

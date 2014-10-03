@@ -53,6 +53,14 @@
                     password2: {
                         equalTo: '#password'
                     }
+                },
+                errorPlacement: function(place, element) {
+                    var placeId = $(element).attr('data-error-placement');
+                    if (placeId) {
+                        $(placeId).append(place);
+                    } else {
+                        place.insertAfter( element );
+                    }
                 }
             },
 
@@ -145,8 +153,15 @@
                         }
 
                         var previous = this.previousValue(element),
-                            plan = $($(element).attr('data-plan')).filter('input:checked,input:selected'),
+                            plans = [],
                             validator, data, keyValue;
+
+                        $($(element)
+                            .attr('data-plan'))
+                            .filter('input:checked,input:selected')
+                            .each(function(idx, plan) {
+                                plans.push($(plan).val());
+                            });
 
                         if (!this.settings.messages[ element.name ]) {
                             this.settings.messages[ element.name ] = {};
@@ -154,7 +169,7 @@
                         previous.originalMessage = this.settings.messages[ element.name ].remote;
                         this.settings.messages[ element.name ].remote = previous.message;
 
-                        keyValue = value + ':' + plan.val();
+                        keyValue = value + ':' + plans.join('|');
                         if (previous.old === keyValue) {
                             return previous.valid;
                         }
@@ -173,7 +188,7 @@
                                 option: 'com_simplerenew',
                                 task: 'validate.coupon',
                                 format: 'json',
-                                plan: plan.val(),
+                                plans: plans,
                                 coupon: value
                             },
                             context: validator.currentForm,

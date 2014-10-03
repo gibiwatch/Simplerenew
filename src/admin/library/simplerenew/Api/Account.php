@@ -24,6 +24,7 @@ defined('_JEXEC') or die();
  */
 class Account extends AbstractApiBase
 {
+    // Status bit masks
     const STATUS_ACTIVE  = 1;
     const STATUS_CLOSED  = 2;
     const STATUS_UNKNOWN = 0;
