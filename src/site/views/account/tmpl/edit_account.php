@@ -46,7 +46,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             name="username"
             type="text"
             value="<?php echo $this->user->username; ?>"
-            readonly="true"/>
+            readonly/>
     </div>
     <div class="block6">
         <label for="email"><?php echo JText::_('COM_SIMPLERENEW_EMAIL'); ?> <span>*</span></label>

@@ -57,7 +57,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
         <input
             <?php
             if ($loggedIn) {
-                echo 'readonly="true"';
+                echo 'readonly';
             }
             ?>
             id="username"
