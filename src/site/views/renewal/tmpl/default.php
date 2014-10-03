@@ -34,7 +34,7 @@ else:
         foreach ($this->subscriptions as $id => $subscription):
             $this->subscription = $subscription;
             ?>
-            <div class="ost-section ost-row-one">
+            <div class="ost-section ost-row-two b-bottom">
                 <?php echo $this->loadTemplate('plan'); ?>
             </div>
         <?php
@@ -54,7 +54,7 @@ else:
                 name="task"
                 value="renewal.update"/>
 
-            <button type="submit" class="btn-main btn-big">
+            <button type="submit" class="btn-main btn-big m-top">
                 <i class="fa fa-check"></i>
                 <?php echo JText::_('COM_SIMPLERENEW_RENEWAL_UPDATE_BUTTON'); ?>
             </button>

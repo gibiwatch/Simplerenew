@@ -27,34 +27,7 @@ $classes = array(
 );
 $checked = ($subscription->status == Subscription::STATUS_ACTIVE);
 ?>
-<div class="block9">
-    <?php echo $plan->name; ?>
-    <br/>
-    <?php
-    echo JText::sprintf(
-        'COM_SIMPLERENEW_SUBSCRIPTION_ACTIVE_PERIOD',
-        $subscription->period_start->format('F j, Y'),
-        $subscription->period_end->format('F j, Y')
-    );
-
-    echo '<br/>';
-
-    if ($subscription->pending_plan):
-        $pending = $container->getPlan()->load($subscription->pending_plan);
-
-        echo JText::sprintf(
-            'COM_SIMPLERENEW_SUBSCRIPTION_PENDING',
-            $subscription->period_end->format('F j, Y'),
-            $pending->name,
-            '$' . number_format($pending->amount, 2)
-        );
-    else:
-        echo JText::sprintf(
-            'COM_SIMPLERENEW_SUBSCRIPTION_RENEW_DATE',
-            $subscription->period_end->format('F j, Y')
-        );
-    endif;
-    ?>
+<div class="block2">
     <div class="switch">
         <input<?php echo $checked ? ' checked' : ''; ?>
             type="checkbox"
@@ -64,4 +37,7 @@ $checked = ($subscription->status == Subscription::STATUS_ACTIVE);
             value="<?php echo $subscription->id; ?>"/>
         <label for="<?php echo $planId; ?>"></label>
     </div>
+</div>
+<div class="block10">
+    <label><?php echo $plan->name; ?></label>
 </div>
