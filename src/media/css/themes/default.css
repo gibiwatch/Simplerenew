@@ -253,6 +253,73 @@
     color:#ffffff;
 }
 
+/* Toggle
+ ========================================================================== */
+.ost-container input.ost-toggle {
+    position: absolute;
+    margin-left: -9999px;
+    visibility: hidden;
+}
+
+.ost-container input.ost-toggle + label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    padding: 2px;
+    width: 50px;
+    height: 25px;
+    background-color: #ff0000;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -o-border-radius: 2px;
+    transition: background 0.4s;
+}
+
+.ost-container input.ost-toggle + label:before,
+.ost-container input.ost-toggle + label:after {
+    display: block;
+    position: absolute;
+    content: "";
+}
+
+.ost-container input.ost-toggle + label:before {
+    top: 2px;
+    left: 2px;
+    bottom: 2px;
+    right: 2px;
+    background-color: #fff;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -o-border-radius: 2px;
+    transition: background 0.4s;
+}
+
+.ost-container input.ost-toggle + label:after {
+    top: 4px;
+    left: 4px;
+    bottom: 4px;
+    width: 22px;
+    background-color: #ff0000;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -o-border-radius: 2px;
+    transition: margin 0.4s, background 0.4s;
+}
+
+.ost-container input.ost-toggle:checked + label {
+    background-color: #8cc14c;
+}
+
+.ost-container input.ost-toggle:checked + label:after {
+    margin-left: 23px;
+    background-color: #8cc14c;
+}
+
 /* Validation form
  ========================================================================== */
 .ost-container input.ost_error, 

@@ -20,15 +20,15 @@ $plan         = $container->getPlan()->load($subscription->plan);
 
 $planId  = 'plan_code_' . $plan->code;
 $classes = array(
-    'cmn-toggle',
-    'cmn-toggle-round-flat',
+    'ost-toggle',
+    'ost-toggle-flat',
     'plan_code',
     $planId
 );
 $checked = ($subscription->status == Subscription::STATUS_ACTIVE);
 ?>
 <div class="block2">
-    <div class="switch">
+    <div class="ost-switch">
         <input<?php echo $checked ? ' checked' : ''; ?>
             type="checkbox"
             id="<?php echo $planId; ?>"
