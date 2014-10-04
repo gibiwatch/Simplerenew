@@ -24,10 +24,25 @@ class Account implements HandlerInterface
         if ($notice->user->id) {
             switch ($notice->action) {
                 case Notify::ACTION_REACTIVATE:
+                    $response = $notice->user->username . ' updated';
+                    if (!$notice->user->enabled) {
+                        $notice->user->enabled = true;
+                        $response .= ': Re-enabled';
+                    }
+
+                    $oldGroups = array_values($notice->user->groups);
+                    sort($oldGroups);
+
                     $notice->user->addGroups($notice->subscription->plan);
-                    $notice->user->enabled = true;
+                    $newGroups = array_values($notice->user->groups);
+                    sort($newGroups);
+
+                    if ($oldGroups != $newGroups) {
+                        $response .= ': ' . $notice->subscription->plan;
+                    }
                     $notice->user->update();
-                    return $notice->user->username . ': Enabled';
+
+                    return $response;
             }
         }
         return null;
