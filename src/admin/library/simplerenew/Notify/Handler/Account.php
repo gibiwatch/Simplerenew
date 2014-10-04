@@ -23,13 +23,6 @@ class Account implements HandlerInterface
     {
         if ($notice->user->id) {
             switch ($notice->action) {
-                case Notify::ACTION_CANCEL:
-                    $notice->user->enabled = false;
-                    $notice->user->update();
-                    $notice->user->logout();
-                    return $notice->user->username . ': Disabled';
-
-
                 case Notify::ACTION_REACTIVATE:
                     $notice->user->addGroups($notice->subscription->plan);
                     $notice->user->enabled = true;
