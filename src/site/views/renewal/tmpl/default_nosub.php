@@ -8,8 +8,6 @@
 
 defined('_JEXEC') or die();
 ?>
-<div class="ost-container simplerenew-renewal">
-    <div class="ost-alert-warning">
-        <?php echo JText::_('COM_SIMPLERENEW_RENEWAL_NON_SUBSCRIBER'); ?>
-    </div>
+<div class="ost-alert-warning">
+    <?php echo JText::_('COM_SIMPLERENEW_RENEWAL_NON_SUBSCRIBER'); ?>
 </div>

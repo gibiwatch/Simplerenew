@@ -13,23 +13,27 @@ defined('_JEXEC') or die();
  * @var Simplerenew\Api\Subscription $subscription
  */
 $app = SimplerenewFactory::getApplication();
-
-if (!$this->subscriptions):
-    echo $this->loadTemplate('nosub');
-else:
-    ?>
-    <div class="ost-container simplerenew-renewal">
-
-        <?php if ($this->getParams()->get('show_page_heading', true)): ?>
-        <div class="page-header">
-            <h1>
-                <?php
-                echo $this->getHeading(
-                    JText::plural('COM_SIMPLERENEW_RENEWAL_UPDATE', count($this->subscriptions), false)
-                ); ?>
-            </h1>
-        </div>
-        <?php endif; ?>
+?>
+<div class="ost-container simplerenew-renewal">
+    <?php
+    if (!$this->subscriptions):
+        echo $this->loadTemplate('nosub');
+    else:
+        ?>
+        <?php
+        if ($this->getParams()->get('show_page_heading', true)):
+            ?>
+            <div class="page-header">
+                <h1>
+                    <?php
+                    echo $this->getHeading(
+                        JText::plural('COM_SIMPLERENEW_RENEWAL_UPDATE', count($this->subscriptions), false)
+                    ); ?>
+                </h1>
+            </div>
+            <?php
+        endif;
+        ?>
 
         <form
             name="renewalForm"
@@ -44,9 +48,8 @@ else:
             <div class="ost-section ost-row-two b-bottom">
                 <?php echo $this->loadTemplate('plan'); ?>
             </div>
-        <?php
-        endforeach;
-    ?>
+            <?php
+        endforeach; ?>
             <input
                 type="hidden"
                 name="option"
@@ -68,6 +71,7 @@ else:
 
             <?php echo JHtml::_('form.token'); ?>
         </form>
-    </div>
-<?php
-endif;
+    <?php
+    endif;
+    ?>
+</div>
