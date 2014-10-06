@@ -22,7 +22,7 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
                 break;
 
             default:
-                throw new Exception('not accepting ' . $method);
+                throw new Exception(JText::sprintf('COM_SIMPLERENEW_ERROR_NOTIFY_METHOD', $method), 405);
                 break;
         }
 
