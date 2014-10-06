@@ -20,11 +20,11 @@ else:
     ?>
     <div class="ost-container simplerenew-renewal">
 
-    <?php if ($this->getParams()->get('show_page_heading', true)): ?>
-    <div class="page-header">
+        <?php if ($this->getParams()->get('show_page_heading', true)): ?>
+        <div class="page-header">
             <h1><?php echo JText::plural('COM_SIMPLERENEW_RENEWAL_UPDATE', count($this->subscriptions)); ?></h1>
-    </div>
-    <?php endif; ?>
+        </div>
+        <?php endif; ?>
 
         <form
             name="renewalForm"
