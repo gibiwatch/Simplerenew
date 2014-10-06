@@ -13,9 +13,11 @@ defined('_JEXEC') or die();
  */
 
 ?>
+<?php if ($this->getParams()->get('show_page_heading', true)): ?>
 <div class="page-header">
     <h1><?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE'); ?></h1>
 </div>
+<?php endif; ?>
 
 <?php echo $this->loadTemplate('account'); ?>
 

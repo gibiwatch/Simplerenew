@@ -10,9 +10,11 @@ defined('_JEXEC') or die();
 ?>
 <div class="ost-container simplerenew-account">
 
+    <?php if ($this->getParams()->get('show_page_heading', true)): ?>
     <div class="page-header">
         <h1><?php echo JText::_('COM_SIMPLERENEW_ACCOUNT_INFO'); ?></h1>
     </div>
+    <?php endif; ?>
 
     <h3><span><i class="fa fa-info-circle"></i></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'); ?></h3>
 

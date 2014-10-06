@@ -15,9 +15,11 @@ defined('_JEXEC') or die();
 $current = array_shift($this->subscriptions);
 
 ?>
+<?php if ($this->getParams()->get('show_page_heading', true)): ?>
 <div class="page-header">
     <h1><?php echo JText::_('COM_SIMPLERENEW_CHANGE_PLAN'); ?></h1>
 </div>
+<?php endif; ?>
 
 <div class="ost-section">
 

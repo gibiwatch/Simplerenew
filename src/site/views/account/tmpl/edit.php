@@ -17,9 +17,11 @@ JHtml::_('sr.validation.init', '#accountForm');
 ?>
 <div class="ost-container simplerenew-edit-account">
 
+    <?php if ($this->getParams()->get('show_page_heading', true)): ?>
     <div class="page-header">
         <h1><?php echo JText::_('COM_SIMPLERENEW_ACCOUNT_EDIT'); ?></h1>
     </div>
+    <?php endif; ?>
 
     <form
         name="accountForm"
