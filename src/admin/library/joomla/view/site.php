@@ -74,6 +74,19 @@ abstract class SimplerenewViewSite extends JViewLegacy
     }
 
     /**
+     * Append page class suffix if specified
+     *
+     * @param string $base
+     *
+     * @return string
+     */
+    protected function getPageClass($base = '')
+    {
+        $suffix = $this->getParams()->get('pageclass_sfx');
+        return trim($base . ' ' . $suffix);
+    }
+
+    /**
      * For use on form pages that might contain sensitive information. Redirect
      * to the SSL version of the page if necessary.
      */

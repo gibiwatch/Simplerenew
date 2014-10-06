@@ -18,7 +18,7 @@ JHtml::_('sr.validation.init', '#subscribeForm');
 
 $app = SimplerenewFactory::getApplication();
 ?>
-<div class="ost-container simplerenew-subscribe">
+<div class="<?php echo $this->getPageClass('ost-container simplerenew-subscribe'); ?>">
 
     <form
         name="subscribeForm"

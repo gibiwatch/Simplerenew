@@ -15,7 +15,7 @@ $app = SimplerenewFactory::getApplication();
 
 JHtml::_('sr.validation.init', '#accountForm');
 ?>
-<div class="ost-container simplerenew-edit-account">
+<div class="<?php echo $this->getPageClass('ost-container simplerenew-edit-account'); ?>">
 
     <?php if ($this->getParams()->get('show_page_heading', true)): ?>
     <div class="page-header">

@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die();
 ?>
-<div class="ost-container simplerenew-renewal">
+<div class="<?php echo $this->getPageClass('ost-container simplerenew-renewal'); ?>">
     <div class="ost-alert-notify">
         <?php echo JText::_('COM_SIMPLERENEW_RENEWAL_RESUBSCRIBE_INSTRUCTIONS'); ?>
     </div>

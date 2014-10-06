@@ -14,7 +14,7 @@ defined('_JEXEC') or die();
  */
 $app = SimplerenewFactory::getApplication();
 ?>
-<div class="ost-container simplerenew-renewal">
+<div class="<?php echo $this->getPageClass('ost-container simplerenew-renewal'); ?>">
     <?php
     if (!$this->subscriptions):
         echo $this->loadTemplate('nosub');
