@@ -19,7 +19,7 @@ JHtml::_('sr.validation.init', '#accountForm');
 
     <?php if ($this->getParams()->get('show_page_heading', true)): ?>
     <div class="page-header">
-        <h1><?php echo JText::_('COM_SIMPLERENEW_ACCOUNT_EDIT'); ?></h1>
+        <h1><?php echo $this->getHeading('COM_SIMPLERENEW_ACCOUNT_EDIT'); ?></h1>
     </div>
     <?php endif; ?>
 

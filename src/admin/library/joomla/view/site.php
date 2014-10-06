@@ -11,6 +11,11 @@ defined('_JEXEC') or die();
 abstract class SimplerenewViewSite extends JViewLegacy
 {
     /**
+     * @var JRegistry
+     */
+    protected $params = null;
+
+    /**
      * @var int
      */
     protected $step = 1;
@@ -37,11 +42,35 @@ abstract class SimplerenewViewSite extends JViewLegacy
      */
     protected function getParams()
     {
-        if ($params = $this->get('Params')) {
-            return $params;
+        if ($this->params === null) {
+            if (!($this->params = $this->get('Params'))) {
+                $this->params = new JRegistry();
+            }
+
         }
 
-        return new JRegistry();
+        return $this->params;
+    }
+
+    /**
+     * Get the page heading from the menu definition if set
+     *
+     * @param string $default
+     * @param bool   $translate
+     *
+     * @return string
+     */
+    protected function getHeading($default = null, $translate = true)
+    {
+        if ($heading = $this->getParams()->get('page_heading')) {
+            return $heading;
+        }
+
+        if ($translate) {
+            return JText::_($default);
+        }
+
+        return $default;
     }
 
     /**
