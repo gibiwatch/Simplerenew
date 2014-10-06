@@ -10,43 +10,79 @@ defined('_JEXEC') or die();
 
 class SimplerenewControllerValidate extends SimplerenewControllerJson
 {
+    /**
+     * Check for the availability of a proposed new username. For logged in users,
+     * assume that this is a request to change their own username. Blank username
+     * will validate as unavailable.
+     *
+     * @return void
+     * @throws Exception
+     */
     public function username()
     {
         $this->checkToken();
 
-        $user = SimplerenewFactory::getUser();
-        if ($username = SimplerenewFactory::getApplication()->input->getUsername('username')) {
+        $id       = -1;
+        $user     = SimplerenewFactory::getUser();
+        $username = SimplerenewFactory::getApplication()->input->getUsername('username');
+        if ($username) {
             $db = SimplerenewFactory::getDbo();
 
-            $db->setQuery('Select id From #__users Where username=' . $db->quote($username));
-            $id = $db->loadResult();
-            if ($id && $id == $user->id) {
-                // Current user requested, so we're cool
-                $id = 0;
-            }
+            $query = $db->getQuery(true)
+                ->select($db->quote('id'))
+                ->from($db->quoteName('#__users'))
+                ->where(
+                    array(
+                        $db->quoteName('username') . '=' . $db->quote($username),
+                        $db->quoteName('id') . '!=' . $db->quote($user->id)
+                    )
+                );
+
+            $id = $db->setQuery($query)->loadResult();
         }
 
         echo json_encode(empty($id));
     }
 
+    /**
+     * Check for existence of proposed new email address. For logged in users,
+     * assume that this is an attempt to change their own email address. Blank
+     * email address will validate as unavailable.
+     *
+     * @throws Exception
+     */
     public function email()
     {
         $this->checkToken();
 
-        $user = SimplerenewFactory::getUser();
-        if ($email = SimplerenewFactory::getApplication()->input->getString('email')) {
+        $id    = -1;
+        $user  = SimplerenewFactory::getUser();
+        $email = SimplerenewFactory::getApplication()->input->getString('email');
+        if ($email) {
             $db = SimplerenewFactory::getDbo();
 
-            $db->setQuery('Select id From #__users Where email=' . $db->quote($email));
-            $id = $db->loadResult();
-            if ($id && $id == $user->id) {
-                $id = 0;
-            }
+            $query = $db->getQuery(true)
+                ->Select($db->quoteName('id'))
+                ->from($db->quoteName('#__users'))
+                ->where(
+                    array(
+                        $db->quoteName('email') . '=' . $db->quote($email),
+                        $db->quoteName('id') . '!=' . $db->quote($user->id)
+                    )
+                );
+
+            $id = $db->setQuery($query)->loadResult();
         }
 
         echo json_encode(empty($id));
     }
 
+    /**
+     * See if coupon is valid for at least one of the selected plans
+     *
+     * @return void
+     * @throws Exception
+     */
     public function coupon()
     {
         $app       = SimplerenewFactory::getApplication();
@@ -74,7 +110,7 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
 
             $discount = 0;
             foreach ($planCodes as $planCode) {
-                $plan   = $container->getPlan()->load($planCode);
+                $plan = $container->getPlan()->load($planCode);
                 if ($coupon->isAvailable($plan)) {
                     $discount += $coupon->getDiscount($plan);
                     $result['valid'] = true;
