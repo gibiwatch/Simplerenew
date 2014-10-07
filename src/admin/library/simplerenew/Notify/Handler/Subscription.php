@@ -22,7 +22,7 @@ class Subscription implements HandlerInterface
      */
     public function execute(Notify $notice)
     {
-        if ($notice->user->id) {
+        if (!empty($notice->user->id)) {
             switch ($notice->action) {
                 case Notify::ACTION_NEW:
                 case Notify::ACTION_UPDATE:
