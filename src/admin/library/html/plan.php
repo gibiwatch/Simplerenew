@@ -51,6 +51,34 @@ abstract class JHtmlPlan
     }
 
     /**
+     * Return a standard format duration text
+     *
+     * @param int    $length
+     * @param string $unit
+     *
+     * @return string
+     */
+    public static function length($length, $unit = null)
+    {
+        if (func_num_args() == 1) {
+            if (is_object($length)) {
+                $plan = (array)$length;
+            }
+            $length = empty($plan['length']) ? 0 : $plan['length'];
+            $unit   = empty($plan['unit']) ? '' : $plan['unit'];
+        }
+
+        if ($length && $unit) {
+            $string = 'COM_SIMPLERENEW_PLAN_LENGTH_' . $unit;
+            if (SimplerenewFactory::getLanguage()->hasKey($string)) {
+                return JText::plural($string, $length);
+            }
+        }
+
+        return '';
+    }
+
+    /**
      * Return standard format trial period text
      *
      * @param mixed  $length
@@ -64,21 +92,9 @@ abstract class JHtmlPlan
             if (is_object($length)) {
                 $plan = (array)$length;
             }
-
-            if (!empty($plan['trial_length']) && !empty($plan['trial_unit'])) {
-                $plan   = $length;
-                $length = $plan->trial_length;
-                $unit   = $plan->trial_unit;
-            }
+            $length = empty($plan['trial_length']) ? 0 : $plan['trial_length'];
+            $unit   = empty($plan['trial_unit']) ? '' : $plan['trial_unit'];
         }
-
-        if ($length && $unit) {
-            return JText::plural(
-                'COM_SIMPLERENEW_TRIAL_' . $unit,
-                $length
-            );
-        }
-
-        return '';
+        return self::length($length, $unit);
     }
 }

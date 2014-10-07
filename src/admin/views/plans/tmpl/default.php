@@ -152,6 +152,10 @@ else:
             </th>
 
             <th class="nowrap">
+                <?php echo JText::_('COM_SIMPLERENEW_PLAN_LENGTH_LABEL'); ?>
+            </th>
+
+            <th class="nowrap">
                 <?php echo JText::_('COM_SIMPLERENEW_PLAN_TRIAL_PERIOD_LABEL'); ?>
             </th>
         </tr>
@@ -239,6 +243,10 @@ else:
 
                 <td style="text-align: right;">
                     <?php echo JHtml::_('currency.format', $item->setup_cost); ?>
+                </td>
+
+                <td>
+                    <?php echo JHtml::_('plan.length', $item) ? : JText::_('COM_SIMPLERENEW_PLAN_LENGTH_NONE'); ?>
                 </td>
 
                 <td>
