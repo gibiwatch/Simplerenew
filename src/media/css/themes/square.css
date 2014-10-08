@@ -149,7 +149,9 @@
     height: 38px;
 }
 
-.ost-container input[readonly]{
+.ost-container input[readonly],
+.ost-container input[readonly]:hover,
+.ost-container input[readonly]:focus{
     background: #f2f2f2;
 }
 
