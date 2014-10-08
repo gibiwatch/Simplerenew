@@ -146,30 +146,31 @@ class Com_SimplerenewInstallerScript
                 JFactory::getApplication()->enqueueMessage('Please update to at least v0.1.0 (First Beta) before updating to this version', 'error');
                 return false;
             }
-            $this->clearUpdateServers();
-        }
 
-        // ** Fix issue with typo in schema updates **
-        if (version_compare($this->previousVersion, '0.2.0', 'lt')) {
-            $path = JPATH_ADMINISTRATOR . '/components/com_simplerenew/sql/updates/mysql/0.045.sql';
-            if (is_file($path)) {
-                unlink($path);
-            }
-            $db    = JFactory::getDbo();
-            $query = $db->getQuery(true)
-                ->select('s.*')
-                ->from('#__schemas s')
-                ->innerJoin('#__extensions e ON e.extension_id = s.extension_id')
-                ->where('e.element = ' . $db->quote('com_simplerenew'));
+            // ** Fix issue with typo in schema updates **
+            if (version_compare($this->previousVersion, '0.2.0', 'lt')) {
+                $path = JPATH_ADMINISTRATOR . '/components/com_simplerenew/sql/updates/mysql/0.045.sql';
+                if (is_file($path)) {
+                    unlink($path);
+                }
+                $db    = JFactory::getDbo();
+                $query = $db->getQuery(true)
+                    ->select('s.*')
+                    ->from('#__schemas s')
+                    ->innerJoin('#__extensions e ON e.extension_id = s.extension_id')
+                    ->where('e.element = ' . $db->quote('com_simplerenew'));
 
-            if ($schema = $db->setQuery($query)->loadObject()) {
-                if (version_compare($schema->version_id, '0.2', 'ge')) {
-                    $schema->version_id = '0.1.0';
-                    $db->updateObject('#__schemas', $schema, 'extension_id');
+                if ($schema = $db->setQuery($query)->loadObject()) {
+                    if (version_compare($schema->version_id, '0.2', 'ge')) {
+                        $schema->version_id = '0.1.0';
+                        $db->updateObject('#__schemas', $schema, 'extension_id');
+                    }
                 }
             }
+            // ** End of temporary schema fix **
+
+            $this->clearUpdateServers();
         }
-        // ** End of temporary schema fix **
 
         return true;
     }
