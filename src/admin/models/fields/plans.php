@@ -56,6 +56,7 @@ class JFormFieldPlans extends JFormFieldCheckboxes
                     'p.code',
                     'p.name',
                     'p.amount',
+                    'p.currency',
                     'p.trial_length',
                     'p.trial_unit',
                     'p.group_id'
@@ -70,14 +71,8 @@ class JFormFieldPlans extends JFormFieldCheckboxes
                 ->innerJoin('#__usergroups g on g.id = p.group_id')
                 ->order($listOrder . ' ' . $listDir);
 
-            $localPlans  = $db->setQuery($query)->loadAssocList();
-            $remotePlans = SimplerenewFactory::getContainer()->getPlan()->getList();
-
+            $localPlans  = $db->setQuery($query)->loadObjectList();
             foreach ($localPlans as $plan) {
-                if (isset($remotePlans[$plan['code']])) {
-                    $remote = $remotePlans[$plan['code']]->getProperties();
-                    $plan = array_merge($plan, $remote);
-                }
                 $text = str_replace(
                     array(
                         '{code}',
@@ -87,18 +82,18 @@ class JFormFieldPlans extends JFormFieldCheckboxes
                         '{group}'
                     ),
                     array(
-                        $plan['code'],
-                        $plan['name'],
-                        JHtml::_('currency.format', $plan['amount'], $plan['currency']),
-                        JHtml::_('plan.trial', $plan['trial_length'], $plan['trial_unit']),
-                        $plan['group']
+                        $plan->code,
+                        $plan->name,
+                        JHtml::_('currency.format', $plan->amount, $plan->currency),
+                        JHtml::_('plan.trial', $plan->trial_length, $plan->trial_unit),
+                        $plan->group
                     ),
                     $format
                 );
-                $option           = JHtml::_('select.option', $plan['code'], $text);
+                $option           = JHtml::_('select.option', $plan->code, $text);
                 $option->checked  = false;
-                $option->group    = $plan['group'];
-                $option->group_id = $plan['group_id'];
+                $option->group    = $plan->group;
+                $option->group_id = $plan->group_id;
                 $this->options[]  = $option;
             }
         }

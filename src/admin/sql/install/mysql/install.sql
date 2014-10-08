@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS `#__simplerenew_plans` (
   `unit` varchar(45) NOT NULL,
   `trial_length` int(11) NOT NULL,
   `trial_unit` varchar(45) NOT NULL,
+  `currency` char(3) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `setup_cost` decimal(10,2) NOT NULL,
   `published` tinyint(4) NOT NULL,

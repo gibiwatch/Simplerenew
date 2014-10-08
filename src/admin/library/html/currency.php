@@ -11,12 +11,11 @@ defined('_JEXEC') or die();
 abstract class JHtmlCurrency
 {
     protected static $currencies = array(
-        'AUD' => array('language' => 'en_AU', 'format' => '$%s'),
-        'CAD' => array('language' => 'en_CA', 'format' => '$%s'),
-        'EUR' => array('language' => 'de_DE', 'format' => '€%s'),
-        'GBP' => array('language' => 'en_GB', 'format' => '£%s'),
-        'USD' => array('language' => 'en_US', 'format' => '$%s'),
-
+        'AUD' => array('format' => '$%s', 'decimal' => '.', 'thousands' => ','),
+        'CAD' => array('format' => '$%s', 'decimal' => '.', 'thousands' => ','),
+        'EUR' => array('format' => '€%s', 'decimal' => ',', 'thousands' => '.'),
+        'GBP' => array('format' => '£%s', 'decimal' => '.', 'thousands' => ','),
+        'USD' => array('format' => '$%s', 'decimal' => '.', 'thousands' => ',')
     );
 
     /**
@@ -36,12 +35,9 @@ abstract class JHtmlCurrency
             $selected = self::$currencies['USD'];
         }
 
-        setLocale(LC_NUMERIC, $selected['language']);
-        $formats = localeconv();
-
         return sprintf(
             $selected['format'],
-            number_format($amount, 2, $formats['decimal_point'], $formats['thousands_sep'])
+            number_format($amount, 2, $selected['decimal'], $selected['thousands'])
         );
     }
 }

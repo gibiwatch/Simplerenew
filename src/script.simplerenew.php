@@ -11,7 +11,8 @@ defined('_JEXEC') or die();
 class Com_SimplerenewInstallerScript
 {
     /**
-     * @var array Obsolete folders/files to be deleted - use admin/site/media for location
+     * @var array Obsolete folders/files to be deleted
+     * Start with [/admin|/site|/media] for location
      */
     protected $obsoleteItems = array(
         '/admin/library/configuration.json',
@@ -53,6 +54,11 @@ class Com_SimplerenewInstallerScript
     /**
      * @var string
      */
+    protected $previousVersion = '0.0.0';
+
+    /**
+     * @var string
+     */
     protected $mediaFolder = null;
 
     /**
@@ -67,6 +73,12 @@ class Com_SimplerenewInstallerScript
      */
     public function initprops($parent)
     {
+        $path = JPATH_ADMINISTRATOR . '/components/com_simplerenew/simplerenew.xml';
+        if (is_file($path)) {
+            $previousManifest = JInstaller::parseXMLInstallFile($path);
+            $this->previousVersion = $previousManifest['version'];
+        }
+
         $this->installer = $parent->get('parent');
         $this->manifest  = $this->installer->getManifest();
         $this->messages  = array();
@@ -130,8 +142,34 @@ class Com_SimplerenewInstallerScript
         $this->initprops($parent);
 
         if ($type == 'update') {
+            if (version_compare($this->previousVersion, '0.1.0', 'lt')) {
+                JFactory::getApplication()->enqueueMessage('Please update to at least v0.1.0 (First Beta) before updating to this version', 'error');
+                return false;
+            }
             $this->clearUpdateServers();
         }
+
+        // ** Fix issue with typo in schema updates **
+        if (version_compare($this->previousVersion, '0.2.0', 'lt')) {
+            $path = JPATH_ADMINISTRATOR . '/components/com_simplerenew/sql/updates/mysql/0.045.sql';
+            if (is_file($path)) {
+                unlink($path);
+            }
+            $db    = JFactory::getDbo();
+            $query = $db->getQuery(true)
+                ->select('s.*')
+                ->from('#__schemas s')
+                ->innerJoin('#__extensions e ON e.extension_id = s.extension_id')
+                ->where('e.element = ' . $db->quote('com_simplerenew'));
+
+            if ($schema = $db->setQuery($query)->loadObject()) {
+                if (version_compare($schema->version_id, '0.2', 'ge')) {
+                    $schema->version_id = '0.1.0';
+                    $db->updateObject('#__schemas', $schema, 'extension_id');
+                }
+            }
+        }
+        // ** End of temporary schema fix **
 
         return true;
     }
@@ -516,49 +554,6 @@ class Com_SimplerenewInstallerScript
             foreach ($regions as $region) {
                 $db->insertObject('#__simplerenew_regions', $region);
             }
-        }
-
-        // @TODO: All the rest should be removed on 1st beta
-        $plans = $db->getTableColumns('#__simplerenew_plans');
-        $cmds  = array();
-        $drops = array('accounting_code', 'alias', 'description');
-        foreach ($drops as $field) {
-            if (isset($plans[$field])) {
-                $cmds[] = 'Drop Column ' . $db->quoteName($field);
-            }
-        }
-        if (!isset($plans['ordering'])) {
-            $cmds[] = 'Add Column '
-                . $db->quoteName('ordering')
-                . ' int NOT NULL AFTER '
-                . $db->quoteName('published');
-        }
-
-        if ($cmds) {
-            $query = 'Alter Table '
-                . $db->quoteName('#__simplerenew_plans') . ' '
-                . join(', ', $cmds);
-            $db->setQuery($query)->execute();
-        }
-
-        // If ordering field just added, initialise the ordering
-        $query   = $db->getQuery(true)
-            ->select('name, id, ordering')
-            ->from('#__simplerenew_plans')
-            ->order('name, code');
-        $list    = $db->setQuery($query)->loadObjectList();
-        $empties = array_filter(
-            $list,
-            function ($el) {
-                return ($el->ordering == 0);
-            }
-        );
-        if (count($list) && count($empties) == count($list)) {
-            foreach ($list as $i => $plan) {
-                $plan->ordering = $i + 1;
-                $db->updateObject('#__simplerenew_plans', $plan, 'id');
-            }
-            $this->setMessage('Plan ordering has been initialised to alphabetical by Plan Name');
         }
     }
 }

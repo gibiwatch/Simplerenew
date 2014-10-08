@@ -161,10 +161,6 @@ class Plan extends AbstractApiBase
         $baseData = $this->getProperties();
         unset($baseData['created']);
 
-        $data = array_intersect_key($data, $baseData);
-        if (empty($data['currency'])) {
-            $data['currency'] = $this->currency;
-        }
         if (!empty($data['created'])) {
             unset($data['created']);
         }
