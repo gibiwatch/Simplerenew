@@ -46,8 +46,8 @@ class JFormFieldPlans extends JFormFieldCheckboxes
                 'group'    => 'g.title'
             );
             $listOrder = $this->element['order'];
-            $listOrder = empty($orders[$listOrder]) ? $orders['ordering'] :  $orders[$listOrder];
-            $listDir = $this->element['direction'] ? (string)$this->element['direction'] : 'ASC';
+            $listOrder = empty($orders[$listOrder]) ? $orders['ordering'] : $orders[$listOrder];
+            $listDir   = $this->element['direction'] ? (string)$this->element['direction'] : 'ASC';
 
             $db       = SimplerenewFactory::getDbo();
             $fields   = array_map(
@@ -62,6 +62,7 @@ class JFormFieldPlans extends JFormFieldCheckboxes
                 )
             );
             $fields[] = $db->quoteName('g.title', 'group');
+            $fields[] = $db->quote('') . ' ' . $db->quoteName('currency');
 
             $query = $db->getQuery(true)
                 ->select($fields)
@@ -69,9 +70,14 @@ class JFormFieldPlans extends JFormFieldCheckboxes
                 ->innerJoin('#__usergroups g on g.id = p.group_id')
                 ->order($listOrder . ' ' . $listDir);
 
-            $list = $db->setQuery($query)->loadObjectList();
+            $localPlans  = $db->setQuery($query)->loadAssocList();
+            $remotePlans = SimplerenewFactory::getContainer()->getPlan()->getList();
 
-            foreach ($list as $plan) {
+            foreach ($localPlans as $plan) {
+                if (isset($remotePlans[$plan['code']])) {
+                    $remote = $remotePlans[$plan['code']]->getProperties();
+                    $plan = array_merge($plan, $remote);
+                }
                 $text = str_replace(
                     array(
                         '{code}',
@@ -81,19 +87,18 @@ class JFormFieldPlans extends JFormFieldCheckboxes
                         '{group}'
                     ),
                     array(
-                        $plan->code,
-                        $plan->name,
-                        JHtml::_('currency.format', $plan->amount),
-                        JHtml::_('plan.trial', $plan->trial_length, $plan->trial_unit),
-                        $plan->group
+                        $plan['code'],
+                        $plan['name'],
+                        JHtml::_('currency.format', $plan['amount'], $plan['currency']),
+                        JHtml::_('plan.trial', $plan['trial_length'], $plan['trial_unit']),
+                        $plan['group']
                     ),
                     $format
                 );
-
-                $option           = JHtml::_('select.option', $plan->code, $text);
+                $option           = JHtml::_('select.option', $plan['code'], $text);
                 $option->checked  = false;
-                $option->group    = $plan->group;
-                $option->group_id = $plan->group_id;
+                $option->group    = $plan['group'];
+                $option->group_id = $plan['group_id'];
                 $this->options[]  = $option;
             }
         }

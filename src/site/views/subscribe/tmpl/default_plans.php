@@ -42,6 +42,7 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
                     echo JHtml::_(
                         'plan.name',
                         $plan->name,
+                        $plan->currency,
                         $plan->amount,
                         $plan->length,
                         $plan->unit,

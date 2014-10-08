@@ -238,11 +238,11 @@ else:
                 </td>
 
                 <td style="text-align: right;">
-                    <?php echo JHtml::_('currency.format', $item->amount); ?>
+                    <?php echo JHtml::_('currency.format', $item->amount, $item->currency); ?>
                 </td>
 
                 <td style="text-align: right;">
-                    <?php echo JHtml::_('currency.format', $item->setup_cost); ?>
+                    <?php echo JHtml::_('currency.format', $item->setup_cost, $item->currency); ?>
                 </td>
 
                 <td>

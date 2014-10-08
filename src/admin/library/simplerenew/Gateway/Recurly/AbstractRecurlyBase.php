@@ -23,11 +23,6 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
      */
     protected $client = null;
 
-    /**
-     * @var string
-     */
-    protected $currency = 'USD';
-
     protected $mode = null;
 
     public function __construct(Configuration $config = null)
@@ -38,7 +33,6 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
         if ($apiKey = $this->getCfg('Apikey')) {
             $this->client = new \Recurly_Client($apiKey);
         }
-        $this->currency = $this->getCfg('currency', 'USD');
     }
 
     /**
@@ -55,14 +49,20 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
 
         if (isset($amounts[$currency])) {
             $amount = $amounts[$currency]->amount_in_cents / 100;
-            return $amount;
+        } else {
+            $locale = $amounts->getIterator()->current();
+            $this->currency = $locale->currencyCode;
+            $amount = $locale->amount_in_cents /100;
         }
 
-        return 0.0;
+        return $amount;
     }
 
     /**
-     * Convenience method for retrieving gateway config items
+     * Recurly gateway can run in test or live mode. Pull
+     * config values from the appropriate key in the form:
+     * testVarname
+     * liveVarname
      *
      * @param string $key
      * @param mixed  $default
@@ -72,14 +72,13 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
     protected function getCfg($key, $default = null)
     {
         if ($this->mode === null) {
-            $this->mode = $this->gatewayConfig->get('mode', 'test');
+            $this->mode = parent::getCfg('mode', 'test');
         }
 
         $key     = strtolower($key);
         $modeKey = $this->mode . ucfirst($key);
 
-        $default = $this->gatewayConfig->get($key, $default);
-        return $this->gatewayConfig->get($modeKey, $default);
+        return parent::getCfg($modeKey, parent::getCfg($key, $default));
     }
 
     /**

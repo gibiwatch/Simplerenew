@@ -253,11 +253,11 @@ $saveOrder = $listOrder == 'plan.ordering';
             </td>
 
             <td class="right">
-                <?php echo JHtml::_('currency.format', $item->amount); ?>
+                <?php echo JHtml::_('currency.format', $item->amount, $item->currency); ?>
             </td>
 
             <td class="right">
-                <?php echo JHtml::_('currency.format', $item->setup_cost); ?>
+                <?php echo JHtml::_('currency.format', $item->setup_cost, $item->currency); ?>
             </td>
 
             <td>

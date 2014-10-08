@@ -105,7 +105,7 @@ class JFormFieldPlanAccess extends JFormFieldPlans
             . $disabled
             . '/>';
 
-        $html[] = '<label for="' . $id . '">' . JText::_($option->text) . '</label>';
+        $html[] = '<label for="' . $id . '">' . $option->text . '</label>';
         $html[] = '</li>';
 
         return implode($html);

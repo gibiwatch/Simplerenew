@@ -28,6 +28,11 @@ abstract class AbstractGatewayBase extends Object
     protected $gatewayConfig = array();
 
     /**
+     * @var string
+     */
+    protected $currency = null;
+
+    /**
      * @var Cache
      */
     private $cache = null;
@@ -35,6 +40,21 @@ abstract class AbstractGatewayBase extends Object
     public function __construct(Configuration $config = null)
     {
         $this->gatewayConfig = $config;
+
+        $this->currency = $config->get('currency', null);
+    }
+
+    /**
+     * Convenience method for retrieving gateway config items
+     *
+     * @param string $key
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    protected function getCfg($key, $default = null)
+    {
+        return $this->gatewayConfig->get($key, $default);
     }
 
     /**
