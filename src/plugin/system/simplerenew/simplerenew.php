@@ -32,11 +32,21 @@ class plgSystemSimplerenew extends JPlugin
         // Catch push notifications from the gateway and direct to the receiver
         $app = JFactory::getApplication();
         if ($app->isSite()) {
-            $uri = JUri::getInstance();
-            if ($uri->getPath() == '/simplerenew/notify') {
-                $app->input->set('option', 'com_simplerenew');
-                $app->input->set('task', 'notify.receive');
-                $app->input->set('format', 'raw');
+            $uri  = JUri::getInstance();
+            $path = rtrim($uri->getPath(), '\\/');
+            if ($path == '/simplerenew/notify') {
+                $vars = array(
+                    'option' => 'com_simplerenew',
+                    'task'   => 'notify.receive',
+                    'format' => 'raw'
+                );
+                foreach ($vars as $var => $value) {
+                    $app->input->set($var, $value);
+                }
+                if ($app->getRouter()->getMode() == JROUTER_MODE_SEF) {
+                    $uri->setPath('/component/simplerenew');
+                    $uri->setQuery($vars);
+                }
             }
         }
     }
