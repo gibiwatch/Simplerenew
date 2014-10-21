@@ -118,7 +118,7 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
     }
 
     /**
-     * Change from one active subscription to another
+     * Change a subscription from one plan to another
      */
     public function change()
     {
@@ -126,15 +126,7 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
 
         $app = SimplerenewFactory::getApplication();
 
-        // We only accept a single Subscription ID
-        $ids = $app->input->get('ids', array(), 'array');
-        $ids = array_filter(
-            array_map(
-                array('SimplerenewApplicationHelper', 'stringURLSafe'),
-                $ids
-            )
-        );
-        $id  = array_shift($ids);
+        $id = $app->input->getString('id', null);
         if (!$id) {
             $this->callerReturn(
                 JText::_('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_NOID'),
