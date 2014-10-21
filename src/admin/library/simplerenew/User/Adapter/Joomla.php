@@ -192,11 +192,11 @@ class Joomla implements UserInterface
         }
 
         if (!$user->bind($data)) {
-            throw new Exception(join('<br/>', array_filter($user->getErrors())));
+            throw new Exception(join('<br/>', array_filter($user->getErrors())), 403);
         }
 
         if (!$user->save(true)) {
-            throw new Exception(join('<br/>', array_filter($user->getErrors())));
+            throw new Exception(join('<br/>', array_filter($user->getErrors())), 403);
         }
 
         // If current user, refresh the session data
@@ -340,7 +340,7 @@ class Joomla implements UserInterface
      *
      * @param User  $parent
      * @param array $planCodes
-     * @param bool  $replace   Clear all current plan groups
+     * @param bool  $replace Clear all current plan groups
      *
      * @return void
      * @throws Exception
