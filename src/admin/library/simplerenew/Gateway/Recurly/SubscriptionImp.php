@@ -298,7 +298,7 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
 
                 /** @var \Recurly_Coupon $newCoupon */
                 $newCoupon = \Recurly_Coupon::get($coupon->code, $this->client);
-                $newCoupon->redeemCoupon($accountCode, $this->currency);
+                $newCoupon->redeemCoupon($accountCode, $subscription->currency);
             }
 
             $subscription->plan_code = $plan->code;

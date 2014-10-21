@@ -74,7 +74,7 @@ if ($this->subscriptions):
                         'COM_SIMPLERENEW_SUBSCRIPTION_PENDING',
                         $subscription->period_end->format('F j, Y'),
                         $pending->name,
-                        '$' . number_format($pending->amount, 2)
+                        JHtml::_('currency.format', $pending->amount, $pending->currency)
                     );
                     ?>
                 </div>
