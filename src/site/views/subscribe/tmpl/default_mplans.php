@@ -30,12 +30,7 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
         foreach ($this->plans as $code => $plan):
             $planId  = 'plan_code_' . $code;
             $classes = array('plan_code', $planId);
-
-            $active = $plan->subscription && !empty($this->subscriptions[$plan->subscription]);
-            if ($active) {
-                $classes[] = 'subscriber';
-            }
-            $checked = $plan->selected && $active ? ' checked' : '';
+            $checked = $plan->selected ? ' checked' : '';
             ?>
             <div class="<?php echo join(' ', $classes); ?>">
                 <span class="simplerenew-plan <?php echo $planId; ?>">

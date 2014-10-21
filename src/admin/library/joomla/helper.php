@@ -143,9 +143,6 @@ abstract class SimplerenewHelper
             $defaultGroup    = $params->get('basic.defaultGroup');
             $expirationGroup = $params->get('basic.expirationGroup');
 
-            if (!$defaultGroup) {
-                $message->warnings[] = JText::_('COM_SIMPLERENEW_WARN_NO_DEFAULTGROUP');
-            }
             if ($defaultGroup == $expirationGroup) {
                 $message->warnings[] = JText::_('COM_SIMPLERENEW_WARN_GROUPS_EQUAL');
             }
