@@ -58,8 +58,15 @@ class plgSystemSimplerenew extends JPlugin
      */
     protected function autoSyncPlans()
     {
-        $app = JFactory::getApplication();
-        if ($app->isAdmin() && $app->input->getCmd('option') == 'com_simplerenew') {
+        $app    = JFactory::getApplication();
+        $option = $app->input->getCmd('option');
+        $view   = $app->input->getCmd('view');
+
+        if (
+            $app->isAdmin()
+            && $option == 'com_simplerenew'
+            && $view == 'plans'
+        ) {
             if ($this->isInstalled()) {
                 $planSync = abs((int)$this->params->get('planSync', 1)) * 60;
 
