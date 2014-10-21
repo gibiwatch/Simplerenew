@@ -196,7 +196,12 @@ class Joomla implements UserInterface
         }
 
         if (!$user->save(true)) {
-            throw new Exception(join('<br/>', array_filter($user->getErrors())), 403);
+            // @TODO: Keep an eye out for changes in Joomla. This is garbage.
+            $errors = $user->getErrors();
+            if (count($errors) != 1 || !in_array('User not Super Administrator', $errors)) {
+                // Only throw an error if this isn't the 'change SU' problem
+                throw new Exception(join('<br/>', array_filter($user->getErrors())), 403);
+            }
         }
 
         // If current user, refresh the session data
