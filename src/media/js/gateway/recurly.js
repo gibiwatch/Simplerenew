@@ -16,7 +16,7 @@
             recurly.configure(this.options.key);
 
 
-            $('[name=planCode]').attr('data-recurly', 'plan');
+            $('[name^=planCodes]').attr('data-recurly', 'plan');
             $('#coupon_code').attr('data-recurly', 'coupon');
             $('#billing_cc_number').attr('data-recurly', 'number');
             $('#billing_cc_month').attr('data-recurly', 'month');
