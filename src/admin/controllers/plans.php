@@ -17,18 +17,4 @@ class SimplerenewControllerPlans extends SimplerenewControllerAdmin
         $model = parent::getModel($name, $prefix, $config);
         return $model;
     }
-
-    /**
-     * Used for manual update/sync of plans from the gateway.
-     * @TODO: Not currently used
-     */
-    public function sync()
-    {
-        $this->checkToken();
-
-        $messages = SimplerenewHelper::syncPlans();
-        SimplerenewHelper::enqueueMessages($messages);
-
-        $this->setRedirect('index.php?option=com_simplerenew&view=plans');
-    }
 }
