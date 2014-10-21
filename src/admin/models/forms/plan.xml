@@ -72,6 +72,15 @@
         </field>
 
         <field
+            name="currency"
+            type="currency"
+            label="Currency"
+            description="Currency Desc"
+            required="true">
+            <option value=""></option>
+        </field>
+
+        <field
             name="amount"
             type="text"
             label="COM_SIMPLERENEW_PLAN_AMOUNT_LABEL"

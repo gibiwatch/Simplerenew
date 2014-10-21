@@ -32,9 +32,21 @@ class SimplerenewModelPlan extends SimplerenewModelAdmin
         if (empty($data)) {
             $data = $this->getItem();
 
+            // Load some defaults for new plans
             if (!$data->get('id')) {
                 $gid = SimplerenewComponentHelper::getParams()->get('basic.defaultGroup');
                 $data->set('group_id', $gid);
+            }
+
+            // We are supporting only a single currency at this time
+            if (!$data->get('currency')) {
+                $db = SimplerenewFactory::getDbo();
+                $query = $db->getQuery(true)
+                    ->select('currency')
+                    ->from('#__simplerenew_plans')
+                    ->where('currency != ' . $db->quote(''));
+                $currency = $db->setQuery($query, 0, 1)->loadResult();
+                $data->set('currency', $currency);
             }
         }
 
