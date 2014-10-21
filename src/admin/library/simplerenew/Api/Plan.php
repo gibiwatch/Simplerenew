@@ -161,9 +161,7 @@ class Plan extends AbstractApiBase
         $baseData = $this->getProperties();
         unset($baseData['created']);
 
-        if (!empty($data['created'])) {
-            unset($data['created']);
-        }
+        $data = array_intersect_key($data, $baseData);
 
         return ($baseData == $data);
     }
