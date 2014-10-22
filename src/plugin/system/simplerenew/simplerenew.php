@@ -70,7 +70,7 @@ class plgSystemSimplerenew extends JPlugin
     {
         $app    = JFactory::getApplication();
         $option = $app->input->getCmd('option');
-        $view   = $app->input->getCmd('view');
+        $view   = $app->input->getCmd('view', 'plans');
 
         if (
             $app->isAdmin()
