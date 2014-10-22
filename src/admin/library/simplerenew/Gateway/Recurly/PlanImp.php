@@ -176,7 +176,17 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
         if ($isNew) {
             $plan->unit_amount_in_cents->addCurrency($parent->currency, $amount);
             $plan->setup_fee_in_cents->addCurrency($parent->currency, $setup_cost);
+
             $plan->create();
+            if (
+                !$plan->unit_amount_in_cents instanceof \Recurly_CurrencyList
+                || !$plan->unit_amount_in_cents->offsetExists($parent->currency)
+            ) {
+                // there was a problem with the selected currency
+                $plan->delete();
+                throw new Exception(sprintf('"%s" is not an accepted currency at Recurly', $parent->currency));
+            }
+
         } else {
             if (!$plan->unit_amount_in_cents instanceof \Recurly_CurrencyList) {
                 $plan->unit_amount_in_cents = new \Recurly_CurrencyList('unit_amount_in_cents');
