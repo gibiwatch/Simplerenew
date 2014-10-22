@@ -174,9 +174,8 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
         $amount     = $parent->amount * 100;
         $setup_cost = $parent->setup_cost * 100;
         if ($isNew) {
-            $plan->unit_amount_in_cents->addCurrency($this->currency, $amount);
-            $plan->setup_fee_in_cents->addCurrency($this->currency, $setup_cost);
-
+            $plan->unit_amount_in_cents->addCurrency($parent->currency, $amount);
+            $plan->setup_fee_in_cents->addCurrency($parent->currency, $setup_cost);
             $plan->create();
         } else {
             if (!$plan->unit_amount_in_cents instanceof \Recurly_CurrencyList) {
