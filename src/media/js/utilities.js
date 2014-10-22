@@ -2,9 +2,17 @@
     $.extend($.fn, {
         closePanel: function (state) {
             if (state) {
-                $(this).hide().find(':input').attr('disabled', true);
+                $(this)
+                    .hide()
+                    .find(':input')
+                    .attr('disabled', true)
+                    .trigger('sr.disable');
             } else {
-                $(this).show().find(':input').attr('disabled', false);
+                $(this)
+                    .show()
+                    .find(':input')
+                    .attr('disabled', false)
+                    .trigger('sr.enable');
                 $(this).find(':input:visible').first().focus();
             }
             return this;
@@ -12,9 +20,17 @@
         closePanelSlide: function (state, options) {
             options = $.extend({'duration': 400}, options);
             if (state) {
-                $(this).slideUp().find(':input').attr('disabled', true);
+                $(this)
+                    .slideUp()
+                    .find(':input')
+                    .attr('disabled', true)
+                    .trigger('sr.disable');
             } else {
-                $(this).slideDown().find(':input').attr('disabled', false);
+                $(this)
+                    .slideDown()
+                    .find(':input')
+                    .attr('disabled', false)
+                    .trigger('sr.enable');
                 $(this).find(':input:visible').first().focus();
             }
             return this;
