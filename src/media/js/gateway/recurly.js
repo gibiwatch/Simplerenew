@@ -33,7 +33,7 @@
 
             var coupon = $('#coupon_code')
                 .attr('data-recurly', 'coupon')
-                .on('change sr.disable', function(evt) {
+                .on('change sr.disable sr.enable', function(evt) {
                     plans.each(function(idx, plan) {
                         $(plan).recurly.calculate(coupon, plan);
                     });
