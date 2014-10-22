@@ -46,15 +46,12 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
     protected function getCurrency(\Recurly_CurrencyList $amounts, $currency = null)
     {
         $currency = $currency ? : $this->currency;
-
-        if (isset($amounts[$currency])) {
-            $amount = $amounts[$currency]->amount_in_cents / 100;
-        } else {
-            $locale = $amounts->getIterator()->current();
-            $this->currency = $locale->currencyCode;
-            $amount = $locale->amount_in_cents /100;
+        if (!isset($amounts[$currency])) {
+            $this->currency = key($amounts->getIterator()->getArrayCopy());
+            $currency = $this->currency;
         }
 
+        $amount = $amounts[$currency]->amount_in_cents / 100;
         return $amount;
     }
 
