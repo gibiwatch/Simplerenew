@@ -16,25 +16,23 @@ $app = SimplerenewFactory::getApplication();
 ?>
 <div class="<?php echo $this->getPageClass('ost-container simplerenew-renewal'); ?>">
     <?php
+    if ($this->getParams()->get('show_page_heading', true)):
+        ?>
+        <div class="page-header">
+            <h1>
+                <?php
+                echo $this->getHeading(
+                    JText::plural('COM_SIMPLERENEW_RENEWAL_UPDATE', count($this->subscriptions), false)
+                ); ?>
+            </h1>
+        </div>
+    <?php
+    endif;
+
     if (!$this->subscriptions):
         echo $this->loadTemplate('nosub');
     else:
         ?>
-        <?php
-        if ($this->getParams()->get('show_page_heading', true)):
-            ?>
-            <div class="page-header">
-                <h1>
-                    <?php
-                    echo $this->getHeading(
-                        JText::plural('COM_SIMPLERENEW_RENEWAL_UPDATE', count($this->subscriptions), false)
-                    ); ?>
-                </h1>
-            </div>
-            <?php
-        endif;
-        ?>
-
         <form
             name="renewalForm"
             id="renewalForm"

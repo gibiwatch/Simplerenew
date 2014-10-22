@@ -7,6 +7,19 @@
  */
 
 defined('_JEXEC') or die();
+
+if ($this->getParams()->get('show_page_heading', true)):
+    ?>
+    <div class="page-header">
+        <h1>
+            <?php
+            echo $this->getHeading(
+                JText::plural('COM_SIMPLERENEW_RENEWAL_UPDATE', count($this->subscriptions), false)
+            ); ?>
+        </h1>
+    </div>
+    <?php
+endif;
 ?>
 <div class="<?php echo $this->getPageClass('ost-container simplerenew-renewal'); ?>">
     <div class="ost-alert-warning">
