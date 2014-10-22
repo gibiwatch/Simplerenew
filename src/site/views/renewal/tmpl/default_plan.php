@@ -27,7 +27,7 @@ $classes = array(
 );
 $checked = ($subscription->status == Subscription::STATUS_ACTIVE);
 ?>
-<div class="block1">
+<div class="block2">
     <div class="ost-switch">
         <input<?php echo $checked ? ' checked' : ''; ?>
             type="checkbox"
@@ -38,6 +38,6 @@ $checked = ($subscription->status == Subscription::STATUS_ACTIVE);
         <label for="<?php echo $planId; ?>"></label>
     </div>
 </div>
-<div class="block11">
+<div class="block10">
     <label><?php echo $plan->name; ?></label>
 </div>
