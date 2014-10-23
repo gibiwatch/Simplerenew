@@ -92,7 +92,11 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
         }
 
         // Determine which plans to show pre-selected
-        $app = SimplerenewFactory::getApplication();
+        $app           = SimplerenewFactory::getApplication();
+        $multiple      = $this->params->get('basic.allowMultiple');
+        $overrides     = $app->input->getString('select');
+        $selectedPlans = array();
+
         if (!empty($formData['planCode'])) {
             // Plans selected on last form submit
             $selectedPlans = array_fill_keys((array)$formData['planCode'], true);
@@ -103,21 +107,25 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
                 $selectedPlans[$subscription->plan] = $subscription->id;
             }
 
-        } elseif ($overrides = $app->input->getString('select')) {
-            // No existing subscriptions, use plans to select from url var
-            $selectedPlans = array_fill_keys(
-                explode(' ', $overrides),
-                true
-            );
-            if (!$this->params->get('basic.allowMultiple')) {
-                // For single sub sites, use only the first one specified
-                $plan          = array_shift($selectedPlans);
-                $selectedPlans = array($plan => true);
-            }
-        } elseif (!$this->params->get('basic.allowMultiple')) {
+        } elseif (!$multiple && !$overrides) {
             // By default select the first shown plan on single sub sites
             $plan          = current($this->plans);
             $selectedPlans = array($plan->code => true);
+        }
+
+        if ($overrides) {
+            $selectedPlans = array_merge(
+                $selectedPlans,
+                array_fill_keys(
+                    explode(' ', $overrides),
+                    true
+                )
+            );
+            if (!$multiple) {
+                // For single sub sites, use only the first one specified
+                reset($selectedPlans);
+                $selectedPlans = array(key($selectedPlans) => true);
+            }
         }
 
         // Collect all active/canceled subscriptions and add info to plans list
