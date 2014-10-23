@@ -33,6 +33,10 @@ $app = SimplerenewFactory::getApplication();
         echo $this->loadTemplate('nosub');
     else:
         ?>
+        <div class="ost-section p-bottom b-bottom">
+            <?php echo JText::_('COM_SIMPLERENEW_RENEWAL_DESCRIPTION'); ?>
+        </div>
+
         <form
             name="renewalForm"
             id="renewalForm"

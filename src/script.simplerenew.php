@@ -75,7 +75,7 @@ class Com_SimplerenewInstallerScript
     {
         $path = JPATH_ADMINISTRATOR . '/components/com_simplerenew/simplerenew.xml';
         if (is_file($path)) {
-            $previousManifest = JInstaller::parseXMLInstallFile($path);
+            $previousManifest      = JInstaller::parseXMLInstallFile($path);
             $this->previousVersion = $previousManifest['version'];
         }
 
@@ -143,29 +143,33 @@ class Com_SimplerenewInstallerScript
 
         if ($type == 'update') {
             if (version_compare($this->previousVersion, '0.1.0', 'lt')) {
-                JFactory::getApplication()->enqueueMessage('Please update to at least v0.1.0 (First Beta) before updating to this version', 'error');
+                JFactory::getApplication()->enqueueMessage(
+                    'Please update to at least v0.1.0 (First Beta) before updating to this version',
+                    'error'
+                );
                 return false;
             }
 
             // ** Fix issue with typo in schema updates **
-            if (version_compare($this->previousVersion, '0.2.0', 'lt')) {
-                $path = JPATH_ADMINISTRATOR . '/components/com_simplerenew/sql/updates/mysql/0.045.sql';
-                if (is_file($path)) {
-                    unlink($path);
-                }
-                $db    = JFactory::getDbo();
-                $query = $db->getQuery(true)
-                    ->select('s.*')
-                    ->from('#__schemas s')
-                    ->innerJoin('#__extensions e ON e.extension_id = s.extension_id')
-                    ->where('e.element = ' . $db->quote('com_simplerenew'));
+            $path = JPATH_ADMINISTRATOR . '/components/com_simplerenew/sql/updates/mysql/0.045.sql';
+            if (is_file($path)) {
+                unlink($path);
+            }
+            $db    = JFactory::getDbo();
+            $query = $db->getQuery(true)
+                ->select('s.*')
+                ->from('#__schemas s')
+                ->innerJoin('#__extensions e ON e.extension_id = s.extension_id')
+                ->where(
+                    array(
+                        'e.element = ' . $db->quote('com_simplerenew'),
+                        's.version_id = ' . $db->quote('0.045')
+                    )
+                );
 
-                if ($schema = $db->setQuery($query)->loadObject()) {
-                    if (version_compare($schema->version_id, '0.2', 'ge')) {
-                        $schema->version_id = '0.1.0';
-                        $db->updateObject('#__schemas', $schema, 'extension_id');
-                    }
-                }
+            if ($schema = $db->setQuery($query)->loadObject()) {
+                $schema->version_id = '0.1.0';
+                $db->updateObject('#__schemas', $schema, 'extension_id');
             }
             // ** End of temporary schema fix **
 
@@ -222,7 +226,7 @@ class Com_SimplerenewInstallerScript
                             $current = $this->findExtension($type, $element, $folder);
                             $isNew   = empty($current);
 
-                            $typeName = trim(($folder ? : '') . ' ' . $type);
+                            $typeName = trim(($folder ?: '') . ' ' . $type);
                             $text     = 'COM_SIMPLERENEW_RELATED_' . ($isNew ? 'INSTALL' : 'UPDATE');
                             if ($installer->install($path)) {
                                 $this->setMessage(JText::sprintf($text, $typeName, $element));

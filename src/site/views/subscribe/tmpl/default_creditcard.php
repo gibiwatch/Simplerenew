@@ -79,7 +79,7 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
             </div>
             <div class="block2">
                 <label for="billing_cc_cvv">
-                    <?php echo JText::_('COM_SIMPLERENEW_CC_CVV'); ?>
+                    <?php echo JText::_('COM_SIMPLERENEW_CC_CVV'); ?> <i class="fa fa-question-circle ost-tooltip-icon ost-tooltip"><span><?php echo JText::_('COM_SIMPLERENEW_CC_CVV_DESCRIPTION'); ?></span></i>
                     <span>*</span>
                 </label>
                 <input
