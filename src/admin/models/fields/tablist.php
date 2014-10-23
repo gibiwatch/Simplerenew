@@ -28,6 +28,12 @@ class JFormFieldTablist extends JFormFieldList
         }
         $show = json_encode($show);
 
+        if ($this->element['container']) {
+            $container = (string)$this->element['container'];
+        } else {
+            $container = version_compare(JVERSION, '3.0', 'lt') ? 'li' : '.control-group';
+        }
+
         $js = <<<JSCODE
 (function($) {
     $(document).ready(function($) {
@@ -36,9 +42,9 @@ class JFormFieldTablist extends JFormFieldList
         control.on('change', function(evt) {
             $.each(show, function(value, selector) {
                 if (control.val() == value) {
-                    $(selector).parent('li').show();
+                    $(selector).parents('{$container}').show();
                 } else {
-                    $(selector).parent('li').hide();
+                    $(selector).parents('{$container}').hide();
                 }
             });
         }).trigger('change');
