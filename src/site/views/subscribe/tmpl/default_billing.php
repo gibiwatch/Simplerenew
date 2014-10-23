@@ -16,15 +16,17 @@ defined('_JEXEC') or die();
  * @var Payment\CreditCard       $creditCard
  */
 
+$paymentOptions = $this->getParams()->get('basic.paymentOptions');
+if ($this->billing->payment instanceof Payment\PayPal) {
+    $paypal = $this->billing->payment;
+}
+
 JHtml::_('sr.validation.billing');
 
-JHtml::_('sr.tabs', '.payment-tabs div');
-
-$paymentOptions = $this->getParams()->get('basic.paymentOptions');
-
-if ($this->billing->payment instanceof Payment\PayPal) {
-    $paypal     = $this->billing->payment;
-}
+$options = array(
+    'active' => empty($paypal) ? '#tab_card' : '#tab_paypal'
+);
+JHtml::_('sr.tabs', '.payment-tabs div', $options);
 
 echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BILLING'));
 

@@ -81,20 +81,24 @@ abstract class JHtmlSr
     /**
      * Setup tabbed areas
      *
-     * @param $selector
+     * @param string       $selector jQuery selector for tab headers
+     * @param array|string $options  Associative array or JSON string of tabber options
      *
      * @return void
      */
-    public static function tabs($selector)
+    public static function tabs($selector, $options = null)
     {
         static::jquery(true);
 
-        $options = json_encode(
-            array(
-                'selector' => $selector
-            )
-        );
+        if ($options && is_string($options)) {
+            $options = json_decode($options, true);
+        }
+        if (!is_array($options)) {
+            $options = array();
+        }
+        $options['selector'] = $selector;
 
+        $options = json_encode($options);
         static::onready("jQuery.Simplerenew.tabs({$options});");
     }
 
@@ -165,10 +169,10 @@ abstract class JHtmlSr
     /**
      * Create an input form field
      *
-     * @param string      $name
-     * @param mixed $attribs
+     * @param string $name
+     * @param mixed  $attribs
      * @param string $selected
-     * @param mixed $idtag
+     * @param mixed  $idtag
      *
      * @return string
      */
@@ -180,7 +184,7 @@ abstract class JHtmlSr
         }
 
         $attribs['name']  = $name;
-        $attribs['id']    = $idtag ? : preg_replace('/(\[\]|\[|\])/', '_', $name);
+        $attribs['id']    = $idtag ?: preg_replace('/(\[\]|\[|\])/', '_', $name);
         $attribs['type']  = 'text';
         $attribs['value'] = $selected;
         return '<input ' . JArrayHelper::toString($attribs) . '/>';

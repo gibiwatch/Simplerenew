@@ -67,12 +67,15 @@
                     });
             });
 
-        // Start with first panel active
-        $(headers[options.active]).trigger('click');
+        // Set active panel
+        if (!options.active) {
+            options.active = '#' + $(headers[0]).attr('id');
+        }
+        $(headers.filter(options.active)).trigger('click');
     };
     $.Simplerenew.tabs.options = {
         selector : null,
-        active   : 0
+        active   : null
     };
 
     /**
