@@ -12,17 +12,27 @@ class JFormFieldHeading extends JFormField
 {
     public function getInput()
     {
-        return '' ;
+        return '';
     }
 
     public function getLabel()
     {
-        $tag = $this->element['tag'] ? (string)$this->element['tag'] : 'p';
+        $tag  = $this->element['tag'] ? (string)$this->element['tag'] : 'p';
         $text = JText::_((string)$this->element['label']);
 
-        return '<' . $tag
-            . ' style="clear: both; padding: 10px 0px; margin: 0;">'
-            . $text
-            . '</' . $tag . '>';
+        $attribs = array();
+        if ($this->element['class']) {
+            $attribs['class'] = (string)$this->element['class'];
+        }
+
+        $html = array('<' . $tag);
+        if ($attribs) {
+            $html[] = JArrayHelper::toString($attribs);
+        }
+        $html[] = 'style="clear: both; padding: 10px 0px; margin: 0;">';
+        $html[] = $text;
+        $html[] = '</' . $tag . '>';
+
+        return join(' ', $html);
     }
 }
