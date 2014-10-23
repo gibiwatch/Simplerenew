@@ -72,50 +72,56 @@
                 <field
                     name="mode"
                     label="COM_SIMPLERENEW_CONFIG_GATEWAY_MODE_LABEL"
-                    type="list">
-                    <option value="test">COM_SIMPLERENEW_OPTION_GATEWAY_MODE_TEST</option>
-                    <option value="live">COM_SIMPLERENEW_OPTION_GATEWAY_MODE_LIVE</option>
+                    type="tablist">
+                    <option value="test" show=".recurly.test">COM_SIMPLERENEW_OPTION_GATEWAY_MODE_TEST</option>
+                    <option value="live" show=".recurly.live">COM_SIMPLERENEW_OPTION_GATEWAY_MODE_LIVE</option>
                 </field>
 
                 <field
                     name="LiveHead"
                     label="COM_SIMPLERENEW_CONFIG_GATEWAY_HEAD_LIVE"
                     type="heading"
-                    tag="h4"/>
+                    tag="h4"
+                    class="recurly live"/>
 
                 <field
                     name="liveApikey"
                     label="COM_SIMPLERENEW_CONFIG_RECURLY_APIKEY_LABEL"
                     description="COM_SIMPLERENEW_CONFIG_RECURLY_APIKEY_DESC"
                     type="text"
-                    size="50"/>
+                    size="50"
+                    class="recurly live"/>
 
                 <field
                     name="livePublickey"
                     label="COM_SIMPLERENEW_CONFIG_RECURLY_PUBLICKEY_LABEL"
                     description="COM_SIMPLERENEW_CONFIG_RECURLY_PUBLICKEY_DESC"
                     type="text"
-                    size="50"/>
+                    size="50"
+                    class="recurly live"/>
 
                 <field
                     name="testHead"
                     label="COM_SIMPLERENEW_CONFIG_GATEWAY_HEAD_TEST"
                     type="heading"
-                    tag="h4"/>
+                    tag="h4"
+                    class="recurly test"/>
 
                 <field
                     name="testApikey"
                     label="COM_SIMPLERENEW_CONFIG_RECURLY_APIKEY_LABEL"
                     description="COM_SIMPLERENEW_CONFIG_RECURLY_APIKEY_DESC"
                     type="text"
-                    size="50"/>
+                    size="50"
+                    class="recurly test"/>
 
                 <field
                     name="testPublickey"
                     label="COM_SIMPLERENEW_CONFIG_RECURLY_PUBLICKEY_LABEL"
                     description="COM_SIMPLERENEW_CONFIG_RECURLY_PUBLICKEY_DESC"
                     type="text"
-                    size="50"/>
+                    size="50"
+                    class="recurly test"/>
 
             </fieldset>
         </fields>
