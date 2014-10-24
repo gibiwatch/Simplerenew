@@ -1,6 +1,10 @@
 (function ($) {
     $.extend($.fn, {
-        closePanel: function (state) {
+        closePanel: function (state, options) {
+            options = $.extend({
+                focus: true
+            }, options);
+
             if (state) {
                 $(this)
                     .hide()
@@ -13,12 +17,19 @@
                     .find(':input')
                     .attr('disabled', false)
                     .trigger('sr.enable');
-                $(this).find(':input:visible').first().focus();
+
+                if (options.focus) {
+                    $(this).find(':input:visible').first().focus();
+                }
             }
             return this;
         },
         closePanelSlide: function (state, options) {
-            options = $.extend({'duration': 400}, options);
+            options = $.extend({
+                duration: 400,
+                focus: true
+            }, options);
+
             if (state) {
                 $(this)
                     .slideUp()
@@ -31,7 +42,10 @@
                     .find(':input')
                     .attr('disabled', false)
                     .trigger('sr.enable');
-                $(this).find(':input:visible').first().focus();
+
+                if (options.focus) {
+                    $(this).find(':input:visible').first().focus();
+                }
             }
             return this;
         }
@@ -58,11 +72,11 @@
             .each(function (idx, active) {
                 $(this)
                     .data('contentPanel', $($(this).attr('data-content')))
-                    .on('click', function (evt) {
+                    .on('click', function (evt, options) {
                         headers.each(function (idx) {
                             $(this)
                                 .toggleClass('tab-enabled', active === this)
-                                .data('contentPanel').closePanel(active !== this)
+                                .data('contentPanel').closePanel(active !== this, options)
                         });
                     });
             });
@@ -71,7 +85,7 @@
         if (!options.active) {
             options.active = '#' + $(headers[0]).attr('id');
         }
-        $(headers.filter(options.active)).trigger('click');
+        $(headers.filter(options.active)).trigger('click', {focus: false});
     };
     $.Simplerenew.tabs.options = {
         selector : null,
@@ -95,11 +109,11 @@
             $(this)
                 .css('cursor', 'pointer')
                 .data('contentPanel', $($(this).attr('data-content')))
-                .on('click', function (evt) {
+                .on('click', function (evt, options) {
                     var contentPanel = $(this).data('contentPanel');
-                    contentPanel.closePanelSlide(contentPanel.is(':visible'));
+                    contentPanel.closePanelSlide(contentPanel.is(':visible'), options);
                 })
-                .data('contentPanel').closePanel(!options.visible);
+                .data('contentPanel').closePanel(!options.visible, {focus: false});
         });
     };
     $.Simplerenew.sliders.options = {
