@@ -29,7 +29,7 @@
      * @param clear
      * @returns {$.fn}
      */
-    $.fn.tempName = function(clear) {
+    $.fn.tempName = function (clear) {
         var self = $(this);
         if (self.is('input')) {
             if (clear && self.data('clearName')) {
@@ -54,12 +54,12 @@
                         equalTo: '#password'
                     }
                 },
-                errorPlacement: function(place, element) {
+                errorPlacement: function (place, element) {
                     var placeId = $(element).attr('data-error-placement');
                     if (placeId) {
                         $(placeId).append(place);
                     } else {
-                        place.insertAfter( element );
+                        place.insertAfter(element);
                     }
                 }
             },
@@ -102,7 +102,7 @@
                         submitHandler: function (form) {
 
                             // Clear out any temporary names to prevent being sent to server
-                            $(form).find(':input').each(function(idx, element) {
+                            $(form).find(':input').each(function (idx, element) {
                                 $(element).tempName(true);
                             });
 
@@ -125,17 +125,17 @@
                                 $('label[id^=' + this.id + ']').remove();
                             }
                         });
-                        $($(this).attr('data-plan')).on('click', function(evt) {
+                        $($(this).attr('data-plan')).on('click', function (evt) {
                             $(coupon).valid();
                         });
                     });
 
                     // Add special validation events for date dropdowns
-                    $('select[class*=check_date]').each(function(idx, element) {
-                        $(element).on('change', function(evt) {
+                    $('select[class*=check_date]').each(function (idx, element) {
+                        $(element).on('change', function (evt) {
                             $(this).valid();
                         });
-                        $($(element).attr('data-partner')).on('change', function(evt) {
+                        $($(element).attr('data-partner')).on('change', function (evt) {
                             $(element).valid();
                         });
                     });
@@ -159,15 +159,15 @@
                         $($(element)
                             .attr('data-plan'))
                             .filter('input:checked,input:selected')
-                            .each(function(idx, plan) {
+                            .each(function (idx, plan) {
                                 plans.push($(plan).val());
                             });
 
-                        if (!this.settings.messages[ element.name ]) {
-                            this.settings.messages[ element.name ] = {};
+                        if (!this.settings.messages[element.name]) {
+                            this.settings.messages[element.name] = {};
                         }
-                        previous.originalMessage = this.settings.messages[ element.name ].remote;
-                        this.settings.messages[ element.name ].remote = previous.message;
+                        previous.originalMessage = this.settings.messages[element.name].remote;
+                        this.settings.messages[element.name].remote = previous.message;
 
                         keyValue = value + ':' + plans.join('|');
                         if (previous.old === keyValue) {
@@ -196,14 +196,14 @@
                                 var valid = response.valid && response.valid === true,
                                     errors, message, submitted;
 
-                                validator.settings.messages[ element.name ].coupon = previous.originalMessage;
+                                validator.settings.messages[element.name].coupon = previous.originalMessage;
                                 $('label[id=' + element.id + '-message]').remove();
                                 if (valid) {
                                     submitted = validator.formSubmitted;
                                     validator.prepareElement(element);
                                     validator.formSubmitted = submitted;
                                     validator.successList.push(element);
-                                    delete validator.invalid[ element.name ];
+                                    delete validator.invalid[element.name];
                                     validator.showErrors();
                                     $(element).after($('<label>', {
                                         id: element.id + '-message',
@@ -213,8 +213,8 @@
                                 } else {
                                     errors = {};
                                     message = response.error || validator.defaultMessage(element, 'coupon');
-                                    errors[ element.name ] = previous.message = $.isFunction(message) ? message(value) : message;
-                                    validator.invalid[ element.name ] = true;
+                                    errors[element.name] = previous.message = $.isFunction(message) ? message(value) : message;
+                                    validator.invalid[element.name] = true;
                                     validator.showErrors(errors);
                                 }
                                 previous.valid = valid;
