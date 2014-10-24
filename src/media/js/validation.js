@@ -229,7 +229,7 @@
 
                 ccnumber: {
                     method: function (value, element) {
-                        return $.Simplerenew.creditCard.verifyNumber(value);
+                        return !value || $.Simplerenew.creditCard.verifyNumber(value);
                     },
                     message: 'Invalid card number'
                 },
