@@ -158,7 +158,7 @@
 
                         $($(element)
                             .attr('data-plan'))
-                            .filter('input:checked,input:selected')
+                            .filter(':checked,:selected')
                             .each(function (idx, plan) {
                                 plans.push($(plan).val());
                             });

@@ -6,6 +6,8 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Exception\NotFound;
+
 defined('_JEXEC') or die();
 
 class SimplerenewControllerValidate extends SimplerenewControllerJson
@@ -123,7 +125,7 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
                 $result['error'] = JText::plural('COM_SIMPLERENEW_ERROR_COUPON_UNAVAILABLE', count($planCodes));
             }
 
-        } catch (Simplerenew\Exception\NotFound $e) {
+        } catch (NotFound $e) {
             $result['error'] = JText::_('COM_SIMPLERENEW_ERROR_COUPON_INVALID');
 
         } catch (Exception $e) {
