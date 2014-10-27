@@ -2,18 +2,26 @@
     $.extend($.fn, {
         recurly: {
             calculate: function (coupon, plan) {
-                var code = $(coupon).is(':disabled') ? '' : $(coupon).val();
-                recurly.Pricing()
-                    .plan($(plan).val())
-                    .coupon(code)
+                var planCode = $(plan).val();
+                var couponCode = $(coupon).is(':disabled') ? '' : $(coupon).val();
+
+                var pricing = recurly.Pricing();
+                pricing
+                    .plan(planCode)
                     .catch(function (err) {
-                        alert(err.message);
+                        alert('Simplerenew Configuration Problem: ' + err.message);
                     })
                     .done(function (price) {
-                        $(plan).data('price', {
-                            net: price.now.total,
-                            symbol: price.currency.symbol
-                        })
+                        pricing.coupon(couponCode)
+                            .catch(function(err) {
+                                // Next .done() gets called even on failure
+                            })
+                            .done(function(price) {
+                                $(plan).data('price', {
+                                    net: price.now.total || 0,
+                                    symbol: price.currency.symbol || ''
+                                });
+                            });
                     });
             }
         }
@@ -33,8 +41,8 @@
 
             var coupon = $('#coupon_code')
                 .attr('data-recurly', 'coupon')
-                .on('change sr.disable sr.enable', function(evt) {
-                    plans.each(function(idx, plan) {
+                .on('change sr.disable sr.enable', function (evt) {
+                    plans.each(function (idx, plan) {
                         $(plan).recurly.calculate(coupon, plan);
                     });
                 });
@@ -45,7 +53,7 @@
                     $(this).recurly.calculate(coupon, this);
                 });
 
-            plans.filter(':checked').each(function(idx, plan) {
+            plans.filter(':checked').each(function (idx, plan) {
                 $(plan).recurly.calculate(coupon, plan);
             });
 
@@ -83,7 +91,7 @@
                     });
 
                     description = 'Subscription to ' + items.join(', ')
-                        + ' for a total of ' + symbol + total.toFixed(2);
+                    + ' for a total of ' + symbol + total.toFixed(2);
 
                     recurly.paypal({description: description}, function (err, token) {
                         if (err) {
