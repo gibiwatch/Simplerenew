@@ -55,8 +55,8 @@
 
             if (targets) {
                 $(element).on('blur', function (evt) {
-                    targets.each(function (target) {
-                        target.removeData('previousValue').valid();
+                    $(targets).each(function (idx, target) {
+                        $(target).removeData('previousValue').valid();
                     });
                 });
             }
