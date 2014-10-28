@@ -66,8 +66,9 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             type="text"
             value="<?php echo $this->user->username; ?>"
             required="true"
-            data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_USERNAME_REQUIRED'); ?>"
-            data-msg-remote="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_USERNAME_REMOTE'); ?>"/>
+            data-include="#email #password"
+            data-recheck="#email #password"
+            data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_USERNAME_REQUIRED'); ?>"/>
     </div>
     <div class="block6">
         <label for="email">
@@ -81,9 +82,10 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             class="unique_email"
             value="<?php echo $this->user->email; ?>"
             required="true"
+            data-include="#username"
+            data-recheck="#username #password"
             data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_EMAIL_REQUIRED'); ?>"
-            data-msg-email="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_EMAIL_FORMAT'); ?>"
-            data-msg-remote="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_EMAIL_REMOTE'); ?>"/>
+            data-msg-email="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_EMAIL_FORMAT'); ?>"/>
     </div>
 </div>
 
@@ -100,6 +102,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             type="password"
             value=""
             required="true"
+            data-recheck="#email #username"
             data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_PASSWORD_REQUIRED'); ?>"/>
     </div>
     <div class="block6">
