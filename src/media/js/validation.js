@@ -15,10 +15,51 @@
 
             form.find('.' + cls + ':not([readonly=true])')
                 .each(function (idx, el) {
-                    $(el)
-                        .tempName()
-                        .rules('add', rule);
+                    if (rule.remote) {
+                        // Add option to include other fields in remote validations
+                        var include = $(el).attr('data-include');
+                        var custom = {
+                            remote: {
+                                data: {}
+                            }
+                        };
+                        if (include) {
+                            $(include.split(' ')).each(function (idx, target) {
+                                var info = target.split(':'),
+                                    selector = info.pop(),
+                                    urlVar = info.pop() || $(selector).attr('name');
+                                if (urlVar && $(selector)) {
+                                    custom.remote.data[urlVar] =
+                                        function () {
+                                            return $(selector).val();
+                                        };
+                                }
+                            });
+                        }
+                        $(el).tempName().rules('add', $.extend(true, {}, custom, rule));
+                    } else {
+                        $(el).tempName().rules('add', rule);
+                    }
                 });
+        });
+
+        // A special case we want to run only on user changes
+        $('[data-recheck]:input').each(function (idx, element) {
+            var targets = [];
+            $.each($(element).attr('data-recheck').split(' '), function(idx, selector) {
+                var field = $(selector);
+                if (field) {
+                    targets.push(field);
+                }
+            });
+
+            if (targets) {
+                $(element).on('blur', function (evt) {
+                    targets.each(function (target) {
+                        target.removeData('previousValue').valid();
+                    });
+                });
+            }
         });
     };
 
