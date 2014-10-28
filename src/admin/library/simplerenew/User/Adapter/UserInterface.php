@@ -37,6 +37,16 @@ interface UserInterface
     public function loadByUsername(User $parent);
 
     /**
+     * Load a user from the email address
+     *
+     * @param User $parent
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function loadByEmail(User $parent);
+
+    /**
      * Create a new user. It is up to the system instances to perform
      * validation on the properties.
      *

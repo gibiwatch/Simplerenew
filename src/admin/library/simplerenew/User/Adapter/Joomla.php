@@ -82,6 +82,32 @@ class Joomla implements UserInterface
      * @return void
      * @throws NotFound
      */
+    public function loadByEmail(User $parent)
+    {
+        $email = $parent->email;
+        $parent->clearProperties();
+
+        $db    = SimplerenewFactory::getDbo();
+        $query = $db->getQuery(true)
+            ->select($db->quoteName('id'))
+            ->from('#__users')
+            ->where('email = ' . $db->quote($email));
+
+        if ($id = $db->setQuery($query)->loadResult()) {
+            $parent->id = $id;
+            $this->load($parent);
+            return;
+        }
+
+        throw new NotFound('Email not found - ' . $email);
+    }
+
+    /**
+     * @param User $parent
+     *
+     * @return void
+     * @throws NotFound
+     */
     public function load(User $parent)
     {
         $id = $parent->id;

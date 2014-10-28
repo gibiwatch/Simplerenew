@@ -112,10 +112,26 @@ class User extends Object
      * @return User
      * @throws Exception
      */
-    public function loadByUsername($username = null)
+    public function loadByUsername($username)
     {
         $this->username = $username;
         $this->adapter->loadByUsername($this);
+
+        return $this;
+    }
+
+    /**
+     * Load a user from their email address
+     *
+     * @param $email
+     *
+     * @return User
+     * @throws Exception
+     */
+    public function loadByEmail($email)
+    {
+        $this->email = $email;
+        $this->adapter->loadByEmail($this);
 
         return $this;
     }
