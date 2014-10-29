@@ -100,9 +100,11 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             id="password"
             name="password"
             type="password"
+            class="verify_password"
             value=""
             required="true"
             data-recheck="#email #username"
+            data-include="#username"
             data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_PASSWORD_REQUIRED'); ?>"/>
     </div>
     <div class="block6">
