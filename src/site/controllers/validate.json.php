@@ -215,12 +215,15 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
 
         $result = array(
             'valid'   => false,
+            'coupon'  => null,
             'message' => 0,
             'error'   => null
         );
 
         try {
             $coupon = $container->getCoupon()->load($couponCode);
+
+            $result['coupon'] = $coupon->getProperties();
 
             $discount = 0;
             foreach ($planCodes as $planCode) {
