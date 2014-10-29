@@ -25,15 +25,54 @@ class Coupon extends AbstractApiBase
     const STATUS_MAX     = 4;
     const STATUS_UNKNOWN = 0;
 
+    /**
+     * @var string
+     */
     public $code = null;
+
+    /**
+     * @var string
+     */
     public $name = null;
+
+    /**
+     * @var int
+     */
     public $status = null;
+
+    /**
+     * @var string
+     */
     public $type = null;
+
+    /**
+     * @var string
+     */
     public $currency = null;
+
+    /**
+     * @var float
+     */
     public $amount = null;
+
+    /**
+     * @var \DateTime
+     */
     public $expires = null;
+
+    /**
+     * @var int
+     */
     public $max_uses = null;
+
+    /**
+     * @var array
+     */
     public $plans = null;
+
+    /**
+     * @var \DateTime
+     */
     public $created = null;
 
     /**
