@@ -72,7 +72,7 @@ class CouponImp extends AbstractRecurlyBase implements CouponInterface
      * Map raw data from the Gateway to SR fields
      *
      * @param Coupon $parent
-     * @param mixed   $data
+     * @param mixed  $data
      *
      * @return void
      */
@@ -93,7 +93,7 @@ class CouponImp extends AbstractRecurlyBase implements CouponInterface
             case Coupon::TYPE_AMOUNT:
                 $parent->amount = $this->getKeyValue($data, 'discount_in_cents');
                 if ($parent->amount instanceof \Recurly_CurrencyList) {
-                    $parent->amount   = $this->getCurrency($parent->amount);
+                    $parent->amount = $this->getCurrency($parent->amount);
                 }
                 break;
 
