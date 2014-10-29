@@ -44,7 +44,8 @@ jQuery.Simplerenew = jQuery.extend({}, jQuery.Simplerenew, {
          *
          * v2.0 11/7/2005
          */
-        var Mod10 = function (ccNumb) {
+        var Mod10 = function (rawNumb) {
+            var ccNumb = rawNumb.replace(/-/g, '');
             var valid = "0123456789";               // Valid digits in a credit card number
             var len = ccNumb.length;                // The length of the submitted cc number
             var iCCN = parseInt(ccNumb, 10);        // integer of ccNumb
@@ -118,7 +119,8 @@ jQuery.Simplerenew = jQuery.extend({}, jQuery.Simplerenew, {
             return false;
         };
 
-        var verifyCVV = function (ccnumber, cvv) {
+        var verifyCVV = function (rawNumber, cvv) {
+            var ccnumber = rawNumber.replace(/-/g, '');
             var card = getType(ccnumber);
             if (card) {
                 return (cvv >= 1 && cvv <= 9999 && cvv.length == card.cvvlen);
