@@ -63,22 +63,13 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
                     // Password/email sent but both empty
                     $message = JText::_('COM_SIMPLERENEW_VALIDATE_USERNAME_VERIFY');
 
-                } elseif (!$password) {
+                } elseif (!$password || !$user->validate($password)) {
                     // Need a password for verification
                     $message = JText::_('COM_SIMPLERENEW_VALIDATE_USERNAME_PASSWORD');
 
-                } elseif (!$email) {
+                } elseif (!$email || $user->email != $email) {
                     // Need an email for verification
                     $message = JText::_('COM_SIMPLERENEW_VALIDATE_USERNAME_EMAIL');
-
-                } elseif (!$user->validate($password)) {
-                    // Wrong password
-                    $message = JText::_('COM_SIMPLERENEW_VALIDATE_USERNAME_BAD_PASSWORD');
-
-                } elseif ($user->email != $email) {
-                    // wrong email
-                    $message = JText::_('COM_SIMPLERENEW_VALIDATE_USERNAME_BAD_EMAIL');
-
                 }
             }
         }
@@ -102,7 +93,8 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
         $currentUser = $container->getUser();
         $user        = $container->getUser();
 
-        $email = $app->input->getUsername('email');
+        $message = true;
+        $email   = $app->input->getUsername('email');
         if ($email) {
             try {
                 $user->loadByEmail($email);
@@ -111,46 +103,56 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
             } catch (Exception $e) {
 
             }
-        }
 
-        $message = true;
-        if (!empty($user->id)) {
-            if ($currentUser->id) {
-                if ($currentUser->id != $user->id) {
-                    // Logged in user trying to change their email address
-                    $message = JText::_('COM_SIMPLERENEW_VALIDATE_EMAIL_REMOTE');
+            $targetUser = $container->getUser();
+            if ($username = $app->input->getUsername('username')) {
+                try {
+                    $targetUser->loadByUsername($username);
+                } catch (Exception $e) {
+                    // Nonexistent is okay
                 }
+            }
 
-            } else {
-                // Not logged in. Try to verify username match
-                $username = $app->input->getUsername('username');
+            if (empty($user->id) && !empty($targetUser->id)) {
+                // email not on file, but username does exist
+                $message = JText::_('COM_SIMPLERENEW_VALIDATE_EMAIL_INVALID');
 
-                if (is_null($username)) {
-                    // Username not being sent
-                    $message = JText::_('COM_SIMPLERENEW_VALIDATE_EMAIL_REMOTE');
+            } elseif (!empty($user->id)) {
+                if ($currentUser->id) {
+                    if ($currentUser->id != $user->id) {
+                        // Logged in user trying to change their email address
+                        $message = JText::_('COM_SIMPLERENEW_VALIDATE_EMAIL_REMOTE');
+                    }
 
                 } else {
-                    $targetUser = $container->getUser();
-                    if (!$username) {
-                        // email in use, no username given yet
+                    // Not logged in. Try to verify username match
+                    if (is_null($username)) {
+                        // Username not being sent
                         $message = JText::_('COM_SIMPLERENEW_VALIDATE_EMAIL_REMOTE');
 
                     } else {
-                        try {
-                            $targetUser->loadByUsername($username);
-
-                            if ($targetUser->email != $email) {
-                                // Incorrect email for the selected user
-                                $message = JText::_('COM_SIMPLERENEW_VALIDATE_USERNAME_BAD_EMAIL');
-                            }
-
-                        } catch (Exception $e) {
-                            // Incorrect for the selected user
+                        $targetUser = $container->getUser();
+                        if (!$username) {
+                            // email in use, no username given yet
                             $message = JText::_('COM_SIMPLERENEW_VALIDATE_EMAIL_REMOTE');
+
+                        } else {
+                            try {
+                                $targetUser->loadByUsername($username);
+
+                                if ($targetUser->email != $email) {
+                                    // Incorrect email for the selected user
+                                    $message = JText::_('COM_SIMPLERENEW_VALIDATE_EMAIL_INVALID');
+                                }
+
+                            } catch (Exception $e) {
+                                // Email in use, no target user
+                                $message = JText::_('COM_SIMPLERENEW_VALIDATE_EMAIL_REMOTE');
+                            }
                         }
                     }
-                }
 
+                }
             }
         }
         echo json_encode($message);
