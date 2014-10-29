@@ -159,6 +159,37 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
     }
 
     /**
+     * Validate a password against a username if passed
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function password()
+    {
+        $this->checkToken();
+
+        $app = SimplerenewFactory::getApplication();
+
+        $message = true;
+        $password = $app->input->getString('password');
+        $username = $app->input->getUsername('username');
+        if ($username && $password) {
+            $targetUser = SimplerenewFactory::getContainer()->getUser();
+            try {
+                $targetUser->loadByUsername($username);
+                if (!$targetUser->validate($password)) {
+                    $message = JText::_('COM_SIMPLERENEW_VALIDATE_PASSWORD_NOMATCH');
+                }
+
+            } catch (Exception $e) {
+                // User doesn't exist. This is good!
+            }
+        }
+
+        echo json_encode($message);
+    }
+
+    /**
      * See if coupon is valid for at least one of the selected plans
      *
      * @return void

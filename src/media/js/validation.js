@@ -349,6 +349,18 @@
                     }
                 },
 
+                verify_password: {
+                    remote: {
+                        url: 'index.php',
+                        type: 'post',
+                        data: {
+                            option: 'com_simplerenew',
+                            format: 'json',
+                            task: 'validate.password'
+                        }
+                    }
+                },
+
                 check_coupon: 'coupon',
 
                 check_ccnumber: 'ccnumber',
