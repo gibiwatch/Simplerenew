@@ -137,7 +137,7 @@ abstract class SimplerenewRender
     public static function addressRequired()
     {
         $params   = SimplerenewComponentHelper::getParams();
-        $required = $params->get('account.billingAddress');
+        $required = $params->get('basic.billingAddress');
         if ($required == 'none') {
             return array();
         }
