@@ -46,7 +46,7 @@
         // A special case we want to run only on user changes
         $('[data-recheck]:input').each(function (idx, element) {
             var targets = [];
-            $.each($(element).attr('data-recheck').split(' '), function(idx, selector) {
+            $.each($(element).attr('data-recheck').split(' '), function (idx, selector) {
                 var field = $(selector);
                 if (field) {
                     targets.push(field);

@@ -81,7 +81,9 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
      * assume that this is an attempt to change their own email address. Blank
      * email address will validate as unavailable.
      *
+     * @return void
      * @throws Exception
+
      */
     public function email()
     {
