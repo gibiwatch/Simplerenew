@@ -36,6 +36,16 @@ class Coupon extends AbstractApiBase
     public $name = null;
 
     /**
+     * @var string
+     */
+    public $description = null;
+
+    /**
+     * @var string
+     */
+    public $short_description = null;
+
+    /**
      * @var int
      */
     public $status = null;

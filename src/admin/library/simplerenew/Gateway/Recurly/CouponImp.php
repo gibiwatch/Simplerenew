@@ -20,8 +20,9 @@ defined('_JEXEC') or die();
 class CouponImp extends AbstractRecurlyBase implements CouponInterface
 {
     protected $fieldMap = array(
-        'code'     => 'coupon_code',
-        'status'   => array(
+        'code'              => 'coupon_code',
+        'short_description' => 'invoice_description',
+        'status'            => array(
             'state' => array(
                 'redeemable'          => Coupon::STATUS_ACTIVE,
                 'expired'             => Coupon::STATUS_EXPIRED,
@@ -30,17 +31,17 @@ class CouponImp extends AbstractRecurlyBase implements CouponInterface
                 Object::MAP_UNDEFINED => Coupon::STATUS_UNKNOWN
             )
         ),
-        'type'     => array(
+        'type'              => array(
             'discount_type' => array(
                 'percent'             => Coupon::TYPE_PERCENT,
                 'dollars'             => Coupon::TYPE_AMOUNT,
                 Object::MAP_UNDEFINED => null
             )
         ),
-        'expires'  => 'redeem_by_date',
-        'max_uses' => 'max_redemptions',
-        'plans'    => 'plan_codes',
-        'created'  => 'created_at'
+        'expires'           => 'redeem_by_date',
+        'max_uses'          => 'max_redemptions',
+        'plans'             => 'plan_codes',
+        'created'           => 'created_at'
     );
 
     /**
