@@ -225,14 +225,17 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
             $result['coupon'] = $coupon->getProperties();
 
             $discount = 0;
+            $currency = null;
             foreach ($planCodes as $planCode) {
                 $plan = $container->getPlan()->load($planCode);
                 if ($coupon->isAvailable($plan)) {
                     $discount += $coupon->getDiscount($plan);
+                    $currency = $currency ?: $plan->currency;
+
                     $result['valid'] = true;
                 }
             }
-            $discount = '$' . number_format($discount, 2);
+            $discount = JHtml::_('currency.format', $discount, $currency);
 
             $result['message'] = JText::sprintf('COM_SIMPLERENEW_COUPON_PLAN_DISCOUNT', $discount);
             if (!$result['valid']) {
