@@ -83,7 +83,6 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
      *
      * @return void
      * @throws Exception
-
      */
     public function email()
     {
@@ -172,7 +171,7 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
 
         $app = SimplerenewFactory::getApplication();
 
-        $message = true;
+        $message  = true;
         $password = $app->input->getString('password');
         $username = $app->input->getUsername('username');
         if ($username && $password) {
