@@ -19,8 +19,8 @@ abstract class SimplerenewRender
 {
     protected static $addressOrder = array(
         'address1', 'address2',
-        'country', 'postal',
-        'city', 'region'
+        'country', 'region',
+        'city', 'postal'
     );
 
     /**
