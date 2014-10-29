@@ -17,6 +17,12 @@ defined('_JEXEC') or die();
  */
 abstract class SimplerenewRender
 {
+    protected static $addressOrder = array(
+        'address1', 'address2',
+        'country', 'postal',
+        'city', 'region'
+    );
+
     /**
      * Get correct form field inputs for configured addressses
      *
@@ -148,6 +154,6 @@ abstract class SimplerenewRender
      */
     public static function addressFieldNames()
     {
-        return array('address1', 'address2', 'country', 'postal', 'city', 'region');
+        return self::$addressOrder;
     }
 }
