@@ -1,0 +1,12 @@
+mkdir:
+    - components/com_simplerenew
+    - administrator/components/com_simplerenew
+    - media/com_simplerenew
+symlinks:
+    - src/simplerenew.xml: administrator/components/com_simplerenew/simplerenew.xml
+    - src/script.simplerenew.php : administrator/components/com_simplerenew/script.simplerenew.php
+    - src/admin : administrator/components/com_simplerenew
+    - src/site : components/com_simplerenew
+    - media : media/com_simplerenew
+    - plugin/system/simplerenew : plugins/system/simplerenew
+    - plugin/user/simplerenew : plugins/user/simplerenew
