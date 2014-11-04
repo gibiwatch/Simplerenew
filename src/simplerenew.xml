@@ -71,6 +71,7 @@
 
         <obsolete>
             <folder>/administrator/components/com_simplerenew/views/dashboard</folder>
+            <folder>/administrator/components/com_simplerenew/views/installer</folder>
             <folder>/components/components/com_simplerenew/views/change</folder>
             <file>/administrator/components/com_simplerenew/controllers/test.php</file>
             <file>/administrator/components/com_simplerenew/library/configuration.json</file>
@@ -87,8 +88,7 @@
         <server
             type="extension"
             priority="1"
-            name="Simplerenew Updates">
-            <![CDATA[https://deploy.ostraining.com/updates/joomla/com_simplerenew.xml]]></server>
+            name="Simplerenew Updates"><![CDATA[https://deploy.ostraining.com/updates/joomla/com_simplerenew.xml]]></server>
     </updateservers>
 
 </extension>
