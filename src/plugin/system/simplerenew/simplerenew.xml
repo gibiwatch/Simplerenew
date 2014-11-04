@@ -2,12 +2,12 @@
 <extension version="2.5" type="plugin" group="system" method="upgrade">
     <name>plg_system_simplerenew</name>
     <author>OSTraining</author>
-    <creationDate>October 21 2014</creationDate>
-    <copyright>Copyright (C) 2013 OSTraining.com</copyright>
+    <creationDate>November 3 2014</creationDate>
+    <copyright>Copyright (C) 2014 OSTraining.com</copyright>
     <license>GPL v3</license>
     <authorEmail>info@ostraining.com</authorEmail>
     <authorUrl>http://www.ostraining.com</authorUrl>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <description>plg_system_simplerenew_description</description>
 
     <files>
