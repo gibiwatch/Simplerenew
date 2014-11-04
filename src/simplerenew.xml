@@ -64,11 +64,31 @@
         </files>
     </administration>
 
+    <alledia>
+        <element>simplerenew</element>
+        <namespace>Simplerenew</namespace>
+        <license>free</license>
+
+        <obsolete>
+            <folder>/administrator/components/com_simplerenew/views/dashboard</folder>
+            <folder>/components/components/com_simplerenew/views/change</folder>
+            <file>/administrator/components/com_simplerenew/controllers/test.php</file>
+            <file>/administrator/components/com_simplerenew/library/configuration.json</file>
+            <file>/administrator/components/com_simplerenew/library/simplerenew/Notify/Handler/None.php</file>
+            <file>/administrator/components/com_simplerenew/sql/updates/mysql/0.045.sql</file>
+            <file>/components/com_simplerenew/views/renewal/tmpl/cancel.php</file>
+            <file>/components/com_simplerenew/views/renewal/tmpl/multiple.php</file>
+            <file>/components/com_simplerenew/views/renewal/tmpl/reactivate.php</file>
+            <file>/media/com_simplerenew/js/tabs.js</file>
+        </obsolete>
+    </alledia>
+
     <updateservers>
         <server
             type="extension"
             priority="1"
-            name="Simplerenew Updates"><![CDATA[https://deploy.ostraining.com/updates/joomla/com_simplerenew.xml]]></server>
+            name="Simplerenew Updates">
+            <![CDATA[https://deploy.ostraining.com/updates/joomla/com_simplerenew.xml]]></server>
     </updateservers>
 
 </extension>
