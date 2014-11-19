@@ -73,8 +73,8 @@
                     name="mode"
                     label="COM_SIMPLERENEW_CONFIG_GATEWAY_MODE_LABEL"
                     type="tablist">
-                    <option value="test" show=".recurly.test">COM_SIMPLERENEW_OPTION_GATEWAY_MODE_TEST</option>
                     <option value="live" show=".recurly.live">COM_SIMPLERENEW_OPTION_GATEWAY_MODE_LIVE</option>
+                    <option value="test" show=".recurly.test">COM_SIMPLERENEW_OPTION_GATEWAY_MODE_TEST</option>
                 </field>
 
                 <field
