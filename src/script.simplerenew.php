@@ -19,7 +19,7 @@ if (file_exists($includePath . '/installer/include.php')) {
     throw new Exception('[Simplerenew] Alledia Installer not found');
 }
 
-class Com_SimplerenewInstallerScript extends AllediaInstallerAbstract
+class com_simplerenewInstallerScript extends AllediaInstallerAbstract
 {
     /**
      * @var array Related extensions required or useful with the component
