@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die();
 
-class Com_SimplerenewInstallerScript
+class com_simplerenewInstallerScript
 {
     /**
      * @var array Obsolete folders/files to be deleted
