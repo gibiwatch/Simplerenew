@@ -6,26 +6,23 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Alledia\Installer\AbstractScript;
+
 defined('_JEXEC') or die();
 
-class com_simplerenewInstallerScript
-{
-    /**
-     * @var array Obsolete folders/files to be deleted
-     * Start with [/admin|/site|/media] for location
-     */
-    protected $obsoleteItems = array(
-        '/admin/library/configuration.json',
-        '/media/js/tabs.js',
-        '/admin/library/simplerenew/Notify/Handler/None.php',
-        '/site/views/change',
-        '/admin/views/dashboard',
-        '/admin/controllers/test.php',
-        '/site/views/renewal/tmpl/multiple.php',
-        '/site/views/renewal/tmpl/reactivate.php',
-        '/site/views/renewal/tmpl/cancel.php'
-    );
+$includePath = __DIR__ . '/admin/library';
+if (!is_dir($includePath)) {
+    $includePath = __DIR__ . '/library';
+}
 
+if (file_exists($includePath . '/Installer/include.php')) {
+    require_once $includePath . '/Installer/include.php';
+} else {
+    throw new Exception('[Simplerenew] Alledia Installer not found');
+}
+
+class com_simplerenewInstallerScript extends AbstractScript
+{
     /**
      * @var array Related extensions required or useful with the component
      *            type => [ (folder) => [ (element) => [ (publish), (uninstall), (ordering) ] ] ]
@@ -42,93 +39,24 @@ class com_simplerenewInstallerScript
     );
 
     /**
-     * @var JInstaller
-     */
-    protected $installer = null;
-
-    /**
-     * @var SimpleXMLElement
-     */
-    protected $manifest = null;
-
-    /**
      * @var string
      */
     protected $previousVersion = '0.0.0';
 
     /**
-     * @var string
-     */
-    protected $mediaFolder = null;
-
-    /**
-     * @var array
-     */
-    protected $messages = array();
-
-    /**
      * @param JInstallerAdapterComponent $parent
      *
      * @return void
      */
-    public function initprops($parent)
+    public function initProperties($parent)
     {
+        parent::initProperties($parent);
+
         $path = JPATH_ADMINISTRATOR . '/components/com_simplerenew/simplerenew.xml';
         if (is_file($path)) {
             $previousManifest      = JInstaller::parseXMLInstallFile($path);
             $this->previousVersion = $previousManifest['version'];
         }
-
-        $this->installer = $parent->get('parent');
-        $this->manifest  = $this->installer->getManifest();
-        $this->messages  = array();
-
-        if ($media = $this->manifest->media) {
-            $path              = JPATH_SITE . '/' . $media['folder'] . '/' . $media['destination'];
-            $this->mediaFolder = $path;
-        }
-    }
-
-    /**
-     * @param JInstallerAdapterComponent $parent
-     *
-     * @return bool
-     */
-    public function install($parent)
-    {
-        return true;
-    }
-
-    /**
-     * @param JInstallerAdapterComponent $parent
-     *
-     * @return bool
-     */
-    public function discover_install($parent)
-    {
-        return $this->install($parent);
-    }
-
-    /**
-     * @param JInstallerAdapterComponent $parent
-     *
-     * @return void
-     */
-    public function uninstall($parent)
-    {
-        $this->initprops($parent);
-        $this->uninstallRelated();
-        $this->showMessages();
-    }
-
-    /**
-     * @param JInstallerAdapterComponent $parent
-     *
-     * @return bool
-     */
-    public function update($parent)
-    {
-        return true;
     }
 
     /**
@@ -139,9 +67,8 @@ class com_simplerenewInstallerScript
      */
     public function preFlight($type, $parent)
     {
-        $this->initprops($parent);
-
-        if ($type == 'update') {
+        $success = parent::preFlight($type, $parent);
+        if ($success && $type == 'update') {
             if (version_compare($this->previousVersion, '0.1.0', 'lt')) {
                 JFactory::getApplication()->enqueueMessage(
                     'Please update to at least v0.1.0 (First Beta) before updating to this version',
@@ -150,11 +77,12 @@ class com_simplerenewInstallerScript
                 return false;
             }
 
-            // ** Fix issue with typo in schema updates **
-            $path = JPATH_ADMINISTRATOR . '/components/com_simplerenew/sql/updates/mysql/0.045.sql';
-            if (is_file($path)) {
-                unlink($path);
+            if ($type == 'update') {
+                JFactory::getApplication()->enqueueMessage('This is a temporary test update package. Please try again later.', 'error');
+                return false;
             }
+
+            // ** Fix issue with typo in schema updates **
             $db    = JFactory::getDbo();
             $query = $db->getQuery(true)
                 ->select('s.*')
@@ -172,11 +100,9 @@ class com_simplerenewInstallerScript
                 $db->updateObject('#__schemas', $schema, 'extension_id');
             }
             // ** End of temporary schema fix **
-
-            $this->clearUpdateServers();
         }
 
-        return true;
+        return $success;
     }
 
     /**
@@ -205,11 +131,14 @@ class com_simplerenewInstallerScript
 
     /**
      * Install related extensions
+     * Overriding the Alledia Install because we're specifying differently
      *
      * @return void
      */
     protected function installRelated()
     {
+        parent::installRelated();
+
         if ($this->relatedExtensions) {
             $installer = new JInstaller();
             $source    = $this->installer->getPath('source');
@@ -254,6 +183,8 @@ class com_simplerenewInstallerScript
      */
     protected function uninstallRelated()
     {
+        parent::uninstallRelated();
+
         if ($this->relatedExtensions) {
             $installer = new JInstaller();
 
@@ -272,175 +203,6 @@ class com_simplerenewInstallerScript
                             }
                         }
                     }
-                }
-            }
-        }
-    }
-
-    /**
-     * @param string $type
-     * @param string $element
-     * @param string $folder
-     *
-     * @return JTable
-     */
-    protected function findExtension($type, $element, $folder = null)
-    {
-        $row = JTable::getInstance('extension');
-
-        $terms = array(
-            'type'    => $type,
-            'element' => ($type == 'module' ? 'mod_' : '') . $element
-        );
-        if ($type == 'plugin') {
-            $terms['folder'] = $folder;
-        }
-        $eid = $row->find($terms);
-        if ($eid) {
-            $row->load($eid);
-            return $row;
-        }
-        return null;
-    }
-
-    /**
-     * Set requested ordering for selected plugin extension
-     * Accepted ordering arguments:
-     * (n<=1 | first) First within folder
-     * (* | last) Last within folder
-     * (before:element) Before the named plugin
-     * (after:element) After the named plugin
-     *
-     * @param JTable $extension
-     * @param string $order
-     *
-     * @return void
-     */
-    protected function setPluginOrder(JTable $extension, $order)
-    {
-        if ($extension->type == 'plugin' && !empty($order)) {
-            $db    = JFactory::getDbo();
-            $query = $db->getQuery(true);
-
-            $query->select('extension_id, element');
-            $query->from('#__extensions');
-            $query->where(
-                array(
-                    $db->qn('folder') . ' = ' . $db->q($extension->folder),
-                    $db->qn('type') . ' = ' . $db->q($extension->type)
-                )
-            );
-            $query->order($db->qn('ordering'));
-
-            $plugins = $db->setQuery($query)->loadObjectList('element');
-
-            // Set the order only if plugin already successfully installed
-            if (array_key_exists($extension->element, $plugins)) {
-                $target = array(
-                    $extension->element => $plugins[$extension->element]
-                );
-                $others = array_diff_key($plugins, $target);
-
-                if ((is_numeric($order) && $order <= 1) || $order == 'first') {
-                    // First in order
-                    $neworder = array_merge($target, $others);
-                } elseif (($order == '*') || ($order == 'last')) {
-                    // Last in order
-                    $neworder = array_merge($others, $target);
-                } elseif (preg_match('/^(before|after):(\S+)$/', $order, $match)) {
-                    // place before or after named plugin
-                    $place    = $match[1];
-                    $element  = $match[2];
-                    $neworder = array();
-                    $previous = '';
-
-                    foreach ($others as $plugin) {
-                        if ((($place == 'before') && ($plugin->element == $element)) || (($place == 'after') && ($previous == $element))) {
-                            $neworder = array_merge($neworder, $target);
-                        }
-                        $neworder[$plugin->element] = $plugin;
-                        $previous                   = $plugin->element;
-                    }
-                    if (count($neworder) < count($plugins)) {
-                        // Make it last if the requested plugin isn't installed
-                        $neworder = array_merge($neworder, $target);
-                    }
-                } else {
-                    $neworder = array();
-                }
-
-                if (count($neworder) == count($plugins)) {
-                    // Only reorder if have a validated new order
-                    JModelLegacy::addIncludePath(
-                        JPATH_ADMINISTRATOR . '/components/com_plugins/models',
-                        'PluginsModels'
-                    );
-                    $model = JModelLegacy::getInstance('Plugin', 'PluginsModel');
-
-                    $ids = array();
-                    foreach ($neworder as $plugin) {
-                        $ids[] = $plugin->extension_id;
-                    }
-                    $order = range(1, count($ids));
-                    $model->saveorder($ids, $order);
-                }
-            }
-        }
-    }
-
-    /**
-     * Display messages from array
-     *
-     * @return void
-     */
-    protected function showMessages()
-    {
-        $app = JFactory::getApplication();
-        foreach ($this->messages as $msg) {
-            $app->enqueueMessage($msg[0], $msg[1]);
-        }
-    }
-
-    /**
-     * Add a message to the message list
-     *
-     * @param string $msg
-     * @param string $type
-     *
-     * @return void
-     */
-    protected function setMessage($msg, $type = 'message')
-    {
-        $this->messages[] = array($msg, $type);
-    }
-
-    /**
-     * Delete obsolete files and folders
-     */
-    protected function clearObsolete()
-    {
-        if ($this->obsoleteItems) {
-            $admin = $this->installer->getPath('extension_administrator');
-            $site  = $this->installer->getPath('extension_site');
-
-            $search  = array('#^/admin#', '#^/site#');
-            $replace = array($admin, $site);
-            if ($this->mediaFolder) {
-                $search[]  = '#^/media#';
-                $replace[] = $this->mediaFolder;
-            }
-
-            foreach ($this->obsoleteItems as $item) {
-                $path = preg_replace($search, $replace, $item);
-                if (is_file($path)) {
-                    $success = JFile::delete($path);
-                } elseif (is_dir($path)) {
-                    $success = JFolder::delete($path);
-                } else {
-                    $success = null;
-                }
-                if ($success !== null) {
-                    $this->setMessage('Delete ' . $path . ($success ? ' [OK]' : ' [FAILED]'));
                 }
             }
         }
@@ -511,24 +273,6 @@ class com_simplerenewInstallerScript
         if ($setParams) {
             $table->params = $params->toString();
             $table->store();
-        }
-    }
-
-    /**
-     * Use this in preflight to clear out obsolete update servers when the url has changed.
-     */
-    protected function clearUpdateServers()
-    {
-        $sr = JComponentHelper::getComponent('com_simplerenew');
-
-        $db = JFactory::getDbo();
-        $db->setQuery('Select update_site_id From #__update_sites_extensions where extension_id=' . (int)$sr->id);
-        if ($list = $db->loadColumn()) {
-            $db->setQuery('Delete From #__update_sites_extensions where extension_id=' . (int)$sr->id);
-            $db->execute();
-
-            $db->setQuery('Delete From #__update_sites Where update_site_id IN (' . join(',', $list) . ')');
-            $db->execute();
         }
     }
 
