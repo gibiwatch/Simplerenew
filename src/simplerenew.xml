@@ -2,12 +2,12 @@
 <extension type="component" version="2.5" method="upgrade">
     <name>COM_SIMPLERENEW</name>
     <author>OSTraining</author>
-    <creationDate>November 20 2014</creationDate>
+    <creationDate>November 21 2014</creationDate>
     <copyright>Copyright (C) 2014 OSTraining.com</copyright>
     <license>GPL v3</license>
     <authorEmail>info@simplerenew.com</authorEmail>
     <authorUrl>https://simplerenew.com</authorUrl>
-    <version>0.2.10</version>
+    <version>0.2.11</version>
     <description>COM_SIMPLERENEW_COMPONENT_DESCRIPTION</description>
 
     <scriptfile>script.simplerenew.php</scriptfile>
@@ -67,14 +67,8 @@
     <updateservers>
         <server
             type="extension"
-            priority="1"
-            name="Simplerenew Updates"><![CDATA[https://deploy.ostraining.com/updates/joomla/com_simplerenew.xml]]></server>
-
-<!--        <server
-            type="extension"
             priority="2"
             name="Simplerenew Updates"><![CDATA[https://deploy.ostraining.com/client/update/free/stable/com_simplerenew/extension.xml]]></server>
--->
     </updateservers>
 
 </extension>
