@@ -77,6 +77,11 @@ class com_simplerenewInstallerScript extends AbstractScript
                 return false;
             }
 
+            if ($type == 'update') {
+                JFactory::getApplication()->enqueueMessage('This is a temporary test update package. Please try again later.', 'error');
+                return false;
+            }
+
             // ** Fix issue with typo in schema updates **
             $db    = JFactory::getDbo();
             $query = $db->getQuery(true)
