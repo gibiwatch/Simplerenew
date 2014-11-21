@@ -5,8 +5,11 @@
     "license"          : "GPL-2+",
     "type"             : "joomla.component",
     "extra"            : {
-        "element": "com_simplerenew",
-        "name":    "SimpleRenew"
+        "element"         : "com_simplerenew",
+        "element-short"   : "simplerenew",
+        "name"            : "SimpleRenew",
+        "client"          : "admin",
+        "package-license" : "free"
     },
     "authors" : [
         {

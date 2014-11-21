@@ -6,6 +6,8 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Alledia\Installer\AbstractScript;
+
 defined('_JEXEC') or die();
 
 $includePath = __DIR__ . '/admin/library';
@@ -13,13 +15,13 @@ if (!is_dir($includePath)) {
     $includePath = __DIR__ . '/library';
 }
 
-if (file_exists($includePath . '/installer/include.php')) {
-    require_once $includePath . '/installer/include.php';
+if (file_exists($includePath . '/Installer/include.php')) {
+    require_once $includePath . '/Installer/include.php';
 } else {
     throw new Exception('[Simplerenew] Alledia Installer not found');
 }
 
-class com_simplerenewInstallerScript extends AllediaInstallerAbstract
+class com_simplerenewInstallerScript extends AbstractScript
 {
     /**
      * @var array Related extensions required or useful with the component
@@ -46,9 +48,9 @@ class com_simplerenewInstallerScript extends AllediaInstallerAbstract
      *
      * @return void
      */
-    public function initprops($parent)
+    public function initProperties($parent)
     {
-        parent::initprops($parent);
+        parent::initProperties($parent);
 
         $path = JPATH_ADMINISTRATOR . '/components/com_simplerenew/simplerenew.xml';
         if (is_file($path)) {
@@ -66,7 +68,6 @@ class com_simplerenewInstallerScript extends AllediaInstallerAbstract
     public function preFlight($type, $parent)
     {
         $success = parent::preFlight($type, $parent);
-
         if ($success && $type == 'update') {
             if (version_compare($this->previousVersion, '0.1.0', 'lt')) {
                 JFactory::getApplication()->enqueueMessage(

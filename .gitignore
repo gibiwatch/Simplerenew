@@ -4,6 +4,7 @@
 *.bak
 *~
 build.properties
+
 !.gitignore
 !.htaccess
 
@@ -49,7 +50,16 @@ nb-configuration.xml
 vendor/
 composer.lock
 
+# Phing #
+#########
+packages/*
+!packages/.gitkeep
+
 # misc other files #
 ####################
 _notes/
-tests/config.php
+error_log
+
+config.codekit
+
+tests/_output/*
