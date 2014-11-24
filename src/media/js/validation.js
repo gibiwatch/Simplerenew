@@ -246,11 +246,16 @@
                                     validator.successList.push(element);
                                     delete validator.invalid[element.name];
                                     validator.showErrors();
-                                    $(element).after($('<label>', {
+
+                                    var label = $('<label>', {
                                         id: element.id + '-message',
                                         for: element.id,
                                         class: validator.settings.validClass
-                                    }).html(response.message));
+                                    }).html(response.message);
+                                    if (response.coupon.description) {
+                                        label.append($('<span>').html(response.coupon.description));
+                                    }
+                                    $(element).after(label);
                                 } else {
                                     errors = {};
                                     message = response.error || validator.defaultMessage(element, 'coupon');
