@@ -67,11 +67,6 @@ class com_simplerenewInstallerScript extends AbstractScript
      */
     public function preFlight($type, $parent)
     {
-        if ($type == 'update') {
-            JFactory::getApplication()->enqueueMessage('This is a temporary test update package. Please try again later.', 'error');
-            return false;
-        }
-
         $success = parent::preFlight($type, $parent);
         if ($success && $type == 'update') {
             if (version_compare($this->previousVersion, '0.1.0', 'lt')) {
