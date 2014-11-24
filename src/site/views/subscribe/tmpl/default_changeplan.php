@@ -17,7 +17,7 @@ $current = array_shift($this->subscriptions);
 ?>
 <?php if ($this->getParams()->get('show_page_heading', true)): ?>
 <div class="page-header">
-    <h1><?php echo $this->getHeading('COM_SIMPLERENEW_CHANGE_PLAN'); ?></h1>
+    <h1><?php echo $this->getHeading('COM_SIMPLERENEW_HEADING_CHANGE_PLAN'); ?></h1>
 </div>
 <?php endif; ?>
 

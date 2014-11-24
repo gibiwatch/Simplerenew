@@ -47,20 +47,20 @@ class SimplerenewViewAccount extends SimplerenewViewSite
         try {
             $this->user = $this->get('User');
             if (!$this->user) {
-                $this->setLayout('login');
+                $tpl = 'login';
 
             } else {
                 $this->billing       = $this->get('Billing');
                 $this->subscriptions = $this->get('Subscriptions');
             }
 
+            if (!$allowMultiple && count($this->subscriptions)) {
+                // Single sub sites only look at the most recent subscription
+                $this->subscriptions = array(array_shift($this->subscriptions));
+            }
+
         } catch (Simplerenew\Exception $e) {
             SimplerenewFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
-        }
-
-        if (!$allowMultiple && count($this->subscriptions)) {
-            // Single sub sites only look at the most recent subscription
-            $this->subscriptions = array(array_shift($this->subscriptions));
         }
 
         parent::display($tpl);
