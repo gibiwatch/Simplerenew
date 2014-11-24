@@ -76,25 +76,6 @@ class com_simplerenewInstallerScript extends AbstractScript
                 );
                 return false;
             }
-
-            // ** Fix issue with typo in schema updates **
-            $db    = JFactory::getDbo();
-            $query = $db->getQuery(true)
-                ->select('s.*')
-                ->from('#__schemas s')
-                ->innerJoin('#__extensions e ON e.extension_id = s.extension_id')
-                ->where(
-                    array(
-                        'e.element = ' . $db->quote('com_simplerenew'),
-                        's.version_id = ' . $db->quote('0.045')
-                    )
-                );
-
-            if ($schema = $db->setQuery($query)->loadObject()) {
-                $schema->version_id = '0.1.0';
-                $db->updateObject('#__schemas', $schema, 'extension_id');
-            }
-            // ** End of temporary schema fix **
         }
 
         return $success;
