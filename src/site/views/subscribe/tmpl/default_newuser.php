@@ -15,7 +15,7 @@ defined('_JEXEC') or die();
 ?>
 <?php if ($this->getParams()->get('show_page_heading', true)): ?>
 <div class="page-header">
-    <h1><?php echo $this->getHeading('COM_SIMPLERENEW_SUBSCRIBE'); ?></h1>
+    <h1><?php echo $this->getHeading('COM_SIMPLERENEW_HEADING_SUBSCRIBE'); ?></h1>
 </div>
 <?php endif; ?>
 
@@ -44,7 +44,7 @@ defined('_JEXEC') or die();
     <div class="m-bottom">
         <button type="submit" class="btn-main btn-big">
             <i class="fa fa-check"></i>
-            <?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE'); ?>
+            <?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE_BUTTON'); ?>
         </button>
     </div>
     <?php echo SimplerenewHelper::renderModule('simplerenew_submit_bottom'); ?>

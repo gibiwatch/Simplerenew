@@ -22,7 +22,7 @@ $app = SimplerenewFactory::getApplication();
             <h1>
                 <?php
                 echo $this->getHeading(
-                    JText::plural('COM_SIMPLERENEW_RENEWAL_UPDATE', count($this->subscriptions), false)
+                    JText::plural('COM_SIMPLERENEW_HEADING_RENEWAL_UPDATE', count($this->subscriptions), false)
                 ); ?>
             </h1>
         </div>
