@@ -55,7 +55,7 @@ class com_simplerenewInstallerScript extends AbstractScript
         $path = JPATH_ADMINISTRATOR . '/components/com_simplerenew/simplerenew.xml';
         if (is_file($path)) {
             $previousManifest      = JInstaller::parseXMLInstallFile($path);
-            $this->previousVersion = $previousManifest['version'];
+            $this->previousVersion = (string)$previousManifest['version'];
         }
     }
 
