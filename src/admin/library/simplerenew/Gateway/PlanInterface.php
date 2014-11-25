@@ -54,8 +54,8 @@ interface PlanInterface
     /**
      * Map raw data from the Gateway to SR fields
      *
-     * @param Plan $parent
-     * @param mixed   $data
+     * @param Plan  $parent
+     * @param mixed $data
      *
      * @return void
      */
