@@ -42,11 +42,7 @@ defined('_JEXEC') or die();
                 ?>
                 <div class="<?php echo $rowClass; ?>">
                     <div class="invoice_col invoice_col1">
-                        <?php echo JHtml::link(
-                            '#',
-                            $invoice->number,
-                            'onclick="return alert(\'under construction\');return false;"'
-                        ); ?>
+                        <?php echo JHtml::_('invoice.pdflink', $invoice->number); ?>
                     </div>
                     <div class="invoice_col invoice_col2"><?php echo JHtml::_(
                             'currency.format',
