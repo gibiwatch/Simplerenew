@@ -35,12 +35,14 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
 
     public function display($tpl = null)
     {
+        /** @var SimplerenewModelRenewal $model */
+        $model = $this->getModel();
         try {
-            $this->user = $this->get('User');
+            $this->user = $model->getUser();
             if (!$this->user) {
                 $this->setLayout('login');
             } else {
-                $this->subscriptions = $this->get('Subscriptions');
+                $this->subscriptions = $model->getSubscriptions();
             }
         } catch (Exception $e) {
             SimplerenewFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');

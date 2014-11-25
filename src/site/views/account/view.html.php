@@ -44,14 +44,16 @@ class SimplerenewViewAccount extends SimplerenewViewSite
             $model->setState('status.subscription', $currentSubs);
         }
 
+        /** @var SimplerenewModelAccount $model */
+        $model = $this->getModel();
         try {
-            $this->user = $this->get('User');
+            $this->user = $model->getUser();
             if (!$this->user) {
                 $tpl = 'login';
 
             } else {
-                $this->billing       = $this->get('Billing');
-                $this->subscriptions = $this->get('Subscriptions');
+                $this->billing       = $model->getBilling();
+                $this->subscriptions = $model->getSubscriptions();
             }
 
             if (!$allowMultiple && count($this->subscriptions)) {

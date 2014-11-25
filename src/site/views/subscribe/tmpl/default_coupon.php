@@ -10,14 +10,12 @@ defined('_JEXEC') or die();
 
 /**
  * @var SimplerenewViewSubscribe $this
- * @var JObject                  $state
  */
 
-$visible = $this->get('State')->get('coupon.default');
+$visible = $this->state->get('coupon.default');
 JHtml::_('sr.sliders', 'div.coupon-toggle', $visible);
 
-$state = $this->get('State');
-$couponCode = $state->get('coupon.default');
+$couponCode = $this->state->get('coupon.default');
 
 ?>
 <div class="ost-section">

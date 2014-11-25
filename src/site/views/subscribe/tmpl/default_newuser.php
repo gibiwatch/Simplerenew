@@ -28,7 +28,7 @@ defined('_JEXEC') or die();
     echo $this->loadTemplate($this->allowMultiple ? 'mplans' : 'plans');
     echo SimplerenewHelper::renderModule('simplerenew_plans_bottom');
 
-    $showCoupon = $this->get('State')->get('coupon.allow');
+    $showCoupon = $this->state->get('coupon.allow');
     if ($showCoupon < 0 || $showCoupon == 1) {
         echo $this->loadTemplate('coupon');
     }

@@ -28,7 +28,7 @@ $current = array_shift($this->subscriptions);
     echo $this->loadTemplate('plans');
     echo SimplerenewHelper::renderModule('simplerenew_plans_bottom');
 
-    $showCoupon = $this->get('State')->get('coupon.allow');
+    $showCoupon = $this->state->get('coupon.allow');
     if ($showCoupon < 0 || $showCoupon == 2) {
         echo $this->loadTemplate('coupon');
     }

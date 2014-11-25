@@ -16,6 +16,11 @@ defined('_JEXEC') or die();
 class SimplerenewViewSubscribe extends SimplerenewViewSite
 {
     /**
+     * @var Joomla\Registry\Registry
+     */
+    protected $state = null;
+
+    /**
      * @var array
      */
     protected $plans = array();
@@ -49,12 +54,16 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
     {
         $this->enforceSSL();
 
-        $this->plans = $this->get('Plans');
+        /** @var SimplerenewModelSubscribe $model */
+        $model = $this->getModel();
+
+        $this->state = $model->getState();
+        $this->plans = $model->getPlans();
         try {
-            if ($this->user = $this->get('User')) {
-                $this->account       = $this->get('Account');
-                $this->billing       = $this->get('billing');
-                $this->subscriptions = $this->get('Subscriptions');
+            if ($this->user = $model->getUser()) {
+                $this->account       = $model->getAccount();
+                $this->billing       = $model->getBilling();
+                $this->subscriptions = $model->getSubscriptions();
             }
 
         } catch (Exception $e) {
