@@ -11,6 +11,7 @@ namespace Simplerenew\Gateway\Recurly;
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Invoice;
 use Simplerenew\Exception;
+use Simplerenew\Exception\NotFound;
 use Simplerenew\Gateway\InvoiceInterface;
 use Simplerenew\Object;
 
@@ -19,8 +20,8 @@ defined('_JEXEC') or die();
 class InvoiceImp extends AbstractRecurlyBase implements InvoiceInterface
 {
     protected $fieldMap = array(
-        'id'          => 'uuid',
-        'status'      => array(
+        'number' => 'invoice_number',
+        'status' => array(
             'state' => array(
                 'open'                => Invoice::STATUS_OPEN,
                 'collected'           => Invoice::STATUS_PAID,
@@ -29,10 +30,8 @@ class InvoiceImp extends AbstractRecurlyBase implements InvoiceInterface
                 Object::MAP_UNDEFINED => Invoice::STATUS_UNKNOWN
             )
         ),
-        'number'      => 'invoice_number',
-        'date' => 'created_at'
+        'date'   => 'created_at'
     );
-
 
     /**
      * @param Invoice $parent
@@ -42,10 +41,13 @@ class InvoiceImp extends AbstractRecurlyBase implements InvoiceInterface
      */
     public function load(Invoice $parent)
     {
-        // TODO: Implement load() method.
+        $invoice = $this->getInvoice($parent->number);
+        $this->bindSource($parent, $invoice);
     }
 
     /**
+     * Return all invoices for the selected account
+     *
      * @param Invoice $template
      * @param Account $account
      *
@@ -56,17 +58,30 @@ class InvoiceImp extends AbstractRecurlyBase implements InvoiceInterface
     {
         $invoices = array();
 
-        $list = \Recurly_InvoiceList::getForAccount($account->code, null, $this->client);
-        foreach ($list as $rawInvoice) {
-            $invoice = clone $template;
-            $this->bindSource($invoice, $rawInvoice);
+        try {
+            $list = \Recurly_InvoiceList::getForAccount($account->code, null, $this->client);
+            foreach ($list as $rawInvoice) {
+                $invoice = clone $template;
+                $this->bindSource($invoice, $rawInvoice);
 
-            $invoices[$invoice->id] = $invoice;
+                $invoices[$invoice->number] = $invoice;
+            }
+
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
 
         return $invoices;
     }
 
+    /**
+     * Map raw data from the Gateway to SR fields
+     *
+     * @param Invoice $parent
+     * @param mixed   $data
+     *
+     * @throws Exception
+     */
     public function bindSource(Invoice $parent, $data)
     {
         // Find account code
@@ -103,5 +118,45 @@ class InvoiceImp extends AbstractRecurlyBase implements InvoiceInterface
                     'total'           => $this->getKeyValue($data, 'total_in_cents') / 100
                 )
             );
+    }
+
+    /**
+     * @param string $number
+     *
+     * @return \Recurly_Invoice
+     * @throws Exception
+     * @throws NotFound
+     */
+    protected function getInvoice($number)
+    {
+        if (!$number) {
+            throw new Exception('No invoice selected');
+        }
+
+        try {
+            $invoice = \Recurly_Invoice::get($number, $this->client);
+
+        } catch (\Recurly_NotFoundError $e) {
+            throw new NotFound($e->getMessage(), $e->getCode(), $e);
+
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
+        }
+
+        return $invoice;
+    }
+
+    /**
+     * Return an invoice as pdf
+     *
+     * @param Invoice $parent
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function toPDF(Invoice $parent)
+    {
+        $invoice = $this->getInvoice($parent->number);
+        return $invoice->getPdf();
     }
 }

@@ -25,6 +25,8 @@ interface InvoiceInterface
     public function load(Invoice $parent);
 
     /**
+     * Return all invoices for the selected account
+     *
      * @param Invoice $template
      * @param Account $account
      *
@@ -32,4 +34,23 @@ interface InvoiceInterface
      * @throws Exception
      */
     public function getAccountList(Invoice $template, Account $account);
+
+    /**
+     * Map raw data from the Gateway to SR fields
+     *
+     * @param Invoice $parent
+     * @param mixed   $data
+     *
+     * @return void
+     */
+    public function bindSource(Invoice $parent, $data);
+
+    /**
+     * Return an invoice as pdf
+     * @param Invoice $parent
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function toPDF(Invoice $parent);
 }

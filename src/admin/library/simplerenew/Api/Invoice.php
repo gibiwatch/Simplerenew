@@ -24,11 +24,6 @@ class Invoice extends AbstractApiBase
     /**
      * @var string
      */
-    public $id = null;
-
-    /**
-     * @var string
-     */
     public $number = null;
 
     /**
@@ -96,25 +91,38 @@ class Invoice extends AbstractApiBase
     }
 
     /**
-     * Load an invoice by system ID
+     * Load an invoice by number
      *
-     * @param string $id
+     * @param string $number
      *
      * @return Invoice
      * @throws Exception
      */
-    public function load($id)
+    public function load($number)
     {
         $this->clearProperties();
 
-        $this->id = $id;
+        $this->number = $number;
         $this->imp->load($this);
 
         return $this;
     }
 
+    /**
+     * Return all invoices for the selected account
+     *
+     * @param Account $account
+     *
+     * @return array
+     * @throws Exception
+     */
     public function getAccountList(Account $account)
     {
         return $this->imp->getAccountList($this, $account);
+    }
+
+    public function toPDF()
+    {
+        return $this->imp->toPDF($this);
     }
 }
