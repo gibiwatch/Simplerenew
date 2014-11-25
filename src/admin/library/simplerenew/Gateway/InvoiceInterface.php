@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Gateway;
 
+use Simplerenew\Api\Account;
 use Simplerenew\Api\Invoice;
 use Simplerenew\Exception;
 
@@ -22,4 +23,13 @@ interface InvoiceInterface
      * @throws Exception
      */
     public function load(Invoice $parent);
+
+    /**
+     * @param Invoice $template
+     * @param Account $account
+     *
+     * @return array
+     * @throws Exception
+     */
+    public function getAccountList(Invoice $template, Account $account);
 }

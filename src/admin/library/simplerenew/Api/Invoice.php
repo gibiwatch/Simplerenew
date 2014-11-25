@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Api;
 
+use Simplerenew\Api\Account;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\InvoiceInterface;
 
@@ -28,12 +29,12 @@ class Invoice extends AbstractApiBase
     /**
      * @var string
      */
-    public $account_code = null;
+    public $number = null;
 
     /**
-     * @var string
+     * @var \DateTime
      */
-    public $subscription_id = null;
+    public $date = null;
 
     /**
      * @var int
@@ -43,12 +44,12 @@ class Invoice extends AbstractApiBase
     /**
      * @var string
      */
-    public $number = null;
+    public $po_number = null;
 
     /**
      * @var string
      */
-    public $po_number = null;
+    public $coupon = null;
 
     /**
      * @var float
@@ -71,29 +72,14 @@ class Invoice extends AbstractApiBase
     public $currency = null;
 
     /**
-     * @var \DateTime
+     * @var string
      */
-    public $date_opened = null;
-
-    /**
-     * @var \DateTime
-     */
-    public $date_closed = null;
+    public $account_code = null;
 
     /**
      * @var string
      */
-    public $coupon = null;
-
-    /**
-     * @var array
-     */
-    public $line_items = array();
-
-    /**
-     * @var array
-     */
-    public $transactions = array();
+    public $subscription_id = null;
 
     /**
      * @var InvoiceInterface
@@ -125,5 +111,10 @@ class Invoice extends AbstractApiBase
         $this->imp->load($this);
 
         return $this;
+    }
+
+    public function getAccountList(Account $account)
+    {
+        return $this->imp->getAccountList($this, $account);
     }
 }
