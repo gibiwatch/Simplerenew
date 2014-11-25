@@ -17,6 +17,11 @@ class SimplerenewViewInvoices extends SimplerenewViewSite
      */
     protected $user = null;
 
+    /**
+     * @var array
+     */
+    protected $invoices = array();
+
     public function display($tpl = null)
     {
         /** @var SimplerenewModelInvoices $model */
@@ -27,6 +32,7 @@ class SimplerenewViewInvoices extends SimplerenewViewSite
             if (!$this->user) {
                 $this->setLayout('login');
             }
+            $this->invoices = $model->getInvoices();
 
         } catch (Simplerenew\Exception $e) {
             SimplerenewFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');

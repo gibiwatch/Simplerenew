@@ -111,6 +111,33 @@ class SimplerenewModelAccount extends SimplerenewModelSite
     }
 
     /**
+     * Get all invoices for the account
+     *
+     * @return array
+     */
+    public function getInvoices()
+    {
+        $invoices = $this->getState('invoices', null);
+        if ($invoices === null) {
+            $invoices = array();
+
+            if ($account = $this->getAccount()) {
+                try {
+                    $invoices = $this->getContainer()
+                        ->getInvoice()
+                        ->getAccountList($account);
+
+                } catch (NotFound $e) {
+                    // No invoices, no problem
+                }
+            }
+            $this->setState('invoices', $invoices);
+        }
+
+        return $invoices;
+    }
+
+    /**
      * @return Container
      */
     protected function getContainer()
