@@ -93,6 +93,7 @@ class com_simplerenewInstallerScript extends AbstractScript
         $this->installRelated();
         $this->clearObsolete();
         $this->checkDB();
+        $this->fixMenus();
 
         $this->showMessages();
 
@@ -280,5 +281,28 @@ class com_simplerenewInstallerScript extends AbstractScript
                 $db->insertObject('#__simplerenew_regions', $region);
             }
         }
+    }
+
+    /**
+     * On new install, this will check and fix any menus that may have been created
+     * in a previous installation.
+     *
+     * @return void
+     */
+    protected function fixMenus()
+    {
+        $db          = SimplerenewFactory::getDbo();
+        $componentId = SimplerenewComponentHelper::getComponent('com_simplerenew')->id;
+
+        $query = $db->getQuery(true)
+            ->update('#__menu')
+            ->set('component_id = ' . $db->quote($componentId))
+            ->where(
+                array(
+                    'type = ' . $db->quote('component'),
+                    'link LIKE ' . $db->quote('%option=com_simplerenew%')
+                )
+            );
+        $db->setQuery($query)->execute();
     }
 }
