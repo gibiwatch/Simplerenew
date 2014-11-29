@@ -291,8 +291,8 @@ class com_simplerenewInstallerScript extends AbstractScript
      */
     protected function fixMenus()
     {
-        $db          = SimplerenewFactory::getDbo();
-        $componentId = SimplerenewComponentHelper::getComponent('com_simplerenew')->id;
+        $db          = JFactory::getDbo();
+        $componentId = JComponentHelper::getComponent('com_simplerenew')->id;
 
         $query = $db->getQuery(true)
             ->update('#__menu')
