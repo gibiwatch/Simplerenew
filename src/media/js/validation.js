@@ -253,7 +253,7 @@
                                         class: validator.settings.validClass
                                     }).html(response.message);
                                     if (response.coupon.description) {
-                                        label.append($('<span>').html(response.coupon.description));
+                                        label.append($('<div>').html(response.coupon.description));
                                     }
                                     $(element).after(label);
                                 } else {
