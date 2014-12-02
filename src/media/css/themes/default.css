@@ -531,6 +531,16 @@ span.simplerenew-plan.simplerenew-plan-selected{
     margin-bottom: 50px;
 }
 
+/* Invoices view
+ ========================================================================== */
+.ost-invoice-heading > div{
+    font-weight: bold;
+}
+
+.ost-invoice-heading{
+    border-bottom-color: #cccccc;
+}
+
 /* Media queries
  ========================================================================== */
 @media (min-width: 960px) {
@@ -545,6 +555,10 @@ span.simplerenew-plan.simplerenew-plan-selected{
     .ost-container textarea,
     .ost-container select {
         width: 80%;
+    }
+    /* Invoices view */
+    .ost-invoice-heading{
+        display: none;
     }
 }
 

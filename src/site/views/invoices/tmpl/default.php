@@ -28,34 +28,37 @@ defined('_JEXEC') or die();
     else:
         ?>
 
-        <div class="simplerenew-invoices-table">
-            <div class="invoice_heading">
-                <div class="invoice_col invoice_col1"><strong>Number</strong></div>
-                <div class="invoice_col invoice_col2"><strong>Total</strong></div>
-                <div class="invoice_col invoice_col3"><strong>Date issued</strong></div>
-                <div class="clr"></div>
-            </div>
-            <?php
-            $i = 0;
-            foreach ($this->invoices as $invoice):
-                $rowClass = 'invoice_row invoice_row_' . ($i % 2);
-                ?>
-                <div class="<?php echo $rowClass; ?>">
-                    <div class="invoice_col invoice_col1">
-                        <?php echo JHtml::_('invoice.pdflink', $invoice->number); ?>
-                    </div>
-                    <div class="invoice_col invoice_col2"><?php echo JHtml::_(
-                            'currency.format',
-                            $invoice->total,
-                            $invoice->currency
-                        ); ?></div>
-                    <div class="invoice_col invoice_col3"><?php echo $invoice->date->format('M j, Y'); ?></div>
-                    <div class="clr"></div>
-                </div>
-            <?php
-            endforeach;
-            ?>
-
+        <div class="ost-section ost-row-two ost-invoice-heading b-bottom">
+            <div class="block4">Number</div>
+            <div class="block4">Total</div>
+            <div class="block4">Date issued</div>
         </div>
+
+        <?php
+        $i = 1;
+        foreach ($this->invoices as $invoice):
+            if( $i == 1 ) {
+                $rowClass = 'ost-row-one';
+                $i = 2;
+            }else{
+                $rowClass = 'ost-row-two';
+                $i = 1;
+            }
+            ?>
+            <div class="ost-section <?php echo $rowClass; ?>">
+                <div class="block4">
+                    <?php echo JHtml::_('invoice.pdflink', $invoice->number); ?>
+                </div>
+                <div class="block4"><?php echo JHtml::_(
+                        'currency.format',
+                        $invoice->total,
+                        $invoice->currency
+                    ); ?></div>
+                <div class="block4"><?php echo $invoice->date->format('M j, Y'); ?></div>
+            </div>
+        <?php
+        endforeach;
+        ?>
+
     <?php endif; ?>
 </div>
