@@ -38,23 +38,21 @@ defined('_JEXEC') or die();
         <?php
         $i = 1;
         foreach ($this->invoices as $invoice):
-            if( $i == 1 ) {
-                $rowClass = 'ost-row-one';
-                $i = 2;
-            }else{
-                $rowClass = 'ost-row-two';
-                $i = 1;
-            }
+            $rowClass = $i++ % 2 ? 'ost-row-one' : 'ost-row-two';
             ?>
             <div class="ost-section <?php echo $rowClass; ?>">
                 <div class="block4">
                     <?php echo JHtml::_('invoice.pdflink', $invoice->number); ?>
                 </div>
-                <div class="block4"><?php echo JHtml::_(
+                <div class="block4">
+                    <?php
+                    echo JHtml::_(
                         'currency.format',
                         $invoice->total,
                         $invoice->currency
-                    ); ?></div>
+                    );
+                    ?>
+                </div>
                 <div class="block4"><?php echo $invoice->date->format('M j, Y'); ?></div>
             </div>
             <!-- /ost-section -->
