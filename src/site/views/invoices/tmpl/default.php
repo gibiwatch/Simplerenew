@@ -33,6 +33,7 @@ defined('_JEXEC') or die();
             <div class="block4">Total</div>
             <div class="block4">Date issued</div>
         </div>
+        <!-- /ost-section -->
 
         <?php
         $i = 1;
@@ -56,6 +57,7 @@ defined('_JEXEC') or die();
                     ); ?></div>
                 <div class="block4"><?php echo $invoice->date->format('M j, Y'); ?></div>
             </div>
+            <!-- /ost-section -->
         <?php
         endforeach;
         ?>
