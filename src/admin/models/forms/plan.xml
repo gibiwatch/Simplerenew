@@ -77,7 +77,6 @@
             label="Currency"
             description="Currency Desc"
             required="true">
-            <option value=""></option>
         </field>
 
         <field
@@ -85,13 +84,15 @@
             type="text"
             label="COM_SIMPLERENEW_PLAN_AMOUNT_LABEL"
             description="COM_SIMPLERENEW_PLAN_AMOUNT_DESC"
+            size="5"
             required="true"/>
 
         <field
             name="setup_cost"
             type="text"
             label="COM_SIMPLERENEW_PLAN_SETUP_COST_LABEL"
-            description="COM_SIMPLERENEW_PLAN_SETUP_COST_DESC"/>
+            description="COM_SIMPLERENEW_PLAN_SETUP_COST_DESC"
+            size="5"/>
 
         <field
             name="published"

@@ -27,3 +27,15 @@
 .ost-container-dashboard{
     margin: 25px 0;
 }
+
+/* Override of normal input fields
+=============================================================================== */
+#ost-custom input,
+#ost-custom select,
+#ost-custom textarea {
+    width: auto;
+}
+
+#ost-custom label {
+    display: none;
+}
