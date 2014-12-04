@@ -30,12 +30,25 @@
 
 /* Override of normal input fields
 =============================================================================== */
-#ost-custom input,
-#ost-custom select,
-#ost-custom textarea {
+#ost-narrative input,
+#ost-narrative select,
+#ost-narrative textarea {
     width: auto;
+    margin: 0px;
+    padding: 0px;
 }
 
-#ost-custom label {
+#ost-narrative input {
+    border-style: none none solid;
+    box-shadow: none;
+    text-align: center;
+}
+
+#ost-narrative .chzn-container {
+    margin-bottom: 6px;
+    width: auto !important;
+}
+
+#ost-narrative label {
     display: none;
 }

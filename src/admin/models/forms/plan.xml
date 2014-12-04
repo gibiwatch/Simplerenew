@@ -45,7 +45,7 @@
             validate="integer"
             message="COM_SIMPLERENEW_PLAN_LENGTH_INVALID"
             required="true"
-            size="5"/>
+            size="2"/>
 
         <field
             name="unit"
@@ -61,7 +61,7 @@
             description="COM_SIMPLERENEW_PLAN_TRIAL_LENGTH_DESC"
             validate="integer"
             message="COM_SIMPLERENEW_PLAN_TRIAL_LENGTH_INVALID"
-            size="5"/>
+            size="2"/>
 
         <field
             name="trial_unit"
