@@ -187,6 +187,6 @@ abstract class JHtmlSr
         $attribs['id']    = $idtag ?: preg_replace('/(\[\]|\[|\])/', '_', $name);
         $attribs['type']  = 'text';
         $attribs['value'] = $selected;
-        return '<input ' . JArrayHelper::toString($attribs) . '/>';
+        return '<input ' . SimplerenewUtilitiesArray::toString($attribs) . '/>';
     }
 }

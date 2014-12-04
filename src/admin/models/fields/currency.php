@@ -27,7 +27,7 @@ class JFormFieldCurrency extends JFormFieldList
                 'id'    => $this->id,
                 'value' => $this->value
             );
-            return '<input ' . JArrayHelper::toString($attribs) . '/>';
+            return '<input ' . SimplerenewUtilitiesArray::toString($attribs) . '/>';
         }
 
         return parent::getInput();

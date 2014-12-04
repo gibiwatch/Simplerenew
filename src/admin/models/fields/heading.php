@@ -27,7 +27,7 @@ class JFormFieldHeading extends JFormField
 
         $html = array('<' . $tag);
         if ($attribs) {
-            $html[] = JArrayHelper::toString($attribs);
+            $html[] = SimplerenewUtilitiesArray::toString($attribs);
         }
         $html[] = 'style="clear: both; padding: 10px 0px; margin: 0;">';
         $html[] = $text;
