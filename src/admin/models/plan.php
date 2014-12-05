@@ -39,17 +39,37 @@ class SimplerenewModelPlan extends SimplerenewModelAdmin
             }
 
             // We are supporting only a single currency at this time
-            if (!$data->get('currency')) {
-                $db = SimplerenewFactory::getDbo();
+            $currency = $data->get('currency');
+            if (!$currency) {
+                $db    = SimplerenewFactory::getDbo();
                 $query = $db->getQuery(true)
                     ->select('currency')
                     ->from('#__simplerenew_plans')
                     ->where('currency != ' . $db->quote(''));
+
                 $currency = $db->setQuery($query, 0, 1)->loadResult();
                 $data->set('currency', $currency);
             }
+
+            $amount    = $data->get('amount');
+            $setupCost = $data->get('setup_cost');
+
+            $data->set('amount', JHtml::_('currency.format', $amount, $currency));
+            $data->set('setup_cost', JHtml::_('currency.format', $setupCost, $currency));
         }
 
         return $data;
+    }
+
+
+    /**
+     * @param JTable $table
+     *
+     * @return void
+     */
+    protected function prepareTable($table)
+    {
+        $table->amount     = preg_replace('/[^\d\.]/', '', $table->amount);
+        $table->setup_cost = preg_replace('/[^\d\.]/', '', $table->setup_cost);
     }
 }
