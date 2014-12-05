@@ -1,7 +1,0 @@
-{
-    "system": "joomla",
-    "type": "component",
-    "name": "SimpleRenew",
-    "element": "com_simplerenew",
-    "description": "Simple Renew manages renewable subscriptions to your site."
-}
