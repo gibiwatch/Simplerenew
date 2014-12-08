@@ -112,7 +112,7 @@ if ($this->billing):
 
     <?php
     endif;
-else:
+elseif ($this->subscriptions):
     ?>
 
     <div class="ost-alert-warning">
