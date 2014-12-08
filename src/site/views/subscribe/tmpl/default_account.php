@@ -29,6 +29,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             type="text"
             value="<?php echo $this->user->firstname; ?>"
             required="true"
+            maxlength="50"
             data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_FIRSTNAME_REQUIRED'); ?>"
             autofocus/>
     </div>
@@ -42,6 +43,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             name="lastname"
             type="text"
             value="<?php echo $this->user->lastname; ?>"
+            maxlength="50"
             required="true"
             data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_LASTNAME_REQUIRED'); ?>"/>
     </div>
@@ -65,6 +67,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             class="unique_user"
             type="text"
             value="<?php echo $this->user->username; ?>"
+            maxlength="50"
             required="true"
             data-include="#email #password"
             data-recheck="#email #password"
@@ -81,6 +84,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             type="email"
             class="unique_email"
             value="<?php echo $this->user->email; ?>"
+            maxlength="50"
             required="true"
             data-include="#username"
             data-recheck="#username #password"

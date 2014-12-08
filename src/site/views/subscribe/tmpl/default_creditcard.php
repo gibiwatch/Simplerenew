@@ -36,6 +36,7 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
                     name="billing[firstname]"
                     type="text"
                     value="<?php echo $this->billing->firstname; ?>"
+                    maxlength="50"
                     required="true"
                     data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_FIRSTNAME_REQUIRED'); ?>"/>
             </div>
@@ -49,6 +50,7 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
                     name="billing[lastname]"
                     type="text"
                     value="<?php echo $this->billing->lastname; ?>"
+                    maxlength="50"
                     required="true"
                     data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_LASTNAME_REQUIRED'); ?>"/>
             </div>
@@ -72,6 +74,7 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
                     id="billing_cc_number"
                     type="text"
                     value=""
+                    maxlength="25"
                     placeholder="<?php echo JHtml::_('creditcard.mask', $creditCard->lastFour); ?>"
                     class="check_ccnumber"
                     data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_CC_NUMBER_REQUIRED'); ?>"
@@ -91,6 +94,7 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
                     id="billing_cc_cvv"
                     type="text"
                     value=""
+                    maxlength="5"
                     class="check_cvv small-width"
                     data-ccnumber="#billing_cc_number"
                     data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_CC_CVV_REQUIRED'); ?>"
