@@ -16,6 +16,13 @@ jQuery.Simplerenew = jQuery.extend({}, jQuery.Simplerenew, {
             { name: 'Laser', cvvlen: 3, prefixes: [6304, 6706, 6771, 6709] }
         ];
 
+        /**
+         * @param {string} ccnumber
+         *
+         * Look up the card prefix in the list we know about
+         *
+         * @returns {object}
+         */
         var getType = function (ccnumber) {
             var card, prefix;
 
@@ -33,13 +40,17 @@ jQuery.Simplerenew = jQuery.extend({}, jQuery.Simplerenew, {
         };
 
         /**
-         * Nicely elegant luhn test! Thanks to:
-         * https://gist.github.com/DiegoSalazar/4075533
+         * @param {string} value
          *
          * Determine if a credit card number could be valid before submitting it for
          * real-time online authentication. Based on ANSI X4.13, the LUHN formula,
          * aka the Mod 10 algorithm is used to validate accurate credit card
          * numbers.
+         *
+         * Nicely elegant luhn test! Thanks to:
+         * https://gist.github.com/DiegoSalazar/4075533
+         *
+         * @returns {boolean}
          */
         var luhnTest = function (value) {
             // accept only digits, dashes or spaces
@@ -64,6 +75,14 @@ jQuery.Simplerenew = jQuery.extend({}, jQuery.Simplerenew, {
             return (nCheck % 10) == 0;
         };
 
+        /**
+         * @param {string} rawNumber
+         * @param {string} cvv
+         *
+         * Verify the security code only if we know the credit card type
+         *
+         * @returns {boolean}
+         */
         var verifyCVV = function (rawNumber, cvv) {
             var ccnumber = rawNumber.replace(/[\s-]/g, '');
             var card = getType(ccnumber);
@@ -73,6 +92,14 @@ jQuery.Simplerenew = jQuery.extend({}, jQuery.Simplerenew, {
             return true;
         };
 
+        /**
+         * @param {integer} ccmonth
+         * @param {integer} ccyear
+         *
+         * Valid expiration date is anytime after the end of current month
+         *
+         * @returns {boolean}
+         */
         var verifyDate = function (ccmonth, ccyear) {
             if (ccmonth > 0 && ccyear > 0) {
                 var now = new Date();
