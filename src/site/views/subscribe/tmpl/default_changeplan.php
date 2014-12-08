@@ -15,9 +15,9 @@ defined('_JEXEC') or die();
 $current = array_shift($this->subscriptions);
 
 ?>
-<?php if ($this->getParams()->get('show_page_heading', true)): ?>
+<?php if ($heading = $this->getHeading('COM_SIMPLERENEW_HEADING_CHANGE_PLAN')): ?>
 <div class="page-header">
-    <h1><?php echo $this->getHeading('COM_SIMPLERENEW_HEADING_CHANGE_PLAN'); ?></h1>
+    <h1><?php echo $heading; ?></h1>
 </div>
 <?php endif; ?>
 

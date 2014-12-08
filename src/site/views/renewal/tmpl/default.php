@@ -13,18 +13,21 @@ defined('_JEXEC') or die();
  * @var Simplerenew\Api\Subscription $subscription
  */
 $app = SimplerenewFactory::getApplication();
+
+$heading = $this->getHeading(
+    JText::plural(
+        'COM_SIMPLERENEW_HEADING_RENEWAL_UPDATE',
+        count($this->subscriptions),
+        false
+    )
+);
 ?>
 <div class="<?php echo $this->getPageClass('ost-container simplerenew-renewal'); ?>">
     <?php
-    if ($this->getParams()->get('show_page_heading', true)):
+    if ($heading):
         ?>
         <div class="page-header">
-            <h1>
-                <?php
-                echo $this->getHeading(
-                    JText::plural('COM_SIMPLERENEW_HEADING_RENEWAL_UPDATE', count($this->subscriptions), false)
-                ); ?>
-            </h1>
+            <h1><?php echo $heading; ?></h1>
         </div>
     <?php
     endif;

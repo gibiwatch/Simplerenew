@@ -62,15 +62,14 @@ abstract class SimplerenewViewSite extends JViewLegacy
      */
     protected function getHeading($default = null, $translate = true)
     {
-        if ($heading = $this->getParams()->get('page_heading')) {
-            return $heading;
-        }
+        $params = $this->getParams();
 
-        if ($translate) {
-            return JText::_($default);
+        if ($params->get('show_page_heading')) {
+            $heading = $params->get('page_heading');
+        } else {
+            $heading = $translate ? JText::_($default) : $default;
         }
-
-        return $default;
+        return $heading;
     }
 
     /**

@@ -9,9 +9,9 @@
 defined('_JEXEC') or die();
 ?>
 <div class="<?php echo $this->getPageClass('ost-container simplerenew-invoices'); ?>">
-    <?php if ($this->getParams()->get('show_page_heading', true)): ?>
+    <?php if ($heading = $this->getHeading('COM_SIMPLERENEW_HEADING_INVOICES')): ?>
         <div class="page-header">
-            <h1><?php echo $this->getHeading('COM_SIMPLERENEW_HEADING_INVOICES'); ?></h1>
+            <h1><?php echo $heading; ?></h1>
         </div>
     <?php endif; ?>
 
