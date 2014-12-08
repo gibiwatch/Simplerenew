@@ -1,5 +1,5 @@
 Simple Renew
-==============
+============
 
 Simple Renew manages renewable subscriptions to your site.
 
@@ -14,4 +14,4 @@ Simple Renew manages renewable subscriptions to your site.
 
 ## License
 
-[GNU General Public License v3 or later](http://www.gnu.org/copyleft/gpl.html)
+[GNU General Public License](http://www.gnu.org/copyleft/gpl.html)
