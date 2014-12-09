@@ -50,22 +50,12 @@ defined('_JEXEC') or die();
     </div>
     <!-- /.ost-section -->
 
-    <div class="ost-section ost-row-two">
+    <div class="ost-section ost-row-two m-bottom b-bottom">
         <div class="block3">
             <label><?php echo JText::_('COM_SIMPLERENEW_EMAIL'); ?></label>
         </div>
         <div class="block9">
             <?php echo $this->user->email; ?>
-        </div>
-    </div>
-    <!-- /.ost-section -->
-
-    <div class="ost-section ost-row-one m-bottom b-bottom">
-        <div class="block3">
-            <label><?php echo JText::_('COM_SIMPLERENEW_MEMBER_GROUP'); ?></label>
-        </div>
-        <div class="block9">
-            <?php echo $this->user->groupText ? : JText::_('COM_SIMPLERENEW_MEMBER_GROUP_NONE'); ?>
         </div>
     </div>
     <!-- /.ost-section -->
