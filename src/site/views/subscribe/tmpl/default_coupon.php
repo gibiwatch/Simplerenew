@@ -12,10 +12,16 @@ defined('_JEXEC') or die();
  * @var SimplerenewViewSubscribe $this
  */
 
-$visible = $this->state->get('coupon.default');
-JHtml::_('sr.sliders', 'div.coupon-toggle', $visible);
-
 $couponCode = $this->state->get('coupon.default');
+$planSelected = false;
+foreach ($this->plans as $plan) {
+    $planSelected |= $plan->selected;
+}
+
+JHtml::_('sr.sliders', 'div.coupon-toggle', $couponCode);
+if ($couponCode && $planSelected) {
+    JHtml::_('sr.onready', "jQuery('#coupon_code').valid();");
+}
 
 ?>
 <div class="ost-section">
