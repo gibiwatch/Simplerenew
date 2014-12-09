@@ -187,6 +187,13 @@
              * Custom methods
              */
             methods: {
+                email: {
+                    method: function (value, element) {
+                        var regex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+                        return this.optional(element) || regex.test(value);
+                    }
+                },
+
                 coupon: {
                     method: function (value, element) {
                         if (this.optional(element)) {
