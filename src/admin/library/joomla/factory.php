@@ -6,6 +6,7 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Joomla\Uri\Uri;
 use Simplerenew\Container;
 
 defined('_JEXEC') or die();
@@ -50,5 +51,19 @@ abstract class SimplerenewFactory extends JFactory
             self::$SimplerenewContainers[$key] = new Container($config);
         }
         return self::$SimplerenewContainers[$key];
+    }
+
+    /**
+     * @param string $uri
+     *
+     * @return Uri|JUri
+     */
+    public static function getURI($uri = 'SERVER')
+    {
+        if (class_exists('Joomla\\Uri\\Uri')) {
+            return new Uri($uri);
+        }
+
+        return JUri::getInstance($uri);
     }
 }

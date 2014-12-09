@@ -29,25 +29,7 @@ class plgSystemSimplerenew extends JPlugin
 
     public function onAfterInitialise()
     {
-        // Catch push notifications from the gateway and direct to the receiver
-        $app = JFactory::getApplication();
-        if ($app->isSite()) {
-            $uri  = JUri::getInstance();
-            if (preg_match('#/simplerenew/notify/?$#', $uri->getPath())) {
-                $vars = array(
-                    'option' => 'com_simplerenew',
-                    'task'   => 'notify.receive',
-                    'format' => 'raw'
-                );
-                foreach ($vars as $var => $value) {
-                    $app->input->set($var, $value);
-                }
-                if ($app->getRouter()->getMode() == JROUTER_MODE_SEF) {
-                    $uri->setPath('/component/simplerenew');
-                    $uri->setQuery($vars);
-                }
-            }
-        }
+        $this->catchNotify();
     }
 
     public function onAfterRoute()
@@ -75,19 +57,18 @@ class plgSystemSimplerenew extends JPlugin
             $app->isAdmin()
             && $option == 'com_simplerenew'
             && $view == 'plans'
+            && $this->isInstalled()
         ) {
-            if ($this->isInstalled()) {
-                $planSync = abs((int)$this->params->get('planSync', 1)) * 60;
+            $planSync = abs((int)$this->params->get('planSync', 1)) * 60;
 
-                if ($planSync) {
-                    $componentParams = SimplerenewComponentHelper::getParams();
-                    $lastPlanSync    = $componentParams->get('log.lastPlanSync', 0);
-                    $nextPlanSync    = $lastPlanSync + $planSync;
+            if ($planSync) {
+                $componentParams = SimplerenewComponentHelper::getParams();
+                $lastPlanSync    = $componentParams->get('log.lastPlanSync', 0);
+                $nextPlanSync    = $lastPlanSync + $planSync;
 
-                    if ($nextPlanSync < time()) {
-                        $messages = SimplerenewHelper::syncPlans('ad');
-                        SimplerenewHelper::enqueueMessages($messages);
-                    }
+                if ($nextPlanSync < time()) {
+                    $messages = SimplerenewHelper::syncPlans('ad');
+                    SimplerenewHelper::enqueueMessages($messages);
                 }
             }
         }
@@ -143,10 +124,34 @@ class plgSystemSimplerenew extends JPlugin
             require_once $path;
         }
 
-        // Make sure component language file loaded
-        SimplerenewFactory::getLanguage()
-            ->load('com_simplerenew', SIMPLERENEW_ADMIN);
-
         return true;
+    }
+
+    /**
+     * Catch notification messages from the gateway
+     *
+     * @throws Exception
+     * @return void
+     */
+    protected function catchNotify()
+    {
+        $app = JFactory::getApplication();
+        if ($app->isSite() && $this->isInstalled()) {
+            $uri = SimplerenewFactory::getURI();
+            if (preg_match('#/simplerenew/notify/?$#', $uri->getPath())) {
+                $vars = array(
+                    'option' => 'com_simplerenew',
+                    'task'   => 'notify.receive',
+                    'format' => 'raw'
+                );
+                foreach ($vars as $var => $value) {
+                    $app->input->set($var, $value);
+                }
+                if ($app->getRouter()->getMode() == JROUTER_MODE_SEF) {
+                    $uri->setPath('/component/simplerenew');
+                    $uri->setQuery($vars);
+                }
+            }
+        }
     }
 }
