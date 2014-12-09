@@ -34,6 +34,7 @@ class plgSystemSimplerenew extends JPlugin
 
     public function onAfterRoute()
     {
+        $this->revertSSL();
         $this->autoSyncPlans();
     }
 
@@ -150,6 +151,40 @@ class plgSystemSimplerenew extends JPlugin
                 if ($app->getRouter()->getMode() == JROUTER_MODE_SEF) {
                     $uri->setPath('/component/simplerenew');
                     $uri->setQuery($vars);
+                }
+            }
+        }
+    }
+
+    /**
+     * When desired, switch back to http after coming from a Simplerenew SSL form
+     *
+     * @throws Exception
+     * @return void
+     */
+    protected function revertSSL()
+    {
+        $app = JFactory::getApplication();
+        if ($app->isSite() && $this->params->get('revertSSL', 1)) {
+            $uri = JUri::getInstance();
+
+            if ($uri->getScheme() == 'https') {
+                $option = $app->input->getCmd('option');
+
+                if ($option == 'com_simplerenew') {
+                    $app->setUserState('simplerenew.ssl.reset', true);
+
+                } elseif ($reset = $app->getUserState('simplerenew.ssl.reset', false)) {
+                    $app->setUserState('simplerenew.ssl.reset', false);
+
+                    if ($menu = $app->getMenu()->getActive()) {
+                        $reset = ($menu->params->get('secure') != 1);
+                    }
+
+                    if ($reset) {
+                        $uri->setScheme('http');
+                        $app->redirect((string)$uri);
+                    }
                 }
             }
         }

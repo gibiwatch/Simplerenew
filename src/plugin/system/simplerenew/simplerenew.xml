@@ -2,12 +2,12 @@
 <extension version="2.5" type="plugin" group="system" method="upgrade">
     <name>plg_system_simplerenew</name>
     <author>OSTraining</author>
-    <creationDate>November 24 2014</creationDate>
+    <creationDate>December 9, 2014</creationDate>
     <copyright>Copyright (C) 2014 OSTraining.com</copyright>
     <license>GPL v3</license>
     <authorEmail>info@ostraining.com</authorEmail>
     <authorUrl>http://www.ostraining.com</authorUrl>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <description>plg_system_simplerenew_description</description>
 
     <files>
@@ -24,6 +24,16 @@
                     label="PLG_SYSTEM_SIMPLERENEW_PLAN_SYNC_LABEL"
                     description="PLG_SYSTEM_SIMPLERENEW_PLAN_SYNC_DESC"
                     default="1"/>
+
+                <field
+                    name="revertSSL"
+                    type="list"
+                    label="PLG_SYSTEM_SIMPLERENEW_REVERT_SSL_LABEL"
+                    description="PLG_SYSTEM_SIMPLERENEW_REVERT_SSL_DESC"
+                    default="1">
+                    <option value="0">JDISABLED</option>
+                    <option value="1">JENABLED</option>
+                </field>
             </fieldset>
         </fields>
     </config>
