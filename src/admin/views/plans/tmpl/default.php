@@ -52,7 +52,7 @@ if ($saveOrder) {
 echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this));
 if (empty($this->items)): ?>
     <div class="alert alert-no-items">
-        <?php echo JText::_('JGLOBAL_NO_MATCHING_RESULTS'); ?>
+        <?php echo JText::_('COM_SIMPLERENEW_NO_MATCHING_RESULTS'); ?>
     </div>
 <?php
 else:
