@@ -123,6 +123,10 @@ class plgSystemSimplerenew extends JPlugin
                 return false;
             }
             require_once $path;
+
+            // Make sure component language file loaded
+            SimplerenewFactory::getLanguage()
+                ->load('com_simplerenew', SIMPLERENEW_ADMIN);
         }
 
         return true;
