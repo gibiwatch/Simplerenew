@@ -39,7 +39,7 @@ class SimplerenewViewAccount extends SimplerenewViewSite
         $allowMultiple = $this->getParams()->get('basic.allowMultiple');
         if ($allowMultiple) {
             // On multi-sub sites we won't be interested in expired subscriptions
-            $model = $this->getModel();
+            $model       = $this->getModel();
             $currentSubs = Subscription::STATUS_ACTIVE | Subscription::STATUS_CANCELED;
             $model->setState('status.subscription', $currentSubs);
         }
@@ -66,5 +66,37 @@ class SimplerenewViewAccount extends SimplerenewViewSite
         }
 
         parent::display($tpl);
+    }
+
+    /**
+     * Load a plan safely without throwing any errors
+     *
+     * @param string $code
+     *
+     * @return Plan
+     */
+    protected function getPlan($code)
+    {
+        /** @var Plan $plan */
+        $plan = SimplerenewFactory::getContainer()->getPlan();
+        try {
+            $plan->load($code);
+
+        } catch (Simplerenew\Exception\NotFound $e) {
+            $error = JText::sprintf('COM_SIMPLERENEW_ERROR_PLAN_NOT_FOUND', $code);
+
+        } catch (Exception $e) {
+            $error = JText::sprintf('COM_SIMPLERENEW_ERROR_PLAN_LOAD', $code);
+        }
+
+        if (!empty($error)) {
+            SimplerenewFactory::getApplication()
+                ->enqueueMessage($error, 'error');
+
+            $plan->code = $code;
+            $plan->name = $code;
+        }
+
+        return $plan;
     }
 }

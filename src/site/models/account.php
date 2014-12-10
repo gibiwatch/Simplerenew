@@ -8,8 +8,6 @@
 
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Billing;
-use Simplerenew\Api\Plan;
-use Simplerenew\Api\Subscription;
 use Simplerenew\Container;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\User\User;

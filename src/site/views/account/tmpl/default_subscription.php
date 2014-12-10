@@ -18,7 +18,7 @@ $container = SimplerenewFactory::getContainer();
 
 if ($this->subscriptions):
     foreach ($this->subscriptions as $subscription):
-        $plan = $container->getPlan()->load($subscription->plan);
+        $plan = $this->getPlan($subscription->plan);
         ?>
         <h3>
             <span><i class="fa fa-check"></i></span>
