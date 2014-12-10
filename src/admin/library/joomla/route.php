@@ -32,6 +32,32 @@ abstract class SimplerenewRoute
     }
 
     /**
+     * Build the correct link to a com_content article
+     *
+     * @param $articleId
+     *
+     * @return string
+     * @throws Exception
+     */
+    public static function fromArticleId($articleId)
+    {
+        $contentId = JComponentHelper::getComponent('com_content')->id;
+        $menuItems = JFactory::getApplication()->getMenu()->getItems('component_id', $contentId);
+
+        $link = 'index.php?option=com_content&view=article&id=' . $articleId;
+        foreach ($menuItems as $item) {
+            list(, $query) = explode('?', $item->link);
+            parse_str($query, $query);
+
+            if (!empty($query['article']) && !empty($query['id']) && $query['id'] == $articleId) {
+                $link = $item->link;
+            }
+        }
+
+        return $link;
+    }
+
+    /**
      * Get the query array for the selected view,layout
      *
      * @param string $view
