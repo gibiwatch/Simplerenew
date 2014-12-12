@@ -133,7 +133,7 @@ class com_simplerenewInstallerScript extends AbstractScript
                             $isNew   = empty($current);
 
                             $typeName = trim(($folder ?: '') . ' ' . $type);
-                            $text     = 'COM_SIMPLERENEW_RELATED_' . ($isNew ? 'INSTALL' : 'UPDATE');
+                            $text     = 'LIB_ALLEDIAINSTALLER_RELATED_' . ($isNew ? 'INSTALL' : 'UPDATE');
                             if ($installer->install($path)) {
                                 $this->setMessage(JText::sprintf($text, $typeName, $element));
                                 if ($isNew) {
@@ -170,7 +170,7 @@ class com_simplerenewInstallerScript extends AbstractScript
                     foreach ($extensions as $element => $settings) {
                         if ($settings[1]) {
                             if ($current = $this->findExtension($type, $element, $folder)) {
-                                $msg     = 'COM_SIMPLERENEW_RELATED_UNINSTALL';
+                                $msg     = 'LIB_ALLEDIAINSTALLER_RELATED_UNINSTALL';
                                 $msgtype = 'message';
                                 if (!$installer->uninstall($current->type, $current->extension_id)) {
                                     $msg .= '_FAIL';
