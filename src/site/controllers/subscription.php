@@ -113,7 +113,14 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             return;
         }
 
-        $link = SimplerenewRoute::get('account');
+        /** @var SimplerenewModelSubscribe $model */
+        $model = $this->getModel('Subscribe', 'SimplerenewModel');
+        if ($itemid = $model->getParams()->get('newSubscriptionRedirect')) {
+            $link = 'index.php?Itemid=' . (int)$itemid;
+        } else {
+            $link = SimplerenewRoute::get('account');
+        }
+
         $this->setRedirect(JRoute::_($link));
     }
 
