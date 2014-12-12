@@ -13,6 +13,16 @@ jimport('joomla.plugin.plugin');
 class plgSystemSimplerenew extends JPlugin
 {
     /**
+     * @var array view/layouts enforcing SSL
+     *            Format: array(<view> => [array(<layout1>, <layout2>...)])
+     *            Use array('*') to select all layouts for a view
+     */
+    protected $sslViews = array(
+        'account'   => array('edit'),
+        'subscribe' => array('*')
+    );
+
+    /**
      * @var JTableExtension
      */
     protected $extensionTable = null;
@@ -173,9 +183,13 @@ class plgSystemSimplerenew extends JPlugin
             $uri = JUri::getInstance();
 
             if ($uri->getScheme() == 'https') {
-                $option = $app->input->getCmd('option');
+                $option  = $app->input->getCmd('option');
+                $view    = $app->input->getCmd('view');
+                $layout  = $app->input->getCmd('layout');
+                $sslView = isset($this->sslViews[$view]) ? $this->sslViews[$view] : array();
+                $target  = array_intersect($sslView, array('*', $layout));
 
-                if ($option == 'com_simplerenew') {
+                if ($option == 'com_simplerenew' && $target) {
                     $app->setUserState('simplerenew.ssl.reset', true);
 
                 } elseif ($reset = $app->getUserState('simplerenew.ssl.reset', false)) {
