@@ -23,7 +23,7 @@
 
         <field
             name="code"
-            type="text"
+            type="plancode"
             label="COM_SIMPLERENEW_PLAN_CODE_LABEL"
             description="COM_SIMPLERENEW_PLAN_CODE_DESC"
             hint="COM_SIMPLERENEW_PLAN_CODE_PLACEHOLDER"/>

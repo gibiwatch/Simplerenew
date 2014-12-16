@@ -46,26 +46,8 @@ class SimplerenewTablePlans extends SimplerenewTable
         try {
             $plan->load($this->code);
         } catch (NotFound $e) {
-            // We need special handling if this involves a code change
-            // We can't change the code on an existing plan, so we delete the old one
-            if ($this->id > 0) {
-                $oldLocal = clone $this;
-                $oldLocal->load($this->id);
-                if ($oldLocal->code != $this->code) {
-                    $oldPlan = clone $plan;
-                    try {
-                        $oldPlan->load($oldLocal->code);
-                        $oldPlan->delete();
-                    } catch (NotFound $e) {
-                        // Not good, but let's ignore it
-                    } catch (Exception $e) {
-                        $this->setError(
-                            JText::sprintf('COM_SIMPLERENEW_ERROR_GATEWAY_FAILURE', $e->getMessage())
-                        );
-                        return false;
-                    }
-                }
-            }
+            // The safest thing to do here is create a new local plan
+            $this->id = null;
         }
 
         $plan->setProperties($this->getProperties());
@@ -176,7 +158,9 @@ class SimplerenewTablePlans extends SimplerenewTable
 
     public function store($updateNulls = false)
     {
-        $this->code = SimplerenewApplicationHelper::stringURLSafe($this->name);
+        if (empty($this->code)) {
+            $this->code = SimplerenewApplicationHelper::stringURLSafe($this->name);
+        }
 
         // Verify that the code is unique
         $db    = $this->getDbo();

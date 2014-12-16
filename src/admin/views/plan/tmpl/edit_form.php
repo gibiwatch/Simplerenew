@@ -36,9 +36,11 @@ $input = $app->input;
         ?>
 
         <p><?php
-            $code = $this->form->getValue('code');
-            $lang = $code ? 'COM_SIMPLERENEW_NARRATIVE_PLAN_NAMECODE' : 'COM_SIMPLERENEW_NARRATIVE_PLAN_NAME';
-            echo JText::sprintf($lang, $this->form->getInput('name'), $code);
+            echo JText::sprintf(
+                'COM_SIMPLERENEW_NARRATIVE_PLAN_NAME',
+                $this->form->getInput('name'),
+                $this->form->getInput('code')
+            );
             ?>
         </p>
 
