@@ -179,27 +179,34 @@ class plgSystemSimplerenew extends JPlugin
     protected function revertSSL()
     {
         $app = JFactory::getApplication();
-        if ($app->isSite() && $this->params->get('revertSSL', 1)) {
+
+        $revert = $this->params->get('revertSSL', 0);
+        if ($app->isSite() && $revert) {
             $uri = JUri::getInstance();
 
             if ($uri->getScheme() == 'https') {
-                $option  = $app->input->getCmd('option');
-                $view    = $app->input->getCmd('view');
-                $layout  = $app->input->getCmd('layout');
+                $option = $app->input->getCmd('option');
+                $view   = $app->input->getCmd('view');
+                $layout = $app->input->getCmd('layout');
+
                 $sslView = isset($this->sslViews[$view]) ? $this->sslViews[$view] : array();
                 $target  = array_intersect($sslView, array('*', $layout));
 
                 if ($option == 'com_simplerenew' && $target) {
                     $app->setUserState('simplerenew.ssl.reset', true);
 
-                } elseif ($reset = $app->getUserState('simplerenew.ssl.reset', false)) {
-                    $app->setUserState('simplerenew.ssl.reset', false);
-
-                    if ($menu = $app->getMenu()->getActive()) {
-                        $reset = ($menu->params->get('secure') != 1);
-                    }
+                } else {
+                    $menu  = $app->getMenu()->getActive();
+                    $reset = !$target
+                        && $menu
+                        && $menu->params->get('secure') != 1
+                        && $app->getUserState('simplerenew.ssl.reset', false)
+                        && $app->input->getCmd('format', 'html') == 'html'
+                        && $app->input->getMethod() != 'POST'
+                        && $app->input->getCmd('tmpl', '') != 'component';
 
                     if ($reset) {
+                        $app->setUserState('simplerenew.ssl.reset', false);
                         $uri->setScheme('http');
                         $app->redirect((string)$uri);
                     }
