@@ -159,7 +159,10 @@ class SimplerenewTablePlans extends SimplerenewTable
     public function store($updateNulls = false)
     {
         if (empty($this->code)) {
-            $this->code = SimplerenewApplicationHelper::stringURLSafe($this->name);
+            $this->code = $this->name;
+        }
+        if (empty($this->id)) {
+            $this->code = SimplerenewApplicationHelper::stringURLSafe($this->code);
         }
 
         // Verify that the code is unique
