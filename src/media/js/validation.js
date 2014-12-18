@@ -63,6 +63,30 @@
         });
     };
 
+    $.fn.disableSubmit = function(state) {
+        var buttons = $(this).find(':button[type=submit]'),
+            enabled = buttons.find('.ost-text-enabled'),
+            disabled = buttons.find('.ost-text-disabled');
+
+        if ($.type(state) === 'undefined' || state) {
+            buttons.prop('disabled', true).css('cursor', 'default');
+            enabled.hide();
+            disabled.show();
+
+        } else {
+            buttons.prop('disabled', false).css('cursor', 'pointer');
+            enabled.show();
+            disabled.hide();
+        }
+
+        return this;
+    };
+
+    $.fn.enableSubmit = function(state) {
+        state = $.type(state) === 'undefined' || state;
+        return $(this).disableSubmit(!state);
+    };
+
     /**
      * This will give us a chance to validate no-name fields like
      * CC Number and CVV
@@ -122,12 +146,14 @@
                 if (form) {
                     var gateway = this.gateway;
 
-                    // Store the CSRF Token if there is one
+                    // Store the CSRF Token and setup submit buttons
                     var csrfToken = form.find('span#token input:hidden');
-                    form.data('csrfToken', {
-                        name: csrfToken.attr('name'),
-                        value: csrfToken.val()
-                    });
+                    form
+                        .data('csrfToken', {
+                            name: csrfToken.attr('name'),
+                            value: csrfToken.val()
+                        })
+                        .enableSubmit();
 
                     // Load custom methods
                     $.each(this.methods, function (name, method) {
@@ -142,10 +168,12 @@
                     options = $.extend(this.options, options, {
                         submitHandler: function (form) {
 
-                            // Clear out any temporary names to prevent being sent to server
-                            $(form).find(':input').each(function (idx, element) {
-                                $(element).tempName(true);
-                            });
+                            // Disable submit, Clear temporary names to prevent being sent to server
+                            $(form)
+                                .disableSubmit()
+                                .find(':input').each(function (idx, element) {
+                                    $(element).tempName(true);
+                                });
 
                             if (typeof gateway.submit === 'function') {
                                 // Gateway is handling form submit

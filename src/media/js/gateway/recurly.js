@@ -95,6 +95,7 @@
 
                     recurly.paypal({description: description}, function (err, token) {
                         if (err) {
+                            $(form).enableSubmit();
                             if (err.code != 'paypal-canceled') {
                                 alert(err.message);
                             }
@@ -112,6 +113,7 @@
                     if (number) {
                         recurly.token(form, function (err, token) {
                             if (err) {
+                                $(form).enableSubmit();
                                 alert(err.message);
                             } else {
                                 billing_token.val(token.id);
