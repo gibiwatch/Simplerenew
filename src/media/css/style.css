@@ -64,6 +64,14 @@ span.simplerenew-plan:hover{
     margin-top: -1px;
 }
 
+.ost-text-disabled{
+    display: none;
+}
+
+.ost-text-enabled{
+    display: inline;
+}
+
 /* Help classes
  ========================================================================== */
 .m-bottom {
