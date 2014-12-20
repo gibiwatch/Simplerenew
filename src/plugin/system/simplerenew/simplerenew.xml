@@ -7,34 +7,11 @@
     <license>GPL v3</license>
     <authorEmail>info@ostraining.com</authorEmail>
     <authorUrl>http://www.ostraining.com</authorUrl>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
     <description>plg_system_simplerenew_description</description>
 
     <files>
         <folder>language</folder>
         <filename plugin="simplerenew">simplerenew.php</filename>
     </files>
-
-    <config>
-        <fields name="params">
-            <fieldset name="basic">
-                <field
-                    name="planSync"
-                    type="text"
-                    label="PLG_SYSTEM_SIMPLERENEW_PLAN_SYNC_LABEL"
-                    description="PLG_SYSTEM_SIMPLERENEW_PLAN_SYNC_DESC"
-                    default="1"/>
-
-                <field
-                    name="revertSSL"
-                    type="list"
-                    label="PLG_SYSTEM_SIMPLERENEW_REVERT_SSL_LABEL"
-                    description="PLG_SYSTEM_SIMPLERENEW_REVERT_SSL_DESC"
-                    default="0">
-                    <option value="0">JDISABLED</option>
-                    <option value="1">JENABLED</option>
-                </field>
-            </fieldset>
-        </fields>
-    </config>
 </extension>

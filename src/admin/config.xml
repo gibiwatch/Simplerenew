@@ -193,6 +193,24 @@
                 <option value="0">JNO</option>
                 <option value="1">JYES</option>
             </field>
+
+            <field
+                name="revertSSL"
+                type="list"
+                label="COM_SIMPLERENEW_CONFIG_REVERT_SSL_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_REVERT_SSL_DESC"
+                default="0">
+                <option value="0">JDISABLED</option>
+                <option value="1">JENABLED</option>
+            </field>
+
+            <field
+                name="planSync"
+                type="text"
+                label="COM_SIMPLERENEW_CONFIG_PLAN_SYNC_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_PLAN_SYNC_DESC"
+                size="3"
+                default="1"/>
         </fieldset>
     </fields>
 

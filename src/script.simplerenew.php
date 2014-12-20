@@ -202,16 +202,27 @@ class com_simplerenewInstallerScript extends AbstractScript
         $defaultGroup = JComponentHelper::getParams('com_users')->get('new_usertype');
 
         if ($type == 'update') {
-            // v0.0.47: Clear up old setting that might be invalid
-            if ($params->get('basic.defaultGroup') == $defaultGroup) {
-                $params->set('basic.defaultGroup', '');
-                $setParams = true;
-            }
+            // v0.3.9: Move system plugin parameters to component
+            if ($plugin = JPluginHelper::getPlugin('system', 'simplerenew')) {
+                $plugin = JTable::getInstance('extension');
+                $plugin->load(
+                    array(
+                        'type' => 'plugin',
+                        'element' => 'simplerenew',
+                        'folder' => 'system'
+                    )
+                );
 
-            $paramArray = $params->toArray();
-            if (!isset($paramArray['basic']['billingAddress'])) {
-                $params->set('basic.billingAddress', $params->get('account.billingAddress'));
-                $setParams = true;
+                if ($plugin->extension_id > 0) {
+                    if ($plugin->params) {
+                        $pluginParams = array('advanced' => json_decode($plugin->params, true));
+                        $merged = json_encode(array_merge_recursive($params->toArray(), $pluginParams));
+                        $params = new JRegistry($merged);
+                        $plugin->params = '';
+
+                        $setParams = true;
+                    }
+                }
             }
         }
 

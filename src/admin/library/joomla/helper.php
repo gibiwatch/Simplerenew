@@ -147,7 +147,7 @@ abstract class SimplerenewHelper
                 $message->warnings[] = JText::_('COM_SIMPLERENEW_WARN_GROUPS_EQUAL');
             }
 
-            $db    = SimplerenewFactory::getDbo();
+            $db = SimplerenewFactory::getDbo();
 
             // Check for plans set to the expiration group
             $plans = $db
@@ -313,7 +313,7 @@ abstract class SimplerenewHelper
         // Update Sync time
         $table = self::getExtensionTable();
         $table->params->set('log.lastPlanSync', time());
-        $table->params = $params->toString();
+        $table->params = $table->params->toString();
         $table->store();
 
         // Fill out messaging object
