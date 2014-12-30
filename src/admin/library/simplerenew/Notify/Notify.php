@@ -175,16 +175,12 @@ class Notify extends Object
             $this->subscription_id = $this->subscription->id;
         }
 
-        $handlerClass = '\\Simplerenew\\Notify\\Handler\\' . ucfirst(strtolower($this->type));
-        if (!class_exists($handlerClass)) {
+        if ($handler = $this->getHandler($this->type)) {
+            $this->handler  = get_class($handler);
+            $this->response = $handler->execute($this);
+        } else {
             $this->handler  = 'None';
             $this->response = $this->handler;
-        } else {
-            /** @var HandlerInterface $handler */
-            $handler       = new $handlerClass();
-            $this->handler = get_class($handler);
-
-            $this->response = $handler->execute($this) ? : 'None';
         }
 
         Logger::addEntry($this);
@@ -196,6 +192,24 @@ class Notify extends Object
     public function getContainer()
     {
         return $this->container;
+    }
+
+    /**
+     * @param string $className
+     *
+     * @return null|HandlerInterface
+     */
+    public function getHandler($className)
+    {
+        if (strpos($className, '\\') === false) {
+            $className = '\\Simplerenew\\Notify\\Handler\\' . ucfirst(strtolower($className));
+        }
+
+        if (class_exists($className)) {
+            return new $className();
+        }
+
+        return null;
     }
 
     /**
