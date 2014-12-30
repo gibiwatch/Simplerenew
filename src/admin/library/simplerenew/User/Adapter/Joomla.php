@@ -425,8 +425,7 @@ class Joomla implements UserInterface
         $this->load($parent);
 
         $localPlans = $this->getLocalPlans();
-
-        $newGroups = array_flip(array_values($parent->groups));
+        $newGroups  = array_flip(array_values($parent->groups));
 
         $defaultId = $this->userParams->get('new_usertype');
         if (isset($newGroups[$defaultId])) {
@@ -441,7 +440,7 @@ class Joomla implements UserInterface
         }
         $newGroups = array_keys($newGroups);
         if (count($newGroups) == 0) {
-            $newGroups[] = $parent->getExpirationGroup();
+            $newGroups[] = $parent->getExpirationGroup() ?: $defaultId;
         }
 
         $parent->groups = $newGroups;

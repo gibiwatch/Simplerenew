@@ -81,10 +81,9 @@ class User extends Object
     {
         $this->adapter = $adapter;
 
-        if (empty($config['expirationGroup'])) {
-            throw new Exception('Configuration problem - Expiration user group is required');
+        if (!empty($config['expirationGroup'])) {
+            $this->expirationGroup = $config['expirationGroup'];
         }
-        $this->expirationGroup = $config['expirationGroup'];
     }
 
     /**
@@ -251,6 +250,8 @@ class User extends Object
 
     /**
      * Returns the user group used when a subscription expires
+     *
+     * @return null|int
      */
     public function getExpirationGroup()
     {
