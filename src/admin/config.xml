@@ -205,6 +205,16 @@
             </field>
 
             <field
+                name="disableRegistration"
+                type="list"
+                label="COM_SIMPLERENEW_CONFIG_DISABLE_REGISTRATION_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_DISABLE_REGISTRATION_DESC"
+                default="1">
+                <option value="0">COM_SIMPLERENEW_OPTION_CONFIG_DEFAULT</option>
+                <option value="1">COM_SIMPLERENEW_OPTION_SIMPLERNEW_REGISTRATION</option>
+            </field>
+
+            <field
                 name="planSync"
                 type="text"
                 label="COM_SIMPLERENEW_CONFIG_PLAN_SYNC_LABEL"

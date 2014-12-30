@@ -46,6 +46,7 @@ class plgSystemSimplerenew extends JPlugin
 
     public function onAfterRoute()
     {
+        $this->redirectRegister();
         $this->revertSSL();
         $this->autoSyncPlans();
     }
@@ -191,6 +192,27 @@ class plgSystemSimplerenew extends JPlugin
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Catch attempts to go to standard Joomla registration form if requested
+     *
+     * @throws Exception
+     */
+    protected function redirectRegister()
+    {
+        $app    = JFactory::getApplication();
+        $option = $app->input->getCmd('option');
+        $view   = $app->input->getCmd('view');
+        if (
+            $app->isSite()
+            && $option == 'com_users'
+            && $view == 'registration'
+            && $this->params->get('advanced.disableRegistration', 1)
+            && $this->isInstalled()
+        ) {
+            $app->redirect(JRoute::_(SimplerenewRoute::get('subscribe')));
         }
     }
 }
