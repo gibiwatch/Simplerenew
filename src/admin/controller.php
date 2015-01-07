@@ -11,12 +11,4 @@ defined('_JEXEC') or die();
 class SimplerenewController extends SimplerenewControllerBase
 {
     protected $default_view = 'plans';
-
-    public function __construct($config = array())
-    {
-        parent::__construct($config);
-
-        $notices = SimplerenewHelper::getNotices();
-        SimplerenewHelper::enqueueMessages($notices);
-    }
 }

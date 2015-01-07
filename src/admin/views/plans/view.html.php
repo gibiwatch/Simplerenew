@@ -48,6 +48,10 @@ class SimplerenewViewPlans extends SimplerenewViewAdmin
         }
 
         $this->setToolbar();
+
+        $notices = SimplerenewHelper::getNotices();
+        SimplerenewHelper::enqueueMessages($notices);
+
         parent::display($tpl);
     }
 
