@@ -17,15 +17,16 @@ JHtml::_('stylesheet', 'com_simplerenew/admin.css', null, true);
 
 // Setup for configuration options
 $optionsLink = 'index.php?option=com_config&view=component&component=com_simplerenew';
-if (version_compare(JVERSION, '3', 'ge')) {
-    $optionsAttribs = 'class ="btn btn-small"';
-} else {
+if (version_compare(JVERSION, '3.0', 'lt')) {
     JHtml::_('behavior.modal');
     $optionsAttribs = array(
         'class' => 'btn btn-small modal',
         'rel'   => "{handler: 'iframe', size: {x: 875, y: 550}, onClose: function() {}}"
     );
     $optionsLink .= '&tmpl=component';
+
+} else {
+    $optionsAttribs = 'class ="btn btn-small"';
 }
 
 $status = new SimplerenewStatus();

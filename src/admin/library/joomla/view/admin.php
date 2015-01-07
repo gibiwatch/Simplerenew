@@ -22,11 +22,22 @@ abstract class SimplerenewViewAdmin extends SimplerenewView
         $this->state = $this->get('State');
     }
 
+    /**
+     * Admin display to handle differences between Joomla 2.5 and 3.x
+     *
+     * @param null $tpl
+     *
+     * @throws Exception
+     * @return void
+     */
     public function display($tpl = null)
     {
         $this->displayHeader();
 
-        if (version_compare(JVERSION, '3.0', 'ge')) {
+        if (version_compare(JVERSION, '3.0', 'lt')) {
+            parent::display($tpl);
+
+        } else {
             $hide    = SimplerenewFactory::getApplication()->input->getBool('hidemainmenu', false);
             $sidebar = count(JHtmlSidebar::getEntries()) + count(JHtmlSidebar::getFilters());
             if (!$hide && $sidebar > 0) {
@@ -36,22 +47,27 @@ abstract class SimplerenewViewAdmin extends SimplerenewView
                     '</div>',
                     '<div id="j-main-container" class="span10">'
                 );
+
             } else {
-                $start = array(
-                    '<div id="j-main-container">'
-                );
+                $start = array('<div id="j-main-container">');
             }
 
             echo join("\n", $start) . "\n";
             parent::display($tpl);
             echo "\n</div>";
-        } else {
-            parent::display($tpl);
         }
 
         $this->displayFooter();
     }
 
+    /**
+     * Load different layout depending on Joomla 2.5 vs 3.x
+     * For default layout, the j2 version is not required.
+     *
+     * @TODO: Test for existence of j2 non-default layout
+     *
+     * @return string
+     */
     public function getLayout()
     {
         $layout = parent::getLayout();
@@ -109,7 +125,7 @@ abstract class SimplerenewViewAdmin extends SimplerenewView
      *
      * @param string $fieldSet
      * @param array  $sameLine
-     * @param bool $tabbed
+     * @param bool   $tabbed
      *
      * @return string
      */
@@ -123,10 +139,10 @@ abstract class SimplerenewViewAdmin extends SimplerenewView
                 $name  = $fieldSets[$fieldSet]->name;
                 $label = $fieldSets[$fieldSet]->label;
 
-                if (version_compare(JVERSION, '3', 'ge')) {
-                    $html = $this->renderFieldsetJ3($name, $label, $sameLine, $tabbed);
-                } else {
+                if (version_compare(JVERSION, '3.0', 'lt')) {
                     $html = $this->renderFieldsetJ2($name, $label, $sameLine, $tabbed);
+                } else {
+                    $html = $this->renderFieldsetJ3($name, $label, $sameLine, $tabbed);
                 }
             }
         }
@@ -155,7 +171,7 @@ abstract class SimplerenewViewAdmin extends SimplerenewView
                 '<div class="controls">',
                 $field->input
             );
-            $html = array_merge($html, $fieldHtml);
+            $html      = array_merge($html, $fieldHtml);
 
             if (isset($sameLine[$field->fieldname])) {
                 $html[] = ' ' . $this->form->getField($sameLine[$field->fieldname])->input;
@@ -191,7 +207,7 @@ abstract class SimplerenewViewAdmin extends SimplerenewView
             $fieldHtml = array(
                 '<li>' . $field->label . $field->input . '</li>'
             );
-            $html = array_merge($html, $fieldHtml);
+            $html      = array_merge($html, $fieldHtml);
 
             if (isset($sameLine[$field->fieldname])) {
                 $html[] = ' ' . $this->form->getField($sameLine[$field->fieldname])->input;

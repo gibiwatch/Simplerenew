@@ -36,7 +36,7 @@ class JFormFieldPlanAccess extends JFormFieldPlans
             'SELECT' => $this->fieldname . '-select'
         );
 
-        if (version_compare(JVERSION, '3', 'lt')) {
+        if (version_compare(JVERSION, '3.0', 'lt')) {
             JHtml::_('behavior.tooltip');
         } else {
             JHtml::_('bootstrap.tooltip');
@@ -145,10 +145,10 @@ class JFormFieldPlanAccess extends JFormFieldPlans
         $plans = $this->getOptions();
         $html  = array();
 
-        if (version_compare(JVERSION, '3', 'ge')) {
-            $html[] = $this->pageDescription(JText::_('COM_SIMPLERENEW_PLANACCESS_SELECT_DESC'));
-        } else {
+        if (version_compare(JVERSION, '3.0', 'lt')) {
             $html[] = '<br style="clear: both;"/>';
+        } else {
+            $html[] = $this->pageDescription(JText::_('COM_SIMPLERENEW_PLANACCESS_SELECT_DESC'));
         }
 
         $class  = sprintf('class="%s"', empty($this->class) ? 'checkboxes' : 'checkboxes ' . $this->class);

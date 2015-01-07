@@ -49,9 +49,7 @@ abstract class JHtmlSr
         if ($params->get('advanced.jquery', 1)) {
             // Only load once
             if (empty(static::$jqueryLoaded[__METHOD__])) {
-                if (version_compare(JVERSION, '3', 'ge')) {
-                    JHtml::_('jquery.framework', $noConflict, $debug);
-                } else {
+                if (version_compare(JVERSION, '3.0', 'lt')) {
                     // pre 3.0 manual loading
 
                     // If no debugging value is set, use the configuration setting
@@ -66,6 +64,8 @@ abstract class JHtmlSr
                     if ($noConflict) {
                         JHtml::_('script', 'com_simplerenew/jquery-noconflict.js', false, true, false, false, false);
                     }
+                } else {
+                    JHtml::_('jquery.framework', $noConflict, $debug);
                 }
             }
         }

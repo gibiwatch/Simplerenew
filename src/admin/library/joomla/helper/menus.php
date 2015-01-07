@@ -200,6 +200,7 @@ class SimplerenewHelperMenus
     {
         if (class_exists('SimplerenewApplicationHelper')) {
             return SimplerenewApplicationHelper::stringURLSafe($string);
+
         } elseif (version_compare(JVERSION, '3.0', 'lt')) {
             return JApplication::stringURLSafe($string);
         }
