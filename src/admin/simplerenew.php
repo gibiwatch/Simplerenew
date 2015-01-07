@@ -15,7 +15,12 @@ if (!SimplerenewFactory::getUser()->authorise('core.manage', 'com_simplerenew'))
     throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
 }
 
-require_once JPATH_COMPONENT . '/include.php';
+// Check for configuration
+if (!SimplerenewHelper::isConfigured()) {
+    $input = SimplerenewFactory::getApplication()->input;
+    $input->set('view', 'welcome');
+    $input->set('task', null);
+}
 
 $controller = SimplerenewControllerBase::getInstance('Simplerenew');
 $controller->execute(SimplerenewFactory::getApplication()->input->getCmd('task'));

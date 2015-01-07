@@ -16,11 +16,7 @@ class SimplerenewController extends SimplerenewControllerBase
     {
         parent::__construct($config);
 
-        if (!SimplerenewHelper::isConfigured()) {
-            SimplerenewFactory::getApplication()->input->set('view', 'welcome');
-        } else {
-            $notices = SimplerenewHelper::getNotices();
-            SimplerenewHelper::enqueueMessages($notices);
-        }
+        $notices = SimplerenewHelper::getNotices();
+        SimplerenewHelper::enqueueMessages($notices);
     }
 }
