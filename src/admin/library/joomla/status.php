@@ -54,7 +54,8 @@ class SimplerenewStatus
             ->loadResult();
 
         // Find all instances of the subscribe view
-        $site  = JApplication::getInstance('site');
+
+        $site  = SimplerenewHelper::getApplication('site');
         $menus = $site->getMenu()->getItems('component', 'com_simplerenew');
         foreach ($menus as $menu) {
             if (!empty($menu->query['view']) && $menu->query['view'] == 'subscribe') {

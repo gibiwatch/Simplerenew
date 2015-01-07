@@ -211,10 +211,10 @@ abstract class SimplerenewHelper
      */
     protected static function addMenuEntry($name, $link, $active = false)
     {
-        if (version_compare(JVERSION, '3.0', 'ge')) {
-            JHtmlSidebar::addEntry($name, $link, $active);
-        } else {
+        if (version_compare(JVERSION, '3.0', 'lt')) {
             JSubMenuHelper::addEntry($name, $link, $active);
+        } else {
+            JHtmlSidebar::addEntry($name, $link, $active);
         }
     }
 
@@ -388,5 +388,21 @@ abstract class SimplerenewHelper
     {
         $gateway = SimplerenewComponentHelper::getParams()->get('gateway');
         return (bool)$gateway;
+    }
+
+    /**
+     * Get the requested application object
+     *
+     * @param $client
+     *
+     * @return JApplicationCms
+     */
+    public static function getApplication($client)
+    {
+        if (version_compare(JVERSION, '3.0', 'lt')) {
+            return JApplication::getInstance($client);
+        }
+
+        return JApplicationCms::getInstance($client);
     }
 }
