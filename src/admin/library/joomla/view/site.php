@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die();
 
-abstract class SimplerenewViewSite extends JViewLegacy
+abstract class SimplerenewViewSite extends SimplerenewView
 {
     /**
      * @var JRegistry

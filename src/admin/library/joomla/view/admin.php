@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die();
 
-abstract class SimplerenewViewAdmin extends JViewLegacy
+abstract class SimplerenewViewAdmin extends SimplerenewView
 {
     /**
      * @var JObject
@@ -24,6 +24,8 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
 
     public function display($tpl = null)
     {
+        $this->displayHeader();
+
         if (version_compare(JVERSION, '3.0', 'ge')) {
             $hide    = SimplerenewFactory::getApplication()->input->getBool('hidemainmenu', false);
             $sidebar = count(JHtmlSidebar::getEntries()) + count(JHtmlSidebar::getFilters());
@@ -207,12 +209,22 @@ abstract class SimplerenewViewAdmin extends JViewLegacy
     }
 
     /**
+     * Display a header on admin pages
+     *
+     * @return void
+     */
+    protected function displayHeader()
+    {
+        // To be set in subclasses
+    }
+
+    /**
      * Display a standard footer on all admin pages
      *
      * @return void
      */
     protected function displayFooter()
     {
-        // Don't show footer on these views
+        // To be set in subclassess
     }
 }
