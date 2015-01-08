@@ -134,7 +134,7 @@
 .ost-container textarea:focus:invalid:focus, 
 .ost-container select:focus:invalid:focus{
     color: #333333;
-    border-color: #999999;
+    border-color: #666666;
     box-shadow: none;
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
@@ -181,10 +181,10 @@
 .ost-container input[type="submit"],
 .ost-container button {
     background: #666666;
-    border-radius: 2px;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    -o-border-radius: 2px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
     color: #FFFFFF;
     cursor: pointer;
     display: inline-block;
@@ -472,6 +472,13 @@ div.ost-alert-notify{
     -o-box-shadow: 0 -1px 0 #666 inset, 0 1px 0 rgba(255, 255, 255, 0.5) inset;
 }
 
+.ost-container .tab-disabled.tab-enabled{
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    -o-box-shadow: none;
+}
+
 span.simplerenew-plan{
     background: #2184cd;
     color: #ffffff;
@@ -482,6 +489,10 @@ span.simplerenew-plan{
     -o-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
     border: 1px solid #333333;
     text-shadow: 0 1px 0 #333;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
 }
 
 span.simplerenew-plan:hover,
