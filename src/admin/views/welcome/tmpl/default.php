@@ -15,7 +15,7 @@ JHtml::_('stylesheet', 'com_simplerenew/grid.css', null, true);
 JHtml::_('stylesheet', 'com_simplerenew/grid-responsive.css', null, true);
 JHtml::_('stylesheet', 'com_simplerenew/admin.css', null, true);
 
-$status = new SimplerenewStatus();
+$status = SimplerenewFactory::getStatus();
 ?>
 <div class="ost-container ost-container-dashboard">
 

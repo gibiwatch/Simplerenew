@@ -118,7 +118,7 @@ abstract class SimplerenewHelper
 
         if (SimplerenewFactory::getApplication()->isAdmin()) {
             // Test Gateway Configuration
-            if (self::isConfigured()) {
+            if (static::isConfigured()) {
                 try {
                     $valid = SimplerenewFactory::getContainer()->getAccount()->validConfiguration();
                     if (!$valid) {
@@ -233,7 +233,7 @@ abstract class SimplerenewHelper
             'success' => array()
         );
 
-        if (!self::isConfigured()) {
+        if (!static::isConfigured()) {
             return $message;
         }
 
@@ -311,7 +311,7 @@ abstract class SimplerenewHelper
         }
 
         // Update Sync time
-        $table = self::getExtensionTable();
+        $table = static::getExtensionTable();
         $table->params->set('log.lastPlanSync', time());
         $table->params = $table->params->toString();
         $table->store();
@@ -386,8 +386,8 @@ abstract class SimplerenewHelper
      */
     public static function isConfigured()
     {
-        $gateway = SimplerenewComponentHelper::getParams()->get('gateway');
-        return (bool)$gateway;
+        $status = SimplerenewFactory::getStatus();
+        return $status->gateway && $status->plans;
     }
 
     /**

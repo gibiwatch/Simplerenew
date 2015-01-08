@@ -18,6 +18,11 @@ abstract class SimplerenewFactory extends JFactory
     protected static $SimplerenewContainers = array();
 
     /**
+     * @var SimplerenewStatus
+     */
+    protected static $SimplerenewStatus = null;
+
+    /**
      * Get the Simplerenew container class
      *
      * @TODO: Review Factory/DI pattern for possible improvement
@@ -32,7 +37,7 @@ abstract class SimplerenewFactory extends JFactory
         $params = $params ? : SimplerenewComponentHelper::getParams();
         $key    = sha1($params->toString());
 
-        if (empty(self::$SimplerenewContainers[$key])) {
+        if (empty(static::$SimplerenewContainers[$key])) {
             $config = array(
                 'user'    => array(
                     'adapter'         => 'joomla',
@@ -47,8 +52,21 @@ abstract class SimplerenewFactory extends JFactory
                 )
             );
 
-            self::$SimplerenewContainers[$key] = new Container($config);
+            static::$SimplerenewContainers[$key] = new Container($config);
         }
-        return self::$SimplerenewContainers[$key];
+        return static::$SimplerenewContainers[$key];
+    }
+
+    /**
+     * Status information about Simplerenew
+     *
+     * @return SimplerenewStatus
+     */
+    public static function getStatus()
+    {
+        if (static::$SimplerenewStatus === null) {
+            static::$SimplerenewStatus = new SimplerenewStatus();
+        }
+        return static::$SimplerenewStatus;
     }
 }

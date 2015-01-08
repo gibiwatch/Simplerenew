@@ -23,12 +23,12 @@ class SimplerenewStatus
     /**
      * @var bool
      */
-    protected $configured = null;
+    protected $configured = false;
 
     /**
      * @var bool
      */
-    protected $gateway = null;
+    protected $gateway = false;
 
     /**
      * @var int
@@ -38,28 +38,27 @@ class SimplerenewStatus
     /**
      * @var int
      */
-    protected $subscribe = 0;
+    protected $subscribeViews = 0;
 
     public function __construct()
     {
         $this->configured = (bool)SimplerenewComponentHelper::getParams()->get('gateway');
 
-        $this->gateway = $this->configured;
-        if ($this->gateway) {
+        if ($this->configured) {
             $this->gateway = SimplerenewFactory::getContainer()->getAccount()->validConfiguration();
         }
 
+        // Count of existing plans
         $this->plans = SimplerenewFactory::getDbo()
             ->setQuery('Select count(*) From #__simplerenew_plans')
             ->loadResult();
 
-        // Find all instances of the subscribe view
-
+        // Count of subscribe views
         $site  = SimplerenewHelper::getApplication('site');
         $menus = $site->getMenu()->getItems('component', 'com_simplerenew');
         foreach ($menus as $menu) {
             if (!empty($menu->query['view']) && $menu->query['view'] == 'subscribe') {
-                $this->subscribe++;
+                $this->subscribeViews++;
             }
         }
     }
