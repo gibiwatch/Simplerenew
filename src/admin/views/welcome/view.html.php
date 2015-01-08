@@ -35,11 +35,10 @@ class SimplerenewViewWelcome extends SimplerenewViewAdmin
      * @param bool   $status
      * @param string $langText
      * @param string $link
-     * @param mixed  $attribs
      *
      * @return string
      */
-    protected function renderStep($status, $langText, $link, $attribs = null)
+    protected function renderStep($status, $langText, $link)
     {
         $status = (int)(bool)$status;
         $html   = array();
@@ -55,12 +54,7 @@ class SimplerenewViewWelcome extends SimplerenewViewAdmin
             $html[] = JText::_('COM_SIMPLERENEW_WELCOME_' . $langText . '_FIX');
             $html[] = '<br/>';
 
-            $html[] = JHtml::_(
-                'link',
-                $link,
-                '<span class="icon-plus"></span>' . JText::_('COM_SIMPLERENEW_WELCOME_' . $langText . '_LINKTEXT'),
-                $attribs
-            );
+            $html[] = $link;
             $html[] = '</p>';
         }
         return join("\n", $html);

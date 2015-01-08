@@ -15,23 +15,8 @@ JHtml::_('stylesheet', 'com_simplerenew/grid.css', null, true);
 JHtml::_('stylesheet', 'com_simplerenew/grid-responsive.css', null, true);
 JHtml::_('stylesheet', 'com_simplerenew/admin.css', null, true);
 
-// Setup for configuration options
-$optionsLink = 'index.php?option=com_config&view=component&component=com_simplerenew';
-if (version_compare(JVERSION, '3.0', 'lt')) {
-    JHtml::_('behavior.modal');
-    $optionsAttribs = array(
-        'class' => 'btn btn-small modal',
-        'rel'   => "{handler: 'iframe', size: {x: 875, y: 550}, onClose: function() {}}"
-    );
-    $optionsLink .= '&tmpl=component';
-
-} else {
-    $optionsAttribs = 'class ="btn btn-small"';
-}
-
 $status = new SimplerenewStatus();
 ?>
-
 <div class="ost-container ost-container-dashboard">
 
     <div class="ost-section ost-steps">
@@ -40,19 +25,29 @@ $status = new SimplerenewStatus();
         </div>
         <div class="block1 ost-connector"> </div>
         <div class="block2">
-            <?php echo $this->renderStep($status->gateway, 'gateway', $optionsLink, $optionsAttribs);?>
-        </div>
-        <div class="block2">
             <?php
-            $planLink = JRoute::_('index.php?option=com_simplerenew&task=plan.add');
-            echo $this->renderStep(
-                $status->gateway && $status->plans,
-                ($status->gateway ? 'plans' : 'plans_gateway'),
-                ($status->gateway ? $planLink : $optionsLink),
-                ($status->gateway ? 'class="btn btn-small"' : $optionsAttribs)
+            $link = JHtml::_(
+                'link.options',
+                '<span class="icon-plus"></span>' . JText::_('COM_SIMPLERENEW_WELCOME_GATEWAY_LINKTEXT')
             );
+            echo $this->renderStep($status->gateway, 'gateway', $link);
             ?>
         </div>
+
+        <?php if ($status->gateway): ?>
+        <div class="block2">
+            <?php
+            $link = JHtml::_(
+                'link',
+                JRoute::_('index.php?option=com_simplerenew&task=plan.add'),
+                '<span class="icon-plus"></span>' . JText::_('COM_SIMPLERENEW_WELCOME_PLANS_LINKTEXT'),
+                'class="btn btn-small"'
+            );
+
+            echo $this->renderStep($status->plans, 'plans', $link);
+            ?>
+        </div>
+        <?php endif; ?>
     </div>
     <!-- /.ost-section -->
 </div>
