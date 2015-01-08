@@ -21,8 +21,8 @@ abstract class SimplerenewLoader
 
     protected static function load($class)
     {
-        if (!class_exists($class) && strpos($class, self::PREFIX) === 0) {
-            $parts = preg_split('/(?<=[a-z])(?=[A-Z])/x', substr($class, strlen(self::PREFIX)));
+        if (!class_exists($class) && strpos($class, static::PREFIX) === 0) {
+            $parts = preg_split('/(?<=[a-z])(?=[A-Z])/x', substr($class, strlen(static::PREFIX)));
 
             $file = strtolower(join('/', $parts));
 

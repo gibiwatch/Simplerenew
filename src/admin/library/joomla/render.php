@@ -40,12 +40,12 @@ abstract class SimplerenewRender
         $requiredText = ' <span>*</span>'
     ) {
         $fields = array();
-        if ($required = self::addressRequired()) {
+        if ($required = static::addressRequired()) {
             if (is_string($attribs)) {
                 $attribs = JUtility::parseAttributes($attribs);
             }
 
-            $required = array_intersect(self::addressFieldNames(), $required);
+            $required = array_intersect(static::addressFieldNames(), $required);
             foreach ($required as $fieldName) {
                 $name  = $prefix . '[' . $fieldName . ']';
                 $id    = $prefix . '_' . $fieldName;
@@ -111,7 +111,7 @@ abstract class SimplerenewRender
     public static function addressDisplay(Address $address)
     {
         $fields   = array();
-        $required = self::addressRequired();
+        $required = static::addressRequired();
         foreach ($required as $name) {
             if (isset($address->$name)) {
                 if ($name == 'address1' && !in_array('address2', $required)) {
@@ -142,7 +142,7 @@ abstract class SimplerenewRender
             return array();
         }
         if (!$required) {
-            return self::addressFieldNames();
+            return static::addressFieldNames();
         }
         return explode(',', $required);
     }
@@ -154,6 +154,6 @@ abstract class SimplerenewRender
      */
     public static function addressFieldNames()
     {
-        return self::$addressOrder;
+        return static::$addressOrder;
     }
 }

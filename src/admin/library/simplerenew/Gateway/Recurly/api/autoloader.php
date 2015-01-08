@@ -27,8 +27,8 @@ abstract class RecurlyLoader
     protected static function load($class)
     {
         if (!class_exists($class) && strpos($class, 'Recurly_') === 0) {
-            if (array_key_exists($class, self::$exceptions)) {
-                $file = self::$exceptions[$class];
+            if (array_key_exists($class, static::$exceptions)) {
+                $file = static::$exceptions[$class];
             } elseif (strpos($class, 'Error') == (strlen($class) - 5)) {
                 $file = 'errors.php';
             } else {

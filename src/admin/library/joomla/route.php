@@ -25,7 +25,7 @@ abstract class SimplerenewRoute
      */
     public static function get($view, $layout = null)
     {
-        if ($query = self::getQuery($view, $layout)) {
+        if ($query = static::getQuery($view, $layout)) {
             return 'index.php?' . http_build_query($query);
         }
         return null;
@@ -67,9 +67,9 @@ abstract class SimplerenewRoute
      */
     public static function getQuery($view, $layout = '')
     {
-        if (self::$items === null) {
+        if (static::$items === null) {
             $menu        = JApplication::getInstance('site')->getMenu();
-            self::$items = $menu->getItems(array('component', 'access'), array('com_simplerenew', true));
+            static::$items = $menu->getItems(array('component', 'access'), array('com_simplerenew', true));
         }
 
         $query = array(
@@ -81,7 +81,7 @@ abstract class SimplerenewRoute
         }
 
         // Look for an existing menu item that matches the requests
-        foreach (self::$items as $item) {
+        foreach (static::$items as $item) {
             $mView   = empty($item->query['view']) ? '' : $item->query['view'];
             $mLayout = empty($item->query['layout']) ? '' : $item->query['layout'];
 

@@ -119,7 +119,7 @@ class Coupon extends AbstractApiBase
      */
     public function isAvailable(Plan $plan)
     {
-        return ($this->status == self::STATUS_ACTIVE
+        return ($this->status == static::STATUS_ACTIVE
             && (!$this->plans || in_array($plan->code, $this->plans))
         );
     }
@@ -137,11 +137,11 @@ class Coupon extends AbstractApiBase
 
         if ($this->isAvailable($plan)) {
             switch ($this->type) {
-                case self::TYPE_AMOUNT:
+                case static::TYPE_AMOUNT:
                     $amount = $this->amount;
                     break;
 
-                case self::TYPE_PERCENT:
+                case static::TYPE_PERCENT:
                     $amount = $plan->amount * ($this->amount / 100);
                     break;
             }

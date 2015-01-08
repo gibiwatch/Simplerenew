@@ -145,8 +145,8 @@ class Object
 
                     if (isset($values[$srcValue])) {
                         $value = $values[$srcValue];
-                    } elseif (isset($values[self::MAP_UNDEFINED])) {
-                        $value = $values[self::MAP_UNDEFINED];
+                    } elseif (isset($values[static::MAP_UNDEFINED])) {
+                        $value = $values[static::MAP_UNDEFINED];
                     }
                 }
             }

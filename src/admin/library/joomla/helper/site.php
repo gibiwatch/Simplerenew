@@ -22,10 +22,10 @@ abstract class SimplerenewHelperSite
      */
     public static function getParams()
     {
-        if (self::$params === null) {
-            self::$params = SimplerenewComponentHelper::getParams('com_simplerenew');
+        if (static::$params === null) {
+            static::$params = SimplerenewComponentHelper::getParams('com_simplerenew');
         }
-        return self::$params;
+        return static::$params;
     }
 
     /**
@@ -38,7 +38,7 @@ abstract class SimplerenewHelperSite
      */
     public static function loadTheme($theme = null)
     {
-        $params = self::getParams();
+        $params = static::getParams();
 
         // Load the selected font
         $font = explode('|', $params->get('themes.fontFamily', 'none'));
@@ -48,7 +48,7 @@ abstract class SimplerenewHelperSite
             *  Example: "Droid Sans|sans-serif|400,700"
             *  400,700 is the font-weight */
             if (count($font) > 2) {
-                $href = self::$googleFonts . '/css?family=' . $font[0] . ':' . $font[2];
+                $href = static::$googleFonts . '/css?family=' . $font[0] . ':' . $font[2];
                 JHtml::stylesheet($href);
             }
 

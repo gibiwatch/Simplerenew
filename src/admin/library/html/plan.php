@@ -46,7 +46,7 @@ abstract class JHtmlPlan
         }
 
         if ($trial_length > 0 && $trial_unit) {
-            $text .= ' - ' . self::trial($trial_length, $trial_unit);
+            $text .= ' - ' . static::trial($trial_length, $trial_unit);
         }
 
         return $text;
@@ -98,6 +98,6 @@ abstract class JHtmlPlan
             $length = empty($plan['trial_length']) ? 0 : $plan['trial_length'];
             $unit   = empty($plan['trial_unit']) ? '' : $plan['trial_unit'];
         }
-        return self::length($length, $unit, true);
+        return static::length($length, $unit, true);
     }
 }

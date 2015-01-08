@@ -36,10 +36,10 @@ abstract class JHtmlCurrency
      */
     public static function format($amount, $currency = 'USD')
     {
-        if (isset(self::$currencies[$currency])) {
-            $selected = self::$currencies[$currency];
+        if (isset(static::$currencies[$currency])) {
+            $selected = static::$currencies[$currency];
         } else {
-            $selected = self::$currencies['USD'];
+            $selected = static::$currencies['USD'];
         }
 
         return sprintf(
@@ -55,17 +55,17 @@ abstract class JHtmlCurrency
      */
     public static function options()
     {
-        if (self::$options === null) {
-            self::$options = array();
-            foreach (self::$currencies as $code => $settings) {
+        if (static::$options === null) {
+            static::$options = array();
+            foreach (static::$currencies as $code => $settings) {
                 $option    = array(
                     'value' => $code,
                     'text'  => $code
                 );
-                self::$options[] = (object)array_merge($option, $settings);
+                static::$options[] = (object)array_merge($option, $settings);
             }
         }
-        return self::$options;
+        return static::$options;
     }
 
 }
