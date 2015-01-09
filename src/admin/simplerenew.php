@@ -16,7 +16,7 @@ if (!SimplerenewFactory::getUser()->authorise('core.manage', 'com_simplerenew'))
 }
 
 // Check for configuration
-if (!SimplerenewHelper::isConfigured()) {
+if (!SimplerenewFactory::getStatus()->configured) {
     $input = SimplerenewFactory::getApplication()->input;
     $input->set('view', 'welcome');
     $input->set('task', null);

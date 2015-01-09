@@ -118,7 +118,8 @@ abstract class SimplerenewHelper
 
         if (SimplerenewFactory::getApplication()->isAdmin()) {
             // Test Gateway Configuration
-            if (static::isConfigured()) {
+            $status = SimplerenewFactory::getStatus();
+            if ($status->configured) {
                 try {
                     $valid = SimplerenewFactory::getContainer()->getAccount()->validConfiguration();
                     if (!$valid) {
@@ -233,7 +234,8 @@ abstract class SimplerenewHelper
             'success' => array()
         );
 
-        if (!static::isConfigured()) {
+        $status = SimplerenewFactory::getStatus();
+        if (!$status->configured) {
             return $message;
         }
 
@@ -377,17 +379,6 @@ abstract class SimplerenewHelper
         ob_end_clean();
 
         return $content;
-    }
-
-    /**
-     * Determine if component has been configured
-     *
-     * @return bool
-     */
-    public static function isConfigured()
-    {
-        $status = SimplerenewFactory::getStatus();
-        return $status->gateway && $status->plans;
     }
 
     /**
