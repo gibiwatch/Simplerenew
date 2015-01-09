@@ -22,9 +22,9 @@ class SimplerenewHelperMenus
      */
     protected $componentId = null;
 
-    public function __construct($component = 'com_simplerenew')
+    public function __construct()
     {
-        $this->componentId = JComponentHelper::getComponent($component)->id;
+        $this->componentId = JComponentHelper::getComponent('com_simplerenew')->id;
 
         $lang = JFactory::getLanguage();
         $lang->load('com_simplerenew', JPATH_ADMINISTRATOR . '/components/com_simplerenew');

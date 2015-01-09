@@ -41,7 +41,7 @@ abstract class SimplerenewRoute
      */
     public static function fromArticleId($articleId)
     {
-        $contentId = JComponentHelper::getComponent('com_content')->id;
+        $contentId = SimplerenewComponentHelper::getComponent('com_content')->id;
         $menuItems = JFactory::getApplication()->getMenu()->getItems('component_id', $contentId);
 
         $link = 'index.php?option=com_content&view=article&id=' . $articleId;
