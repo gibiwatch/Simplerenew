@@ -86,17 +86,6 @@ class plgSystemSimplerenew extends JPlugin
     }
 
     /**
-     * clear hidden log parameter
-     */
-    protected function clearLastSync()
-    {
-        $app       = JFactory::getApplication();
-        $option    = $app->input->getCmd('option');
-        $component = $app->input->getCmd('component');
-
-    }
-
-    /**
      * Check for component installation and initialise if not
      *
      * @return bool
