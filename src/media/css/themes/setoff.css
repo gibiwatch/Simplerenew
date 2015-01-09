@@ -583,10 +583,12 @@ span.simplerenew-plan.simplerenew-plan-selected{
 .ost-row-two.m-bottom {
     margin-bottom: 50px;
 }
+
 .simplerenew-basic-information,
 .simplerenew-credit-card-information,
 .simplerenew-paypal-information,
-.simplerenew-plan-information{
+.simplerenew-plan-information,
+.simplerenew-invoices-table{
     padding: 2px;
     border: 1px solid #cccccc;
 }

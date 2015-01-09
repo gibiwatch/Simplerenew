@@ -28,37 +28,42 @@ defined('_JEXEC') or die();
     else:
         ?>
 
-        <div class="ost-section ost-row-two ost-invoice-heading b-bottom">
-            <div class="block4">Number</div>
-            <div class="block4">Total</div>
-            <div class="block4">Date issued</div>
-        </div>
-        <!-- /ost-section -->
+        <div class="simplerenew-invoices-table">
 
-        <?php
-        $i = 1;
-        foreach ($this->invoices as $invoice):
-            $rowClass = $i++ % 2 ? 'ost-row-one' : 'ost-row-two';
-            ?>
-            <div class="ost-section <?php echo $rowClass; ?>">
-                <div class="block4">
-                    <?php echo JHtml::_('invoice.pdflink', $invoice->number); ?>
-                </div>
-                <div class="block4">
-                    <?php
-                    echo JHtml::_(
-                        'currency.format',
-                        $invoice->total,
-                        $invoice->currency
-                    );
-                    ?>
-                </div>
-                <div class="block4"><?php echo $invoice->date->format('M j, Y'); ?></div>
+            <div class="ost-section ost-row-two ost-invoice-heading b-bottom">
+                <div class="block4">Number</div>
+                <div class="block4">Total</div>
+                <div class="block4">Date issued</div>
             </div>
             <!-- /ost-section -->
-        <?php
-        endforeach;
-        ?>
+
+            <?php
+            $i = 1;
+            foreach ($this->invoices as $invoice):
+                $rowClass = $i++ % 2 ? 'ost-row-one' : 'ost-row-two';
+                ?>
+                <div class="ost-section <?php echo $rowClass; ?>">
+                    <div class="block4">
+                        <?php echo JHtml::_('invoice.pdflink', $invoice->number); ?>
+                    </div>
+                    <div class="block4">
+                        <?php
+                        echo JHtml::_(
+                            'currency.format',
+                            $invoice->total,
+                            $invoice->currency
+                        );
+                        ?>
+                    </div>
+                    <div class="block4"><?php echo $invoice->date->format('M j, Y'); ?></div>
+                </div>
+                <!-- /ost-section -->
+            <?php
+            endforeach;
+            ?>
+
+        </div>
+        <!-- .simplerenew-invoices-table -->
 
     <?php endif; ?>
 </div>
