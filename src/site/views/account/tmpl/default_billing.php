@@ -21,86 +21,96 @@ if ($this->billing):
     if ($payment instanceof Payment\CreditCard): ?>
         <h3><span><i class="fa fa-credit-card"></i></span> <?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?></h3>
 
-        <div class="ost-section ost-row-one">
-            <div class="block3">
-                <label><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
-            </div>
-            <div class="block9">
-                <?php echo $this->billing->firstname; ?>
-            </div>
-        </div>
-        <!-- /.ost-section -->
+        <div class="simplerenew-credit-card-information m-bottom b-bottom">
 
-        <div class="ost-section ost-row-two">
-            <div class="block3">
-                <label><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
+            <div class="ost-section ost-row-one">
+                <div class="block3">
+                    <label><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
+                </div>
+                <div class="block9">
+                    <?php echo $this->billing->firstname; ?>
+                </div>
             </div>
-            <div class="block9">
-                <?php echo $this->billing->lastname; ?>
-            </div>
-        </div>
-        <!-- /.ost-section -->
+            <!-- /.ost-section -->
 
-        <div class="ost-section ost-row-one">
-            <div class="block3">
-                <label><?php echo JText::_('COM_SIMPLERENEW_CC_TYPE'); ?></label>
+            <div class="ost-section ost-row-two">
+                <div class="block3">
+                    <label><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
+                </div>
+                <div class="block9">
+                    <?php echo $this->billing->lastname; ?>
+                </div>
             </div>
-            <div class="block9">
-                <?php echo $payment->type; ?>
-            </div>
-        </div>
-        <!-- /.ost-section -->
+            <!-- /.ost-section -->
 
-        <div class="ost-section ost-row-two">
-            <div class="block3">
-                <label><?php echo JText::_('COM_SIMPLERENEW_CC_NUMBER'); ?></label>
+            <div class="ost-section ost-row-one">
+                <div class="block3">
+                    <label><?php echo JText::_('COM_SIMPLERENEW_CC_TYPE'); ?></label>
+                </div>
+                <div class="block9">
+                    <?php echo $payment->type; ?>
+                </div>
             </div>
-            <div class="block9">
-                <?php echo JHtml::_('creditcard.mask', $payment->lastFour); ?>
-            </div>
-        </div>
-        <!-- /.ost-section -->
+            <!-- /.ost-section -->
 
-        <div class="ost-section ost-row-one">
-            <div class="block3">
-                <label><?php echo JText::_('COM_SIMPLERENEW_CC_EXPIRATION'); ?></label>
+            <div class="ost-section ost-row-two">
+                <div class="block3">
+                    <label><?php echo JText::_('COM_SIMPLERENEW_CC_NUMBER'); ?></label>
+                </div>
+                <div class="block9">
+                    <?php echo JHtml::_('creditcard.mask', $payment->lastFour); ?>
+                </div>
             </div>
-            <div class="block9">
-                <?php echo JHtml::_('creditcard.expiration', $payment->month, $payment->year); ?>
-            </div>
-        </div>
-        <!-- /.ost-section -->
+            <!-- /.ost-section -->
 
-        <?php echo $this->loadTemplate('address'); ?>
+            <div class="ost-section ost-row-one">
+                <div class="block3">
+                    <label><?php echo JText::_('COM_SIMPLERENEW_CC_EXPIRATION'); ?></label>
+                </div>
+                <div class="block9">
+                    <?php echo JHtml::_('creditcard.expiration', $payment->month, $payment->year); ?>
+                </div>
+            </div>
+            <!-- /.ost-section -->
+
+            <?php echo $this->loadTemplate('address'); ?>
+
+        </div>
+        <!-- .simplerenew-credit-card -->
 
     <?php
     elseif ($payment instanceof Payment\PayPal): ?>
         <h3><span><i class="fa fa-paypal"></i></span> <?php echo JText::_('COM_SIMPLERENEW_PAYPAL'); ?></h3>
 
-        <div class="ost-section ost-row-one">
-            <div class="block3">
-                <label><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
-            </div>
-            <div class="block9">
-                <?php echo $this->billing->firstname; ?>
-            </div>
-        </div>
-        <!-- /.ost-section -->
+        <div class="simplerenew-paypal-information m-bottom">
 
-        <div class="ost-section ost-row-two">
-            <div class="block3">
-                <label><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
+            <div class="ost-section ost-row-one">
+                <div class="block3">
+                    <label><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
+                </div>
+                <div class="block9">
+                    <?php echo $this->billing->firstname; ?>
+                </div>
             </div>
-            <div class="block9">
-                <?php echo $this->billing->lastname; ?>
-            </div>
-        </div>
-        <!-- /.ost-section -->
+            <!-- /.ost-section -->
 
-        <div class="ost-alert-notify m-bottom">
-            <?php echo JText::sprintf('COM_SIMPLERENEW_PAYPAL_AGREEMENTID', $payment->agreementId); ?>
+            <div class="ost-section ost-row-two">
+                <div class="block3">
+                    <label><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
+                </div>
+                <div class="block9">
+                    <?php echo $this->billing->lastname; ?>
+                </div>
+            </div>
+            <!-- /.ost-section -->
+
+            <div class="ost-alert-notify">
+                <?php echo JText::sprintf('COM_SIMPLERENEW_PAYPAL_AGREEMENTID', $payment->agreementId); ?>
+            </div>
+            <!-- /.ost-section -->
+
         </div>
-        <!-- /.ost-section -->
+        <!-- .simplerenew-paypal-information -->
 
     <?php
     else: ?>

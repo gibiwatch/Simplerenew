@@ -20,45 +20,50 @@ defined('_JEXEC') or die();
 
     <h3><span><i class="fa fa-info-circle"></i></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'); ?></h3>
 
-    <div class="ost-section ost-row-one">
-        <div class="block3">
-            <label><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
-        </div>
-        <div class="block9">
-            <?php echo $this->user->firstname; ?>
-        </div>
-    </div>
-    <!-- /.ost-section -->
+    <div class="simplerenew-basic-information m-bottom b-bottom">
 
-    <div class="ost-section ost-row-two">
-        <div class="block3">
-            <label><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
+        <div class="ost-section ost-row-one">
+            <div class="block3">
+                <label><?php echo JText::_('COM_SIMPLERENEW_FIRSTNAME'); ?></label>
+            </div>
+            <div class="block9">
+                <?php echo $this->user->firstname; ?>
+            </div>
         </div>
-        <div class="block9">
-            <?php echo $this->user->lastname; ?>
-        </div>
-    </div>
-    <!-- /.ost-section -->
+        <!-- /.ost-section -->
 
-    <div class="ost-section ost-row-one">
-        <div class="block3">
-            <label><?php echo JText::_('COM_SIMPLERENEW_USERNAME'); ?></label>
+        <div class="ost-section ost-row-two">
+            <div class="block3">
+                <label><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
+            </div>
+            <div class="block9">
+                <?php echo $this->user->lastname; ?>
+            </div>
         </div>
-        <div class="block9">
-            <?php echo $this->user->username; ?>
-        </div>
-    </div>
-    <!-- /.ost-section -->
+        <!-- /.ost-section -->
 
-    <div class="ost-section ost-row-two m-bottom b-bottom">
-        <div class="block3">
-            <label><?php echo JText::_('COM_SIMPLERENEW_EMAIL'); ?></label>
+        <div class="ost-section ost-row-one">
+            <div class="block3">
+                <label><?php echo JText::_('COM_SIMPLERENEW_USERNAME'); ?></label>
+            </div>
+            <div class="block9">
+                <?php echo $this->user->username; ?>
+            </div>
         </div>
-        <div class="block9">
-            <?php echo $this->user->email; ?>
+        <!-- /.ost-section -->
+
+        <div class="ost-section ost-row-two">
+            <div class="block3">
+                <label><?php echo JText::_('COM_SIMPLERENEW_EMAIL'); ?></label>
+            </div>
+            <div class="block9">
+                <?php echo $this->user->email; ?>
+            </div>
         </div>
+        <!-- /.ost-section -->
+
     </div>
-    <!-- /.ost-section -->
+    <!-- .simplerenew-basic-information -->
 
     <?php echo $this->loadTemplate('billing'); ?>
 

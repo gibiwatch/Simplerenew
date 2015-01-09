@@ -493,7 +493,6 @@ span.simplerenew-plan{
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     -o-border-radius: 5px;
-    display: block;
 }
 
 span.simplerenew-plan:hover,
@@ -583,6 +582,13 @@ span.simplerenew-plan.simplerenew-plan-selected{
 .ost-row-one.m-bottom,
 .ost-row-two.m-bottom {
     margin-bottom: 50px;
+}
+.simplerenew-basic-information,
+.simplerenew-credit-card-information,
+.simplerenew-paypal-information,
+.simplerenew-plan-information{
+    padding: 2px;
+    border: 1px solid #cccccc;
 }
 
 /* Invoices view

@@ -19,9 +19,6 @@ foreach ($fields as $i => $field) {
         'ost-section',
         'ost-row-' . (($i % 2) ? 'one' : 'two')
     );
-    if ($i+1 == count($fields)) {
-        $class[] = 'm-bottom b-bottom';
-    }
     $html = array_merge(
         $html,
         array(
