@@ -24,8 +24,8 @@ if ($couponCode && $planSelected) {
 }
 
 ?>
-<div class="ost-section">
-    <div class="block6 p-bottom b-bottom">
+<div class="ost-section p-bottom b-bottom">
+    <div class="block6">
         <div class="ost-alert-notify">
 
             <div class="coupon-toggle" data-content="#coupon-area">
