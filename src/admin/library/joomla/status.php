@@ -13,10 +13,11 @@ defined('_JEXEC') or die();
  *
  * Class SimplerenewStatus
  *
- * @property bool $configured Gateway configuration has been at least visited and saved
- * @property bool $gateway    Gateway configuration is valid and working
- * @property int  $plans      Number of plans that have been created
- * @property int  $subscribe  Number of subscribe forms that have been created on the front end
+ * @property bool   $configured      Gateway configuration has been at least visited and saved
+ * @property bool   $gateway         Gateway configuration is valid and working
+ * @property int    $plans           Number of plans that have been created
+ * @property int    $subscribeViews  Number of subscribe forms that have been created on the front end
+ * @property object $update          Information about update if one is available
  */
 class SimplerenewStatus
 {
@@ -34,6 +35,11 @@ class SimplerenewStatus
      * @var int
      */
     protected $plans = 0;
+
+    /**
+     * @var object
+     */
+    protected $update = null;
 
     /**
      * @var int
@@ -61,6 +67,8 @@ class SimplerenewStatus
                 $this->subscribeViews++;
             }
         }
+
+        $this->update = SimplerenewModel::getInstance('Update')->getUpdate();
     }
 
     public function __get($name)

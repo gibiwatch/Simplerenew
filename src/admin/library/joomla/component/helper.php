@@ -14,4 +14,9 @@ abstract class SimplerenewComponentHelper extends JComponentHelper
     {
         return parent::getParams($option, $strict);
     }
+
+    public static function getComponent($option = 'com_simplerenew', $strict = false)
+    {
+        return parent::getComponent($option, $strict);
+    }
 }

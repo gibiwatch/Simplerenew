@@ -69,4 +69,15 @@ class SimplerenewViewPlans extends SimplerenewViewAdmin
 
         parent::setToolBar($addDivider);
     }
+
+    protected function displayFooter()
+    {
+        parent::displayFooter();
+
+        $update = SimplerenewFactory::getStatus()->update;
+        if ($update) {
+            $link = 'index.php?option=com_simplerenew&task=update.update';
+            echo JText::sprintf('COM_SIMPLERENEW_UPDATE_AVAILABLE', $link, $update->version);
+        }
+    }
 }
