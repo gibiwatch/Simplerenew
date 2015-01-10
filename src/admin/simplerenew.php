@@ -15,13 +15,14 @@ if (!SimplerenewFactory::getUser()->authorise('core.manage', 'com_simplerenew'))
     throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
 }
 
-// Check for configuration
+$input = SimplerenewFactory::getApplication()->input;
+
+// Check if configuration has been visited
 if (!SimplerenewFactory::getStatus()->configured) {
-    $input = SimplerenewFactory::getApplication()->input;
     $input->set('view', 'welcome');
     $input->set('task', null);
 }
 
 $controller = SimplerenewControllerBase::getInstance('Simplerenew');
-$controller->execute(SimplerenewFactory::getApplication()->input->getCmd('task'));
+$controller->execute($input->getCmd('task'));
 $controller->redirect();
