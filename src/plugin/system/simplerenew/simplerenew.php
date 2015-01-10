@@ -65,7 +65,7 @@ class plgSystemSimplerenew extends JPlugin
             $component = $app->input->getCmd('component');
 
             if ($option == 'com_simplerenew' && $view == 'plans') {
-                $planSync = abs((int)$this->params->get('advanced.planSync', 1)) * 60;
+                $planSync = abs((float)$this->params->get('advanced.planSync', 1)) * 60;
 
                 if ($planSync) {
                     $lastPlanSync = $this->params->get('log.lastPlanSync', 0);
@@ -76,6 +76,7 @@ class plgSystemSimplerenew extends JPlugin
                         SimplerenewHelper::enqueueMessages($messages);
                     }
                 }
+
             } elseif ($option == 'com_config' && $component == 'com_simplerenew') {
                 $table = SimplerenewHelper::getExtensionTable();
                 $table->params->set('log.lastPlanSync', 0);
