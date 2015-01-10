@@ -50,6 +50,12 @@ foreach ($cssPaths as $path) {
             <p class="ost-step"><?php echo JText::_('COM_SIMPLERENEW_WELCOME_SAVE'); ?></p>
         </div>
     </div>
+    <?php
+    echo JText::sprintf(
+        'COM_SIMPLERENEW_INSTALL_GOTO_OPTIONS',
+        JHtml::_('srlink.options', 'COM_SIMPLERENEW_INSTALL_GOTO_OPTIONS_LINKTEXT')
+    );
+    ?>
     <!-- /.ost-section -->
 </div>
 <!-- /.ost-container -->

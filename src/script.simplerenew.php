@@ -101,6 +101,7 @@ class com_simplerenewInstallerScript extends AbstractScript
         $file = strpos($type, 'install') === false ? $type : 'install';
         $path = JPATH_ADMINISTRATOR . '/components/com_simplerenew/views/welcome/tmpl/' . $file . '.php';
         if (file_exists($path)) {
+            require_once JPATH_ADMINISTRATOR . '/components/com_simplerenew/include.php';
             JFactory::getLanguage()->load('com_simplerenew', JPATH_ADMINISTRATOR . '/components/com_simplerenew');
             require_once $path;
         }

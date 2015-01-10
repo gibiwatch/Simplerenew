@@ -27,8 +27,9 @@ $status = SimplerenewFactory::getStatus();
         <div class="block2">
             <?php
             $link = JHtml::_(
-                'link.options',
-                '<span class="icon-plus"></span>' . JText::_('COM_SIMPLERENEW_WELCOME_GATEWAY_LINKTEXT')
+                'srlink.options',
+                '<span class="icon-plus"></span>' . JText::_('COM_SIMPLERENEW_WELCOME_GATEWAY_LINKTEXT'),
+                'class="btn btn-small"'
             );
             echo $this->renderStep($status->gateway, 'gateway', $link);
             ?>
