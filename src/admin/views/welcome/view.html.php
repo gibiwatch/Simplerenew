@@ -24,7 +24,7 @@ class SimplerenewViewWelcome extends SimplerenewViewAdmin
     protected function setToolbar($addDivider = false)
     {
         $this->setTitle();
-        SimplerenewHelper::addSubmenu('dashboard');
+        SimplerenewHelper::addSubmenu('welcome');
 
         parent::setToolBar($addDivider);
     }
