@@ -170,11 +170,18 @@ $saveOrder = $listOrder == 'plan.ordering';
 
         <tbody>
         <?php
-        foreach ($this->items as $i => $item):
-            $ordering = ($listOrder == 'plan.ordering');
-            $link     = 'index.php?option=com_simplerenew&task=plan.edit&id=' . $item->id;
+        if (empty($this->items)):
             ?>
-            <tr class="row<?php echo $i % 2; ?>">
+            <tr>
+                <td colspan="11"><?php echo JText::_('COM_SIMPLERENEW_NO_MATCHING_RESULTS'); ?></td>
+            </tr>
+        <?php
+        else:
+            foreach ($this->items as $i => $item):
+                $ordering = ($listOrder == 'plan.ordering');
+                $link     = 'index.php?option=com_simplerenew&task=plan.edit&id=' . $item->id;
+                ?>
+                <tr class="row<?php echo $i % 2; ?>">
                 <td>
                     <?php echo $this->pagination->getRowOffset($i); ?>
                 </td>
@@ -189,9 +196,9 @@ $saveOrder = $listOrder == 'plan.ordering';
 
                 <td class="order">
                 <?php
-                    if ($saveOrder):
-                        if ($listDir == 'asc'):
-                            ?>
+                        if ($saveOrder):
+                            if ($listDir == 'asc'):
+                                ?>
                             <span><?php
                                 echo $this->pagination->orderUpIcon(
                                     $i,
@@ -209,7 +216,7 @@ $saveOrder = $listOrder == 'plan.ordering';
                                     'JLIB_HTML_MOVE_DOWN',
                                     $ordering
                                 ); ?></span>
-                <?php
+                        <?php
                         elseif ($listDir == 'desc'): ?>
                             <span><?php
                                 echo $this->pagination->orderUpIcon(
@@ -232,13 +239,9 @@ $saveOrder = $listOrder == 'plan.ordering';
                         endif;
 
                         $disabled = $saveOrder ? '' : 'disabled="disabled"'; ?>
-                        <input
-                            type="text"
-                            name="order[]"
-                            size="5"
-                            value="<?php echo $item->ordering; ?>" <?php echo $disabled ?>
-                            class="text-area-order"/>
-                <?php
+                        <input type="text" name="order[]" size="5"
+                               value="<?php echo $item->ordering; ?>" <?php echo $disabled ?> class="text-area-order"/>
+                    <?php
                     else:
                         echo $item->ordering;
                     endif;
@@ -275,6 +278,7 @@ $saveOrder = $listOrder == 'plan.ordering';
             </tr>
         <?php
         endforeach;
+        endif;
         ?>
         </tbody>
     </table>
