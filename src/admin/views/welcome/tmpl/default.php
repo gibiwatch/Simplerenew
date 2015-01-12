@@ -34,21 +34,6 @@ $status = SimplerenewFactory::getStatus();
             echo $this->renderStep($status->gateway, 'gateway', $link);
             ?>
         </div>
-
-        <?php if ($status->gateway): ?>
-        <div class="block2">
-            <?php
-            $link = JHtml::_(
-                'link',
-                JRoute::_('index.php?option=com_simplerenew&task=plan.add'),
-                '<span class="icon-plus"></span>' . JText::_('COM_SIMPLERENEW_WELCOME_PLANS_LINKTEXT'),
-                'class="btn btn-small"'
-            );
-
-            echo $this->renderStep($status->plans, 'plans', $link);
-            ?>
-        </div>
-        <?php endif; ?>
     </div>
     <!-- /.ost-section -->
 </div>
