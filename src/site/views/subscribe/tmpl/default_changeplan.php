@@ -40,7 +40,8 @@ $current = array_shift($this->subscriptions);
     <div class="m-bottom m-top">
         <button type="submit" class="btn-main btn-big">
             <i class="fa fa-refresh"></i>
-            <?php echo JText::_('COM_SIMPLERENEW_CHANGE_BUTTON'); ?>
+            <span class="ost-text-enabled"><?php echo JText::_('COM_SIMPLERENEW_CHANGE_BUTTON'); ?></span>
+            <span class="ost-text-disabled"><?php echo JText::_('COM_SIMPLERENEW_CHANGE_BUTTON_DISABLED'); ?></span>
         </button>
     </div>
     <?php echo SimplerenewHelper::renderModule('simplerenew_submit_bottom'); ?>
