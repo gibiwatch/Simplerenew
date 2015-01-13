@@ -21,7 +21,7 @@ class SimplerenewControllerUpdate extends SimplerenewControllerBase
 
             if (
                 $app->input->getMethod() == 'GET'
-                && $referer->getHost() == $_SERVER['HTTP_HOST']
+                && $referer->getHost() == $_SERVER['SERVER_NAME']
                 && $referer->getVar('option') == 'com_simplerenew'
             ) {
                 $message = JText::_('COM_SIMPLERENEW_UPDATE_NONE');
