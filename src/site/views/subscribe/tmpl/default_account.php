@@ -72,7 +72,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
                 value="<?php echo $this->user->username; ?>"
                 maxlength="50"
                 required="true"
-                data-include="#email #password"
+                data-include="#email"
                 data-recheck="#email #password"
                 data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_USERNAME_REQUIRED'); ?>"/>
         </div>
@@ -110,8 +110,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
                 class="verify_password"
                 value=""
                 required="true"
-                data-recheck="#email #username"
-                data-include="#username"
+                data-include="#username #email"
                 data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_PASSWORD_REQUIRED'); ?>"/>
         </div>
         <div class="block6">
