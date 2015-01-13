@@ -14,7 +14,7 @@ class SimplerenewControllerUpdate extends SimplerenewControllerBase
     public function update()
     {
         $app = SimplerenewFactory::getApplication();
-        $msg = null;
+        $message = JText::_('JERROR_ALERTNOAUTHOR');
 
         if (!empty($_SERVER['HTTP_REFERER'])) {
             $referer = new JURI($_SERVER['HTTP_REFERER']);
@@ -24,16 +24,18 @@ class SimplerenewControllerUpdate extends SimplerenewControllerBase
                 && $referer->getHost() == $_SERVER['HTTP_HOST']
                 && $referer->getVar('option') == 'com_simplerenew'
             ) {
+                $message = JText::_('COM_SIMPLERENEW_UPDATE_NONE');
                 $update = SimplerenewFactory::getStatus()->update;
                 if ($update) {
                     $model = SimplerenewModel::getInstance('Update');
                     $model->update(array($update->update_id));
+                    $message = $model->getState('result') ? null : JText::_('COM_SIMPLERENEW_UPDATE_FAILED');
                 }
             }
         } else {
             $referer = 'index.php?option=com_simplerenew';
         }
 
-        $this->setRedirect((string)$referer);
+        $this->setRedirect((string)$referer, $message);
     }
 }
