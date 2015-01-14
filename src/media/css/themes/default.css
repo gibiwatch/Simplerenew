@@ -351,6 +351,10 @@
     position: absolute;
 }
 
+.ost-container label.ost_error .ost-tooltip-icon:before {
+    color: #fff;
+}
+
 .ost-container #plancode-error{
     margin-top: 30px;
 }
