@@ -59,26 +59,28 @@ class plgSystemSimplerenew extends JPlugin
     protected function autoSyncPlans()
     {
         $app = JFactory::getApplication();
-        if ($app->isAdmin() && $this->isInstalled()) {
+        if ($app->isAdmin()) {
             $option    = $app->input->getCmd('option');
             $view      = $app->input->getCmd('view', 'plans');
+            $task      = $app->input->getCmd('task');
             $component = $app->input->getCmd('component');
 
-            if ($option == 'com_simplerenew' && $view == 'plans') {
-                $planSync = abs((float)$this->params->get('advanced.planSync', 1)) * 60;
+            if ($option == 'com_simplerenew' && $view == 'plans' && empty($task)) {
+                // Only check against the gateway when in admin plan list
+                $lastPlanSync = $this->params->get('log.lastPlanSync', 0);
+                $nextPlanSync = $lastPlanSync + 15;
 
-                if ($planSync) {
-                    $lastPlanSync = $this->params->get('log.lastPlanSync', 0);
-                    $nextPlanSync = $lastPlanSync + $planSync;
-
-                    if ($nextPlanSync < time()) {
-                        $messages = SimplerenewHelper::syncPlans('ad');
-                        SimplerenewHelper::enqueueMessages($messages);
-                    }
+                if ($nextPlanSync < time() && $this->isInstalled()) {
+                    $messages = SimplerenewHelper::syncPlans('ad');
+                    SimplerenewHelper::enqueueMessages($messages);
                 }
 
             } elseif ($option == 'com_config' && $component == 'com_simplerenew') {
-                $table = SimplerenewHelper::getExtensionTable();
+                // Clear the last sync when in config options
+                $table = JTable::getInstance('Extension');
+                $table->load(array('element' => 'com_simplerenew'));
+                $table->params = new JRegistry($table->params);
+
                 $table->params->set('log.lastPlanSync', 0);
                 $table->params = $table->params->toString();
                 $table->store();
