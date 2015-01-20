@@ -68,7 +68,7 @@ abstract class SimplerenewRoute
     public static function getQuery($view, $layout = '')
     {
         if (static::$items === null) {
-            $menu        = JApplication::getInstance('site')->getMenu();
+            $menu          = SimplerenewHelper::getApplication('site')->getMenu();
             static::$items = $menu->getItems(array('component', 'access'), array('com_simplerenew', true));
         }
 
@@ -80,12 +80,15 @@ abstract class SimplerenewRoute
             $query['layout'] = $layout;
         }
 
+        $viewLevels = SimplerenewFactory::getUser()->getAuthorisedViewLevels();
+
         // Look for an existing menu item that matches the requests
         foreach (static::$items as $item) {
             $mView   = empty($item->query['view']) ? '' : $item->query['view'];
             $mLayout = empty($item->query['layout']) ? '' : $item->query['layout'];
+            $access  = in_array($item->access, $viewLevels);
 
-            if ($mView == $view && $mLayout == $layout) {
+            if ($access && $mView == $view && $mLayout == $layout) {
                 $query['Itemid'] = $item->id;
                 if (!empty($query['view']) && $query['view'] == $view) {
                     unset($query['view']);
@@ -94,7 +97,8 @@ abstract class SimplerenewRoute
                     unset($query['layout']);
                 }
                 break;
-            } elseif ($mView == 'account' && empty($mLayout)) {
+
+            } elseif ($access && $mView == 'account' && empty($mLayout)) {
                 // The account info view can always be used as a base
                 $query['Itemid'] = $item->id;
             }
