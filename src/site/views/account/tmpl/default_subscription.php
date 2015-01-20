@@ -41,63 +41,71 @@ if ($this->subscriptions):
         </div>
         <!-- .simplerenew-plan-information -->
 
-        <?php
-        if ($subscription->status == Subscription::STATUS_EXPIRED):
-            ?>
-            <div class="ost-alert-warning">
-                <?php
-                echo JText::sprintf(
-                    'COM_SIMPLERENEW_SUBSCRIPTION_EXPIRED',
-                    $subscription->expires->format('F j, Y')
-                );
-                ?>
-            </div>
+        <div class="ost-subscriptions-list m-bottom">
+
             <?php
-        else:
-            ?>
-            <div class="ost-alert-success">
-                <?php
-                echo JText::sprintf(
-                    'COM_SIMPLERENEW_SUBSCRIPTION_ACTIVE_PERIOD',
-                    $subscription->period_start->format('F j, Y'),
-                    $subscription->period_end->format('F j, Y')
-                );
-                ?>
-            </div>
-            <?php
-            if ($subscription->canceled):
+            if ($subscription->status == Subscription::STATUS_EXPIRED):
                 ?>
                 <div class="ost-alert-warning">
-                    <?php echo JText::_('COM_SIMPLERENEW_SUBSCRIPTION_CANCELED'); ?>
-                </div>
-            <?php
-            elseif ($subscription->pending_plan):
-                $pending = $container->getPlan()->load($subscription->pending_plan);
-                ?>
-                <div class="ost-alert-notify">
                     <?php
                     echo JText::sprintf(
-                        'COM_SIMPLERENEW_SUBSCRIPTION_PENDING',
-                        $subscription->period_end->format('F j, Y'),
-                        $pending->name,
-                        JHtml::_('currency.format', $pending->amount, $pending->currency)
+                        'COM_SIMPLERENEW_SUBSCRIPTION_EXPIRED',
+                        $subscription->expires->format('F j, Y')
                     );
                     ?>
                 </div>
-            <?php
+                <?php
             else:
                 ?>
-                <div class="ost-alert-notify">
+                <div class="ost-alert-success">
                     <?php
                     echo JText::sprintf(
-                        'COM_SIMPLERENEW_SUBSCRIPTION_RENEW_DATE',
+                        'COM_SIMPLERENEW_SUBSCRIPTION_ACTIVE_PERIOD',
+                        $subscription->period_start->format('F j, Y'),
                         $subscription->period_end->format('F j, Y')
                     );
                     ?>
                 </div>
-            <?php
+                <?php
+                if ($subscription->canceled):
+                    ?>
+                    <div class="ost-alert-warning">
+                        <?php echo JText::_('COM_SIMPLERENEW_SUBSCRIPTION_CANCELED'); ?>
+                    </div>
+                <?php
+                elseif ($subscription->pending_plan):
+                    $pending = $container->getPlan()->load($subscription->pending_plan);
+                    ?>
+                    <div class="ost-alert-notify">
+                        <?php
+                        echo JText::sprintf(
+                            'COM_SIMPLERENEW_SUBSCRIPTION_PENDING',
+                            $subscription->period_end->format('F j, Y'),
+                            $pending->name,
+                            JHtml::_('currency.format', $pending->amount, $pending->currency)
+                        );
+                        ?>
+                    </div>
+                <?php
+                else:
+                    ?>
+                    <div class="ost-alert-notify">
+                        <?php
+                        echo JText::sprintf(
+                            'COM_SIMPLERENEW_SUBSCRIPTION_RENEW_DATE',
+                            $subscription->period_end->format('F j, Y')
+                        );
+                        ?>
+                    </div>
+                <?php
+                endif;
             endif;
-        endif;
+            ?>
+
+        </div>
+        <!-- .ost-subscriptions-list -->
+
+    <?php
     endforeach;
 else:
     ?>
