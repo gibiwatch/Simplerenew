@@ -17,15 +17,15 @@ defined('_JEXEC') or die();
 $container = SimplerenewFactory::getContainer();
 
 if ($this->subscriptions):
+    ?>
+    <h3>
+        <span><i class="fa fa-check"></i></span>
+        <?php echo JText::plural('COM_SIMPLERENEW_HEADING_SUBSCRIPTION', count($this->subscriptions)); ?>
+    </h3>
+    <?php
     foreach ($this->subscriptions as $subscription):
         $plan = $this->getPlan($subscription->plan);
         ?>
-        <h3>
-            <span><i class="fa fa-check"></i></span>
-            <?php echo JText::_('COM_SIMPLERENEW_HEADING_SUBSCRIPTION'); ?>
-        </h3>
-
-
         <div class="simplerenew-plan-information">
 
             <div class="ost-section ost-row-one">
