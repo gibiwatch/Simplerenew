@@ -558,6 +558,10 @@ span.simplerenew-plan.simplerenew-plan-selected{
     margin-bottom: 50px;
 }
 
+.ost-container .ost-subscription-plan{
+    font-weight: 600;
+}
+
 /* Invoices view
  ========================================================================== */
 .ost-invoice-heading > div{

@@ -607,6 +607,10 @@ span.simplerenew-plan.simplerenew-plan-selected{
     border: 1px solid #cccccc;
 }
 
+.ost-container .ost-subscription-plan{
+    font-weight: 600;
+}
+
 /* Invoices view
  ========================================================================== */
 .ost-invoice-heading > div{
