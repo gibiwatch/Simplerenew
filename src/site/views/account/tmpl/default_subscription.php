@@ -29,8 +29,8 @@ if ($this->subscriptions):
         <div class="simplerenew-plan-information">
 
             <div class="ost-section ost-row-one">
-                <div class="block3 ost-subscription-plan">
-                    <?php echo JText::_('COM_SIMPLERENEW_PLAN'); ?>
+                <div class="block3">
+                    <label><?php echo JText::_('COM_SIMPLERENEW_PLAN'); ?></label>
                 </div>
                 <div class="block9">
                     <?php echo $plan->name; ?>
