@@ -10,8 +10,10 @@
  * Loads the necessary support for testing Simple Renew
  */
 
+define('SIMPLERENEW_TESTS', __DIR__);
+
 // Load local installation configurations
-$configPath = __DIR__ . '/config.php';
+$configPath = SIMPLERENEW_TESTS . '/config.php';
 if (!file_exists($configPath)) {
     throw new Exception('Local configuration was not found: ' . $configPath);
 }
@@ -61,7 +63,7 @@ if (!defined('JPATH_PLATFORM')) {
 if (!defined('JDEBUG')) {
     define('JDEBUG', false);
 }
-require_once JPATH_LIBRARIES.'/cms.php';
+require_once JPATH_LIBRARIES . '/cms.php';
 
 // Load the configuration
 require_once JPATH_CONFIGURATION . '/configuration.php';
@@ -70,7 +72,7 @@ require_once JPATH_CONFIGURATION . '/configuration.php';
 JFactory::getApplication('site');
 
 // Bootstrap Simple Renew
-define('SIMPLERENEW_SRC', realpath(__DIR__ . '/../../src'));
+define('SIMPLERENEW_SRC', realpath(SIMPLERENEW_TESTS . '/../src'));
 if (!is_dir(SIMPLERENEW_SRC)) {
     throw new Exception('Could not find the Simple Renew folder: ' . SIMPLERENEW_SRC);
 }
@@ -82,15 +84,12 @@ define('SIMPLERENEW_SITE', SIMPLERENEW_SRC . '/site');
 define('SIMPLERENEW_MEDIA', SIMPLERENEW_SRC . '/media');
 define('SIMPLERENEW_LIBRARY', SIMPLERENEW_ADMIN . '/library');
 
-// Setup autoloaded libraries
-require_once SIMPLERENEW_LIBRARY . '/joomla/loader.php';
-require_once SIMPLERENEW_LIBRARY . '/psr4autoloader.php';
-$loader = new Psr4AutoloaderClass();
-
-
-$loader->register();
-$loader->addNamespace('Simplerenew', SIMPLERENEW_LIBRARY . '/simplerenew');
-$loader->addNamespace('Tests', __DIR__);
-
 // Set the Joomla overrides loader
 require_once SIMPLERENEW_LIBRARY . '/joomla/loader.php';
+
+// Setup autoloaded libraries
+require_once SIMPLERENEW_LIBRARY . '/psr4autoloader.php';
+$loader = new Psr4AutoloaderClass();
+$loader->register();
+$loader->addNamespace('Simplerenew', SIMPLERENEW_LIBRARY . '/simplerenew');
+$loader->addNamespace('Tests\\Simplerenew', SIMPLERENEW_TESTS . '/unit/library/simplerenew');
