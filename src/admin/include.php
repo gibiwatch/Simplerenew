@@ -6,6 +6,8 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Alledia\AutoLoader;
+
 defined('_JEXEC') or die();
 
 if (!defined('SIMPLERENEW_LOADED')) {
@@ -15,15 +17,10 @@ if (!defined('SIMPLERENEW_LOADED')) {
     define('SIMPLERENEW_MEDIA', JPATH_SITE . '/media/com_simplerenew');
     define('SIMPLERENEW_LIBRARY', SIMPLERENEW_ADMIN . '/library');
 
-    // Setup autoloaded libraries
-    require_once SIMPLERENEW_LIBRARY . '/psr4autoloader.php';
-    $loader = new Psr4AutoloaderClass();
-
-    $loader->register();
-    $loader->addNamespace('Simplerenew', SIMPLERENEW_LIBRARY . '/simplerenew');
-
-    // Set the Joomla overrides loader
-    require_once SIMPLERENEW_LIBRARY . '/joomla/loader.php';
+    // Setup autoload libraries
+    require_once SIMPLERENEW_LIBRARY . '/alledia/AutoLoader.php';
+    AutoLoader::register('Simplerenew', SIMPLERENEW_LIBRARY . '/simplerenew');
+    AutoLoader::registerCamelBase('Simplerenew', SIMPLERENEW_LIBRARY . '/joomla');
 
     // Any additional helper paths
     JHtml::addIncludePath(SIMPLERENEW_LIBRARY . '/html');
