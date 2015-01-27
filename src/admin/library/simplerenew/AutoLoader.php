@@ -5,9 +5,11 @@
  * @contact    www.alledia.com, support@alledia.com
  * @copyright  2015 Alledia.com, All rights reserved
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ *
+ * Local copy of the Alledia autoloader
  */
 
-namespace Alledia;
+namespace Simplerenew;
 
 defined('_JEXEC') or die();
 
@@ -40,7 +42,7 @@ class AutoLoader
             static::$instance = new static();
         }
 
-        spl_autoload_register(array(self::$instance, $method));
+        spl_autoload_register(array(static::$instance, $method));
     }
 
     /**
@@ -62,7 +64,7 @@ class AutoLoader
             return;
         }
 
-        if (empty(static::$prefixes)) {
+        if (count(self::$prefixes) == 0) {
             // Register function on first call
             static::registerLoader('loadClass');
         }
@@ -84,14 +86,6 @@ class AutoLoader
         } else {
             array_push(self::$prefixes[$prefix], $baseDir);
         }
-    }
-
-    /**
-     * @deprecated
-     */
-    public function addNamespace($prefix, $baseDir, $prepend = false)
-    {
-        self::register($prefix, $baseDir, $prepend);
     }
 
     /**
@@ -130,12 +124,12 @@ class AutoLoader
     protected function loadMappedFile($prefix, $className)
     {
         // are there any base directories for this namespace prefix?
-        if (isset(static::$prefixes[$prefix]) === false) {
+        if (isset(self::$prefixes[$prefix]) === false) {
             return false;
         }
 
         // look through base directories for this namespace prefix
-        foreach (static::$prefixes[$prefix] as $baseDir) {
+        foreach (self::$prefixes[$prefix] as $baseDir) {
             $path = $baseDir . str_replace('\\', '/', $className) . '.php';
 
             if (is_file($path)) {
@@ -177,7 +171,7 @@ class AutoLoader
             throw new \Exception("Cannot register '{$prefix}'. The requested base directory does not exist!'");
         }
 
-        if (empty(static::$camelPrefixes)) {
+        if (count(self::$camelPrefixes) == 0) {
             // Register function on first call
             static::registerLoader('loadCamelClass');
         }

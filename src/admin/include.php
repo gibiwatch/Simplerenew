@@ -6,7 +6,7 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-use Alledia\AutoLoader;
+use Simplerenew\AutoLoader;
 
 defined('_JEXEC') or die();
 
@@ -18,7 +18,7 @@ if (!defined('SIMPLERENEW_LOADED')) {
     define('SIMPLERENEW_LIBRARY', SIMPLERENEW_ADMIN . '/library');
 
     // Setup autoload libraries
-    require_once SIMPLERENEW_LIBRARY . '/alledia/AutoLoader.php';
+    require_once SIMPLERENEW_LIBRARY . '/simplerenew/AutoLoader.php';
     AutoLoader::register('Simplerenew', SIMPLERENEW_LIBRARY . '/simplerenew');
     AutoLoader::registerCamelBase('Simplerenew', SIMPLERENEW_LIBRARY . '/joomla');
 
