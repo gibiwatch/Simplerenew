@@ -154,8 +154,6 @@ class AutoLoader
      * if there is a matching file in the directory tree starting with $baseDir.
      * File names and directory names are all expected to be lower case.
      *
-     * Be sure to enable this method when instantiating this class.
-     *
      * Example:
      *
      * $prefix = 'Simplerenew'
