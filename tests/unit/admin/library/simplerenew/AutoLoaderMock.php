@@ -35,4 +35,9 @@ class AutoLoaderMock extends \Simplerenew\AutoLoader
     {
         return $this->loadClass($class);
     }
+
+    public function mockLoadCamelClass($class)
+    {
+        return $this->loadCamelClass($class);
+    }
 }

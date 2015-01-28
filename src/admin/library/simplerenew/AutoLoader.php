@@ -166,10 +166,6 @@ class AutoLoader
      */
     public static function registerCamelBase($prefix, $baseDir)
     {
-        if (!is_dir($baseDir)) {
-            throw new \Exception("Cannot register '{$prefix}'. The requested base directory does not exist!'");
-        }
-
         if (count(static::$camelPrefixes) == 0) {
             // Register function on first call
             static::registerLoader('loadCamelClass');

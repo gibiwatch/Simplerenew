@@ -17,6 +17,11 @@ class AutoLoaderTest extends \PHPUnit_Framework_TestCase
             '/vendor/foo.bardoom/src/ClassName.php',
             '/vendor/foo.bar.baz.dib/src/ClassName.php',
             '/vendor/foo.bar.baz.dib.zim.gir/src/ClassName.php',
+            '/local/camels/class.php',
+            '/local/camels/foo/bar.php',
+            '/local/camels/foobar.php',
+            '/local2/camels/class.php',
+            '/local2/camels/foo/bar.php'
         ));
 
         $this->loader = AutoLoaderMock::getInstance();
@@ -26,9 +31,12 @@ class AutoLoaderTest extends \PHPUnit_Framework_TestCase
         AutoLoaderMock::register('Foo\BarDoom', '/vendor/foo.bardoom/src');
         AutoLoaderMock::register('Foo\Bar\Baz\Dib', '/vendor/foo.bar.baz.dib/src');
         AutoLoaderMock::register('Foo\Bar\Baz\Dib\Zim\Gir', '/vendor/foo.bar.baz.dib.zim.gir/src');
+
+        AutoLoaderMock::registerCamelBase('Camel', '/local/camels');
+        AutoLoaderMock::registerCamelBase('Hump', '/local2/camels');
     }
 
-    public function testExistingFile()
+    public function testClassExisting()
     {
         $actual = $this->loader->mockLoadClass('Foo\Bar\ClassName');
         $expect = '/vendor/foo.bar/src/ClassName.php';
@@ -39,20 +47,20 @@ class AutoLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testMissingFile()
+    public function testClassMissing()
     {
         $actual = $this->loader->mockLoadClass('No_Vendor\No_Package\NoClass');
         $this->assertFalse($actual);
     }
 
-    public function testDeepFile()
+    public function testClassDeep()
     {
         $actual = $this->loader->mockLoadClass('Foo\Bar\Baz\Dib\Zim\Gir\ClassName');
         $expect = '/vendor/foo.bar.baz.dib.zim.gir/src/ClassName.php';
         $this->assertSame($expect, $actual);
     }
 
-    public function testConfusion()
+    public function testClassConfusion()
     {
         $actual = $this->loader->mockLoadClass('Foo\Bar\DoomClassName');
         $expect = '/vendor/foo.bar/src/DoomClassName.php';
@@ -62,4 +70,40 @@ class AutoLoaderTest extends \PHPUnit_Framework_TestCase
         $expect = '/vendor/foo.bardoom/src/ClassName.php';
         $this->assertSame($expect, $actual);
     }
+
+    public function testCamelExisting()
+    {
+        $actual = $this->loader->mockLoadCamelClass('CamelClass');
+        $expect = '/local/camels/class.php';
+        $this->assertSame($expect, $actual);
+    }
+
+    public function testCamelMissing()
+    {
+        $actual = $this->loader->mockLoadCamelClass('NoSuchClass');
+        $this->assertFalse($actual);
+    }
+
+    public function testCamelDeep()
+    {
+        $actual = $this->loader->mockLoadCamelClass('CamelFooBar');
+        $expect = '/local/camels/foo/bar.php';
+        $this->assertSame($expect, $actual);
+    }
+
+    public function testCamelConfusion()
+    {
+        $actual = $this->loader->mockLoadCamelClass('CamelFooBar');
+        $expect = '/local/camels/foo/bar.php';
+        $this->assertSame($expect, $actual);
+
+        $actual = $this->loader->mockLoadCamelClass('CamelFoobar');
+        $expect = '/local/camels/foobar.php';
+        $this->assertSame($expect, $actual);
+
+        $actual = $this->loader->mockLoadCamelClass('HumpFooBar');
+        $expect = '/local2/camels/foo/bar.php';
+        $this->assertSame($expect, $actual);
+    }
+
 }
