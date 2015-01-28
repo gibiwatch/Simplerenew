@@ -84,12 +84,7 @@ define('SIMPLERENEW_SITE', SIMPLERENEW_SRC . '/site');
 define('SIMPLERENEW_MEDIA', SIMPLERENEW_SRC . '/media');
 define('SIMPLERENEW_LIBRARY', SIMPLERENEW_ADMIN . '/library');
 
-// Set the Joomla overrides loader
-require_once SIMPLERENEW_LIBRARY . '/joomla/loader.php';
-
 // Setup autoloaded libraries
-require_once SIMPLERENEW_LIBRARY . '/psr4autoloader.php';
-$loader = new Psr4AutoloaderClass();
-$loader->register();
-$loader->addNamespace('Simplerenew', SIMPLERENEW_LIBRARY . '/simplerenew');
-$loader->addNamespace('Tests\\Simplerenew', SIMPLERENEW_TESTS . '/unit/library/simplerenew');
+require_once SIMPLERENEW_LIBRARY . '/simplerenew/AutoLoader.php';
+Simplerenew\AutoLoader::register('Simplerenew', SIMPLERENEW_LIBRARY . '/simplerenew');
+Simplerenew\AutoLoader::registerCamelBase('Simplerenew', SIMPLERENEW_LIBRARY . '/joomla');
