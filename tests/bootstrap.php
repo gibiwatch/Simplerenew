@@ -87,4 +87,5 @@ define('SIMPLERENEW_LIBRARY', SIMPLERENEW_ADMIN . '/library');
 // Setup autoloaded libraries
 require_once SIMPLERENEW_LIBRARY . '/simplerenew/AutoLoader.php';
 Simplerenew\AutoLoader::register('Simplerenew', SIMPLERENEW_LIBRARY . '/simplerenew');
+//Simplerenew\AutoLoader::register('Tests\Simplerenew', SIMPLERENEW_TESTS . '/admin/library/simplerenew');
 Simplerenew\AutoLoader::registerCamelBase('Simplerenew', SIMPLERENEW_LIBRARY . '/joomla');

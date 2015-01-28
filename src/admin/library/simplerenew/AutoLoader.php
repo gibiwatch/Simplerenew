@@ -64,7 +64,7 @@ class AutoLoader
             return;
         }
 
-        if (count(self::$prefixes) == 0) {
+        if (count(static::$prefixes) == 0) {
             // Register function on first call
             static::registerLoader('loadClass');
         }
@@ -76,15 +76,15 @@ class AutoLoader
         $baseDir = rtrim($baseDir, '\\/') . '/';
 
         // initialise the namespace prefix array
-        if (empty(self::$prefixes[$prefix])) {
-            self::$prefixes[$prefix] = array();
+        if (empty(static::$prefixes[$prefix])) {
+            static::$prefixes[$prefix] = array();
         }
 
         // retain the base directory for the namespace prefix
         if ($prepend) {
-            array_unshift(self::$prefixes[$prefix], $baseDir);
+            array_unshift(static::$prefixes[$prefix], $baseDir);
         } else {
-            array_push(self::$prefixes[$prefix], $baseDir);
+            array_push(static::$prefixes[$prefix], $baseDir);
         }
     }
 
@@ -93,7 +93,7 @@ class AutoLoader
      *
      * @param string $class The fully-qualified class name.
      *
-     * @return null|string The mapped file name on success, or boolean false on failure.
+     * @return bool|string The mapped file name on success, or boolean false on failure.
      */
     protected function loadClass($class)
     {
@@ -124,16 +124,15 @@ class AutoLoader
     protected function loadMappedFile($prefix, $className)
     {
         // are there any base directories for this namespace prefix?
-        if (isset(self::$prefixes[$prefix]) === false) {
+        if (isset(static::$prefixes[$prefix]) === false) {
             return false;
         }
 
         // look through base directories for this namespace prefix
-        foreach (self::$prefixes[$prefix] as $baseDir) {
+        foreach (static::$prefixes[$prefix] as $baseDir) {
             $path = $baseDir . str_replace('\\', '/', $className) . '.php';
 
-            if (is_file($path)) {
-                require_once $path;
+            if ($this->requireFile($path)) {
                 return $path;
             }
         }
@@ -171,13 +170,13 @@ class AutoLoader
             throw new \Exception("Cannot register '{$prefix}'. The requested base directory does not exist!'");
         }
 
-        if (count(self::$camelPrefixes) == 0) {
+        if (count(static::$camelPrefixes) == 0) {
             // Register function on first call
             static::registerLoader('loadCamelClass');
         }
 
-        if (empty(self::$camelPrefixes[$prefix])) {
-            self::$camelPrefixes[$prefix] = $baseDir;
+        if (empty(static::$camelPrefixes[$prefix])) {
+            static::$camelPrefixes[$prefix] = $baseDir;
         }
     }
 
@@ -191,15 +190,14 @@ class AutoLoader
     protected function loadCamelClass($class)
     {
         if (!class_exists($class)) {
-            foreach (self::$camelPrefixes as $prefix => $baseDir) {
+            foreach (static::$camelPrefixes as $prefix => $baseDir) {
                 if (strpos($class, $prefix) === 0) {
                     $parts = preg_split('/(?<=[a-z])(?=[A-Z])/x', substr($class, strlen($prefix)));
 
                     $file     = strtolower(join('/', $parts));
                     $filePath = $baseDir . '/' . $file . '.php';
 
-                    if (is_file($filePath)) {
-                        require_once $filePath;
+                    if ($this->requireFile($filePath)) {
                         return $filePath;
                     }
                 }
@@ -208,5 +206,21 @@ class AutoLoader
 
         // No file found
         return false;
+    }
+
+    /**
+     * Require the selected file path
+     *
+     * @param string $path
+     *
+     * @return bool
+     */
+    protected function requireFile($path)
+    {
+        $success = is_file($path);
+        if ($success) {
+            require_once $path;
+        }
+        return $success;
     }
 }
