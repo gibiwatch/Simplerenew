@@ -226,7 +226,7 @@ class Joomla implements UserInterface
             $errors = $user->getErrors();
             if (count($errors) != 1 || !in_array('User not Super Administrator', $errors)) {
                 // Only throw an error if this isn't the 'change SU' problem
-                throw new Exception(join('<br/>', array_filter($user->getErrors())), 403);
+                throw new Exception(join('<br/>', array_filter($errors)), 403);
             }
         }
 
