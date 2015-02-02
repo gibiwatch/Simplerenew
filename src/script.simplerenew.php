@@ -44,22 +44,6 @@ class com_simplerenewInstallerScript extends AbstractScript
     protected $previousVersion = '0.0.0';
 
     /**
-     * @param JInstallerAdapterComponent $parent
-     *
-     * @return void
-     */
-    public function initProperties($parent)
-    {
-        parent::initProperties($parent);
-
-        $path = JPATH_ADMINISTRATOR . '/components/com_simplerenew/simplerenew.xml';
-        if (is_file($path)) {
-            $previousManifest      = JInstaller::parseXMLInstallFile($path);
-            $this->previousVersion = (string)$previousManifest['version'];
-        }
-    }
-
-    /**
      * @param string                     $type
      * @param JInstallerAdapterComponent $parent
      *
