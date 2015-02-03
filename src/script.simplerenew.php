@@ -55,7 +55,7 @@ class com_simplerenewInstallerScript extends AbstractScript
         if ($success && $type == 'update') {
             if (version_compare($this->previousVersion, '0.1.0', 'lt')) {
                 JFactory::getApplication()->enqueueMessage(
-                    'Please update to at least v0.1.0 (First Beta) before updating to this version',
+                    JText::sprintf('COM_SIMPLERENEW_ERROR_INSTALL_MINVERSION', '0.1.0 (First Beta)'),
                     'error'
                 );
                 return false;
