@@ -10,6 +10,7 @@
 .ost-container label,
 .ost-container td {
     color: #333333;
+    text-align: left;
 }
 
 .ost-container input,
