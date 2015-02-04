@@ -61,32 +61,25 @@ class Container
                 $userAdapter = new $userAdapter();
             }
         }
-        if (!$userAdapter instanceof UserInterface) {
-            throw new Exception('User adapter not found - ' . $userAdapter);
+        if ($userAdapter instanceof UserInterface) {
+            $this->configuration->set('user.adapter', $userAdapter);
+            $this->configuration->set('user.config', $config->get('user', array()));
         }
-        $this->configuration->set('user.adapter', $userAdapter);
-        $this->configuration->set('user.config', $config->get('user', array()));
 
         // Load and verify Gateway configurations
         $gateway = $config->get('gateway', array());
-        if (empty($gateway)) {
-            throw new Exception('No gateway has been defined');
-        }
+        if (!empty($gateway)) {
+            $namespace = key($gateway);
+            if (!empty($gateway[$namespace])) {
+                $gatewayConfig = new Configuration($gateway[$namespace]);
+                $this->configuration->set('gateway.config', $gatewayConfig);
+            }
 
-        $namespace = key($gateway);
-        if (empty($gateway[$namespace])) {
-            throw new Exception('Gateway has not been selected');
+            if (strpos($namespace, '\\') === false) {
+                $namespace = '\\Simplerenew\\Gateway\\' . ucfirst(strtolower($namespace));
+            }
+            $this->configuration->set('gateway.namespace', $namespace);
         }
-        $gatewayConfig = new Configuration($gateway[$namespace]);
-        $this->configuration->set('gateway.config', $gatewayConfig);
-
-        if (strpos($namespace, '\\') === false) {
-            $namespace = '\\Simplerenew\\Gateway\\' . ucfirst(strtolower($namespace));
-        }
-        if (!class_exists($namespace . '\\AccountImp')) {
-            throw new Exception('Gateway namespace not found - ' . $namespace);
-        }
-        $this->configuration->set('gateway.namespace', $namespace);
     }
 
     /**
