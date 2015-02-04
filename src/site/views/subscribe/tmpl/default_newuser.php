@@ -43,9 +43,14 @@ defined('_JEXEC') or die();
     <?php echo SimplerenewHelper::renderModule('simplerenew_submit_top'); ?>
     <div class="m-bottom">
         <button type="submit" class="btn-main btn-big">
-            <i class="fa fa-check"></i>
-            <span class="ost-text-enabled"><?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE_BUTTON'); ?></span>
-            <span class="ost-text-disabled"><?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE_BUTTON_DISABLED'); ?></span>
+            <span class="ost-text-enabled">
+                <i class="fa fa-check"></i>
+                <?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE_BUTTON'); ?>
+            </span>
+            <span class="ost-text-disabled">
+                <i class="fa fa-spinner fa-spin"></i>
+                <?php echo JText::_('COM_SIMPLERENEW_SUBSCRIBE_BUTTON_DISABLED'); ?>
+            </span>
         </button>
     </div>
     <?php echo SimplerenewHelper::renderModule('simplerenew_submit_bottom'); ?>
