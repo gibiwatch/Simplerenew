@@ -192,17 +192,17 @@ class com_simplerenewInstallerScript extends AbstractScript
                 $plugin = JTable::getInstance('extension');
                 $plugin->load(
                     array(
-                        'type' => 'plugin',
+                        'type'    => 'plugin',
                         'element' => 'simplerenew',
-                        'folder' => 'system'
+                        'folder'  => 'system'
                     )
                 );
 
                 if ($plugin->extension_id > 0) {
                     if ($plugin->params) {
-                        $pluginParams = array('advanced' => json_decode($plugin->params, true));
-                        $merged = json_encode(array_merge_recursive($params->toArray(), $pluginParams));
-                        $params = new JRegistry($merged);
+                        $pluginParams   = array('advanced' => json_decode($plugin->params, true));
+                        $merged         = json_encode(array_merge_recursive($params->toArray(), $pluginParams));
+                        $params         = new JRegistry($merged);
                         $plugin->params = '';
 
                         $setParams = true;
