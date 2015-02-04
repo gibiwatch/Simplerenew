@@ -47,6 +47,7 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
         $billing = $this->getBilling($parent->account->code);
 
         // Recognize debugging url var
+        // @TODO: Refactor a better cms compatibility layer
         if (\SimplerenewFactory::getApplication()->input->getInt('ppdev', 0)) {
             $billing->paypal_billing_agreement_id = '12345-TEST-54321';
         }
