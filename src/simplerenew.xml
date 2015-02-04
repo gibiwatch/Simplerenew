@@ -2,7 +2,7 @@
 <extension type="component" version="2.5" method="upgrade">
     <name>COM_SIMPLERENEW</name>
     <author>OSTraining</author>
-    <creationDate>February 03 2015</creationDate>
+    <creationDate>February 4, 2015</creationDate>
     <copyright>Copyright (C) 2014 OSTraining.com</copyright>
     <license>GPL v3</license>
     <authorEmail>info@simplerenew.com</authorEmail>
