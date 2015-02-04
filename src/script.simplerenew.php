@@ -102,8 +102,7 @@ class com_simplerenewInstallerScript extends AbstractScript
         parent::installRelated();
 
         if ($this->relatedExtensions) {
-            $installer = new JInstaller();
-            $source    = $this->installer->getPath('source');
+            $source = $this->installer->getPath('source');
 
             foreach ($this->relatedExtensions as $type => $folders) {
                 foreach ($folders as $folder => $extensions) {
@@ -117,8 +116,9 @@ class com_simplerenewInstallerScript extends AbstractScript
                             $current = $this->findExtension($type, $element, $folder);
                             $isNew   = empty($current);
 
-                            $typeName = trim(($folder ?: '') . ' ' . $type);
-                            $text     = 'LIB_ALLEDIAINSTALLER_RELATED_' . ($isNew ? 'INSTALL' : 'UPDATE');
+                            $typeName  = trim(($folder ?: '') . ' ' . $type);
+                            $text      = 'LIB_ALLEDIAINSTALLER_RELATED_' . ($isNew ? 'INSTALL' : 'UPDATE');
+                            $installer = new JInstaller();
                             if ($installer->install($path)) {
                                 $this->setMessage(JText::sprintf($text, $typeName, $element));
                                 if ($isNew) {
