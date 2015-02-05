@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Api;
 
+use Simplerenew\Container;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\AccountInterface;
 use Simplerenew\Primitive\Address;
@@ -17,6 +18,7 @@ defined('_JEXEC') or die();
 
 /**
  * Class Account
+ *
  * @package Simplerenew\Api
  *
  * @property-read User    $user
@@ -84,23 +86,15 @@ class Account extends AbstractApiBase
      */
     private $codeMask = '%s';
 
-    /**
-     * @param AccountInterface $imp
-     * @param array            $config
-     */
-    public function __construct(AccountInterface $imp, array $config = array())
+    public function __construct(Container $container, AccountInterface $imp, Address $address = null)
     {
-        $this->imp = $imp;
+        parent::__construct($container);
 
-        if (!empty($config['codeMask'])) {
-            $this->setCodeMask($config['codeMask']);
-        }
+        $config = $container->configuration;
+        $this->setCodeMask($config->get('account.config.codeMask', $this->codeMask));
 
-        if (!empty($config['address']) && $config['address'] instanceof Address) {
-            $this->address = $config['address'];
-        } else {
-            $this->address = new Address();
-        }
+        $this->imp     = $imp;
+        $this->address = $address ?: new Address();
     }
 
     /**
@@ -142,11 +136,11 @@ class Account extends AbstractApiBase
 
         $this->setProperties(
             array(
-                'code'      => $this->code      ? : $this->getAccountCode($this->user->id),
-                'username'  => $this->username  ? : $this->user->username,
-                'email'     => $this->email     ? : $this->user->email,
-                'firstname' => $this->firstname ? : $this->user->firstname,
-                'lastname'  => $this->lastname  ? : $this->user->lastname
+                'code'      => $this->code ?: $this->getAccountCode($this->user->id),
+                'username'  => $this->username ?: $this->user->username,
+                'email'     => $this->email ?: $this->user->email,
+                'firstname' => $this->firstname ?: $this->user->firstname,
+                'lastname'  => $this->lastname ?: $this->user->lastname
             )
         );
 

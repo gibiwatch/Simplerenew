@@ -122,10 +122,10 @@ class Notify extends Object
      */
     protected $container = null;
 
-    public function __construct(NotifyInterface $adapter, Container $container)
+    public function __construct(Container $container, NotifyInterface $adapter)
     {
-        $this->adapter   = $adapter;
         $this->container = $container;
+        $this->adapter   = $adapter;
     }
 
     /**

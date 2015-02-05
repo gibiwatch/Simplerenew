@@ -9,6 +9,7 @@
 namespace Simplerenew\User;
 
 use Simplerenew\Api\Plan;
+use Simplerenew\Container;
 use Simplerenew\Exception;
 use Simplerenew\Object;
 
@@ -73,17 +74,14 @@ class User extends Object
     protected $adapter = null;
 
     /**
-     * @var int
+     * @var Container
      */
-    protected $expirationGroup = null;
+    protected $container = null;
 
-    public function __construct(Adapter\UserInterface $adapter, array $config = array())
+    public function __construct(Container $container, Adapter\UserInterface $adapter)
     {
-        $this->adapter = $adapter;
-
-        if (!empty($config['expirationGroup'])) {
-            $this->expirationGroup = $config['expirationGroup'];
-        }
+        $this->container = $container;
+        $this->adapter   = $adapter;
     }
 
     /**
@@ -255,6 +253,6 @@ class User extends Object
      */
     public function getExpirationGroup()
     {
-        return $this->expirationGroup;
+        return $this->container->configuration->get('user.config.expirationGroup');
     }
 }

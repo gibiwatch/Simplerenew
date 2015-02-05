@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Api;
 
+use Simplerenew\Container;
 use Simplerenew\Exception;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\Gateway\BillingInterface;
@@ -67,12 +68,10 @@ class Billing extends AbstractApiBase
      */
     protected $imp = null;
 
-    /**
-     * @param BillingInterface $imp
-     * @param array            $config
-     */
-    public function __construct(BillingInterface $imp, array $config = array())
+    public function __construct(Container $container, BillingInterface $imp, Address $address = null)
     {
+        parent::__construct($container);
+
         $this->imp = $imp;
 
         if (!empty($config['address']) && $config['address'] instanceof Address) {

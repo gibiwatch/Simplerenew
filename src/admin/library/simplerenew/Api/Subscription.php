@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Api;
 
+use Simplerenew\Container;
 use Simplerenew\Exception;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\Gateway\SubscriptionInterface;
@@ -108,10 +109,11 @@ class Subscription extends AbstractApiBase
 
     /**
      * @param SubscriptionInterface $imp
-     * @param array                 $config
      */
-    public function __construct(SubscriptionInterface $imp, array $config = array())
+    public function __construct(Container $container, SubscriptionInterface $imp)
     {
+        parent::__construct($container);
+
         $this->imp = $imp;
     }
 

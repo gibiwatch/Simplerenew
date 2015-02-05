@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Api;
 
+use Simplerenew\Container;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\CouponInterface;
 
@@ -90,8 +91,10 @@ class Coupon extends AbstractApiBase
      */
     protected $imp = null;
 
-    public function __construct(CouponInterface $imp, array $config = array())
+    public function __construct(Container $container, CouponInterface $imp)
     {
+        parent::__construct($container);
+
         $this->imp = $imp;
     }
 

@@ -31,9 +31,20 @@ defined('_JEXEC') or die();
 
 /**
  * Class Container
+ *
  * @package Simplerenew
  *
  * @TODO    : Investigate replacing with a proper DI container
+ *
+ * @property Configuration   $configuration
+ * @property Account         $account
+ * @property Billing         $billing
+ * @property Coupon          $coupon
+ * @property Invoice         $invoice
+ * @property Notify          $notify
+ * @property AbstractPayment $paymenttype
+ * @property Plan            $plan
+ * @property Subscription    $subscription
  */
 class Container
 {
@@ -82,6 +93,24 @@ class Container
         }
     }
 
+    public function __get($name)
+    {
+        switch ($name) {
+            case 'configuration':
+                return $this->configuration;
+                break;
+
+            default:
+                $method = 'get' . ucfirst(strtolower($name));
+                if (method_exists($this, $method)) {
+                    return $this->$method();
+                }
+                break;
+        }
+
+        return null;
+    }
+
     /**
      * Create a new user object
      *
@@ -93,7 +122,7 @@ class Container
     public function getUser(UserInterface $adapter = null)
     {
         $adapter = $adapter ?: $this->configuration->get('user.adapter');
-        $user    = new User($adapter, $this->configuration->get('user.config'));
+        $user    = new User($this, $adapter);
         return $user;
     }
 
@@ -107,7 +136,7 @@ class Container
     public function getAccount(AccountInterface $imp = null)
     {
         $imp     = $imp ?: $this->createGatewayInstance('AccountImp');
-        $account = new Account($imp, $this->configuration->get('account.config'));
+        $account = new Account($this, $imp);
         return $account;
     }
 
@@ -119,7 +148,7 @@ class Container
     public function getBilling(BillingInterface $imp = null)
     {
         $imp     = $imp ?: $this->createGatewayInstance('BillingImp');
-        $billing = new Billing($imp);
+        $billing = new Billing($this, $imp);
         return $billing;
     }
 
@@ -131,7 +160,7 @@ class Container
     public function getPlan(PlanInterface $imp = null)
     {
         $imp  = $imp ?: $this->createGatewayInstance('PlanImp');
-        $plan = new Plan($imp);
+        $plan = new Plan($this, $imp);
         return $plan;
     }
 
@@ -143,7 +172,7 @@ class Container
     public function getCoupon(CouponInterface $imp = null)
     {
         $imp    = $imp ?: $this->createGatewayInstance('CouponImp');
-        $coupon = new Coupon($imp);
+        $coupon = new Coupon($this, $imp);
         return $coupon;
     }
 
@@ -157,7 +186,7 @@ class Container
     public function getSubscription(SubscriptionInterface $imp = null)
     {
         $imp          = $imp ?: $this->createGatewayInstance('SubscriptionImp');
-        $subscription = new Subscription($imp);
+        $subscription = new Subscription($this, $imp);
         return $subscription;
     }
 
@@ -171,7 +200,7 @@ class Container
     public function getInvoice(InvoiceInterface $imp = null)
     {
         $imp     = $imp ?: $this->createGatewayInstance('InvoiceImp');
-        $invoice = new Invoice($imp);
+        $invoice = new Invoice($this, $imp);
         return $invoice;
     }
 
@@ -207,7 +236,7 @@ class Container
     {
         $imp = $imp ?: $this->createGatewayInstance('NotifyImp');
 
-        $notify = new Notify($imp, $this);
+        $notify = new Notify($this, $imp);
         return $notify;
     }
 
