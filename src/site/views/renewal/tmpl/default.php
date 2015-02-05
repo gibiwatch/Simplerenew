@@ -70,8 +70,14 @@ $heading = $this->getHeading(
                 value="renewal.update"/>
 
             <button type="submit" class="btn-main btn-big m-top">
-                <i class="fa fa-check"></i>
-                <?php echo JText::_('COM_SIMPLERENEW_RENEWAL_UPDATE_BUTTON'); ?>
+                <span class="ost-text-enabled">
+                    <i class="fa fa-check"></i>
+                    <?php echo JText::_('COM_SIMPLERENEW_RENEWAL_UPDATE_BUTTON'); ?>
+                </span>
+                <span class="ost-text-disabled">
+                    <i class="fa fa-spinner fa-spin"></i>
+                    <?php echo JText::_('COM_SIMPLERENEW_RENEWAL_UPDATE_BUTTON_DISABLED'); ?>
+                </span>
             </button>
 
             <?php echo JHtml::_('form.token'); ?>
