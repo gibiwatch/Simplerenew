@@ -20,6 +20,7 @@ defined('_JEXEC') or die();
 
 /**
  * Class Billing
+ *
  * @package Simplerenew\Api
  *
  * @property-read Account         $account
@@ -68,20 +69,17 @@ class Billing extends AbstractApiBase
      */
     protected $imp = null;
 
-    public function __construct(Container $container, BillingInterface $imp, Address $address = null)
-    {
+    public function __construct(
+        Container $container,
+        BillingInterface $imp,
+        Address $address = null,
+        AbstractPayment $payment = null
+    ) {
         parent::__construct($container);
 
-        $this->imp = $imp;
-
-        if (!empty($config['address']) && $config['address'] instanceof Address) {
-            $this->address = $config['address'];
-        } else {
-            $this->address = new Address();
-        }
-
-        // Default to credit card
-        $this->payment = new CreditCard();
+        $this->imp     = $imp;
+        $this->address = $address ?: new Address();
+        $this->payment = $payment ?: new CreditCard();
     }
 
     /**
@@ -143,8 +141,8 @@ class Billing extends AbstractApiBase
         if (!$token) {
             $this->setProperties(
                 array(
-                    'firstname' => $this->firstname ? : $this->account->firstname,
-                    'lastname'  => $this->lastname  ? : $this->account->lastname,
+                    'firstname' => $this->firstname ?: $this->account->firstname,
+                    'lastname'  => $this->lastname ?: $this->account->lastname,
                     'ipaddress' => filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP)
                 )
             );
