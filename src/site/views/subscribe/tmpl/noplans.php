@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 <div class="<?php echo $this->getPageClass('ost-container simplerenew-subscribe'); ?>">
     <?php if ($heading = $this->getHeading('COM_SIMPLERENEW_HEADING_SUBSCRIBE')): ?>
         <div class="page-header">
-            <h1><?php echo $header; ?></h1>
+            <h1><?php echo $heading; ?></h1>
         </div>
     <?php endif; ?>
 

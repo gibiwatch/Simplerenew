@@ -2,8 +2,8 @@
 <extension version="2.5" type="plugin" group="user" method="upgrade">
     <name>plg_user_simplerenew</name>
     <author>OSTraining</author>
-    <creationDate>November 24, 2014</creationDate>
-    <copyright>Copyright (C) 2014 OSTraining.com</copyright>
+    <creationDate>February 5, 2015</creationDate>
+    <copyright>Copyright (C) 2015 OSTraining.com</copyright>
     <license>GPL v3</license>
     <authorEmail>info@ostraining.com</authorEmail>
     <authorUrl>http://www.ostraining.com</authorUrl>
@@ -14,10 +14,4 @@
         <folder>language</folder>
         <filename plugin="simplerenew">simplerenew.php</filename>
     </files>
-
-    <config>
-        <fields name="params">
-            <fieldset name="basic"/>
-        </fields>
-    </config>
 </extension>
