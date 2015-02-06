@@ -215,7 +215,7 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
     {
         $js = $this->jsScripts;
 
-        $key = $this->getCfg('Publickey');
+        $key = $this->getCfg($this->mode . '.publicKey');
 
         $js[] = "jQuery.Simplerenew.validate.gateway.options"
             . " = jQuery.extend({},"

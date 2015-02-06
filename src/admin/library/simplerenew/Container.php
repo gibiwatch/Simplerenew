@@ -34,8 +34,6 @@ defined('_JEXEC') or die();
  *
  * @package Simplerenew
  *
- * @TODO    : Investigate replacing with a proper DI container
- *
  * @property Configuration   $configuration
  * @property Account         $account
  * @property Billing         $billing
@@ -53,51 +51,20 @@ class Container
      */
     protected $configuration = null;
 
-    public function __construct(array $config)
+    public function __construct(Configuration $config)
     {
-        $this->configuration = new Configuration(array());
-        $config              = new Configuration($config);
-
-        // Load account settings
-        $account = $config->get('account', array());
-        $this->configuration->set('account.config', $account);
-
-        // Load and verify user settings
-        $userAdapter = $config->get('user.adapter');
-        if (is_string($userAdapter)) {
-            if (strpos($userAdapter, '\\') === false) {
-                $userAdapter = '\\Simplerenew\\User\\Adapter\\' . ucfirst(strtolower($userAdapter));
-            }
-            if (class_exists($userAdapter)) {
-                $userAdapter = new $userAdapter();
-            }
-        }
-        if ($userAdapter instanceof UserInterface) {
-            $this->configuration->set('user.adapter', $userAdapter);
-            $this->configuration->set('user.config', $config->get('user', array()));
-        }
-
-        // Load and verify Gateway configurations
-        $gateway = $config->get('gateway', array());
-        if (!empty($gateway)) {
-            $namespace = key($gateway);
-            if (!empty($gateway[$namespace])) {
-                $gatewayConfig = new Configuration($gateway[$namespace]);
-                $this->configuration->set('gateway.config', $gatewayConfig);
-            }
-
-            if (strpos($namespace, '\\') === false) {
-                $namespace = '\\Simplerenew\\Gateway\\' . ucfirst(strtolower($namespace));
-            }
-            $this->configuration->set('gateway.namespace', $namespace);
-        }
+        $this->configuration = $config;
     }
 
     public function __get($name)
     {
-        switch ($name) {
+        switch (strtolower($name)) {
             case 'configuration':
                 return $this->configuration;
+                break;
+
+            case 'gatewayimp':
+                // Hide the gatewayImp getter
                 break;
 
             default:
@@ -121,7 +88,11 @@ class Container
      */
     public function getUser(UserInterface $adapter = null)
     {
-        $adapter = $adapter ?: $this->configuration->get('user.adapter');
+        if (!$adapter) {
+            $className = '\\Simplerenew\\User\\Adapter\\' . $this->configuration->get('user.adapter');
+            $adapter = new $className();
+        }
+
         $user    = new User($this, $adapter);
         return $user;
     }
@@ -135,7 +106,7 @@ class Container
      */
     public function getAccount(AccountInterface $imp = null)
     {
-        $imp     = $imp ?: $this->createGatewayInstance('AccountImp');
+        $imp     = $imp ?: $this->getGatewayImp('AccountImp');
         $account = new Account($this, $imp);
         return $account;
     }
@@ -147,7 +118,7 @@ class Container
      */
     public function getBilling(BillingInterface $imp = null)
     {
-        $imp     = $imp ?: $this->createGatewayInstance('BillingImp');
+        $imp     = $imp ?: $this->getGatewayImp('BillingImp');
         $billing = new Billing($this, $imp);
         return $billing;
     }
@@ -159,7 +130,7 @@ class Container
      */
     public function getPlan(PlanInterface $imp = null)
     {
-        $imp  = $imp ?: $this->createGatewayInstance('PlanImp');
+        $imp  = $imp ?: $this->getGatewayImp('PlanImp');
         $plan = new Plan($this, $imp);
         return $plan;
     }
@@ -171,7 +142,7 @@ class Container
      */
     public function getCoupon(CouponInterface $imp = null)
     {
-        $imp    = $imp ?: $this->createGatewayInstance('CouponImp');
+        $imp    = $imp ?: $this->getGatewayImp('CouponImp');
         $coupon = new Coupon($this, $imp);
         return $coupon;
     }
@@ -185,7 +156,7 @@ class Container
      */
     public function getSubscription(SubscriptionInterface $imp = null)
     {
-        $imp          = $imp ?: $this->createGatewayInstance('SubscriptionImp');
+        $imp          = $imp ?: $this->getGatewayImp('SubscriptionImp');
         $subscription = new Subscription($this, $imp);
         return $subscription;
     }
@@ -199,7 +170,7 @@ class Container
      */
     public function getInvoice(InvoiceInterface $imp = null)
     {
-        $imp     = $imp ?: $this->createGatewayInstance('InvoiceImp');
+        $imp     = $imp ?: $this->getGatewayImp('InvoiceImp');
         $invoice = new Invoice($this, $imp);
         return $invoice;
     }
@@ -234,31 +205,32 @@ class Container
      */
     public function getNotify(NotifyInterface $imp = null)
     {
-        $imp = $imp ?: $this->createGatewayInstance('NotifyImp');
+        $imp = $imp ?: $this->getGatewayImp('NotifyImp');
 
         $notify = new Notify($this, $imp);
         return $notify;
     }
 
     /**
-     * Create a new Gateway object using the configured gateway namespace
+     * Create a gateway implementation
      *
-     * @param $name
+     * @param string $name
      *
      * @return mixed
-     * @throws Exception
      */
-    public function createGatewayInstance($name)
+    public function getGatewayImp($name)
     {
-        $namespace = $this->configuration->get('gateway.namespace');
-        $className = $namespace . '\\' . $name;
-        if (class_exists($className)) {
-            $config   = $this->configuration->get('gateway.config');
-            $instance = new $className($config);
-
-            return $instance;
+        $imp = null;
+        if ($namespace = $this->configuration->get('gateway.namespace')) {
+            if (strpos($namespace, '\\') !== 0) {
+                $namespace = '\\Simplerenew\\Gateway\\' . $namespace;
+            }
+            $className = $namespace . '\\' . $name;
+            if (class_exists($className)) {
+                $config = $this->configuration->get('gateway');
+                $imp    = new $className(new Configuration($config));
+            }
         }
-
-        throw new Exception('Unknown Gateway Object - ' . $className);
+        return $imp;
     }
 }

@@ -29,8 +29,10 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
     {
         parent::__construct($config);
 
+        $this->mode = $config->get('mode');
+
         // Initialise the native Recurly API
-        if ($apiKey = $this->getCfg('Apikey')) {
+        if ($apiKey = $config->get($this->mode . '.apiKey')) {
             $this->client = new \Recurly_Client($apiKey);
         }
     }
@@ -56,29 +58,6 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
     }
 
     /**
-     * Recurly gateway can run in test or live mode. Pull
-     * config values from the appropriate key in the form:
-     * testVarname
-     * liveVarname
-     *
-     * @param string $key
-     * @param mixed  $default
-     *
-     * @return mixed
-     */
-    protected function getCfg($key, $default = null)
-    {
-        if ($this->mode === null) {
-            $this->mode = parent::getCfg('mode', 'test');
-        }
-
-        $key     = strtolower($key);
-        $modeKey = $this->mode . ucfirst($key);
-
-        return parent::getCfg($modeKey, parent::getCfg($key, $default));
-    }
-
-    /**
      * Determine whether the current configuration is usable/valid
      *
      * @return bool
@@ -88,7 +67,7 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
         if (
             $this->client instanceof \Recurly_Client
             && ($this->client->apiKey() != '')
-            && ($this->getCfg('PublicKey') != '')
+            && ($this->getCfg($this->mode . '.publicKey') != '')
         ) {
 
             $url = sprintf($this->client->baseUri() . '/accounts');
@@ -102,7 +81,7 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
                     CURLOPT_MAXREDIRS      => 1,
                     CURLOPT_HEADER         => true,
                     CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_USERPWD        => $this->getCfg('Apikey') . ': '
+                    CURLOPT_USERPWD        => $this->getCfg($this->mode . '.apiKey') . ': '
                 )
             );
 

@@ -25,7 +25,7 @@ abstract class AbstractGatewayBase extends Object
     /**
      * @var Configuration
      */
-    protected $gatewayConfig = array();
+    protected $configuration = array();
 
     /**
      * @var string
@@ -39,7 +39,7 @@ abstract class AbstractGatewayBase extends Object
 
     public function __construct(Configuration $config = null)
     {
-        $this->gatewayConfig = $config;
+        $this->configuration = $config;
 
         $this->currency = $config->get('currency', null);
     }
@@ -54,7 +54,7 @@ abstract class AbstractGatewayBase extends Object
      */
     protected function getCfg($key, $default = null)
     {
-        return $this->gatewayConfig->get($key, $default);
+        return $this->configuration->get($key, $default);
     }
 
     /**
@@ -62,10 +62,10 @@ abstract class AbstractGatewayBase extends Object
      */
     public function getCache()
     {
-        $cache = $this->gatewayConfig->get('cache');
+        $cache = $this->configuration->get('cache');
         if (!$cache instanceof Cache) {
             $cache = new Cache(array('domain' => get_class($this)));
-            $this->gatewayConfig->set('cache', $cache);
+            $this->configuration->set('cache', $cache);
         }
         return $cache;
     }
@@ -77,7 +77,7 @@ abstract class AbstractGatewayBase extends Object
      */
     public function setCache(Cache $cache)
     {
-        $this->gatewayConfig->set('cache', $cache);
+        $this->configuration->set('cache', $cache);
         return $this;
     }
 

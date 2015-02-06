@@ -6,6 +6,7 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Configuration;
 use Simplerenew\Container;
 
 defined('_JEXEC') or die();
@@ -34,21 +35,30 @@ abstract class SimplerenewFactory extends JFactory
      */
     public static function getContainer(JRegistry $params = null)
     {
-        $params = $params ? : SimplerenewComponentHelper::getParams();
+        $params = $params ?: SimplerenewComponentHelper::getParams();
         $key    = sha1($params->toString());
 
         if (empty(static::$SimplerenewContainers[$key])) {
-            $config = array(
-                'user'    => array(
-                    'adapter'         => 'joomla',
-                    'defaultGroup'    => $params->get('basic.defaultGroup'),
-                    'expirationGroup' => $params->get('basic.expirationGroup')
+            $recurly = $params->get('gateway.recurly');
+            $gateway = array(
+                'namespace' => 'Recurly',
+                'mode'      => $recurly->mode,
+                'live'      => array(
+                    'apiKey'    => $recurly->liveApikey,
+                    'publicKey' => $recurly->livePublickey
                 ),
-                'account' => array(
-                    'billingAddress' => $params->get('basic.billingAddress')
-                ),
-                'gateway' => array(
-                    'recurly' => (array)$params->get('gateway.recurly')
+                'test'      => array(
+                    'apiKey'    => $recurly->testApikey,
+                    'publicKey' => $recurly->testPublickey
+                )
+            );
+
+            $config = new Configuration(
+                array(
+                    'user'    => array(
+                        'adapter' => 'Joomla'
+                    ),
+                    'gateway' => $gateway
                 )
             );
 
