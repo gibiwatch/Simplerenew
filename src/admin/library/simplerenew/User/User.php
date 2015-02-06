@@ -253,6 +253,6 @@ class User extends Object
      */
     public function getExpirationGroup()
     {
-        return $this->container->configuration->get('user.config.expirationGroup');
+        return $this->container->configuration->get('user.group.expiration');
     }
 }

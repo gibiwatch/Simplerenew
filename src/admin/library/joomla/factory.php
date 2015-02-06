@@ -39,6 +39,7 @@ abstract class SimplerenewFactory extends JFactory
         $key    = sha1($params->toString());
 
         if (empty(static::$SimplerenewContainers[$key])) {
+            // convert Joomla config parameters into Simplerenew configuration options
             $recurly = $params->get('gateway.recurly');
             $gateway = array(
                 'namespace' => 'Recurly',
@@ -53,10 +54,19 @@ abstract class SimplerenewFactory extends JFactory
                 )
             );
 
+            $billingRequired = explode(',', $params->get('basic.billingAddress'));
+
             $config = new Configuration(
                 array(
+                    'billing' => array(
+                        'required' => array_filter(array_map('trim', $billingRequired))
+                    ),
                     'user'    => array(
-                        'adapter' => 'Joomla'
+                        'adapter' => 'Joomla',
+                        'group'   => array(
+                            'default'    => (int)$params->get('basic.defaultGroup'),
+                            'expiration' => (int)$params->get('basic.expirationGroup')
+                        )
                     ),
                     'gateway' => $gateway
                 )
