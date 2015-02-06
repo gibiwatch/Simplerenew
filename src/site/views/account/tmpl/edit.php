@@ -53,8 +53,14 @@ JHtml::_('sr.validation.init', '#accountForm');
             value="account.save"/>
 
         <button type="submit" class="btn-main btn-big">
-            <i class="fa fa-check"></i>
-            <?php echo JText::_('COM_SIMPLERENEW_SAVE'); ?>
+            <span class="ost-text-enabled">
+                <i class="fa fa-check"></i>
+                <?php echo JText::_('COM_SIMPLERENEW_SAVE'); ?>
+            </span>
+            <span class="ost-text-disabled">
+                <i class="fa fa-check"></i>
+                <?php echo JText::_('COM_SIMPLERENEW_SAVE_DISABLED'); ?>
+            </span>
         </button>
 
         <span id="token">
