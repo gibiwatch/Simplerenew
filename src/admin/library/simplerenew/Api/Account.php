@@ -84,14 +84,14 @@ class Account extends AbstractApiBase
     /**
      * @var string
      */
-    private $codeMask = '%s';
+    protected $codeMask = '%s';
 
     public function __construct(Container $container, AccountInterface $imp, Address $address = null)
     {
         parent::__construct($container);
 
         $config = $container->configuration;
-        $this->setCodeMask($config->get('account.config.codeMask', $this->codeMask));
+        $this->setCodeMask($config->get('account.codeMask', $this->codeMask));
 
         $this->imp     = $imp;
         $this->address = $address ?: new Address();
