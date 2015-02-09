@@ -246,12 +246,12 @@ class User extends Object
     }
 
     /**
-     * Returns the user group used when a subscription expires
+     * Returns the configuration item
      *
-     * @return null|int
+     * @return mixed
      */
-    public function getExpirationGroup()
+    public function getConfig($key, $default = null)
     {
-        return $this->configuration->get('group.expiration');
+        return $this->configuration->get($key, $default);
     }
 }
