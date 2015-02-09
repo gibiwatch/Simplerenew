@@ -8,7 +8,6 @@
 
 namespace Simplerenew\Api;
 
-use Simplerenew\Container;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\AbstractGatewayBase;
 use Simplerenew\Object;
@@ -18,18 +17,13 @@ defined('_JEXEC') or die();
 abstract class AbstractApiBase extends Object
 {
     /**
-     * @var Container
-     */
-    protected $container = null;
-
-    /**
      * @var AbstractGatewayBase
      */
     protected $imp = null;
 
-    public function __construct(Container $container)
+    public function __construct()
     {
-        $this->container = $container;
+
     }
 
     /**

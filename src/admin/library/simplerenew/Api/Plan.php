@@ -8,7 +8,7 @@
 
 namespace Simplerenew\Api;
 
-use Simplerenew\Container;
+use Simplerenew\Configuration;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\PlanInterface;
 
@@ -80,9 +80,9 @@ class Plan extends AbstractApiBase
     /**
      * @param PlanInterface $imp
      */
-    public function __construct(Container $container, PlanInterface $imp)
+    public function __construct(Configuration $config, PlanInterface $imp)
     {
-        parent::__construct($container);
+        parent::__construct();
 
         $this->imp = $imp;
     }

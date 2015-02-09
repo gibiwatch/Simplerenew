@@ -8,10 +8,11 @@
 
 namespace Simplerenew\Api;
 
-use Simplerenew\Container;
+use Simplerenew\Configuration;
 use Simplerenew\Exception;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\Gateway\SubscriptionInterface;
+use Zend\ServiceManager\Config;
 
 defined('_JEXEC') or die();
 
@@ -110,9 +111,9 @@ class Subscription extends AbstractApiBase
     /**
      * @param SubscriptionInterface $imp
      */
-    public function __construct(Container $container, SubscriptionInterface $imp)
+    public function __construct(Configuration $config, SubscriptionInterface $imp)
     {
-        parent::__construct($container);
+        parent::__construct();
 
         $this->imp = $imp;
     }

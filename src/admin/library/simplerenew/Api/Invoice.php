@@ -8,8 +8,7 @@
 
 namespace Simplerenew\Api;
 
-use Simplerenew\Api\Account;
-use Simplerenew\Container;
+use Simplerenew\Configuration;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\InvoiceInterface;
 
@@ -82,9 +81,9 @@ class Invoice extends AbstractApiBase
      */
     protected $imp = null;
 
-    public function __construct(Container $container, InvoiceInterface $imp)
+    public function __construct(Configuration $config, InvoiceInterface $imp)
     {
-        parent::__construct($container);
+        parent::__construct();
 
         $this->imp = $imp;
     }

@@ -103,4 +103,26 @@ class Configuration
         }
         return $oldValue;
     }
+
+    /**
+     * @param string $key
+     *
+     * @return Configuration
+     */
+    public function getConfig($key = null)
+    {
+        if ($key) {
+            return new static($this->get($key, array()));
+        }
+
+        return clone $this;
+    }
+
+    /*
+     * @return string
+     */
+    public function __toString()
+    {
+        return json_encode($this->settings);
+    }
 }

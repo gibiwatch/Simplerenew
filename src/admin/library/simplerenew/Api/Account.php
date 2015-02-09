@@ -8,7 +8,7 @@
 
 namespace Simplerenew\Api;
 
-use Simplerenew\Container;
+use Simplerenew\Configuration;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\AccountInterface;
 use Simplerenew\Primitive\Address;
@@ -86,11 +86,10 @@ class Account extends AbstractApiBase
      */
     protected $codeMask = '%s';
 
-    public function __construct(Container $container, AccountInterface $imp, Address $address = null)
+    public function __construct(Configuration $config, AccountInterface $imp, Address $address = null)
     {
-        parent::__construct($container);
+        parent::__construct();
 
-        $config = $container->configuration;
         $this->setCodeMask($config->get('account.codeMask', $this->codeMask));
 
         $this->imp     = $imp;
