@@ -48,7 +48,7 @@ class Events
     public function registerEvents(array $events)
     {
         foreach ($events as $event => $handlers) {
-            foreach ($handlers as $handler) {
+            foreach ((array)$handlers as $handler) {
                 $this->register($handler, $event);
             }
         }

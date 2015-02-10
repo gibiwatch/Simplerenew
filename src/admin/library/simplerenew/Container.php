@@ -241,7 +241,7 @@ class Container
     public function getEvents(array $events = array())
     {
         if ($this->events === null) {
-            $events       = $events ?: $this->configuration->get('events');
+            $events       = $events ?: $this->configuration->get('events', array());
             $this->events = new Events($events);
 
         } elseif ($events) {
