@@ -15,8 +15,42 @@ abstract class SimplerenewHelper
      */
     protected static $extensionTable = null;
 
+    /**
+     * Build the submenu in admin if needed. Triggers the
+     * onAdminSubmenu event for component addons to attach
+     * their own admin screens.
+     *
+     * The expected response must be an array
+     * [
+     *    "text" => Static language string,
+     *    "link" => Link to the screen
+     *    "view" => unique view name
+     * ]
+     *
+     * @param $vName
+     *
+     * @return void
+     */
     public static function addSubmenu($vName)
     {
+        $events = SimplerenewFactory::getContainer()->getEvents();
+        if ($results = array_filter($events->trigger('onAdminSubmenu'))) {
+            static::addMenuEntry(
+                JText::_('COM_SIMPLERENEW_SUBMENU_PLANS'),
+                'index.php?option=com_simplerenew&view=plans',
+                $vName == 'plans'
+            );
+
+            foreach ($results as $result) {
+                if (is_array($result)) {
+                    static::addMenuEntry(
+                        JText::_($result['text']),
+                        $result['link'],
+                        $vName == $result['view']
+                    );
+                }
+            }
+        }
     }
 
     /**
