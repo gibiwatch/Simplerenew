@@ -14,6 +14,7 @@ use Simplerenew\Api\Coupon;
 use Simplerenew\Api\Invoice;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
+use Simplerenew\Events\Events;
 use Simplerenew\Gateway\AccountInterface;
 use Simplerenew\Gateway\BillingInterface;
 use Simplerenew\Gateway\CouponInterface;
@@ -39,6 +40,7 @@ defined('_JEXEC') or die();
  * @property Billing         $billing
  * @property Configuration   $configuration
  * @property Coupon          $coupon
+ * @property Events          $events
  * @property Invoice         $invoice
  * @property Notify          $notify
  * @property Plan            $plan
@@ -50,6 +52,11 @@ class Container
      * @var Configuration
      */
     protected $configuration = null;
+
+    /**
+     * @var Events
+     */
+    protected $events = null;
 
     public function __construct(Configuration $config)
     {
@@ -225,16 +232,39 @@ class Container
     }
 
     /**
+     * Gets the event manager singleton
+     *
+     * @param array $events
+     *
+     * @return Events
+     */
+    public function getEvents(array $events = array())
+    {
+        if ($this->events === null) {
+            $events       = $events ?: $this->configuration->get('events');
+            $this->events = new Events($events);
+
+        } elseif ($events) {
+            $this->events->registerEvents($events);
+        }
+
+        return $this->events;
+    }
+
+    /**
      * Create a gateway implementation
      *
      * @param string $name
+     * @param string $namespace
      *
      * @return mixed
      */
-    public function getGatewayImp($name)
+    public function getGatewayImp($name, $namespace = null)
     {
-        $imp = null;
-        if ($namespace = $this->configuration->get('gateway.namespace')) {
+        $imp       = null;
+        $namespace = $namespace ?: $this->configuration->get('gateway.namespace');
+
+        if ($namespace) {
             if (strpos($namespace, '\\') !== 0) {
                 $namespace = '\\Simplerenew\\Gateway\\' . $namespace;
             }
