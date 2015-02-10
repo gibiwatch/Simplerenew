@@ -24,17 +24,5 @@ if (!defined('SIMPLERENEW_LOADED')) {
 
     // Any additional helper paths
     JHtml::addIncludePath(SIMPLERENEW_LIBRARY . '/html');
-
-    // Cover other situations
-    if (SimplerenewFactory::getApplication()->input->getCmd('option') != 'com_simplerenew') {
-        switch (JFactory::getApplication()->getName()) {
-            case 'administrator':
-                SimplerenewFactory::getLanguage()->load('com_simplerenew', SIMPLERENEW_ADMIN);
-                break;
-
-            case 'site':
-                SimplerenewFactory::getLanguage()->load('com_simplerenew', SIMPLERENEW_SITE);
-                break;
-        }
-    }
+    SimplerenewHelper::loadOptionLanguage('com_simplerenew', SIMPLERENEW_ADMIN, SIMPLERENEW_SITE);
 }

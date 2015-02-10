@@ -396,4 +396,30 @@ abstract class SimplerenewHelper
 
         return JApplicationCms::getInstance($client);
     }
+
+    /**
+     * Make sure the appropriate component language files are loaded
+     *
+     * @param string $option
+     * @param string $adminPath
+     * @param string $sitePath
+     *
+     * @return void
+     * @throws Exception
+     */
+    public static function loadOptionLanguage($option, $adminPath, $sitePath)
+    {
+        $app = SimplerenewFactory::getApplication();
+        if ($app->input->getCmd('option') != $option) {
+            switch (JFactory::getApplication()->getName()) {
+                case 'administrator':
+                    SimplerenewFactory::getLanguage()->load($option, $adminPath);
+                    break;
+
+                case 'site':
+                    SimplerenewFactory::getLanguage()->load($option, $sitePath);
+                    break;
+            }
+        }
+    }
 }
