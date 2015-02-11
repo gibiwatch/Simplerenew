@@ -6,9 +6,7 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\Events;
-
-use Simplerenew\Configuration;
+namespace Simplerenew\Addon;
 
 defined('_JEXEC') or die();
 

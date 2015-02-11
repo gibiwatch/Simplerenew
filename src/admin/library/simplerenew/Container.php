@@ -8,13 +8,13 @@
 
 namespace Simplerenew;
 
+use Simplerenew\Addon\Events;
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Billing;
 use Simplerenew\Api\Coupon;
 use Simplerenew\Api\Invoice;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
-use Simplerenew\Events\Events;
 use Simplerenew\Gateway\AccountInterface;
 use Simplerenew\Gateway\BillingInterface;
 use Simplerenew\Gateway\CouponInterface;
