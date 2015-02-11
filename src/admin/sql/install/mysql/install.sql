@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS `#__simplerenew_countries` (
   `code` char(2) NOT NULL,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`code`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__simplerenew_plans` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `#__simplerenew_plans` (
   `checked_out` int(10) unsigned NOT NULL DEFAULT '0',
   `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__simplerenew_push_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -41,11 +41,11 @@ CREATE TABLE IF NOT EXISTS `#__simplerenew_push_log` (
   `account_code` varchar(50) NOT NULL DEFAULT '',
   `subscription_id` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__simplerenew_regions` (
   `code` char(2) NOT NULL,
   `country_code` char(2) NOT NULL,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`code`,`country_code`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
