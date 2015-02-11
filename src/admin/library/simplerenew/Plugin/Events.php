@@ -6,7 +6,9 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\Addon;
+namespace Simplerenew\Plugin;
+
+use Simplerenew\Configuration;
 
 defined('_JEXEC') or die();
 
@@ -22,19 +24,30 @@ class Events
      */
     protected $handlers = array();
 
-    public function __construct(array $events = array())
+    public function __construct(Configuration $config)
     {
-        $this->registerEvents($events);
+        $this->configuration = $config;
+
+        if ($events = $config->get('events')) {
+            $this->registerEvents($events);
+        }
     }
 
     /**
+     * Register a handler for the selected events
+     *
+     * The array of events can be a string with a single event name
+     *
      * @param string       $className
      * @param array|string $events
      *
      * @return void
      */
-    public function register($className, $events)
+    public function registerHandler($className, $events)
     {
+        if (strpos($className, '\\') !== 0) {
+            $className = '\\Simplerenew\Plugin\\' . $className;
+        }
         foreach ((array)$events as $event) {
             if (!isset($this->events[$event])) {
                 $this->events[$event] = array();
@@ -45,11 +58,22 @@ class Events
         }
     }
 
+    /**
+     * Register events with specified handlers $events array form is:
+     *
+     * array('event' => array('className1'[, className2 ...]))
+     *
+     * The array of handlers can be a string with the class name of a single handler
+     *
+     * @param array $events
+     *
+     * @return void
+     */
     public function registerEvents(array $events)
     {
         foreach ($events as $event => $handlers) {
             foreach ((array)$handlers as $handler) {
-                $this->register($handler, $event);
+                $this->registerHandler($handler, $event);
             }
         }
     }

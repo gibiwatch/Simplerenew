@@ -6,7 +6,7 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\Addon;
+namespace Simplerenew\Plugin;
 
 defined('_JEXEC') or die();
 

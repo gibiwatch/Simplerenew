@@ -8,7 +8,6 @@
 
 namespace Simplerenew;
 
-use Simplerenew\Addon\Events;
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Billing;
 use Simplerenew\Api\Coupon;
@@ -23,8 +22,9 @@ use Simplerenew\Gateway\NotifyInterface;
 use Simplerenew\Gateway\PlanInterface;
 use Simplerenew\Gateway\SubscriptionInterface;
 use Simplerenew\Notify\Notify;
-use Simplerenew\Primitive\CreditCard;
+use Simplerenew\Plugin\Events;
 use Simplerenew\Primitive\AbstractPayment;
+use Simplerenew\Primitive\CreditCard;
 use Simplerenew\User\Adapter\UserInterface;
 use Simplerenew\User\User;
 
@@ -246,18 +246,15 @@ class Container
     /**
      * Gets the event manager singleton
      *
-     * @param array $events
+     * @param Configuration $config
      *
      * @return Events
      */
-    public function getEvents(array $events = array())
+    public function getEvents(Configuration $config = null)
     {
         if ($this->events === null) {
-            $events       = $events ?: $this->configuration->get('events', array());
-            $this->events = new Events($events);
-
-        } elseif ($events) {
-            $this->events->registerEvents($events);
+            $config       = $config ?: $this->configuration->toConfig('events');
+            $this->events = new Events($config);
         }
 
         return $this->events;
