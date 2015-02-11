@@ -24,7 +24,7 @@ class Configuration
      */
     protected $settings = null;
 
-    public function __construct(array $settings)
+    public function __construct(array $settings = array())
     {
         $this->settings = $settings;
     }
