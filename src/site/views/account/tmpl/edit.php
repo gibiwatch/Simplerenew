@@ -58,7 +58,7 @@ JHtml::_('sr.validation.init', '#accountForm');
                 <?php echo JText::_('COM_SIMPLERENEW_SAVE'); ?>
             </span>
             <span class="ost-text-disabled">
-                <i class="fa fa-check"></i>
+                <i class="fa fa-spinner fa-spin"></i>
                 <?php echo JText::_('COM_SIMPLERENEW_SAVE_DISABLED'); ?>
             </span>
         </button>
