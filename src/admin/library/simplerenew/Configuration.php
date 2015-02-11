@@ -110,6 +110,8 @@ class Configuration
     }
 
     /**
+     * Return as Configuration class
+     *
      * @param string $key
      *
      * @return Configuration
@@ -123,10 +125,43 @@ class Configuration
         return clone $this;
     }
 
+    /**
+     * Return as JSON string
+     *
+     * @param string $key
+     *
+     * @return string
+     */
     public function toString($key = null)
     {
         $value = $key ? $this->get($key) : $this->settings;
         return json_encode($value);
+    }
+
+    /**
+     * Return as stdClass
+     *
+     * @param string $key
+     *
+     * @return object
+     */
+    public function toObject($key = null)
+    {
+        $value = $key ? $this->get($key) : $this->settings;
+        return json_decode(json_encode($value));
+    }
+
+    /**
+     * Return as array
+     *
+     * @param string $key
+     *
+     * @return array
+     */
+    public function toArray($key = null)
+    {
+        $value = $key ? $this->get($key) : $this->settings;
+        return json_decode(json_encode($value), true);
     }
 
     /*
