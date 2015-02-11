@@ -58,8 +58,16 @@ class Container
      */
     protected $events = null;
 
+    /**
+     * @var UserInterface
+     */
+    protected $userAdapter = null;
+
     public function __construct(Configuration $config)
     {
+        $this->userAdapter = $config->get('user.adapter');
+        $config->set('user.adapter', null);
+
         $this->configuration = $config;
     }
 
@@ -95,11 +103,8 @@ class Container
      */
     public function getUser(UserInterface $adapter = null)
     {
-        $config = $this->configuration->getConfig('user');
-        if (!$adapter) {
-            $className = '\\Simplerenew\\User\\Adapter\\' . $config->get('adapter');
-            $adapter   = new $className();
-        }
+        $config  = $this->configuration->toConfig('user');
+        $adapter = $adapter ?: clone $this->userAdapter;
 
         $user = new User($config, $adapter);
         return $user;
@@ -114,7 +119,7 @@ class Container
      */
     public function getAccount(AccountInterface $imp = null)
     {
-        $config = $this->configuration->getConfig('account');
+        $config = $this->configuration->toConfig('account');
         $imp    = $imp ?: $this->getGatewayImp('AccountImp');
 
         $account = new Account($config, $imp);
@@ -128,7 +133,7 @@ class Container
      */
     public function getBilling(BillingInterface $imp = null)
     {
-        $config = $this->configuration->getConfig('billing');
+        $config = $this->configuration->toConfig('billing');
         $imp    = $imp ?: $this->getGatewayImp('BillingImp');
 
         $billing = new Billing($config, $imp);
@@ -142,7 +147,7 @@ class Container
      */
     public function getPlan(PlanInterface $imp = null)
     {
-        $config = $this->configuration->getConfig('plan');
+        $config = $this->configuration->toConfig('plan');
         $imp    = $imp ?: $this->getGatewayImp('PlanImp');
 
         $plan = new Plan($config, $imp);
@@ -156,7 +161,7 @@ class Container
      */
     public function getCoupon(CouponInterface $imp = null)
     {
-        $config = $this->configuration->getConfig('coupon');
+        $config = $this->configuration->toConfig('coupon');
         $imp    = $imp ?: $this->getGatewayImp('CouponImp');
 
         $coupon = new Coupon($config, $imp);
@@ -172,7 +177,7 @@ class Container
      */
     public function getSubscription(SubscriptionInterface $imp = null)
     {
-        $config = $this->configuration->getConfig('subscription');
+        $config = $this->configuration->toConfig('subscription');
         $imp    = $imp ?: $this->getGatewayImp('SubscriptionImp');
 
         $subscription = new Subscription($config, $imp);
@@ -188,7 +193,7 @@ class Container
      */
     public function getInvoice(InvoiceInterface $imp = null)
     {
-        $config = $this->configuration->getConfig('invoice');
+        $config = $this->configuration->toConfig('invoice');
         $imp    = $imp ?: $this->getGatewayImp('InvoiceImp');
 
         $invoice = new Invoice($config, $imp);
@@ -270,7 +275,7 @@ class Container
             }
             $className = $namespace . '\\' . $name;
             if (class_exists($className)) {
-                $config = $this->configuration->getConfig('gateway');
+                $config = $this->configuration->toConfig('gateway');
                 $imp    = new $className($config);
             }
         }

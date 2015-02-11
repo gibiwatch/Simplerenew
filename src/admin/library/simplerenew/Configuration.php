@@ -14,6 +14,7 @@ defined('_JEXEC') or die();
  * A simple class for handling layered variables
  *
  * Class AbstractConfiguration
+ *
  * @package Simplerenew
  */
 class Configuration
@@ -53,11 +54,11 @@ class Configuration
         }
         $levels = explode('.', $name);
 
-        $value = & $this->settings;
+        $value = &$this->settings;
         for ($i = 0; $i < count($levels) - 1; $i++) {
             $key = $levels[$i];
             if (is_array($value) && isset($value[$key])) {
-                $value = & $value[$key];
+                $value = &$value[$key];
             } elseif (is_object($value) && isset($value->$key)) {
                 $value = $value->$key;
             } else {
@@ -89,17 +90,21 @@ class Configuration
             $this->settings[$name] = $newValue;
         } else {
             $keys = explode('.', $name);
-            $tree = & $this->settings;
+            $tree = &$this->settings;
             for ($i = 0; $i < count($keys) - 1; $i++) {
-                $key        = $keys[$i];
+                $key = $keys[$i];
                 if (empty($tree[$key]) || !is_array($tree[$key])) {
                     $tree[$key] = array();
                 }
-                $tree       = & $tree[$key];
+                $tree = &$tree[$key];
             }
 
-            $final        = array_pop($keys);
-            $tree[$final] = $newValue;
+            $final = array_pop($keys);
+            if ($newValue === null) {
+                unset($tree[$final]);
+            } else {
+                $tree[$final] = $newValue;
+            }
         }
         return $oldValue;
     }
@@ -109,7 +114,7 @@ class Configuration
      *
      * @return Configuration
      */
-    public function getConfig($key = null)
+    public function toConfig($key = null)
     {
         if ($key) {
             return new static($this->get($key, array()));
@@ -118,11 +123,17 @@ class Configuration
         return clone $this;
     }
 
+    public function toString($key = null)
+    {
+        $value = $key ? $this->get($key) : $this->settings;
+        return json_encode($value);
+    }
+
     /*
      * @return string
      */
     public function __toString()
     {
-        return json_encode($this->settings);
+        return $this->toString();
     }
 }
