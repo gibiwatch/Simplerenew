@@ -115,12 +115,13 @@ class Container
      * Create a new Account object
      *
      * @param AccountInterface $imp
+     * @param Configuration    $config
      *
      * @return Account
      */
-    public function getAccount(AccountInterface $imp = null)
+    public function getAccount(AccountInterface $imp = null, Configuration $config = null)
     {
-        $config = $this->configuration->toConfig('account');
+        $config = $config ?: $this->configuration->toConfig('account');
         $imp    = $imp ?: $this->getGatewayImp('AccountImp');
 
         $account = new Account($config, $imp);
@@ -129,12 +130,13 @@ class Container
 
     /**
      * @param BillingInterface $imp
+     * @param Configuration    $config
      *
      * @return Billing
      */
-    public function getBilling(BillingInterface $imp = null)
+    public function getBilling(BillingInterface $imp = null, Configuration $config = null)
     {
-        $config = $this->configuration->toConfig('billing');
+        $config = $config ?: $this->configuration->toConfig('billing');
         $imp    = $imp ?: $this->getGatewayImp('BillingImp');
 
         $billing = new Billing($config, $imp);
@@ -143,12 +145,13 @@ class Container
 
     /**
      * @param PlanInterface $imp
+     * @param Configuration $config
      *
      * @return Plan
      */
-    public function getPlan(PlanInterface $imp = null)
+    public function getPlan(PlanInterface $imp = null, Configuration $config = null)
     {
-        $config = $this->configuration->toConfig('plan');
+        $config = $config ?: $this->configuration->toConfig('plan');
         $imp    = $imp ?: $this->getGatewayImp('PlanImp');
 
         $plan = new Plan($config, $imp);
@@ -157,12 +160,13 @@ class Container
 
     /**
      * @param CouponInterface $imp
+     * @param Configuration   $config
      *
      * @return Coupon
      */
-    public function getCoupon(CouponInterface $imp = null)
+    public function getCoupon(CouponInterface $imp = null, Configuration $config = null)
     {
-        $config = $this->configuration->toConfig('coupon');
+        $config = $config ?: $this->configuration->toConfig('coupon');
         $imp    = $imp ?: $this->getGatewayImp('CouponImp');
 
         $coupon = new Coupon($config, $imp);
@@ -173,12 +177,13 @@ class Container
      * Create subscription object
      *
      * @param SubscriptionInterface $imp
+     * @param Configuration         $config
      *
      * @return Subscription
      */
-    public function getSubscription(SubscriptionInterface $imp = null)
+    public function getSubscription(SubscriptionInterface $imp = null, Configuration $config = null)
     {
-        $config = $this->configuration->toConfig('subscription');
+        $config = $config ?: $this->configuration->toConfig('subscription');
         $imp    = $imp ?: $this->getGatewayImp('SubscriptionImp');
 
         $subscription = new Subscription($config, $imp);
@@ -189,12 +194,13 @@ class Container
      * Create Invoice object
      *
      * @param InvoiceInterface $imp
+     * @param Configuration    $config
      *
      * @return Invoice
      */
-    public function getInvoice(InvoiceInterface $imp = null)
+    public function getInvoice(InvoiceInterface $imp = null, Configuration $config = null)
     {
-        $config = $this->configuration->toConfig('invoice');
+        $config = $config ?: $this->configuration->toConfig('invoice');
         $imp    = $imp ?: $this->getGatewayImp('InvoiceImp');
 
         $invoice = new Invoice($config, $imp);
@@ -204,12 +210,12 @@ class Container
     /**
      * Get a new payment primitive optionally initialising the data
      *
-     * @param string $class
-     * @param array  $data
+     * @param string       $class
+     * @param array|object $data
      *
      * @return AbstractPayment
      */
-    public function getPaymentType($class = 'card', array $data = null)
+    public function getPaymentType($class = 'card', $data = null)
     {
         switch (strtolower($class)) {
             case 'cc':
