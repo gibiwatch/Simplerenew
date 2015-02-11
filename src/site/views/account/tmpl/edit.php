@@ -2,7 +2,7 @@
 /**
  * @package   Simplerenew
  * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2014 Open Source Training, LLC. All rights reserved
+ * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
@@ -53,8 +53,14 @@ JHtml::_('sr.validation.init', '#accountForm');
             value="account.save"/>
 
         <button type="submit" class="btn-main btn-big">
-            <i class="fa fa-check"></i>
-            <?php echo JText::_('COM_SIMPLERENEW_SAVE'); ?>
+            <span class="ost-text-enabled">
+                <i class="fa fa-check"></i>
+                <?php echo JText::_('COM_SIMPLERENEW_SAVE'); ?>
+            </span>
+            <span class="ost-text-disabled">
+                <i class="fa fa-spinner fa-spin"></i>
+                <?php echo JText::_('COM_SIMPLERENEW_SAVE_DISABLED'); ?>
+            </span>
         </button>
 
         <span id="token">
