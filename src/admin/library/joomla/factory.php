@@ -8,6 +8,7 @@
 
 use Simplerenew\Configuration;
 use Simplerenew\Container;
+use Simplerenew\User\Adapter\Joomla;
 
 defined('_JEXEC') or die();
 
@@ -62,7 +63,7 @@ abstract class SimplerenewFactory extends JFactory
                         'required' => array_filter(array_map('trim', $billingRequired))
                     ),
                     'user'    => array(
-                        'adapter' => 'Joomla',
+                        'adapter' => new Joomla(),
                         'group'   => array(
                             'default'    => (int)$params->get('basic.defaultGroup'),
                             'expiration' => (int)$params->get('basic.expirationGroup')

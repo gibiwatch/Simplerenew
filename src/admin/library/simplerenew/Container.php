@@ -97,13 +97,14 @@ class Container
      * Create a new user object
      *
      * @param UserInterface $adapter
+     * @param Configuration $config
      *
      * @return User
      * @throws Exception
      */
-    public function getUser(UserInterface $adapter = null)
+    public function getUser(UserInterface $adapter = null, Configuration $config = null)
     {
-        $config  = $this->configuration->toConfig('user');
+        $config  = $config ?: $this->configuration->toConfig('user');
         $adapter = $adapter ?: clone $this->userAdapter;
 
         $user = new User($config, $adapter);
