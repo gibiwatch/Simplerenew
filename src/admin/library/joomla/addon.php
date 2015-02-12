@@ -55,4 +55,18 @@ abstract class SimplerenewAddon
         $simplerenew->params = $simplerenew->params->toString();
         return $simplerenew->store();
     }
+
+    /**
+     * Run initialise routines for all registered addons
+     */
+    public static function load()
+    {
+        $addons = SimplerenewComponentHelper::getParams()->get('addons', array());
+
+        foreach ($addons as $addon) {
+            if (!empty($addon->init) && is_file($addon->init)) {
+                require_once $addon->init;
+            }
+        }
+    }
 }

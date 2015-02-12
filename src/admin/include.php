@@ -25,4 +25,6 @@ if (!defined('SIMPLERENEW_LOADED')) {
     // Any additional helper paths
     JHtml::addIncludePath(SIMPLERENEW_LIBRARY . '/html');
     SimplerenewHelper::loadOptionLanguage('com_simplerenew', SIMPLERENEW_ADMIN, SIMPLERENEW_SITE);
+
+    SimplerenewAddon::load();
 }
