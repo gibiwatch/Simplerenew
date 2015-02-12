@@ -58,6 +58,8 @@ abstract class SimplerenewAddon
 
     /**
      * Run initialise routines for all registered addons
+     *
+     * @return void
      */
     public static function load()
     {

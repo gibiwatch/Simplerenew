@@ -218,6 +218,15 @@
     </fields>
 
     <fieldset
+            name="addons"
+            label="COM_SIMPLERENEW_CONFIG_FIELDSET_ADDONS_LABEL"
+            description="COM_SIMPLERENEW_CONFIG_FIELDSET_ADDONS_DESC">
+        <field
+            name="addons"
+            type="addons"/>
+    </fieldset>
+
+    <fieldset
         name="permissions"
         label="JCONFIG_PERMISSIONS_LABEL"
         description="JCONFIG_PERMISSIONS_DESC">
