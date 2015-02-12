@@ -64,10 +64,14 @@ abstract class SimplerenewAddon
     public static function load()
     {
         $addons = SimplerenewComponentHelper::getParams()->get('addons', array());
+        $extension = JTable::getInstance('Extension');
 
         foreach ($addons as $addon) {
             if (!empty($addon->init) && is_file($addon->init)) {
-                require_once $addon->init;
+                $extension->load($addon->extension_id);
+                if ($extension->enabled) {
+                    require_once $addon->init;
+                }
             }
         }
     }
