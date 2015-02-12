@@ -11,11 +11,6 @@ defined('_JEXEC') or die();
 abstract class SimplerenewHelper
 {
     /**
-     * @var JTableExtension
-     */
-    protected static $extensionTable = null;
-
-    /**
      * Build the submenu in admin if needed. Triggers the
      * onAdminSubmenu event for component addons to attach
      * their own admin screens.
@@ -376,21 +371,26 @@ abstract class SimplerenewHelper
     /**
      * Get the Extension table entry
      *
-     * @param string $extension
+     * @param string $element
+     * @param string $folder
+     * @param string $type
      *
      * @return JTableExtension
      */
-    public static function getExtensionTable($extension = 'com_simplerenew')
+    public static function getExtensionTable($element = 'com_simplerenew', $folder = null, $type = null)
     {
-        if (static::$extensionTable === null) {
-            $table = JTable::getInstance('Extension');
+        $table = JTable::getInstance('Extension');
 
-            $table->load(array('element' => $extension));
-            $table->params = new JRegistry($table->params);
+        $query = array_filter(array(
+            'element' => $element,
+            'folder'  => $folder,
+            'type'    => $type
+        ));
 
-            static::$extensionTable = $table;
-        }
-        return static::$extensionTable;
+        $table->load($query);
+        $table->params = new JRegistry($table->params);
+
+        return $table;
     }
 
     /**
