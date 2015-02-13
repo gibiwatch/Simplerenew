@@ -11,11 +11,4 @@ defined('_JEXEC') or die();
 class SimplerenewController extends SimplerenewControllerBase
 {
     protected $default_view = 'plans';
-
-    public function test()
-    {
-        $addon = SimplerenewHelper::getExtensionTable('com_srgroupleaders');
-
-        SimplerenewAddon::register('Group Leaders', $addon);
-    }
 }
