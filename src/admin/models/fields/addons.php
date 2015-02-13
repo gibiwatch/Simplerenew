@@ -40,7 +40,7 @@ class JFormFieldAddons extends JFormFieldText
                 ));
 
                 foreach ($this->value as $idx => $addon) {
-                    $addon = $addon;
+                    $addon = (object)$addon;
                     $current = isset($status[$addon->extension_id]) ? $status[$addon->extension_id] : null;
                     if ($current) {
                         $registerCount++;
