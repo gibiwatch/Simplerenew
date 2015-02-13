@@ -28,61 +28,63 @@ class JFormFieldAddons extends JFormFieldText
 
         $registerCount = is_array($this->value) ? count($this->value) : 0;
         if ($registerCount) {
-            $html = array_merge($html, array(
-                '<table cellpadding="5"><thead><tr>',
-                '<th>' . JText::_('COM_SIMPLERENEW_ADDONS_ID') . '</th>',
-                '<th>' . JText::_('COM_SIMPLERENEW_ADDONS_NAME') . '</th>',
-                '<th>' . JText::_('COM_SIMPLERENEW_ADDONS_STATUS') . '</th>',
-                '</tr></thead>',
-                '<tbody>'
-            ));
-
-            $status        = SimplerenewAddon::getList();
             $registerCount = 0;
-            foreach ($this->value as $idx => $addon) {
-                $current = isset($status[$addon->extension_id]) ? $status[$addon->extension_id] : null;
-                if ($current) {
-                    $registerCount++;
+            if ($status = SimplerenewAddon::getList()) {
+                $html = array_merge($html, array(
+                    '<table cellpadding="5"><thead><tr>',
+                    '<th>' . JText::_('COM_SIMPLERENEW_ADDONS_ID') . '</th>',
+                    '<th>' . JText::_('COM_SIMPLERENEW_ADDONS_NAME') . '</th>',
+                    '<th>' . JText::_('COM_SIMPLERENEW_ADDONS_STATUS') . '</th>',
+                    '</tr></thead>',
+                    '<tbody>'
+                ));
 
-                    if ($current->enabled && (!$addon->init || is_file($addon->init))) {
-                        $statusImage = JHTML::image(
-                            'admin/icon-16-allow.png',
-                            JText::_('COM_SIMPLERENEW_ENABLED'),
-                            null,
-                            true
-                        );
-                    } else {
-                        $statusImage = JHTML::image(
-                            'admin/icon-16-deny.png',
-                            JText::_('COM_SIMPLERENEW_DISABLED'),
-                            null,
-                            true
-                        );
+                foreach ($this->value as $idx => $addon) {
+                    $addon = $addon;
+                    $current = isset($status[$addon->extension_id]) ? $status[$addon->extension_id] : null;
+                    if ($current) {
+                        $registerCount++;
+
+                        if ($current->enabled && (!$addon->init || is_file($addon->init))) {
+                            $statusImage = JHTML::image(
+                                'admin/icon-16-allow.png',
+                                JText::_('COM_SIMPLERENEW_ENABLED'),
+                                null,
+                                true
+                            );
+                        } else {
+                            $statusImage = JHTML::image(
+                                'admin/icon-16-deny.png',
+                                JText::_('COM_SIMPLERENEW_DISABLED'),
+                                null,
+                                true
+                            );
+                        }
+
+                        $html = array_merge($html, array(
+                            '<tr>',
+                            '<td style="text-align: right;">' . $addon->extension_id . '</td>',
+                            '<td style="text-align: left;">' . $addon->title . '</td>',
+                            '<td style="text-align: center;">' . $statusImage
+                        ));
+
+                        $baseName = $this->name . "[{$idx}]";
+                        foreach (get_object_vars($addon) as $key => $value) {
+                            $name   = $baseName . '[' . $key . ']';
+                            $value  = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
+                            $html[] = "<input type=\"hidden\" name=\"{$name}\" value=\"{$value}\"/>";
+                        }
+
+                        $html[] = '</td>';
+                        $html[] = '</tr>';
                     }
-
-                    $html = array_merge($html, array(
-                        '<tr>',
-                        '<td style="text-align: right;">' . $addon->extension_id . '</td>',
-                        '<td style="text-align: left;">' . $addon->title . '</td>',
-                        '<td style="text-align: center;">' . $statusImage
-                    ));
-
-                    $baseName = $this->name . "[{$idx}]";
-                    foreach (get_object_vars($addon) as $key => $value) {
-                        $name   = $baseName . '[' . $key . ']';
-                        $value  = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
-                        $html[] = "<input type=\"hidden\" name=\"{$name}\" value=\"{$value}\"/>";
-                    }
-
-                    $html[] = '</td>';
-                    $html[] = '</tr>';
                 }
-            }
 
-            $html = array_merge($html, array(
-                '</tbody>',
-                '</table>'
-            ));
+                $html = array_merge($html, array(
+                    '</tbody>',
+                    '</table>'
+                ));
+            }
         }
 
         if ($registerCount) {
