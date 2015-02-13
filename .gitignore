@@ -1,7 +1,6 @@
 # General exclusion of system files
 ###################################
 .*
-*.bak
 *~
 build.properties
 
