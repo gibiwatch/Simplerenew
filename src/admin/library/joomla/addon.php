@@ -63,7 +63,7 @@ abstract class SimplerenewAddon
      */
     public static function load()
     {
-        $addons = SimplerenewComponentHelper::getParams()->get('addons', array());
+        $addons    = SimplerenewComponentHelper::getParams()->get('addons', array());
         $extension = JTable::getInstance('Extension');
 
         foreach ($addons as $addon) {
@@ -74,5 +74,38 @@ abstract class SimplerenewAddon
                 }
             }
         }
+    }
+
+    /**
+     * Get full extension information on all registered addons
+     *
+     * @return array Array of JTableExtension objects
+     */
+    public static function getList()
+    {
+        if ($registered = SimplerenewComponentHelper::getParams()->get('addons', array())) {
+            $ids = array();
+            foreach ($registered as $addon) {
+                $ids[] = $addon->extension_id;
+            }
+
+            $db    = SimplerenewFactory::getDbo();
+            $query = $db->getQuery(true)
+                ->select('*')
+                ->from('#__extensions')
+                ->where('extension_id in (' . join(',', $ids) . ')');
+
+            if ($list = $db->setQuery($query)->loadObjectList('extension_id')) {
+                foreach ($list as $idx => $addon) {
+                    $table = JTable::getInstance('Extension');
+                    $table->setProperties($addon);
+                    $list[$idx] = $table;
+                }
+            }
+
+            return $list;
+        }
+
+        return array();
     }
 }
