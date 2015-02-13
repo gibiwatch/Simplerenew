@@ -109,25 +109,7 @@
             </menu>
         </menus>
 
-        <obsolete>
-            <folder>/administrator/components/com_simplerenew/views/dashboard</folder>
-            <folder>/administrator/components/com_simplerenew/views/installer</folder>
-            <file>/administrator/components/com_simplerenew/controllers/test.php</file>
-            <file>/administrator/components/com_simplerenew/library/configuration.json</file>
-            <file>/administrator/components/com_simplerenew/library/Installer/AllediaInstallerPsr4AutoLoader.php</file>
-            <file>/administrator/components/com_simplerenew/library/joomla/loader.php</file>
-            <file>/administrator/components/com_simplerenew/library/psr4autoloader.php</file>
-            <file>/administrator/components/com_simplerenew/library/simplerenew/Notify/Handler/None.php</file>
-            <file>/administrator/components/com_simplerenew/sql/updates/mysql/0.045.sql</file>
-
-            <folder>/components/com_simplerenew/views/change</folder>
-            <file>/components/com_simplerenew/views/account/tmpl/login.php</file>
-            <file>/components/com_simplerenew/views/renewal/tmpl/cancel.php</file>
-            <file>/components/com_simplerenew/views/renewal/tmpl/multiple.php</file>
-            <file>/components/com_simplerenew/views/renewal/tmpl/reactivate.php</file>
-
-            <file>/media/com_simplerenew/js/tabs.js</file>
-        </obsolete>
+        <obsolete/>
     </alledia>
 
     <updateservers>
