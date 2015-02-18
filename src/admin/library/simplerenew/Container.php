@@ -8,6 +8,7 @@
 
 namespace Simplerenew;
 
+use Pimple\ServiceProviderInterface;
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Billing;
 use Simplerenew\Api\Coupon;
@@ -25,7 +26,6 @@ use Simplerenew\Notify\Notify;
 use Simplerenew\Plugin\Events;
 use Simplerenew\Primitive\AbstractPayment;
 use Simplerenew\Primitive\CreditCard;
-use Simplerenew\User\Adapter\UserInterface;
 use Simplerenew\User\User;
 
 defined('_JEXEC') or die();
@@ -40,75 +40,76 @@ defined('_JEXEC') or die();
  * @property Billing         $billing
  * @property Configuration   $configuration
  * @property Coupon          $coupon
+ * @property CreditCard      $creditcard
  * @property Events          $events
  * @property Invoice         $invoice
  * @property Notify          $notify
  * @property Plan            $plan
  * @property Subscription    $subscription
+ * @property User            $user
  */
-class Container
+class Container extends \Pimple\Container
 {
-    /**
-     * @var Configuration
-     */
-    protected $configuration = null;
-
-    /**
-     * @var Events
-     */
-    protected $events = null;
-
-    /**
-     * @var UserInterface
-     */
-    protected $userAdapter = null;
-
-    public function __construct(Configuration $config)
+    public function __construct(array $config = array())
     {
-        $this->userAdapter = $config->get('user.adapter');
-        $config->set('user.adapter', null);
+        parent::__construct();
 
-        $this->configuration = $config;
+        $required = array(
+            'configClass'     => 'Simplerenew\Configuration',
+            'creditCardClass' => 'Simplerenew\Primitive\CreditCard'
+        );
+        $config   = array_merge($required, $config);
+
+        // Parameters
+        $this['configData']      = $config;
+        $this['configClass']     = $config['configClass'];
+        $this['creditCardClass'] = $config['creditCardClass'];
+
+        $this['userAdapterClass'] = isset($config['user']['adapter']) ? $config['user']['adapter'] : null;
+
+        // Services
+        $this['configuration'] = function ($c) {
+            return new $c['configClass']($c['configData']);
+        };
+
+        $this['userAdapter'] = function ($c) {
+            $adapter = $c['userAdapterClass'];
+            return new $adapter();
+        };
+
+        $this['user'] = $this->factory(function ($c) {
+            $config = $c['configuration']->toConfig('user');
+            return new User($config, $c['userAdapter']);
+        });
+
+        $this['events'] = function ($c) {
+            $config = $c['configuration']->toConfig('events');
+            return new Events($config);
+        };
     }
 
     public function __get($name)
     {
-        switch (strtolower($name)) {
-            case 'configuration':
-                return $this->configuration;
-                break;
+        if ($this[$name]) {
+            return $this[$name];
+        }
 
-            case 'gatewayimp':
-                // Hide the gatewayImp getter
-                break;
-
-            default:
-                $method = 'get' . ucfirst($name);
-                if (method_exists($this, $method)) {
-                    return $this->$method();
-                }
-                break;
+        // @deprecated moving away from explicit getters
+        $method = 'get' . ucfirst($name);
+        if (method_exists($this, $method)) {
+            return $this->$method();
         }
 
         return null;
     }
 
     /**
-     * Create a new user object
-     *
-     * @param UserInterface $adapter
-     * @param Configuration $config
-     *
      * @return User
-     * @throws Exception
+     * @deprecated as of v1.1 use property access instead
      */
-    public function getUser(UserInterface $adapter = null, Configuration $config = null)
+    public function getUser()
     {
-        $config  = $config ?: $this->configuration->toConfig('user');
-        $adapter = $adapter ?: clone $this->userAdapter;
-
-        $user = new User($config, $adapter);
-        return $user;
+        return $this['user'];
     }
 
     /**
@@ -121,7 +122,7 @@ class Container
      */
     public function getAccount(AccountInterface $imp = null, Configuration $config = null)
     {
-        $config = $config ?: $this->configuration->toConfig('account');
+        $config = $config ?: $this['configuration']->toConfig('account');
         $imp    = $imp ?: $this->getGatewayImp('AccountImp');
 
         $account = new Account($config, $imp);
@@ -136,7 +137,7 @@ class Container
      */
     public function getBilling(BillingInterface $imp = null, Configuration $config = null)
     {
-        $config = $config ?: $this->configuration->toConfig('billing');
+        $config = $config ?: $this['configuration']->toConfig('billing');
         $imp    = $imp ?: $this->getGatewayImp('BillingImp');
 
         $billing = new Billing($config, $imp);
@@ -151,7 +152,7 @@ class Container
      */
     public function getPlan(PlanInterface $imp = null, Configuration $config = null)
     {
-        $config = $config ?: $this->configuration->toConfig('plan');
+        $config = $config ?: $this['configuration']->toConfig('plan');
         $imp    = $imp ?: $this->getGatewayImp('PlanImp');
 
         $plan = new Plan($config, $imp);
@@ -166,7 +167,7 @@ class Container
      */
     public function getCoupon(CouponInterface $imp = null, Configuration $config = null)
     {
-        $config = $config ?: $this->configuration->toConfig('coupon');
+        $config = $config ?: $this['configuration']->toConfig('coupon');
         $imp    = $imp ?: $this->getGatewayImp('CouponImp');
 
         $coupon = new Coupon($config, $imp);
@@ -183,7 +184,7 @@ class Container
      */
     public function getSubscription(SubscriptionInterface $imp = null, Configuration $config = null)
     {
-        $config = $config ?: $this->configuration->toConfig('subscription');
+        $config = $config ?: $this['configuration']->toConfig('subscription');
         $imp    = $imp ?: $this->getGatewayImp('SubscriptionImp');
 
         $subscription = new Subscription($config, $imp);
@@ -200,7 +201,7 @@ class Container
      */
     public function getInvoice(InvoiceInterface $imp = null, Configuration $config = null)
     {
-        $config = $config ?: $this->configuration->toConfig('invoice');
+        $config = $config ?: $this['configuration']->toConfig('invoice');
         $imp    = $imp ?: $this->getGatewayImp('InvoiceImp');
 
         $invoice = new Invoice($config, $imp);
@@ -246,18 +247,12 @@ class Container
     /**
      * Gets the event manager singleton
      *
-     * @param Configuration $config
-     *
      * @return Events
+     * @deprecated as of v1.1 use property access instead
      */
-    public function getEvents(Configuration $config = null)
+    public function getEvents()
     {
-        if ($this->events === null) {
-            $config       = $config ?: $this->configuration->toConfig('events');
-            $this->events = new Events($config);
-        }
-
-        return $this->events;
+        return $this['events'];
     }
 
     /**
@@ -271,7 +266,7 @@ class Container
     public function getGatewayImp($name, $namespace = null)
     {
         $imp       = null;
-        $namespace = $namespace ?: $this->configuration->get('gateway.namespace');
+        $namespace = $namespace ?: $this['configuration']->get('gateway.namespace');
 
         if ($namespace) {
             if (strpos($namespace, '\\') !== 0) {
@@ -279,7 +274,7 @@ class Container
             }
             $className = $namespace . '\\' . $name;
             if (class_exists($className)) {
-                $config = $this->configuration->toConfig('gateway');
+                $config = $this['configuration']->toConfig('gateway');
                 $imp    = new $className($config);
             }
         }

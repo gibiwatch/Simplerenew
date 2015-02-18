@@ -22,7 +22,8 @@
         }
     ],
     "require"          : {
-        "php"     : ">= 5.3",
-        "ext-curl": "*"
+        "php"          : ">= 5.3",
+        "ext-curl"     : "*",
+        "pimple/pimple": "v3.0.0"
     }
 }

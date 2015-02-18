@@ -20,6 +20,8 @@ if (!defined('SIMPLERENEW_LOADED')) {
     // Setup autoload libraries
     require_once SIMPLERENEW_LIBRARY . '/simplerenew/AutoLoader.php';
     AutoLoader::register('Simplerenew', SIMPLERENEW_LIBRARY . '/simplerenew');
+    AutoLoader::register('Pimple', SIMPLERENEW_LIBRARY . '/pimple');
+
     AutoLoader::registerCamelBase('Simplerenew', SIMPLERENEW_LIBRARY . '/joomla');
 
     // Any additional helper paths
