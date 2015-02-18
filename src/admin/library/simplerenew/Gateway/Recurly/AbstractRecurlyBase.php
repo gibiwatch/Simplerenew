@@ -29,10 +29,10 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
     {
         parent::__construct($config);
 
-        $this->mode = $config->get('mode');
+        $this->mode = $this->getCfg('mode');
 
         // Initialise the native Recurly API
-        if ($apiKey = $config->get($this->mode . '.apiKey')) {
+        if ($apiKey = $this->getCfg($this->mode . '.apiKey')) {
             $this->client = new \Recurly_Client($apiKey);
         }
     }

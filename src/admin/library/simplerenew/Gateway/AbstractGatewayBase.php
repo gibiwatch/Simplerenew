@@ -41,7 +41,7 @@ abstract class AbstractGatewayBase extends Object
     {
         $this->configuration = $config;
 
-        $this->currency = $config->get('currency', null);
+        $this->currency = $config->get('currency');
     }
 
     /**
@@ -54,44 +54,12 @@ abstract class AbstractGatewayBase extends Object
      */
     protected function getCfg($key, $default = null)
     {
-        return $this->configuration->get($key, $default);
+        return $this->configuration->get('gateway.' . $key, $default);
     }
 
-    /**
-     * @return Cache
-     */
-    public function getCache()
+    protected function setCfg($key, $value)
     {
-        $cache = $this->configuration->get('cache');
-        if (!$cache instanceof Cache) {
-            $cache = new Cache(array('domain' => get_class($this)));
-            $this->configuration->set('cache', $cache);
-        }
-        return $cache;
-    }
-
-    /**
-     * @param Cache $cache
-     *
-     * @return AbstractGatewayBase
-     */
-    public function setCache(Cache $cache)
-    {
-        $this->configuration->set('cache', $cache);
-        return $this;
-    }
-
-    /**
-     * Get a unique domain key for cache items
-     *
-     * @param $key
-     *
-     * @return string
-     */
-    public function getCacheKey($key)
-    {
-        $domain = get_class($this);
-        return $domain . '.' . $key;
+        return $this->configuration->set('gateway.' . $key, $value);
     }
 
     /**
