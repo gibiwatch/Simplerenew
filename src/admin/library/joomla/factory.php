@@ -41,39 +41,37 @@ abstract class SimplerenewFactory extends JFactory
 
         if (empty(static::$SimplerenewContainers[$key])) {
             // convert Joomla config parameters into Simplerenew configuration options
-            $recurly = $params->get('gateway.recurly');
-            $gateway = array(
-                'namespace' => 'Recurly',
-                'mode'      => $recurly->mode,
-                'live'      => array(
-                    'apiKey'    => $recurly->liveApikey,
-                    'publicKey' => $recurly->livePublickey
-                ),
-                'test'      => array(
-                    'apiKey'    => $recurly->testApikey,
-                    'publicKey' => $recurly->testPublickey
-                )
-            );
-
+            $recurly         = $params->get('gateway.recurly');
             $billingRequired = explode(',', $params->get('basic.billingAddress'));
+            $userAdapter     = new Joomla();
 
-            $config = new Configuration(
-                array(
-                    'billing' => array(
-                        'required' => array_filter(array_map('trim', $billingRequired))
+            $config = array(
+                'gateway' => array(
+                    'namespace' => 'Recurly',
+                    'mode'      => $recurly->mode,
+                    'live'      => array(
+                        'apiKey'    => $recurly->liveApikey,
+                        'publicKey' => $recurly->livePublickey
                     ),
-                    'user'    => array(
-                        'adapter' => new Joomla(),
-                        'group'   => array(
-                            'default'    => (int)$params->get('basic.defaultGroup'),
-                            'expiration' => (int)$params->get('basic.expirationGroup')
-                        )
-                    ),
-                    'gateway' => $gateway
+                    'test'      => array(
+                        'apiKey'    => $recurly->testApikey,
+                        'publicKey' => $recurly->testPublickey
+                    )
+                ),
+                'billing' => array(
+                    'required' => array_filter(array_map('trim', $billingRequired))
+                ),
+                'user'    => array(
+                    'adapter' => $userAdapter,
+                    'group'   => array(
+                        'default'    => (int)$params->get('basic.defaultGroup'),
+                        'expiration' => (int)$params->get('basic.expirationGroup')
+                    )
                 )
             );
 
-            static::$SimplerenewContainers[$key] = new Container($config);
+            $container = new Container(new Configuration($config));
+            static::$SimplerenewContainers[$key] = $container;
         }
         return static::$SimplerenewContainers[$key];
     }
