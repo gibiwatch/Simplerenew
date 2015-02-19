@@ -38,7 +38,6 @@ abstract class SimplerenewFactory extends JFactory
     {
         $params = $params ?: SimplerenewComponentHelper::getParams();
         $key    = sha1($params->toString());
-
         if (empty(static::$SimplerenewContainers[$key])) {
             // convert Joomla config parameters into Simplerenew configuration options
             $recurly         = $params->get('gateway.recurly');
@@ -68,6 +67,12 @@ abstract class SimplerenewFactory extends JFactory
                     )
                 )
             );
+
+            // Allow devs to create additional customizations for a site
+            $settingsPath = SIMPLERENEW_LIBRARY . '/simplerenew/.settings.json';
+            if ($settings = is_file($settingsPath) ? file_get_contents($settingsPath) : array()) {
+                $config = array_merge(json_decode($settings, true), $config);
+            }
 
             $container = new Container($config);
             static::$SimplerenewContainers[$key] = $container;
