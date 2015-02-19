@@ -46,7 +46,7 @@ class Events
     public function registerHandler($className, $events)
     {
         if (strpos($className, '\\') !== 0) {
-            $className = '\\Simplerenew\Plugin\\' . $className;
+            $className = 'Simplerenew\\' . $className;
         }
         foreach ((array)$events as $event) {
             if (!isset($this->events[$event])) {
