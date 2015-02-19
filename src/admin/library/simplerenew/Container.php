@@ -23,8 +23,6 @@ defined('_JEXEC') or die();
 /**
  * Class Container
  *
- * @TODO    : This class could still use a lot of improvement!
- *
  * @package Simplerenew
  *
  * @property Account       $account
@@ -51,72 +49,6 @@ defined('_JEXEC') or die();
  */
 class Container extends \Pimple\Container
 {
-    public function __construct($cms, $gateway, array $config = array())
-    {
-        parent::__construct();
-
-        // Parameters
-        $this['configData'] = $config;
-        $this['cmsNamespace'] = $cms;
-        $this['gatewayNamespace'] = $gateway;
-
-        // Services
-        $this['configuration'] = function ($c) {
-            return new Configuration($c['configData']);
-        };
-
-        // User classes
-        $this['userAdapter'] = function ($c) {
-            $adapter = $c['cmsNamespace'] . '\User\Adapter';
-            return new $adapter();
-        };
-
-        $this['user'] = $this->factory(function (Container $c) {
-            return new User($c['configuration'], $c['userAdapter']);
-        });
-
-        // Events class
-        $this['events'] = function ($c) {
-            return new Events($c['configuration']);
-        };
-
-        // Gateway classes
-        $this['account'] = $this->factory(function (Container $c) {
-            $imp = $c->getInstance($c['gatewayNamespace'] . '\AccountImp');
-            return new Account($c['configuration'], $imp);
-        });
-
-        $this['billing'] = $this->factory(function (Container $c) {
-            $imp = $c->getInstance($c['gatewayNamespace'] . '\BillingImp');
-            return new Billing($c['configuration'], $imp);
-        });
-
-        $this['coupon'] = $this->factory(function (Container $c) {
-            $imp = $c->getInstance($c['gatewayNamespace'] . '\CouponImp');
-            return new Coupon($c['configuration'], $imp);
-        });
-
-        $this['invoice'] = $this->factory(function (Container $c) {
-            $imp = $c->getInstance($c['gatewayNamespace'] . '\InvoiceImp');
-            return new Invoice($c['configuration'], $imp);
-        });
-
-        $this['notify'] = $this->factory(function (Container $c) {
-            $imp = $c->getInstance($c['gatewayNamespace'] . '\NotifyImp');
-            return new Notify($c, $imp);
-        });
-
-        $this['plan'] = $this->factory(function (Container $c) {
-            $imp = $c->getInstance($c['gatewayNamespace'] . '\PlanImp');
-            return new Plan($c['configuration'], $imp);
-        });
-
-        $this['subscription'] = $this->factory(function (Container $c) {
-            $imp = $c->getInstance($c['gatewayNamespace'] . '\SubscriptionImp');
-            return new Subscription($c['configuration'], $imp);
-        });
-    }
-
     public function __call($name, $args)
     {
         if (strpos($name, 'get') === 0 && !$args) {
@@ -168,7 +100,9 @@ class Container extends \Pimple\Container
     }
 
     /**
-     * Find a service in the container based on short class name
+     * Find a service in the container based on class name
+     * Classes can be registered either through their short name
+     * or full class name. Short name take precedence.
      *
      * @param \ReflectionClass $class
      * @param bool             $require

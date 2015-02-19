@@ -72,9 +72,9 @@ abstract class SimplerenewFactory extends JFactory
                 $config = array_merge(json_decode($settings, true), $config);
             }
 
-            $cms       = 'Simplerenew\Cms\Joomla';
-            $gateway   = 'Simplerenew\Gateway\Recurly';
-            $container = new Container($cms, $gateway, $config);
+            $container = new Container();
+            $services  = new Simplerenew\Cms\Joomla\Services\Simplerenew($config);
+            $container->register($services);
 
             static::$SimplerenewContainers[$key] = $container;
         }
