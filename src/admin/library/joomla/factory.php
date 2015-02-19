@@ -45,13 +45,12 @@ abstract class SimplerenewFactory extends JFactory
 
             $config = array(
                 'gateway' => array(
-                    'namespace' => 'Recurly',
-                    'mode'      => $recurly->mode,
-                    'live'      => array(
+                    'mode' => $recurly->mode,
+                    'live' => array(
                         'apiKey'    => $recurly->liveApikey,
                         'publicKey' => $recurly->livePublickey
                     ),
-                    'test'      => array(
+                    'test' => array(
                         'apiKey'    => $recurly->testApikey,
                         'publicKey' => $recurly->testPublickey
                     )
@@ -60,8 +59,7 @@ abstract class SimplerenewFactory extends JFactory
                     'required' => array_filter(array_map('trim', $billingRequired))
                 ),
                 'user'    => array(
-                    'adapter' => 'Simplerenew\User\Adapter\Joomla',
-                    'group'   => array(
+                    'group' => array(
                         'default'    => (int)$params->get('basic.defaultGroup'),
                         'expiration' => (int)$params->get('basic.expirationGroup')
                     )
@@ -74,7 +72,10 @@ abstract class SimplerenewFactory extends JFactory
                 $config = array_merge(json_decode($settings, true), $config);
             }
 
-            $container = new Container($config);
+            $cms       = 'Simplerenew\Cms\Joomla';
+            $gateway   = 'Simplerenew\Gateway\Recurly';
+            $container = new Container($cms, $gateway, $config);
+
             static::$SimplerenewContainers[$key] = $container;
         }
         return static::$SimplerenewContainers[$key];

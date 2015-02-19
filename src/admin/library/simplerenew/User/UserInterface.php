@@ -6,7 +6,7 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\User\Adapter;
+namespace Simplerenew\User;
 
 use Simplerenew\Api\Plan;
 use Simplerenew\Exception;

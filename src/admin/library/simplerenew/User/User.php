@@ -68,7 +68,7 @@ class User extends Object
     public $enabled = null;
 
     /**
-     * @var Adapter\UserInterface
+     * @var UserInterface
      */
     protected $adapter = null;
 
@@ -77,7 +77,7 @@ class User extends Object
      */
     protected $configuration = null;
 
-    public function __construct(Configuration $config, Adapter\UserInterface $adapter)
+    public function __construct(Configuration $config, UserInterface $adapter)
     {
         $this->configuration = $config;
         $this->adapter       = $adapter;

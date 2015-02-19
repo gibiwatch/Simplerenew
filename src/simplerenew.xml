@@ -109,7 +109,9 @@
             </menu>
         </menus>
 
-        <obsolete/>
+        <obsolete>
+            <folder>/administrator/components/com_simplerenew/library/simplerenew/User/Adapter</folder>
+        </obsolete>
     </alledia>
 
     <updateservers>

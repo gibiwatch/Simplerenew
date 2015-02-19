@@ -6,17 +6,17 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\User\Adapter;
+namespace Simplerenew\Cms\Joomla\User;
 
 use JAuthentication;
 use JFactory;
 use JLoader;
 use JUser;
 use JUserHelper;
-use Simplerenew\Api\Plan;
 use Simplerenew\Exception;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\User\User;
+use Simplerenew\User\UserInterface;
 use SimplerenewFactory;
 use SimplerenewModel;
 use UsersModelRegistration;
@@ -26,7 +26,7 @@ defined('_JEXEC') or die();
 JLoader::register('JAuthentication', JPATH_LIBRARIES . '/joomla/user/authentication.php');
 
 
-class Joomla implements UserInterface
+class Adapter implements UserInterface
 {
     protected $fieldMap = array(
         'password'  => null,

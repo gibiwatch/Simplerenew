@@ -51,37 +51,23 @@ defined('_JEXEC') or die();
  */
 class Container extends \Pimple\Container
 {
-    public function __construct(array $config = array())
+    public function __construct($cms, $gateway, array $config = array())
     {
         parent::__construct();
 
-        // Normalize configuration array
-        $required = array(
-            'configClass' => 'Simplerenew\Configuration',
-            'gateway'     => array()
-        );
-        $config   = array_merge($required, $config);
-
-        $gatewayNamespace = empty($config['gateway']['namespace']) ? null : $config['gateway']['namespace'];
-        if (strpos($gatewayNamespace, '\\') !== 0) {
-            $config['gateway']['namespace'] = 'Simplerenew\Gateway\\' . $gatewayNamespace;
-        }
-
         // Parameters
-        $this['configData']       = $config;
-        $this['configClass']      = $config['configClass'];
-        $this['gatewayNamespace'] = $config['gateway']['namespace'];
-
-        $this['userAdapterClass'] = isset($config['user']['adapter']) ? $config['user']['adapter'] : null;
+        $this['configData'] = $config;
+        $this['cmsNamespace'] = $cms;
+        $this['gatewayNamespace'] = $gateway;
 
         // Services
         $this['configuration'] = function ($c) {
-            return new $c['configClass']($c['configData']);
+            return new Configuration($c['configData']);
         };
 
         // User classes
         $this['userAdapter'] = function ($c) {
-            $adapter = $c['userAdapterClass'];
+            $adapter = $c['cmsNamespace'] . '\User\Adapter';
             return new $adapter();
         };
 
