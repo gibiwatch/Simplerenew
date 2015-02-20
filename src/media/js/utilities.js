@@ -54,6 +54,62 @@
     $.Simplerenew = $.extend({}, $.Simplerenew);
 
     /**
+     * Traverse a plain object using dot-notation key syntax
+     * Default source is $.Simplerenew
+     *
+     * @param keys
+     * @param source
+     *
+     * @returns {*}
+     */
+    $.Simplerenew.find = function (keys, source) {
+        source = source || this;
+
+        var item = keys.split('.');
+        if (item.length > 1) {
+            var key = item.shift();
+            var value = item.join('.');
+            if (source[key]) {
+                return this.find(value, source[key]);
+            }
+
+        } else if (source[item]) {
+            return source[item];
+        }
+
+        return null;
+    };
+
+    /**
+     * Turn any element into an ajax submitter.
+     * Element must contain a data-task attribute
+     * that references a defined object in $.Simplerenew
+     * containing all jQuery.ajax() options needed to complete
+     * the request.
+     *
+     * Expects dot-notation [see this.find()]
+     *
+     * @param options
+     */
+    $.Simplerenew.ajax = function(options) {
+        options = $.extend(this.ajax.options, options);
+
+        $(options.selector).on('click', function(evt) {
+            evt.preventDefault();
+            var keys = $(this).attr('data-task');
+            if (keys) {
+                var options = $.Simplerenew.find(keys);
+                if (options) {
+                    $.ajax($.extend(options, {context: this}));
+                }
+            }
+        });
+    };
+    $.Simplerenew.ajax.options = {
+        selector: null
+    };
+
+    /**
      * Simple tabs. Define tab headings with any selector
      * and include the attribute data-content with a selector
      * for the content area it controls. All tabs selected by

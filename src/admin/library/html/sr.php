@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 
 abstract class JHtmlSr
 {
-    protected static $jqueryLoaded = array();
+    protected static $jqueryLoaded    = array();
     protected static $utilitiesLoaded = false;
 
     /**
@@ -188,5 +188,25 @@ abstract class JHtmlSr
         $attribs['type']  = 'text';
         $attribs['value'] = $selected;
         return '<input ' . SimplerenewUtilitiesArray::toString($attribs) . '/>';
+    }
+
+    /**
+     * Turn any clickable element into an ajax submitter. See
+     * media/js/utilities.js:ajax() for notes on defined tasks
+     *
+     * @param string $selector
+     * @param array  $options
+     *
+     * @return void
+     */
+    public static function ajax($selector, $options = array())
+    {
+        static::jquery(true);
+
+        $options = is_string($options) ? json_decode($options, true) : (array)$options;
+        $options = array_merge($options, array('selector' => $selector));
+        $options = json_encode($options);
+
+        static::onready("jQuery.Simplerenew.ajax({$options});");
     }
 }
