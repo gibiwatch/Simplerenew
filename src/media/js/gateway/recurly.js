@@ -27,6 +27,8 @@
         }
     });
 
+    $.Simplerenew = $.extend({}, {validate: {}}, $.Simplerenew);
+
     $.Simplerenew.validate.gateway = $.extend({}, $.Simplerenew.validate.gateway, {
         options: {
             key: null
