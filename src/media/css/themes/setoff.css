@@ -595,6 +595,40 @@ span.simplerenew-plan.simplerenew-plan-selected{
     margin: 0;
 }
 
+.ost-row-one a,
+.ost-row-two a {
+    background: #2184cd;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -o-border-radius: 2px;
+    color: #fff;
+    display: inline-block;
+    text-decoration: none;
+    padding: 4px 10px;
+    margin-bottom: 4px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+    -o-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+}
+
+.ost-row-one a:hover,
+.ost-row-two a:hover,
+.ost-row-one a:focus,
+.ost-row-two a:focus,
+.ost-row-one a:active,
+.ost-row-two a:active {
+    background: #41a1d6;
+    text-decoration: none;
+    color: #fff;
+}
+
+.ost-row-one a i:before,
+.ost-row-two a i:before {
+    color: #fff;
+}
+
 .ost-container .ost-row-one.m-bottom,
 .ost-container .ost-row-two.m-bottom {
     margin-bottom: 50px;
