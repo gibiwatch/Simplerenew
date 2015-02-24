@@ -86,7 +86,7 @@ class Account extends AbstractApiBase
      */
     protected $codeMask = '%s';
 
-    public function __construct(Configuration $config, AccountInterface $imp, Address $address = null)
+    public function __construct(Configuration $config, AccountInterface $imp, User $user, Address $address = null)
     {
         parent::__construct();
 
@@ -94,6 +94,7 @@ class Account extends AbstractApiBase
 
         $this->imp     = $imp;
         $this->address = $address ?: new Address();
+        $this->user    = $user;
     }
 
     /**
@@ -114,6 +115,20 @@ class Account extends AbstractApiBase
 
         $this->imp->load($this);
         return $this;
+    }
+
+    /**
+     * Load account information for the selected user ID
+     *
+     * @param int $id
+     *
+     * @return Account
+     * @throws Exception
+     */
+    public function loadByUserid($id = null)
+    {
+        $this->user->load($id);
+        return $this->load($this->user);
     }
 
     /**
