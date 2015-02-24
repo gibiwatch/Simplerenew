@@ -30,7 +30,7 @@ defined('_JEXEC') or die();
 
         <div class="simplerenew-invoices-table">
 
-            <div class="ost-section ost-row-two ost-invoice-heading b-bottom">
+            <div class="ost-section ost-row-heading">
                 <div class="block4">Number</div>
                 <div class="block4">Total</div>
                 <div class="block4">Date issued</div>

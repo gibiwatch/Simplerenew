@@ -513,20 +513,17 @@ span.simplerenew-plan.simplerenew-plan-selected{
     background: #f2f2f2;
 }
 
-/* Account view
+/* Listing
  ========================================================================== */
-.ost-row-one{
-    border-top: 1px solid #f2f2f2;
+.ost-row-one,
+.ost-row-two {
     border-bottom: 1px solid #f2f2f2;
 }
 
-.ost-row-two{
-
-}
-
+.ost-row-heading [class*="block"],
 .ost-row-one [class*="block"],
 .ost-row-two [class*="block"]{
-    padding: 10px;
+    padding: 15px 10px;
 }
 
 .ost-row-one [class*="block"] label,
@@ -565,14 +562,14 @@ span.simplerenew-plan.simplerenew-plan-selected{
     color: #fff;
 }
 
-/* Invoices view
- ========================================================================== */
-.ost-invoice-heading > div{
+.ost-container .ost-row-heading > div{
     font-weight: bold;
 }
 
-.ost-invoice-heading{
-    border-bottom-color: #cccccc;
+.ost-container .ost-row-heading {
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    background: #fff;
 }
 
 /* Media queries
@@ -590,8 +587,8 @@ span.simplerenew-plan.simplerenew-plan-selected{
     .ost-container select {
         width: 80%;
     }
-    /* Invoices view */
-    .ost-invoice-heading{
+    /* Listing */
+    .ost-container .ost-row-heading {
         display: none;
     }
 }
