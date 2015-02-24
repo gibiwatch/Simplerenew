@@ -6,9 +6,8 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-use Simplerenew\Configuration;
+use Simplerenew\Cms\Joomla\Services\Simplerenew;
 use Simplerenew\Container;
-use Simplerenew\User\Adapter\Joomla;
 
 defined('_JEXEC') or die();
 
@@ -73,7 +72,7 @@ abstract class SimplerenewFactory extends JFactory
             }
 
             $container = new Container();
-            $services  = new Simplerenew\Cms\Joomla\Services\Simplerenew($config);
+            $services  = new Simplerenew($config);
             $container->register($services);
 
             static::$SimplerenewContainers[$key] = $container;

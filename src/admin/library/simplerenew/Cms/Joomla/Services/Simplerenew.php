@@ -61,7 +61,7 @@ class Simplerenew implements ServiceProviderInterface
 
         // User classes
         $pimple['userAdapter'] = function (\Simplerenew\Container $c) {
-            $adapter = $c['cmsNamespace'] . '\User\Adapter';
+            $adapter = $c['cmsNamespace'] . '\User\UserAdapter';
             return new $adapter();
         };
 

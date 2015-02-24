@@ -26,7 +26,7 @@ defined('_JEXEC') or die();
 JLoader::register('JAuthentication', JPATH_LIBRARIES . '/joomla/user/authentication.php');
 
 
-class Adapter implements UserInterface
+class UserAdapter implements UserInterface
 {
     protected $fieldMap = array(
         'password'  => null,
