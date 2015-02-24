@@ -548,7 +548,7 @@ span.simplerenew-plan.simplerenew-plan-selected{
     
 }
 
-.ost-alert-notify.m-bottom{
+.ost-container .ost-alert-notify.m-bottom{
     margin-bottom: 30px;
 }
 
@@ -595,8 +595,8 @@ span.simplerenew-plan.simplerenew-plan-selected{
     margin: 0;
 }
 
-.ost-row-one.m-bottom,
-.ost-row-two.m-bottom {
+.ost-container .ost-row-one.m-bottom,
+.ost-container .ost-row-two.m-bottom {
     margin-bottom: 50px;
 }
 
