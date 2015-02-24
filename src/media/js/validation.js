@@ -365,7 +365,6 @@
                         var text = element.id.match(/(\S+?)(\d+)$/)
                         if (text && text[2] == 2) {
                             var partner = $('#' + text[1]);
-                            console.log(partner);
                             if (partner.length) {
                                 return value == partner.val();
                             }
