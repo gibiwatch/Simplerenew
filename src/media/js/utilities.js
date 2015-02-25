@@ -83,7 +83,6 @@
          * in this case the current element will be returned as a partner
          * to itself
          *
-         *
          * @param {string} list
          * @param {bool}   [useAttribute]
          *
@@ -95,19 +94,22 @@
                 prefix = '#',
                 partners = {};
 
+            // 2nd arg defaults to true
             if (arguments.length == 1 || useAttribute) {
                 list = $(this).attr(list);
             }
 
-            if (list) {
-                if (name.indexOf('[') > -1) {
-                    var parts = name.replace(/]/g, '').split(/\[/);
-                    if (parts.join('_') == id) {
-                        name = parts.pop();
-                        prefix = '#' + parts.join('_') + '_';
-                    }
+            // if this is part of an array, we want to be a partner to ourselves
+            if (name.indexOf('[') > -1) {
+                var parts = name.replace(/]/g, '').split(/\[/);
+                if (parts.join('_') == id) {
+                    name = parts.pop();
+                    prefix = '#' + parts.join('_') + '_';
+                    partners[name] = $(this);
                 }
+            }
 
+            if (list) {
                 var partner;
                 $.each(list.split(' '), function(idx, id) {
                     if (id.indexOf('#') < 0) {
