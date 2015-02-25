@@ -31,9 +31,9 @@ defined('_JEXEC') or die();
         <div class="simplerenew-invoices-table">
 
             <div class="ost-section ost-row-heading">
-                <div class="block4">Number</div>
-                <div class="block4">Total</div>
-                <div class="block4">Date issued</div>
+                <div class="block4"><?php echo JText::_('COM_SIMPLERENEW_INVOICE_NUMBER'); ?></div>
+                <div class="block4"><?php echo JText::_('COM_SIMPLERENEW_INVOICE_TOTAL'); ?></div>
+                <div class="block4"><?php echo JText::_('COM_SIMPLERENEW_INVOICE_DATE_ISSUED'); ?></div>
             </div>
             <!-- /ost-section -->
 
