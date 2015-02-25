@@ -48,6 +48,63 @@
                 }
             }
             return this;
+        },
+
+        /**
+         * Return an array of partner elements as requested from
+         * a space delimited string of element ids. If an id string
+         * does not begin with '#', an attempt will be made to find
+         * a partner id with the same prefix. If the element name and
+         * id follow the same pattern:
+         *
+         * member[1][username] == member_1_username
+         *
+         * member_1_ will be recognized as the prefix and a request for
+         * 'email' will attempt to find #member_1_email.
+         *
+         * 'username' and 'email' will be considered the basenames and
+         * in this case the current element will be returned as a partner
+         * to itself
+         *
+         *
+         * @param {string} list
+         * @param {bool}   [useAttribute]
+         *
+         * @returns {Object}
+         */
+        findPartners: function(list, useAttribute) {
+            var name = $(this).attr('name'),
+                id = $(this).attr('id'),
+                prefix = '#',
+                partners = {};
+
+            if (arguments.length == 1 || useAttribute) {
+                list = $(this).attr(list);
+            }
+
+            if (list) {
+                if (name.indexOf('[') > -1) {
+                    var parts = name.replace(/]/g, '').split(/\[/);
+                    if (parts.join('_') == id) {
+                        name = parts.pop();
+                        prefix = '#' + parts.join('_') + '_';
+                    }
+                }
+
+                var partner;
+                $.each(list.split(' '), function(idx, id) {
+                    if (id.indexOf('#') < 0) {
+                        partner = $(prefix + id);
+                    } else {
+                        partner = $(id);
+                        id = id.substr(1);
+                    }
+                    if (partner) {
+                        partners[id] = partner;
+                    }
+                });
+            }
+            return partners;
         }
     });
 
