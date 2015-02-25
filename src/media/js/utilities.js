@@ -174,9 +174,9 @@
             evt.preventDefault();
             var keys = $(this).attr('data-task');
             if (keys) {
-                var options = $.Simplerenew.find(keys);
-                if (options) {
-                    $.ajax($.extend(options, {context: this}));
+                var ajaxOptions = $.extend(true, $.Simplerenew.find(keys), options.ajax);
+                if (ajaxOptions) {
+                    $.ajax($.extend(ajaxOptions, {context: this}));
                 }
             }
         });

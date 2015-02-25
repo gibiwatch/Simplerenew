@@ -204,7 +204,10 @@ abstract class JHtmlSr
         static::jquery(true);
 
         $options = is_string($options) ? json_decode($options, true) : (array)$options;
-        $options = array_merge($options, array('selector' => $selector));
+        $options = array(
+            'selector' => $selector,
+            'ajax'     => $options
+        );
         $options = json_encode($options);
 
         static::onready("jQuery.Simplerenew.ajax({$options});");
