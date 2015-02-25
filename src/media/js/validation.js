@@ -125,8 +125,8 @@
              * Initialize a form for validation.
              * Passes the Joomla session token for ajax calls
              *
-             * @param selector
-             * @param options
+             * @param {string} selector
+             * @param {object} [options]
              */
             init: function(selector, options) {
                 var form = $(selector);
