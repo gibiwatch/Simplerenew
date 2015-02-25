@@ -39,7 +39,15 @@
                 alert('System error: No public key defined');
                 return;
             }
-            recurly.configure(this.options.key);
+
+            try {
+                if (!recurly.configured) {
+                    recurly.configure(this.options.key);
+                }
+            } catch (err) {
+                alert('Unable to configure Recurly: ' + err.message);
+                return;
+            }
 
             var coupon = $('#coupon_code')
                 .attr('data-recurly', 'coupon')
