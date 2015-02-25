@@ -1,6 +1,6 @@
-(function ($) {
+(function($) {
     $.extend($.fn, {
-        closePanel: function (state, options) {
+        closePanel     : function(state, options) {
             options = $.extend({
                 focus: true
             }, options);
@@ -24,10 +24,10 @@
             }
             return this;
         },
-        closePanelSlide: function (state, options) {
+        closePanelSlide: function(state, options) {
             options = $.extend({
                 duration: 400,
-                focus: true
+                focus   : true
             }, options);
 
             if (state) {
@@ -62,7 +62,7 @@
      *
      * @returns {*}
      */
-    $.Simplerenew.find = function (keys, source) {
+    $.Simplerenew.find = function(keys, source) {
         source = source || this;
 
         var item = keys.split('.');
@@ -119,17 +119,17 @@
      * @param options
      *        selector : A jQuery selector for the tab headers
      */
-    $.Simplerenew.tabs = function (options) {
+    $.Simplerenew.tabs = function(options) {
         options = $.extend(this.tabs.options, options);
 
         var headers = $(options.selector);
         headers
             .css('cursor', 'pointer')
-            .each(function (idx, active) {
+            .each(function(idx, active) {
                 $(this)
                     .data('contentPanel', $($(this).attr('data-content')))
-                    .on('click', function (evt, options) {
-                        headers.each(function (idx) {
+                    .on('click', function(evt, options) {
+                        headers.each(function(idx) {
                             $(this)
                                 .toggleClass('tab-enabled', active === this)
                                 .data('contentPanel').closePanel(active !== this, options)
@@ -144,8 +144,8 @@
         $(headers.filter(options.active)).trigger('click', {focus: false});
     };
     $.Simplerenew.tabs.options = {
-        selector : null,
-        active   : null
+        selector: null,
+        active  : null
     };
 
     /**
@@ -158,14 +158,14 @@
      *        selector : a jQuery selector for the slider headers
      *        visible  : bool - initial visible state (default: false)
      */
-    $.Simplerenew.sliders = function (options) {
+    $.Simplerenew.sliders = function(options) {
         options = $.extend(this.sliders.options, options);
 
-        $(options.selector).each(function () {
+        $(options.selector).each(function() {
             $(this)
                 .css('cursor', 'pointer')
                 .data('contentPanel', $($(this).attr('data-content')))
-                .on('click', function (evt, options) {
+                .on('click', function(evt, options) {
                     var contentPanel = $(this).data('contentPanel');
                     contentPanel.closePanelSlide(contentPanel.is(':visible'), options);
                 })
@@ -173,8 +173,8 @@
         });
     };
     $.Simplerenew.sliders.options = {
-        selector : null,
-        visible  : false
+        selector: null,
+        visible : false
     };
 
     /**
@@ -184,11 +184,11 @@
      *        selector : A jQuery selector for the area
      *        target   : alternative selector for the radio/checkbox(es)
      */
-    $.Simplerenew.clickArea = function (options) {
+    $.Simplerenew.clickArea = function(options) {
         options = $.extend(this.clickArea.options, options);
 
         var areas = $(options.selector);
-        areas.on('click', function (evt) {
+        areas.on('click', function(evt) {
             var target = $($(this).find(options.target));
             if (target.attr('type') == 'radio') {
                 target.prop('checked', true);
@@ -219,9 +219,9 @@
         });
     };
     $.Simplerenew.clickArea.options = {
-        selector    : null,
-        target      : 'input:radio,input:checkbox',
-        selectClass : 'simplerenew-selected'
+        selector   : null,
+        target     : 'input:radio,input:checkbox',
+        selectClass: 'simplerenew-selected'
     };
 
     /**
@@ -229,7 +229,7 @@
      *
      * @param options
      */
-    $.Simplerenew.region = function (options) {
+    $.Simplerenew.region = function(options) {
         options = $.extend(this.region.options, options);
 
         var region = $(options.region),
@@ -278,7 +278,7 @@
 
     };
     $.Simplerenew.region.options = {
-        region: null,
+        region : null,
         country: null
     };
 

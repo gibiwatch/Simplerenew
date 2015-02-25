@@ -1,20 +1,20 @@
-(function ($) {
+(function($) {
     /**
      * Custom method for assigning validation by class
      *
      * @param rules
      */
-    $.fn.applyRules = function (rules) {
+    $.fn.applyRules = function(rules) {
         var form = $(this[0]);
         var token = form.data('csrfToken');
 
-        $.each(rules, function (cls, rule) {
+        $.each(rules, function(cls, rule) {
             if (rule.remote && token.name) {
                 rule.remote.data[token.name] = token.value;
             }
 
             form.find('.' + cls + ':not([readonly=true])')
-                .each(function (idx, el) {
+                .each(function(idx, el) {
                     if (rule.remote) {
                         // Add option to include other fields in remote validations
                         var include = $(el).attr('data-include');
@@ -24,13 +24,13 @@
                             }
                         };
                         if (include) {
-                            $(include.split(' ')).each(function (idx, target) {
+                            $(include.split(' ')).each(function(idx, target) {
                                 var info = target.split(':'),
                                     selector = info.pop(),
                                     urlVar = info.pop() || $(selector).attr('name');
                                 if (urlVar && $(selector)) {
                                     custom.remote.data[urlVar] =
-                                        function () {
+                                        function() {
                                             return $(selector).val();
                                         };
                                 }
@@ -44,9 +44,9 @@
         });
 
         // A special case we want to run only on user changes
-        $('[data-recheck]:input').each(function (idx, element) {
+        $('[data-recheck]:input').each(function(idx, element) {
             var targets = [];
-            $.each($(element).attr('data-recheck').split(' '), function (idx, selector) {
+            $.each($(element).attr('data-recheck').split(' '), function(idx, selector) {
                 var field = $(selector);
                 if (field) {
                     targets.push(field);
@@ -54,8 +54,8 @@
             });
 
             if (targets) {
-                $(element).on('blur', function (evt) {
-                    $(targets).each(function (idx, target) {
+                $(element).on('blur', function(evt) {
+                    $(targets).each(function(idx, target) {
                         $(target).removeData('previousValue').valid();
                     });
                 });
@@ -94,7 +94,7 @@
      * @param clear
      * @returns {$.fn}
      */
-    $.fn.tempName = function (clear) {
+    $.fn.tempName = function(clear) {
         var self = $(this);
         if (self.is('input')) {
             if (clear && self.data('clearName')) {
@@ -111,15 +111,15 @@
     $.Simplerenew = $.extend({}, $.Simplerenew, {
         validate: {
             options: {
-                errorClass: 'ost_error',
-                validClass: 'ost_valid',
-                onkeyup: false,
-                rules: {
+                errorClass    : 'ost_error',
+                validClass    : 'ost_valid',
+                onkeyup       : false,
+                rules         : {
                     password2: {
                         equalTo: '#password'
                     }
                 },
-                errorPlacement: function (place, element) {
+                errorPlacement: function(place, element) {
                     var placeId = $(element).attr('data-error-placement');
                     if (placeId) {
                         $(placeId).append(place);
@@ -130,7 +130,7 @@
             },
 
             gateway: {
-                init: null,
+                init  : null,
                 submit: null
             },
 
@@ -141,7 +141,7 @@
              * @param selector
              * @param options
              */
-            init: function (selector, options) {
+            init: function(selector, options) {
                 var form = $(selector);
                 if (form) {
                     var gateway = this.gateway;
@@ -150,13 +150,13 @@
                     var csrfToken = form.find('span#token input:hidden');
                     form
                         .data('csrfToken', {
-                            name: csrfToken.attr('name'),
+                            name : csrfToken.attr('name'),
                             value: csrfToken.val()
                         })
                         .enableSubmit();
 
                     // Load custom methods
-                    $.each(this.methods, function (name, method) {
+                    $.each(this.methods, function(name, method) {
                         $.validator.addMethod(name, method.method, method.message);
                     });
 
@@ -166,12 +166,12 @@
                     }
 
                     options = $.extend(this.options, options, {
-                        submitHandler: function (form) {
+                        submitHandler: function(form) {
 
                             // Disable submit, Clear temporary names to prevent being sent to server
                             $(form)
                                 .disableSubmit()
-                                .find(':input').each(function (idx, element) {
+                                .find(':input').each(function(idx, element) {
                                     $(element).tempName(true);
                                 });
 
@@ -188,23 +188,23 @@
                     form.applyRules(this.rules);
 
                     // Back link plan selection to coupons
-                    $('.check_coupon[data-plan]').each(function (idx, coupon) {
-                        $(coupon).on('focusout', function (evt) {
+                    $('.check_coupon[data-plan]').each(function(idx, coupon) {
+                        $(coupon).on('focusout', function(evt) {
                             if ($(this).val().length == 0) {
                                 $('label[id^=' + this.id + ']').remove();
                             }
                         });
-                        $($(this).attr('data-plan')).on('click', function (evt) {
+                        $($(this).attr('data-plan')).on('click', function(evt) {
                             $(coupon).valid();
                         });
                     });
 
                     // Add special validation events for date dropdowns
-                    $('select[class*=check_date]').each(function (idx, element) {
-                        $(element).on('change', function (evt) {
+                    $('select[class*=check_date]').each(function(idx, element) {
+                        $(element).on('change', function(evt) {
                             $(this).valid();
                         });
-                        $($(element).attr('data-partner')).on('change', function (evt) {
+                        $($(element).attr('data-partner')).on('change', function(evt) {
                             $(element).valid();
                         });
                     });
@@ -216,14 +216,14 @@
              */
             methods: {
                 email: {
-                    method: function (value, element) {
+                    method: function(value, element) {
                         var regex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
                         return this.optional(element) || regex.test(value);
                     }
                 },
 
                 coupon: {
-                    method: function (value, element) {
+                    method : function(value, element) {
                         if (this.optional(element)) {
                             return 'dependency-mismatch';
                         }
@@ -235,7 +235,7 @@
                         $($(element)
                             .attr('data-plan'))
                             .filter(':checked,:selected')
-                            .each(function (idx, plan) {
+                            .each(function(idx, plan) {
                                 plans.push($(plan).val());
                             });
 
@@ -255,20 +255,20 @@
                         this.startRequest(element);
 
                         $.ajax({
-                            url: 'index.php',
-                            type: 'post',
-                            mode: 'abort',
-                            port: 'validate' + element.name,
+                            url     : 'index.php',
+                            type    : 'post',
+                            mode    : 'abort',
+                            port    : 'validate' + element.name,
                             dataType: 'json',
-                            data: {
+                            data    : {
                                 option: 'com_simplerenew',
-                                task: 'validate.coupon',
+                                task  : 'validate.coupon',
                                 format: 'json',
-                                plans: plans,
+                                plans : plans,
                                 coupon: value
                             },
-                            context: validator.currentForm,
-                            success: function (response) {
+                            context : validator.currentForm,
+                            success : function(response) {
                                 var valid = response.valid && response.valid === true,
                                     errors, message, submitted;
 
@@ -283,8 +283,8 @@
                                     validator.showErrors();
 
                                     var label = $('<label>', {
-                                        id: element.id + '-message',
-                                        for: element.id,
+                                        id   : element.id + '-message',
+                                        for  : element.id,
                                         class: validator.settings.validClass
                                     }).html(response.message);
                                     if (response.coupon.description) {
@@ -309,14 +309,14 @@
                 },
 
                 ccnumber: {
-                    method: function (value, element) {
+                    method : function(value, element) {
                         return !value || $.Simplerenew.creditCard.verifyNumber(value);
                     },
                     message: 'Invalid card number'
                 },
 
                 cvv: {
-                    method: function (value, element, params) {
+                    method : function(value, element, params) {
                         var ccnumber = $(element).attr(params.partner);
                         if (ccnumber) {
                             return $.Simplerenew.creditCard.verifyCVV($(ccnumber).val(), value);
@@ -327,7 +327,7 @@
                 },
 
                 ccdate: {
-                    method: function (value, element, params) {
+                    method : function(value, element, params) {
                         var partner = $(element).attr(params.partner),
                             result = false;
 
@@ -361,7 +361,7 @@
                 },
 
                 password_compare: {
-                    method: function(value, element, params) {
+                    method : function(value, element, params) {
                         var text = element.id.match(/(\S+?)(\d+)$/)
                         if (text && text[2] == 2) {
                             var partner = $('#' + text[1]);
@@ -381,36 +381,36 @@
             rules: {
                 unique_user: {
                     remote: {
-                        url: 'index.php',
+                        url : 'index.php',
                         type: 'post',
                         data: {
                             option: 'com_simplerenew',
                             format: 'json',
-                            task: 'validate.username'
+                            task  : 'validate.username'
                         }
                     }
                 },
 
                 unique_email: {
                     remote: {
-                        url: 'index.php',
+                        url : 'index.php',
                         type: 'post',
                         data: {
                             option: 'com_simplerenew',
                             format: 'json',
-                            task: 'validate.email'
+                            task  : 'validate.email'
                         }
                     }
                 },
 
                 verify_password: {
                     remote: {
-                        url: 'index.php',
+                        url : 'index.php',
                         type: 'post',
                         data: {
                             option: 'com_simplerenew',
                             format: 'json',
-                            task: 'validate.password'
+                            task  : 'validate.password'
                         }
                     }
                 },
