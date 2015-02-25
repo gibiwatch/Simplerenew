@@ -1,6 +1,14 @@
 (function($) {
     $.extend($.fn, {
-        closePanel     : function(state, options) {
+        /**
+         * Simple panel toggle that will enable/disable
+         * any form input fields in the container
+         * with option to set focus to first element on
+         * enable.
+         *
+         * Triggers the custom events sr.enable/sr.disable
+         */
+        closePanel: function(state, options) {
             options = $.extend({
                 focus: true
             }, options);
@@ -24,6 +32,15 @@
             }
             return this;
         },
+
+        /**
+         * Simple panel slider that will enable/disable
+         * any form input fields in the container
+         * with option to set focus to first element on
+         * enable.
+         *
+         * Triggers the custom events sr.enable/sr.disable
+         */
         closePanelSlide: function(state, options) {
             options = $.extend({
                 duration: 400,

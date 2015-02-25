@@ -77,7 +77,8 @@
      * This will give us a chance to validate no-name fields like
      * CC Number and CVV
      *
-     * @param clear
+     * @param {bool} [clear]
+     *
      * @returns {$.fn}
      */
     $.fn.tempName = function(clear) {
