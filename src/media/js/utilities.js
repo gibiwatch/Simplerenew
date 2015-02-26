@@ -174,6 +174,7 @@
             evt.preventDefault();
             var keys = $(this).attr('data-task');
             if (keys) {
+                $(this).prop('disabled', true).css('cursor', 'default');
                 $(this).find($.Simplerenew.settings.enableText).hide();
                 $(this).find($.Simplerenew.settings.disableText).show();
 
@@ -183,6 +184,7 @@
                 ajaxOptions.success = function(response) {
                     $(this).find($.Simplerenew.settings.enableText).show();
                     $(this).find($.Simplerenew.settings.disableText).hide();
+                    $(this).prop('disabled', false).css('cursor', 'pointer');
                     if (typeof success === 'function') {
                         success.bind(this)(response);
                     }
