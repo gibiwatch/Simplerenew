@@ -174,10 +174,20 @@
             evt.preventDefault();
             var keys = $(this).attr('data-task');
             if (keys) {
-                var ajaxOptions = $.extend(true, $.Simplerenew.find(keys), options.ajax);
-                if (ajaxOptions) {
-                    $.ajax($.extend(ajaxOptions, {context: this}));
-                }
+                $(this).find($.Simplerenew.settings.enableText).hide();
+                $(this).find($.Simplerenew.settings.disableText).show();
+
+                var ajaxOptions = $.extend(true, $.Simplerenew.find(keys), options.ajax),
+                    success = $.extend(ajaxOptions.success, {});
+
+                ajaxOptions.success = function(response) {
+                    $(this).find($.Simplerenew.settings.enableText).show();
+                    $(this).find($.Simplerenew.settings.disableText).hide();
+                    if (typeof success === 'function') {
+                        success.bind(this)(response);
+                    }
+                };
+                $.ajax($.extend(ajaxOptions, {context: this}));
             }
         });
     };
