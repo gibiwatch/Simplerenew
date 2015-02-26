@@ -63,8 +63,8 @@
      */
     $.fn.disableSubmit = function(state) {
         var buttons = $(this).find(':button[type=submit]'),
-            enabled = buttons.find('.ost-text-enabled'),
-            disabled = buttons.find('.ost-text-disabled');
+            enabled = buttons.find($.Simplerenew.settings.enableText),
+            disabled = buttons.find($.Simplerenew.settings.disableText);
 
         if ($.type(state) === 'undefined' || state) {
             buttons.prop('disabled', true).css('cursor', 'default');
@@ -118,6 +118,11 @@
     };
 
     $.Simplerenew = $.extend({}, $.Simplerenew, {
+        settings: {
+            enableText : '.ost-text-enabled',
+            disableText: '.ost-text-disabled'
+        },
+
         validate: {
             options: {
                 errorClass    : 'ost_error',
