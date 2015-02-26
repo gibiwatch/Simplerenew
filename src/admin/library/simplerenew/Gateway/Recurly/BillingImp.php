@@ -216,10 +216,12 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
 
         $key = $this->getCfg('Publickey');
 
-        $js[] = "jQuery.Simplerenew.validate.gateway.options"
-            . " = jQuery.extend({},"
-            . " jQuery.Simplerenew.validate.gateway.options,"
-            . " {key: '{$key}'});";
+        $js[] = "(function($) {"
+            . "$.Simplerenew.validate.gateway.options"
+            . " = $.extend({},"
+            . " $.Simplerenew.validate.gateway.options,"
+            . " {key: '{$key}'});"
+            . "})(jQuery);";
         return $js;
     }
 }

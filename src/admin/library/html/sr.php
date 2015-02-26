@@ -99,7 +99,7 @@ abstract class JHtmlSr
         $options['selector'] = $selector;
 
         $options = json_encode($options);
-        static::onready("jQuery.Simplerenew.tabs({$options});");
+        static::onready("$.Simplerenew.tabs({$options});");
     }
 
     /**
@@ -121,7 +121,7 @@ abstract class JHtmlSr
             )
         );
 
-        static::onready("jQuery.Simplerenew.sliders({$options});");
+        static::onready("$.Simplerenew.sliders({$options});");
     }
 
     /**
@@ -150,7 +150,7 @@ abstract class JHtmlSr
         }
 
         $jsonOptions = json_encode($arrayOptions);
-        static::onready("jQuery.Simplerenew.clickArea({$jsonOptions});");
+        static::onready("$.Simplerenew.clickArea({$jsonOptions});");
     }
 
     /**
@@ -162,7 +162,7 @@ abstract class JHtmlSr
      */
     public static function onready($js)
     {
-        $js = "jQuery(document).ready(function () { " . $js . " });";
+        $js = "(function($) { $(document).ready(function () { " . $js . " });})(jQuery);";
         SimplerenewFactory::getDocument()->addScriptDeclaration($js);
     }
 
