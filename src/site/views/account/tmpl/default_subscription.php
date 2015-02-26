@@ -26,7 +26,7 @@ if ($this->subscriptions):
     foreach ($this->subscriptions as $subscription):
         $plan = $this->getPlan($subscription->plan);
         ?>
-        <div class="simplerenew-plan-information">
+        <div class="ost-table">
 
             <div class="ost-section ost-row-one">
                 <div class="block3">

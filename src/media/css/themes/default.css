@@ -508,7 +508,7 @@ span.simplerenew-plan.simplerenew-plan-selected{
     
 }
 
-.ost-alert-notify.m-bottom{
+.ost-container .ost-alert-notify.m-bottom{
     margin-bottom: 30px;
 }
 
@@ -535,19 +535,21 @@ span.simplerenew-plan.simplerenew-plan-selected{
     background: #f2f2f2;
 }
 
-/* Account view
+/* Listing
  ========================================================================== */
 .ost-row-one{
-    background: #f2f2f2;
+    background: rgba(242,242,242,0.8);
 }
 
 .ost-row-two{
-    background: #ffffff;
+    background: rgba(242,242,242,0.2);
+    border-bottom: 1px solid #f2f2f2;
 }
 
+.ost-row-heading [class*="block"],
 .ost-row-one [class*="block"],
 .ost-row-two [class*="block"]{
-    padding: 10px;
+    padding: 15px 10px;
 }
 
 .ost-row-one [class*="block"] label,
@@ -555,19 +557,49 @@ span.simplerenew-plan.simplerenew-plan-selected{
     margin: 0;
 }
 
-.ost-row-one.m-bottom,
-.ost-row-two.m-bottom {
+.ost-container .ost-row-one.m-bottom,
+.ost-container .ost-row-two.m-bottom {
     margin-bottom: 50px;
 }
 
-/* Invoices view
- ========================================================================== */
-.ost-invoice-heading > div{
+.ost-row-one a,
+.ost-row-two a {
+    background: #2184cd;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -o-border-radius: 2px;
+    color: #fff;
+    display: inline-block;
+    text-decoration: none;
+    padding: 4px 10px;
+    margin-bottom: 4px;
+}
+
+.ost-row-one a:hover,
+.ost-row-two a:hover,
+.ost-row-one a:focus,
+.ost-row-two a:focus,
+.ost-row-one a:active,
+.ost-row-two a:active {
+    background: #41a1d6;
+    text-decoration: none;
+    color: #fff;
+}
+
+.ost-row-one a i:before,
+.ost-row-two a i:before {
+    color: #fff;
+}
+
+.ost-container .ost-row-heading > div{
     font-weight: bold;
 }
 
-.ost-invoice-heading{
-    border-bottom-color: #cccccc;
+.ost-container .ost-row-heading {
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    background: #fff;
 }
 
 /* Media queries
@@ -585,8 +617,8 @@ span.simplerenew-plan.simplerenew-plan-selected{
     .ost-container select {
         width: 80%;
     }
-    /* Invoices view */
-    .ost-invoice-heading{
+    /* Listing */
+    .ost-container .ost-row-heading {
         display: none;
     }
 }

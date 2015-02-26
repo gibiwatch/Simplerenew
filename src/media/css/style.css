@@ -74,23 +74,23 @@ span.simplerenew-plan:hover{
 
 /* Help classes
  ========================================================================== */
-.m-bottom {
+.ost-container .m-bottom {
     margin-bottom: 30px;
 }
 
-.m-top {
+.ost-container .m-top {
     margin-top: 30px;
 }
 
-.p-bottom {
+.ost-container .p-bottom {
     padding-bottom: 30px;
 }
 
-.p-full{
+.ost-container .p-full{
     padding: 30px;
 }
 
-.b-bottom {
+.ost-container .b-bottom {
     border-bottom: 1px solid #f2f2f2;
 }
 
