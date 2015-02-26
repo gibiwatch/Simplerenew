@@ -25,7 +25,7 @@ abstract class SrValidation
         JHtml::_('script', 'com_simplerenew/validation.js', false, true);
         JHtml::_('script', 'com_simplerenew/creditcard.js', false, true);
 
-        JHtml::_('sr.onready', "jQuery.Simplerenew.validate.init('{$selector}');");
+        JHtml::_('sr.onready', "$.Simplerenew.validate.init('{$selector}');");
     }
 
     /**

@@ -154,7 +154,7 @@ abstract class JHtmlSrselect
                         'country' => '#' . $countryId
                     )
                 );
-                JHtml::_('sr.onready', "jQuery.Simplerenew.region({$jsonOptions});");
+                JHtml::_('sr.onready', "$.Simplerenew.region({$jsonOptions});");
             }
         }
         return join("\n", $html);
