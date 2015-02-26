@@ -583,7 +583,6 @@ span.simplerenew-plan.simplerenew-plan-selected{
 
 .ost-row-two{
     background: rgba(242,242,242,0.2);
-    border-bottom: 1px solid #f2f2f2;
 }
 
 .ost-row-heading [class*="block"],
@@ -638,11 +637,7 @@ span.simplerenew-plan.simplerenew-plan-selected{
     margin-bottom: 50px;
 }
 
-.simplerenew-basic-information,
-.simplerenew-credit-card-information,
-.simplerenew-paypal-information,
-.simplerenew-plan-information,
-.simplerenew-invoices-table{
+.ost-container .ost-table {
     padding: 2px;
     border: 1px solid #cccccc;
 }
@@ -653,7 +648,6 @@ span.simplerenew-plan.simplerenew-plan-selected{
 
 .ost-container .ost-row-heading {
     border-bottom: 1px solid #ccc;
-    border-top: 1px solid #ccc;
     background: #fff;
 }
 

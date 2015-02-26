@@ -28,7 +28,7 @@ defined('_JEXEC') or die();
     else:
         ?>
 
-        <div class="simplerenew-invoices-table">
+        <div class="ost-table">
 
             <div class="ost-section ost-row-heading">
                 <div class="block4"><?php echo JText::_('COM_SIMPLERENEW_INVOICE_NUMBER'); ?></div>

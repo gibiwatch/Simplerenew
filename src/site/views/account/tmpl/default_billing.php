@@ -21,7 +21,7 @@ if ($this->billing):
     if ($payment instanceof Payment\CreditCard): ?>
         <h3><span><i class="fa fa-credit-card"></i></span> <?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?></h3>
 
-        <div class="simplerenew-credit-card-information m-bottom b-bottom">
+        <div class="m-bottom b-bottom ost-table">
 
             <div class="ost-section ost-row-one">
                 <div class="block3">
@@ -82,7 +82,7 @@ if ($this->billing):
     elseif ($payment instanceof Payment\PayPal): ?>
         <h3><span><i class="fa fa-paypal"></i></span> <?php echo JText::_('COM_SIMPLERENEW_PAYPAL'); ?></h3>
 
-        <div class="simplerenew-paypal-information m-bottom">
+        <div class="simplerenew-paypal-information m-bottom ost-table">
 
             <div class="ost-section ost-row-one">
                 <div class="block3">

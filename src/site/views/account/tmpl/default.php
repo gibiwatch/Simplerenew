@@ -20,7 +20,7 @@ defined('_JEXEC') or die();
 
     <h3><span><i class="fa fa-info-circle"></i></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'); ?></h3>
 
-    <div class="simplerenew-basic-information m-bottom b-bottom">
+    <div class="m-bottom b-bottom ost-table">
 
         <div class="ost-section ost-row-one">
             <div class="block3">
