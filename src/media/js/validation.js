@@ -49,6 +49,18 @@
         });
     };
 
+    /**
+     * For use in forms. Looks for all submit buttons and disables/enables
+     * them. If provided, will show/hide elements contained in the button
+     * as requested by enable/disable classes.
+     *
+     * state == true  : (default) Disable buttons, show text marked for disabled state
+     * state == false : Enable buttons, show text marked for enabled state
+     *
+     * @param {boolean} [state]
+     *
+     * @returns {$.fn}
+     */
     $.fn.disableSubmit = function(state) {
         var buttons = $(this).find(':button[type=submit]'),
             enabled = buttons.find('.ost-text-enabled'),
@@ -68,6 +80,16 @@
         return this;
     };
 
+    /**
+     * Convenience wrapper for .disableSubmit() with opposite logic
+     *
+     * state == true  : (default) Enable buttons, show text marked for enabled state
+     * state == false : Disable buttons, show text marked for disabled state
+     *
+     * @param {boolean} [state]
+     *
+     * @returns {$.fn}
+     */
     $.fn.enableSubmit = function(state) {
         state = $.type(state) === 'undefined' || state;
         return $(this).disableSubmit(!state);
