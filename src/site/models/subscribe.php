@@ -29,6 +29,11 @@ class SimplerenewModelSubscribe extends SimplerenewModelAccount
         }
 
         $list = $db->setQuery($query)->loadObjectList('code');
+        foreach ($list as $plan) {
+            $plan->selected = false;
+        }
+        reset($list);
+
         return $list;
     }
 

@@ -54,11 +54,14 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
     {
         $this->enforceSSL();
 
+        $this->allowMultiple = $this->getParams()->get('basic.allowMultiple');
+
         /** @var SimplerenewModelSubscribe $model */
         $model = $this->getModel();
 
         $this->state = $model->getState();
         $this->plans = $model->getPlans();
+
         try {
             if ($this->user = $model->getUser()) {
                 $this->account       = $model->getAccount();
@@ -102,7 +105,6 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
 
         // Determine which plans to show pre-selected
         $app           = SimplerenewFactory::getApplication();
-        $multiple      = $this->params->get('basic.allowMultiple');
         $overrides     = $app->input->getString('select');
         $selectedPlans = array();
 
@@ -116,8 +118,9 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
                 $selectedPlans[$subscription->plan] = $subscription->id;
             }
 
-        } elseif (!$multiple && !$overrides) {
+        } elseif (!$this->allowMultiple && !$overrides) {
             // By default select the first shown plan on single sub sites
+            reset($this->plans);
             $plan          = current($this->plans);
             $selectedPlans = array($plan->code => true);
         }
@@ -130,7 +133,7 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
                     true
                 )
             );
-            if (!$multiple) {
+            if (!$this->allowMultiple) {
                 // For single sub sites, use only the first one specified
                 reset($selectedPlans);
                 $selectedPlans = array(key($selectedPlans) => true);
@@ -138,7 +141,6 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
         }
 
         // Collect all active/canceled subscriptions and add info to plans list
-        $this->allowMultiple = $this->getParams()->get('basic.allowMultiple');
         foreach ($this->plans as $plan) {
             $plan->subscription = empty($selectedPlans[$plan->code]) ? null : $selectedPlans[$plan->code];
             if ($plan->subscription === true) {
