@@ -210,6 +210,6 @@ abstract class JHtmlSr
         );
         $options = json_encode($options);
 
-        static::onready("jQuery.Simplerenew.ajax({$options});");
+        static::onready("$.Simplerenew.ajax({$options});");
     }
 }

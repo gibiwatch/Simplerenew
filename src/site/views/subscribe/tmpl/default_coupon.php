@@ -20,7 +20,7 @@ foreach ($this->plans as $plan) {
 
 JHtml::_('sr.sliders', 'div.coupon-toggle', $couponCode);
 if ($couponCode && $planSelected) {
-    JHtml::_('sr.onready', "jQuery('#coupon_code').valid();");
+    JHtml::_('sr.onready', "$('#coupon_code').valid();");
 }
 
 ?>
