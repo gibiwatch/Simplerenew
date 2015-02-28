@@ -116,7 +116,7 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
                     // username is not being sent
                     $message = JText::_('COM_SIMPLERENEW_VALIDATE_EMAIL_REMOTE');
 
-                } elseif (!$username || $user->username != $username) {
+                } elseif (!$username || strcasecmp($user->username, $username)) {
                     // Entered username doesn't match
                     $message = JText::sprintf(
                         'COM_SIMPLERENEW_VALIDATE_TOOLTIP',
