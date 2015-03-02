@@ -12,6 +12,7 @@ use Simplerenew\Configuration;
 use Simplerenew\Exception;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\Gateway\SubscriptionInterface;
+use Simplerenew\Plugin\Events;
 use Zend\ServiceManager\Config;
 
 defined('_JEXEC') or die();
@@ -109,13 +110,16 @@ class Subscription extends AbstractApiBase
     protected $imp = null;
 
     /**
+     * @param Configuration         $config
      * @param SubscriptionInterface $imp
+     * @param Events                $events
      */
-    public function __construct(Configuration $config, SubscriptionInterface $imp)
+    public function __construct(Configuration $config, SubscriptionInterface $imp, Events $events)
     {
         parent::__construct();
 
-        $this->imp = $imp;
+        $this->imp    = $imp;
+        $this->events = $events;
     }
 
     /**
@@ -175,10 +179,14 @@ class Subscription extends AbstractApiBase
      */
     public function create(Account $account, Plan $plan, Coupon $coupon = null)
     {
+        $this->events->trigger('onSubscriptionBeforeCreate', array($account, $plan, $coupon));
+
         $this->clearProperties();
 
         $this->imp->create($this, $account, $plan, $coupon);
         $account->user->addGroups($plan->code);
+
+        $this->events->trigger('onSubscriptionAfterCreate', array($account, $plan, $coupon));
 
         return $this;
     }
@@ -206,7 +214,7 @@ class Subscription extends AbstractApiBase
     }
 
     /**
-     * Update subscription to a different plans
+     * Update subscription to a different plan
      *
      * @param Plan   $plan
      * @param Coupon $coupon

@@ -107,7 +107,7 @@ class Simplerenew implements ServiceProviderInterface
 
         $pimple['subscription'] = $pimple->factory(function (\Simplerenew\Container $c) {
             $imp = $c->getInstance($c['gatewayNamespace'] . '\SubscriptionImp');
-            return new Subscription($c['configuration'], $imp);
+            return new Subscription($c['configuration'], $imp, $c['events']);
         });
     }
 }

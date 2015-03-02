@@ -11,6 +11,7 @@ namespace Simplerenew\Api;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\AbstractGatewayBase;
 use Simplerenew\Object;
+use Simplerenew\Plugin\Events;
 
 defined('_JEXEC') or die();
 
@@ -20,6 +21,11 @@ abstract class AbstractApiBase extends Object
      * @var AbstractGatewayBase
      */
     protected $imp = null;
+
+    /**
+     * @var Events
+     */
+    protected $events = null;
 
     public function __construct()
     {
