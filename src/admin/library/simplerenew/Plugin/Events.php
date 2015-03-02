@@ -9,6 +9,7 @@
 namespace Simplerenew\Plugin;
 
 use Simplerenew\Configuration;
+use Simplerenew\Exception;
 
 defined('_JEXEC') or die();
 
@@ -38,13 +39,18 @@ class Events
      *
      * The array of events can be a string with a single event name
      *
-     * @param string       $className
-     * @param array|string $events
+     * @param object|string $className
+     * @param array|string  $events
      *
      * @return void
      */
     public function registerHandler($className, $events)
     {
+        if (is_object($className)) {
+            $this->addHandler($className);
+            $className = '\\' . trim(get_class($className), '\\');
+        }
+
         if (strpos($className, '\\') !== 0) {
             $className = 'Simplerenew\\' . $className;
         }
@@ -149,7 +155,7 @@ class Events
     {
         $key = md5($className);
         if (!isset($this->handlers[$key]) && class_exists($className)) {
-            $this->handlers[$key] = new $className();
+            $this->addHandler(new $className(), $key);
         }
 
         if (isset($this->handlers[$key])) {
@@ -161,5 +167,22 @@ class Events
         }
 
         return null;
+    }
+
+    /**
+     * @param object $class
+     * @param string $key
+     *
+     * @throws Exception
+     */
+    protected function addHandler($class, $key = null)
+    {
+        if (!is_object($class)) {
+            throw new Exception('[' . get_class($this) . '] Attempt to register Invalid class');
+        }
+
+        $key = $key ?: md5('\\' . trim(get_class($class), '\\'));
+
+        $this->handlers[$key] = $class;
     }
 }
