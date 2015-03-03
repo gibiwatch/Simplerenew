@@ -22,21 +22,37 @@ class Subscription implements HandlerInterface
      */
     public function execute(Notify $notice)
     {
+        $message = null;
         if (!empty($notice->user->id)) {
+            $isNew = false;
+
             switch ($notice->action) {
+                /** @noinspection PhpMissingBreakStatementInspection */
                 case Notify::ACTION_NEW:
+                    $isNew = true;
+                    // intentional fall-through
+
                 case Notify::ACTION_UPDATE:
                 case Notify::ACTION_RENEW:
                     $notice->user->addGroups($notice->subscription->plan);
-                    return $notice->user->username . ': Update User Group';
+                    $message = 'Update User Group';
                     break;
 
                 case Notify::ACTION_EXPIRE:
                     $notice->user->removeGroups($notice->subscription->plan);
-                    return $notice->user->username . ': Remove plan user group';
+                    $message = 'Remove plan user group';
                     break;
             }
+
+            // Did we do anything?
+            if ($message) {
+                $message = $notice->user->username . ': ' . $message;
+                $notice
+                    ->getContainer()
+                    ->events
+                    ->trigger('onSubscriptionAfterUpdate', array($notice->account, $notice->subscription, $isNew));
+            }
         }
-        return null;
+        return $message;
     }
 }
