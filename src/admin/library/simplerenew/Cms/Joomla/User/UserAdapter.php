@@ -222,9 +222,8 @@ class UserAdapter implements UserInterface
         }
 
         if (!$user->save(true)) {
-            // @TODO: Keep an eye out for changes in Joomla. This is garbage.
             $errors = $user->getErrors();
-            if (count($errors) != 1 || !in_array('User not Super Administrator', $errors)) {
+            if (!$this->isSuperError($errors)) {
                 // Only throw an error if this isn't the 'change SU' problem
                 throw new Exception(join('<br/>', array_filter($errors)), 403);
             }
@@ -512,5 +511,30 @@ class UserAdapter implements UserInterface
 
         // Filter them all out
         return array_values(array_diff($groups, $filter));
+    }
+
+    /**
+     * We want to ignore the error regarding changes to super user
+     * by non-super user. This is a terrible way to do it, but
+     * it's the only way Joomla gives us
+     *
+     * @param array|string $errors
+     *
+     * @return bool
+     */
+    protected function isSuperError($errors)
+    {
+        $strings = array(
+            \JText::_('JLIB_USER_ERROR_NOT_SUPERADMIN'), // J2.5.x
+            'User not Super Administrator' // J3.x
+        );
+
+        foreach ((array)$errors as $error) {
+            if (in_array($error, $strings)) {
+                // If this was the only reported error, return true
+                return (count($errors) == 1);
+            }
+        }
+        return false;
     }
 }
