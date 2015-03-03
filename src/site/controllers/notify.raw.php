@@ -31,44 +31,43 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
         $notify->process($package, $container);
     }
 
-    protected function authenticate()
-    {
-        $app       = SimplerenewFactory::getApplication();
-
-        $this->gatewayLogin(
-            $app->input->server->getUsername('PHP_AUTH_USER'),
-            $app->input->server->getString('PHP_AUTH_PW')
-        );
-    }
-
     /**
-     * Check login credentials of caller if provided
-     *
-     * @param string $username
-     * @param string $password
+     * First pass authentication. Two possibilities are accepted.
+     * If HTTP Authentication is turned on for this page and has
+     * not been accepted, we will look for a Joomla user with
+     * the passed username and authenticate against that password.
+     * The Joomla user must have at least core.manage permission.
      *
      * @return void
      * @throws Exception
      */
-    protected function gatewayLogin($username, $password)
+    protected function authenticate()
     {
-        if ($username && $password) {
-            $container = SimplerenewFactory::getContainer();
+        $app = SimplerenewFactory::getApplication();
 
-            // Login
-            try {
-                $user = $container->getUser()
-                    ->loadByUsername($username);
+        $authType = $app->input->server->get('AUTH_TYPE');
+        if (!$authType) {
+            $username = $app->input->server->getUsername('PHP_AUTH_USER');
+            $password = $app->input->server->getString('PHP_AUTH_PW');
 
-                // Check for proper access
-                $jUser = SimplerenewFactory::getUser($user->id);
-                if ($jUser->authorise('core.manage', 'com_simplerenew')) {
-                    $user->login($password);
-                    return;
+            if ($username && $password) {
+                // U/P given but not authenticated by HTTP Auth
+                $container = SimplerenewFactory::getContainer();
+
+                try {
+                    $user = $container->getUser()
+                        ->loadByUsername($username);
+
+                    // Check for proper access
+                    $jUser = SimplerenewFactory::getUser($user->id);
+                    if ($jUser->authorise('core.manage', 'com_simplerenew')) {
+                        $user->login($password);
+                        return;
+                    }
+
+                } catch (Exception $e) {
+                    throw new Exception($e->getMessage(), 403);
                 }
-
-            } catch (Exception $e) {
-                throw new Exception($e->getMessage(), 403);
             }
         }
     }
