@@ -41,6 +41,18 @@
             </field>
 
             <field
+                name="couponAllow"
+                label="COM_SIMPLERENEW_CONFIG_COUPON_ALLOW_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_COUPON_ALLOW_DESC"
+                type="list"
+                default="0">
+                <option value="0">COM_SIMPLERENEW_OPTION_COUPON_NONE</option>
+                <option value="1">COM_SIMPLERENEW_OPTION_COUPON_SUBSCRIBE</option>
+                <option value="2">COM_SIMPLERENEW_OPTION_COUPON_CHANGE</option>
+                <option value="-1">COM_SIMPLERENEW_OPTION_COUPON_ALL</option>
+            </field>
+
+            <field
                 name="paymentOptions"
                 label="COM_SIMPLERENEW_CONFIG_PAYMENT_OPTIONS_LABEL"
                 description="COM_SIMPLERENEW_CONFIG_PAYMENT_OPTIONS_DESC"
