@@ -62,7 +62,7 @@ class SimplerenewModelSubscribe extends SimplerenewModelAccount
                         ->setQuery('Select group_id from #__simplerenew_plans group by group_id')
                         ->loadColumn();
 
-                    $checkGroups = array_intersect($planGroups, $user->groups) ? : $checkGroups;
+                    $checkGroups = array_intersect($planGroups, $user->groups) ?: $checkGroups;
                 }
 
                 $available = array();
@@ -91,13 +91,15 @@ class SimplerenewModelSubscribe extends SimplerenewModelAccount
         $this->setState('status.subscription', $currentSubs);
 
         if ($params = $this->state->get('parameters.menu')) {
+            $globalParams = SimplerenewComponentHelper::getParams();
+
             $plans = new JRegistry($params->get('plans'));
             $this->setState('filter.plans', $plans->toArray());
 
             // Using the coupon URL var overrides couponAllow
             $input          = SimplerenewFactory::getApplication()->input;
             $couponOverride = $input->getCmd('coupon', 'null');
-            $couponAllow    = (int)$params->get('couponAllow', 0);
+            $couponAllow    = (int)$params->get('couponAllow', $globalParams->get('basic.couponAllow', 0));
 
             if ($couponOverride == 'null') {
                 // No override from URL
@@ -115,7 +117,7 @@ class SimplerenewModelSubscribe extends SimplerenewModelAccount
             }
             $this->setState('coupon.allow', $couponAllow);
 
-            $couponDefault = $couponOverride ? : $params->get('couponDefault', '');
+            $couponDefault = $couponOverride ?: $params->get('couponDefault', '');
             $this->setState('coupon.default', $couponDefault);
         }
     }
