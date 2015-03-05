@@ -6,6 +6,8 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\User\User;
+
 defined('_JEXEC') or die();
 
 class SimplerenewControllerNotify extends SimplerenewControllerBase
@@ -17,7 +19,7 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
         $method = $app->input->getMethod();
         switch ($method) {
             case 'POST':
-                $this->authenticate();
+                $user = $this->authenticate();
                 $package = file_get_contents('php://input');
                 break;
 
@@ -29,6 +31,10 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
         $container = SimplerenewFactory::getContainer();
         $notify    = $container->getNotify();
         $notify->process($package, $container);
+
+        if ($user) {
+            $user->logout();
+        }
     }
 
     /**
@@ -38,7 +44,7 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
      * the passed username and authenticate against that password.
      * The Joomla user must have at least core.manage permission.
      *
-     * @return void
+     * @return User|null
      * @throws Exception
      */
     protected function authenticate()
@@ -62,7 +68,7 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
                     $jUser = SimplerenewFactory::getUser($user->id);
                     if ($jUser->authorise('core.manage', 'com_simplerenew')) {
                         $user->login($password);
-                        return;
+                        return $user;
                     }
 
                 } catch (Exception $e) {
@@ -70,5 +76,7 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
                 }
             }
         }
+
+        return null;
     }
 }
