@@ -11,12 +11,12 @@ namespace Simplerenew\Notify;
 use Simplerenew\AbstractLogger;
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Billing;
+use Simplerenew\Api\Invoice;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
 use Simplerenew\Container;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\Gateway\NotifyInterface;
-use Simplerenew\Logger;
 use Simplerenew\Notify\Handler\HandlerInterface;
 use Simplerenew\Object;
 use Simplerenew\User\User;
@@ -109,6 +109,11 @@ class Notify extends Object
     public $subscription = null;
 
     /**
+     * @var Invoice
+     */
+    public $invoice = null;
+
+    /**
      * @var Plan
      */
     public $plan = null;
@@ -136,11 +141,34 @@ class Notify extends Object
      */
     public function process($package)
     {
-        $this->adapter->loadPackage($this, $package);
+        $this->loadFromGatewayData($package);
 
         $this->container->events->trigger('onNotifyBeforeProcess', array($this));
 
-        // Convert gateway sourced account data to SR Api Objects
+        if ($handler = $this->getHandler($this->type)) {
+            $this->handler  = get_class($handler);
+            $this->response = $handler->execute($this);
+        } else {
+            $this->handler  = 'None';
+            $this->response = $this->handler;
+        }
+        $this->addLogEntry();
+
+        $this->container->events->trigger('onNotifyAfterProcess', array($this));
+    }
+
+    /**
+     * Load data from gateway package and convert to standardized objects
+     *
+     * @return void;
+     */
+    protected function loadFromGatewayData($package)
+    {
+        $this->package = $package;
+
+        $this->adapter->loadPackage($this, $package);
+
+        // Account
         if ($this->account) {
             $this->account = $this->container
                 ->getAccount()
@@ -178,16 +206,11 @@ class Notify extends Object
             $this->subscription_id = $this->subscription->id;
         }
 
-        if ($handler = $this->getHandler($this->type)) {
-            $this->handler  = get_class($handler);
-            $this->response = $handler->execute($this);
-        } else {
-            $this->handler  = 'None';
-            $this->response = $this->handler;
+        if ($this->invoice) {
+            $this->invoice = $this->container
+                ->getInvoice()
+                ->bindSource($this->invoice);
         }
-        $this->addLogEntry();
-
-        $this->container->events->trigger('onNotifyAfterProcess', array($this));
     }
 
     /**
