@@ -24,7 +24,7 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
     );
 
     protected $fieldMap = array(
-        'type'   => array(
+        'type'    => array(
             'type' => array(
                 'new_account_notification'           => Notify::TYPE_ACCOUNT,
                 'canceled_account_notification'      => Notify::TYPE_ACCOUNT,
@@ -45,7 +45,7 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
                 Object::MAP_UNDEFINED                => Notify::TYPE_UNKNOWN
             )
         ),
-        'action' => array(
+        'action'  => array(
             'type' => array(
                 'new_account_notification'           => Notify::ACTION_NEW,
                 'canceled_account_notification'      => Notify::ACTION_CANCEL,
@@ -66,7 +66,7 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
                 Object::MAP_UNDEFINED                => Notify::ACTION_UNKNOWN
             )
         ),
-        'user'   => null
+        'user'    => null
     );
 
     /**
@@ -87,11 +87,12 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
             throw new Exception('Notice came from unrecognized IP - ' . $ip);
         }
 
-        $xml    = simplexml_load_string($package);
-        $notice = $parent->getProperties();
+        $xml = simplexml_load_string($package);
 
-        $notice['type'] = $xml->getName();
-        $notice['package'] = $package;
+        $data = array(
+            'type'    => $xml->getName(),
+            'package' => $package
+        );
 
         foreach ($xml->children() as $node) {
             $name = $node->getName();
@@ -100,9 +101,37 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
             } else {
                 $value = (string)$node;
             }
-            $notice[$name] = $value;
+            $data[$name] = $value;
         }
-        $parent->setProperties($notice, $this->fieldMap);
+
+        // We don't really care about transactions here, so translate into more useful stuff
+        if (!empty($data['transaction'])) {
+            $transaction = $data['transaction'];
+
+            // Get invoice data
+            if (!empty($transaction['invoice_number']) && empty($data['invoice'])) {
+                try {
+                    $number          = $data['transaction']['invoice_number'];
+                    $data['invoice'] = \Recurly_Invoice::get($number, $this->client);
+
+                } catch (Exception $e) {
+                    // This shouldn't happen, but in case it does....
+                }
+            }
+
+            // Get subscription data
+            if (!empty($transaction['subscription_id']) && empty($data['subscription'])) {
+                try {
+                    $uuid = $transaction['subscription_id'];
+                    $data['subscription'] = \Recurly_Subscription::get($uuid, $this->client);
+
+                } catch (Exception $e) {
+                    // This shouldn't happen, but you know... stuff happens.....
+                }
+            }
+        }
+
+        $parent->setProperties($data, $this->fieldMap);
     }
 
     protected function xmlNodeToObject(\SimpleXMLElement $node)
