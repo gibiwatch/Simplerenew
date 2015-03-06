@@ -6,11 +6,13 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\Primitive;
+namespace Simplerenew\Notify;
+
+use Simplerenew\Primitive\AbstractLogEntry;
 
 defined('_JEXEC') or die();
 
-class LogEntry extends AbstractPrimitive
+class LogEntry extends AbstractLogEntry
 {
     /**
      * @var string
@@ -64,7 +66,8 @@ class LogEntry extends AbstractPrimitive
 
     public function __construct($data)
     {
-        $this->setProperties($data);
+        parent::__construct($data);
+
         $this->ipaddress = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
         $this->logtime   = date('Y-m-d H:i:s');
     }

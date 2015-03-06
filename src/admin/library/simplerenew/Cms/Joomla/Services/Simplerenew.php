@@ -59,6 +59,11 @@ class Simplerenew implements ServiceProviderInterface
             return new Configuration($c['configData']);
         };
 
+        $pimple['logger'] = function(\Simplerenew\Container $c) {
+            $className = $c['cmsNamespace'] . '\Logger';
+            return new $className();
+        };
+
         // User classes
         $pimple['userAdapter'] = function (\Simplerenew\Container $c) {
             $adapter = $c['cmsNamespace'] . '\User\UserAdapter';

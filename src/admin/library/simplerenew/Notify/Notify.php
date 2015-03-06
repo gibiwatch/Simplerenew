@@ -183,7 +183,9 @@ class Notify extends Object
             $this->response = $this->handler;
         }
 
-        Logger::addEntry($this);
+        $this->getContainer()
+            ->logger
+            ->add(new LogEntry($this));
     }
 
     /**

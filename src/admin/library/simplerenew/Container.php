@@ -8,6 +8,7 @@
 
 namespace Simplerenew;
 
+use Simplerenew\AbstractLogger;
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Billing;
 use Simplerenew\Api\Coupon;
@@ -25,27 +26,29 @@ defined('_JEXEC') or die();
  *
  * @package Simplerenew
  *
- * @property Account       $account
- * @property Billing       $billing
- * @property Configuration $configuration
- * @property Coupon        $coupon
- * @property Events        $events
- * @property Invoice       $invoice
- * @property Notify        $notify
- * @property Plan          $plan
- * @property Subscription  $subscription
- * @property User          $user
+ * @property Account        $account
+ * @property Billing        $billing
+ * @property Configuration  $configuration
+ * @property Coupon         $coupon
+ * @property Events         $events
+ * @property Invoice        $invoice
+ * @property AbstractLogger $logger
+ * @property Notify         $notify
+ * @property Plan           $plan
+ * @property Subscription   $subscription
+ * @property User           $user
  *
- * @method Account       getAccount()
- * @method Billing       getBilling()
- * @method Configuration getConfiguration()
- * @method Coupon        getCoupon()
- * @method Events        getEvents()
- * @method Invoice       getInvoice()
- * @method Notify        getNotify()
- * @method Plan          getPlan()
- * @method Subscription  getSubscription()
- * @method User          getUser()
+ * @method Account        getAccount()
+ * @method Billing        getBilling()
+ * @method Configuration  getConfiguration()
+ * @method Coupon         getCoupon()
+ * @method Events         getEvents()
+ * @method Invoice        getInvoice()
+ * @method AbstractLogger getLogger()
+ * @method Notify         getNotify()
+ * @method Plan           getPlan()
+ * @method Subscription   getSubscription()
+ * @method User           getUser()
  */
 class Container extends \Pimple\Container
 {

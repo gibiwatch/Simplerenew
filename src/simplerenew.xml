@@ -111,6 +111,8 @@
 
         <obsolete>
             <folder>/administrator/components/com_simplerenew/library/simplerenew/User/Adapter</folder>
+            <file>/administrator/components/com_simplerenew/library/simplerenew/Logger.php</file>
+            <file>/administrator/components/com_simplerenew/library/simplerenew/Primitive/LogEntry.php</file>
         </obsolete>
     </alledia>
 
