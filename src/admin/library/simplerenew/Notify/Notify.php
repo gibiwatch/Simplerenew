@@ -137,6 +137,8 @@ class Notify extends Object
     {
         $this->adapter->loadPackage($this, $package);
 
+        $this->container->events->trigger('onNotifyBeforeProcess', array($this));
+
         // Convert gateway sourced account data to SR Api Objects
         if ($this->account) {
             $this->account = $this->container
@@ -183,9 +185,8 @@ class Notify extends Object
             $this->response = $this->handler;
         }
 
-        $this->getContainer()
-            ->logger
-            ->add(new LogEntry($this));
+        $this->container->logger->add(new LogEntry($this));
+        $this->container->events->trigger('onNotifyAfterProcess', array($this));
     }
 
     /**
