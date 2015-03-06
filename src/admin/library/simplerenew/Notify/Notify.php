@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Notify;
 
+use Simplerenew\AbstractLogger;
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Billing;
 use Simplerenew\Api\Plan;
@@ -184,9 +185,25 @@ class Notify extends Object
             $this->handler  = 'None';
             $this->response = $this->handler;
         }
+        $this->addLogEntry();
 
-        $this->container->logger->add(new LogEntry($this));
         $this->container->events->trigger('onNotifyAfterProcess', array($this));
+    }
+
+    /**
+     * Make an entry in the push notification log
+     *
+     * @param LogEntry       $entry
+     * @param AbstractLogger $logger
+     *
+     * @return void
+     */
+    public function addLogEntry(LogEntry $entry = null, AbstractLogger $logger = null)
+    {
+        $logger = $logger ?: $this->container->logger;
+        $entry  = $entry ?: new LogEntry($this);
+
+        $logger->add($entry);
     }
 
     /**
