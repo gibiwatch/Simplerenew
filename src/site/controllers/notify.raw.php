@@ -14,12 +14,13 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
 {
     public function receive()
     {
-        $app = SimplerenewFactory::getApplication();
+        $user = $this->authenticate();
 
+        $app    = SimplerenewFactory::getApplication();
         $method = $app->input->getMethod();
+
         switch ($method) {
             case 'POST':
-                $user = $this->authenticate();
                 $package = file_get_contents('php://input');
                 break;
 
