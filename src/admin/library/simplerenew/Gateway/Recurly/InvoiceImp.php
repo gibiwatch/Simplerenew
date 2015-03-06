@@ -20,6 +20,7 @@ defined('_JEXEC') or die();
 class InvoiceImp extends AbstractRecurlyBase implements InvoiceInterface
 {
     protected $fieldMap = array(
+        'id'     => 'uuid',
         'number' => 'invoice_number',
         'status' => array(
             'state' => array(

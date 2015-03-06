@@ -24,6 +24,11 @@ class Invoice extends AbstractApiBase
     /**
      * @var string
      */
+    public $id = null;
+
+    /**
+     * @var string
+     */
     public $number = null;
 
     /**
