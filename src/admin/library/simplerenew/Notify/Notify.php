@@ -143,18 +143,17 @@ class Notify extends Object
     {
         $this->loadFromGatewayData($package);
 
-        $this->container->events->trigger('onNotifyBeforeProcess', array($this));
-
         if ($handler = $this->getHandler($this->type)) {
             $this->handler  = get_class($handler);
             $this->response = $handler->execute($this);
+
         } else {
             $this->handler  = 'None';
             $this->response = $this->handler;
         }
         $this->addLogEntry();
 
-        $this->container->events->trigger('onNotifyAfterProcess', array($this));
+        $this->container->events->trigger('onNotifyProcess', array($this));
     }
 
     /**
@@ -223,10 +222,14 @@ class Notify extends Object
      */
     public function addLogEntry(LogEntry $entry = null, AbstractLogger $logger = null)
     {
-        $logger = $logger ?: $this->container->logger;
-        $entry  = $entry ?: new LogEntry($this);
+        if ($this->handler && $this->response) {
+            $logger = $logger ?: $this->container->logger;
+            $entry  = $entry ?: new LogEntry($this);
 
-        $logger->add($entry);
+            $logger->add($entry);
+            $this->handler = null;
+            $this->response = null;
+        }
     }
 
     /**
