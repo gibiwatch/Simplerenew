@@ -14,6 +14,7 @@ use Simplerenew\Api\Billing;
 use Simplerenew\Api\Invoice;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
+use Simplerenew\Api\Transaction;
 use Simplerenew\Container;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\Gateway\NotifyInterface;
@@ -119,6 +120,11 @@ class Notify extends Object
     public $plan = null;
 
     /**
+     * @var Transaction
+     */
+    public $transaction = null;
+
+    /**
      * @var NotifyInterface
      */
     protected $adapter = null;
@@ -207,6 +213,12 @@ class Notify extends Object
             $this->invoice = $this->container
                 ->getInvoice()
                 ->bindSource($this->invoice);
+        }
+
+        if ($this->transaction) {
+            $this->transaction = $this->container
+                ->getTransaction()
+                ->bindSource($this->transaction);
         }
     }
 

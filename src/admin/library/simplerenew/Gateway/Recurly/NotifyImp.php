@@ -104,33 +104,6 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
             $data[$name] = $value;
         }
 
-        // We don't really care about transactions here, so translate into more useful stuff
-        if (!empty($data['transaction'])) {
-            $transaction = $data['transaction'];
-
-            // Get invoice data
-            if (!empty($transaction['invoice_number']) && empty($data['invoice'])) {
-                try {
-                    $number          = $data['transaction']['invoice_number'];
-                    $data['invoice'] = \Recurly_Invoice::get($number, $this->client);
-
-                } catch (Exception $e) {
-                    // This shouldn't happen, but in case it does....
-                }
-            }
-
-            // Get subscription data
-            if (!empty($transaction['subscription_id']) && empty($data['subscription'])) {
-                try {
-                    $uuid = $transaction['subscription_id'];
-                    $data['subscription'] = \Recurly_Subscription::get($uuid, $this->client);
-
-                } catch (Exception $e) {
-                    // This shouldn't happen, but you know... stuff happens.....
-                }
-            }
-        }
-
         $parent->setProperties($data, $this->fieldMap);
     }
 

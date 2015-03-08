@@ -129,27 +129,52 @@ class TransactionImp extends AbstractRecurlyBase implements TransactionInterface
      */
     public function bindSource(Transaction $parent, $data)
     {
-        $parent->setProperties($data, $this->fieldMap);
+        $converted = $parent->getProperties();
+        $converted = $this->map($data, array_keys($converted), $this->fieldMap);
 
-        $parent->setProperties(
-            array(
-                'amount' => $this->getKeyValue($data, 'amount_in_cents') / 100,
-                'tax'    => $this->getKeyValue($data, 'tax_in_cents') / 100
-            )
-        );
-
-        // Load nested data
         if ($data instanceof \Recurly_Transaction) {
             \Recurly_Client::$apiKey = $this->client->apiKey();
 
-            $parent->setProperties(
+            $converted = array_merge(
+                $converted,
                 array(
+                    'amount'         => $this->getKeyValue($data, 'amount_in_cents') / 100,
+                    'tax'            => $this->getKeyValue($data, 'tax_in_cents') / 100,
                     'accountCode'    => $data->account ? $data->account->get()->account_code : null,
                     'invoiceNumber'  => $data->invoice ? $data->invoice->get()->invoice_number : null,
                     'subscriptionId' => $data->subscription ? $data->subscription->get()->uuid : null
                 )
             );
+        } elseif (is_object($data)) {
+            $data = json_decode(json_encode($data), true);
         }
+
+        if (!$converted['id'] && isset($data['id'])) {
+            // Looks like this might have come from the webhook notification
+            // @todo: this might be better handled in the NotifyImp
+            $converted['id'] = $data['id'];
+
+            if (isset($data['invoice_number'])) {
+                $converted['invoiceNumber'] = $data['invoice_number'];
+            }
+
+            if (isset($data['subscription_id'])) {
+                $converted['subscriptionId'] = $data['subscription_id'];
+            }
+
+            if (isset($data['amount_in_cents'])) {
+                $converted['amount'] = $data['amount_in_cents'] / 100;
+            }
+
+            if (isset($data['date'])) {
+                $converted['created'] = $data['date'];
+                if (is_string($converted['created'])) {
+                    $converted['created'] = new \DateTime($converted['created']);
+                }
+            }
+        }
+
+        $parent->setProperties($converted);
     }
 
     /**
