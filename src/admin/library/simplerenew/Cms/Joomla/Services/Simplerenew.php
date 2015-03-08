@@ -16,6 +16,7 @@ use Simplerenew\Api\Coupon;
 use Simplerenew\Api\Invoice;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
+use Simplerenew\Api\Transaction;
 use Simplerenew\Configuration;
 use Simplerenew\Notify\Notify;
 use Simplerenew\Plugin\Events;
@@ -79,7 +80,7 @@ class Simplerenew implements ServiceProviderInterface
             return new Events($c['configuration']);
         };
 
-        // Gateway classes
+        // API/Gateway classes
         $pimple['account'] = $pimple->factory(function (\Simplerenew\Container $c) {
             $imp = $c->getInstance($c['gatewayNamespace'] . '\AccountImp');
             return new Account($c['configuration'], $imp, $c['user']);
@@ -113,6 +114,11 @@ class Simplerenew implements ServiceProviderInterface
         $pimple['subscription'] = $pimple->factory(function (\Simplerenew\Container $c) {
             $imp = $c->getInstance($c['gatewayNamespace'] . '\SubscriptionImp');
             return new Subscription($c['configuration'], $imp, $c['events']);
+        });
+
+        $pimple['transaction'] = $pimple->factory(function (\Simplerenew\Container $c) {
+            $imp = $c->getInstance($c['gatewayNamespace'] . '\TransactionImp');
+            return new Transaction($c['configuration'], $imp);
         });
     }
 }

@@ -15,6 +15,7 @@ use Simplerenew\Api\Coupon;
 use Simplerenew\Api\Invoice;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
+use Simplerenew\Api\Transaction;
 use Simplerenew\Notify\Notify;
 use Simplerenew\Plugin\Events;
 use Simplerenew\User\User;
@@ -36,6 +37,7 @@ defined('_JEXEC') or die();
  * @property Notify         $notify
  * @property Plan           $plan
  * @property Subscription   $subscription
+ * @property Transaction    $transaction
  * @property User           $user
  *
  * @method Account        getAccount()
@@ -48,6 +50,7 @@ defined('_JEXEC') or die();
  * @method Notify         getNotify()
  * @method Plan           getPlan()
  * @method Subscription   getSubscription()
+ * @method Transaction    getTransaction()
  * @method User           getUser()
  */
 class Container extends \Pimple\Container
