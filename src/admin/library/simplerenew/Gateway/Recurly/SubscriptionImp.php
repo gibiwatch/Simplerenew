@@ -63,7 +63,7 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
             $subscription->currency             = $plan->currency;
 
             $subscription->create();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
 
