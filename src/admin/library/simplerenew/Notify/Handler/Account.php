@@ -15,12 +15,16 @@ defined('_JEXEC') or die();
 class Account implements HandlerInterface
 {
     /**
-     * @param Notify $notice
+     * Execute a notify handler which should return a short string
+     * explaining what was done if anything.
+     *
+     * @param Notify    $notice
      *
      * @return string
      */
     public function execute(Notify $notice)
     {
+        $response = null;
         if (!empty($notice->user->id)) {
             switch ($notice->action) {
                 case Notify::ACTION_REACTIVATE:
@@ -45,6 +49,6 @@ class Account implements HandlerInterface
                     return $response;
             }
         }
-        return null;
+        return $response;
     }
 }

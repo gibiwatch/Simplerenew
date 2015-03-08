@@ -16,6 +16,9 @@ defined('_JEXEC') or die();
 interface HandlerInterface
 {
     /**
+     * Execute a notify handler which should return a short string
+     * explaining what was done if anything.
+     *
      * @param Notify    $notice
      *
      * @return string
