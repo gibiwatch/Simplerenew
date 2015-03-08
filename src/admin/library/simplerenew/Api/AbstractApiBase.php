@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Api;
 
+use Simplerenew\Configuration;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\AbstractGatewayBase;
 use Simplerenew\Object;
@@ -21,6 +22,11 @@ abstract class AbstractApiBase extends Object
      * @var AbstractGatewayBase
      */
     protected $imp = null;
+
+    /**
+     * @var Configuration
+     */
+    protected $configuration = null;
 
     /**
      * @var Events

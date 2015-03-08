@@ -118,8 +118,9 @@ class Subscription extends AbstractApiBase
     {
         parent::__construct();
 
-        $this->imp    = $imp;
-        $this->events = $events;
+        $this->imp           = $imp;
+        $this->configuration = $config;
+        $this->events        = $events;
     }
 
     /**
@@ -179,16 +180,14 @@ class Subscription extends AbstractApiBase
      */
     public function create(Account $account, Plan $plan, Coupon $coupon = null)
     {
-        $isNew = !$this->id;
-
-        $this->events->trigger('onSubscriptionBeforeUpdate', array($account, $this, $isNew));
+        $this->events->trigger('onSubscriptionBeforeUpdate', array($this, true));
 
         $this->clearProperties();
 
         $this->imp->create($this, $account, $plan, $coupon);
         $account->user->addGroups($plan->code);
 
-        $this->events->trigger('onSubscriptionAfterUpdate', array($account, $this, $isNew));
+        $this->events->trigger('onSubscriptionAfterUpdate', array($this, true));
 
         return $this;
     }
@@ -226,7 +225,12 @@ class Subscription extends AbstractApiBase
      */
     public function update(Plan $plan, Coupon $coupon = null)
     {
+        $this->events->trigger('onSubscriptionBeforeUpdate', array($this, false));
+
         $this->imp->update($this, $plan, $coupon);
+
+        $this->events->trigger('onSubscriptionAfterUpdate', array($this, false));
+
     }
 
     /**
@@ -245,5 +249,17 @@ class Subscription extends AbstractApiBase
         }
 
         throw new NotFound('Subscription not found for account ' . $account->code);
+    }
+
+    /**
+     * Whether multiple subscriptions are allowed
+     *
+     * @return bool
+     */
+    public function allowMultiple()
+    {
+        return (bool)$this->configuration ?
+            $this->configuration->get('subscription.allowMultiple', false) :
+            false;
     }
 }

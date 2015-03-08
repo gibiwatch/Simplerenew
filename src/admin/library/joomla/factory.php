@@ -57,6 +57,9 @@ abstract class SimplerenewFactory extends JFactory
                 'billing' => array(
                     'required' => array_filter(array_map('trim', $billingRequired))
                 ),
+                'subscription' => array(
+                    'allowMultiple' => $params->get('basic.allowMultiple')
+                ),
                 'user'    => array(
                     'group' => array(
                         'default'    => (int)$params->get('basic.defaultGroup'),
