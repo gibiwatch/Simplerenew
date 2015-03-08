@@ -56,10 +56,11 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
         try {
             $subscription = new \Recurly_Subscription(null, $this->client);
 
-            $subscription->account     = \Recurly_Account::get($account->code, $this->client);
-            $subscription->plan_code   = $plan->code;
-            $subscription->coupon_code = $coupon ? $coupon->code : null;
-            $subscription->currency    = $plan->currency;
+            $subscription->account              = \Recurly_Account::get($account->code, $this->client);
+            $subscription->plan_code            = $plan->code;
+            $subscription->unit_amount_in_cents = $plan->amount;
+            $subscription->coupon_code          = $coupon ? $coupon->code : null;
+            $subscription->currency             = $plan->currency;
 
             $subscription->create();
         } catch (Exception $e) {
@@ -145,7 +146,7 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
         }
 
         try {
-            $subscription          = \Recurly_Subscription::get($id, $this->client);
+            $subscription = \Recurly_Subscription::get($id, $this->client);
 
         } catch (\Recurly_NotFoundError $e) {
             throw new NotFound($e->getMessage(), $e->getCode(), $e);
