@@ -146,12 +146,10 @@ class Notify extends Object
         if ($handler = $this->getHandler($this->type)) {
             $this->handler  = get_class($handler);
             $this->response = $handler->execute($this);
-
-        } else {
-            $this->handler  = 'None';
-            $this->response = $this->handler;
         }
-        $this->addLogEntry();
+
+        $entry = new LogEntry($this);
+        $this->addLogEntry($entry);
 
         $this->container->events->trigger('onNotifyProcess', array($this));
     }
@@ -220,16 +218,13 @@ class Notify extends Object
      *
      * @return void
      */
-    public function addLogEntry(LogEntry $entry = null, AbstractLogger $logger = null)
+    public function addLogEntry(LogEntry $entry, AbstractLogger $logger = null)
     {
-        if ($this->handler && $this->response) {
-            $logger = $logger ?: $this->container->logger;
-            $entry  = $entry ?: new LogEntry($this);
+        $logger = $logger ?: $this->container->logger;
 
-            $logger->add($entry);
-            $this->handler = null;
-            $this->response = null;
-        }
+        $entry->handler  = $entry->handler ?: 'none';
+        $entry->response = $entry->response ?: 'none';
+        $logger->add($entry);
     }
 
     /**
