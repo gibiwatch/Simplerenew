@@ -11,15 +11,4 @@ defined('_JEXEC') or die();
 class SimplerenewController extends SimplerenewControllerBase
 {
     protected $default_view = 'subscribe';
-
-    public function test()
-    {
-        $c = SimplerenewFactory::getContainer();
-
-        echo '<pre>';
-
-        print_r($c->notify);
-
-        echo '</pre>';
-    }
 }
