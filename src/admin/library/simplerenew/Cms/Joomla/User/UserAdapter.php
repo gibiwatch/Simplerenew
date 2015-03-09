@@ -180,12 +180,18 @@ class UserAdapter implements UserInterface
             'password1' => $parent->password
         );
 
-        if ($model->register($data)) {
-            $parent->loadByUsername($parent->username);
-            return;
-        }
+        // Sometimes Joomla throws an error despite the user being successfully created
+        // I really don't like having to do things like this :(
+        try {
+            $model->register($data);
+            $errors = $model->getErrors();
 
-        throw new Exception(join('<br/>', $model->getErrors()));
+            $parent->loadByUsername($parent->username);
+
+        } catch (Exception $e) {
+            $message = $errors ?: array($e->getMessage());
+            throw new Exception(join('<br/>', $message), $e->getCode(), $e);
+        }
     }
 
     /**
