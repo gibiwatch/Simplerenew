@@ -105,7 +105,7 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
             $data[$name] = $value;
         }
 
-        // Adjust Webhook responses for standard API
+        // Adjust Webhook responses for standard API classes
         if (!empty($data['subscription'])) {
             $data['subscription']['plan_code'] = $data['subscription']['plan']['plan_code'];
             if (!empty($data['account'])) {
@@ -114,11 +114,19 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
         }
 
         if (!empty($data['transaction'])) {
-            $data['id']             = $data['uuid'];
-            $data['subscriptionId'] = $data['subscription_id'];
-            $data['amount']         = $data['amount_in_cents'] / 100;
-            $data['created']        = $data['date'];
-            $data['invoiceNumber']  = $data['invoice_number'];
+            if (!empty($data['account'])) {
+                $data['transaction']['accountCode'] = $data['account']['account_code'];
+            }
+            $data['transaction'] = array_merge(
+                $data['transaction'],
+                array(
+                    'uuid'           => $data['transaction']['id'],
+                    'created_at'     => $data['transaction']['date'],
+                    'amount'         => $data['transaction']['amount_in_cents'] / 100,
+                    'invoiceNumber'  => $data['transaction']['invoice_number'],
+                    'subscriptionId' => $data['transaction']['subscription_id']
+                )
+            );
         }
 
         $parent->setProperties($data, $this->fieldMap);
