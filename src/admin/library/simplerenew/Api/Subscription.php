@@ -230,7 +230,6 @@ class Subscription extends AbstractApiBase
         $this->imp->update($this, $plan, $coupon);
 
         $this->events->trigger('onSubscriptionAfterUpdate', array($this, false));
-
     }
 
     /**
