@@ -53,7 +53,7 @@ class Subscription implements HandlerInterface
                 $notice
                     ->getContainer()
                     ->events
-                    ->trigger('onSubscriptionAfterUpdate', array($notice->account, $notice->subscription, $isNew));
+                    ->trigger('onSubscriptionAfterUpdate', array($notice->subscription, $isNew));
             }
         }
         return $message;

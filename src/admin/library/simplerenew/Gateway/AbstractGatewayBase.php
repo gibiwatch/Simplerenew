@@ -63,6 +63,25 @@ abstract class AbstractGatewayBase extends Object
     }
 
     /**
+     * Normalize a variable to a \DateTime object
+     *
+     * @param mixed $value
+     *
+     * @return \DateTime|null
+     */
+    protected function toDateTime($value)
+    {
+        if ($value && is_string($value)) {
+            return new \DateTime($value);
+
+        } elseif ($value instanceof \DateTime) {
+            return $value;
+        }
+
+        return null;
+    }
+
+    /**
      * Determine whether the current configuration is usable/valid
      *
      * @return bool

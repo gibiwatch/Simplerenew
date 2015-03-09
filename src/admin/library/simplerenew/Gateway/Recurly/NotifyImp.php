@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Gateway\Recurly;
 
+use Simplerenew\Api\Subscription;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\NotifyInterface;
 use Simplerenew\Notify\Notify;
@@ -24,7 +25,7 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
     );
 
     protected $fieldMap = array(
-        'type'    => array(
+        'type'   => array(
             'type' => array(
                 'new_account_notification'           => Notify::TYPE_ACCOUNT,
                 'canceled_account_notification'      => Notify::TYPE_ACCOUNT,
@@ -45,7 +46,7 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
                 Object::MAP_UNDEFINED                => Notify::TYPE_UNKNOWN
             )
         ),
-        'action'  => array(
+        'action' => array(
             'type' => array(
                 'new_account_notification'           => Notify::ACTION_NEW,
                 'canceled_account_notification'      => Notify::ACTION_CANCEL,
@@ -66,7 +67,7 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
                 Object::MAP_UNDEFINED                => Notify::ACTION_UNKNOWN
             )
         ),
-        'user'    => null
+        'user'   => null
     );
 
     /**
@@ -102,6 +103,22 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
                 $value = (string)$node;
             }
             $data[$name] = $value;
+        }
+
+        // Adjust Webhook responses for standard API
+        if (!empty($data['subscription'])) {
+            $data['subscription']['plan_code'] = $data['subscription']['plan']['plan_code'];
+            if (!empty($data['account'])) {
+                $data['subscription']['account_code'] = $data['account']['account_code'];
+            }
+        }
+
+        if (!empty($data['transaction'])) {
+            $data['id']             = $data['uuid'];
+            $data['subscriptionId'] = $data['subscription_id'];
+            $data['amount']         = $data['amount_in_cents'] / 100;
+            $data['created']        = $data['date'];
+            $data['invoiceNumber']  = $data['invoice_number'];
         }
 
         $parent->setProperties($data, $this->fieldMap);

@@ -93,14 +93,11 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
     public function bindSource(Subscription $parent, $data)
     {
         // Find account code
-        $account = $this->getKeyValue($data, 'account');
-
-        if ($account instanceof \Recurly_Stub) {
+        $accountCode = $this->getKeyValue($data, 'account_code');
+        if ($accountCode instanceof \Recurly_Stub) {
             \Recurly_Client::$apiKey = $this->client->apiKey();
             $rawAccount              = $data->account->get();
             $accountCode             = $this->getKeyValue($rawAccount, 'account_code');
-        } else {
-            $accountCode = $this->getKeyValue($account, 'account_code');
         }
 
         // Look for a pending plan
@@ -131,6 +128,14 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
                     'account_code'   => $accountCode
                 )
             );
+
+        $parent->enrolled     = $this->toDateTime($parent->enrolled);
+        $parent->canceled     = $this->toDateTime($parent->canceled);
+        $parent->expires      = $this->toDateTime($parent->expires);
+        $parent->period_start = $this->toDateTime($parent->period_start);
+        $parent->period_end   = $this->toDateTime($parent->period_end);
+        $parent->trial_start  = $this->toDateTime($parent->trial_start);
+        $parent->trial_end    = $this->toDateTime($parent->trial_end);
     }
 
     /**

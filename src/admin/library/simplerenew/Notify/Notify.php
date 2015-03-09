@@ -62,16 +62,6 @@ class Notify extends Object
     /**
      * @var string
      */
-    public $handler = null;
-
-    /**
-     * @var string
-     */
-    public $response = null;
-
-    /**
-     * @var string
-     */
     public $package = null;
 
     /**
@@ -149,13 +139,9 @@ class Notify extends Object
     {
         $this->loadFromGatewayData($package);
 
-        if ($handler = $this->getHandler($this->type)) {
-            $this->handler  = get_class($handler);
-            $this->response = $handler->execute($this);
-        }
-
-        $entry = new LogEntry($this);
-        $this->addLogEntry($entry);
+        $handler  = $this->getHandler($this->type);
+        $response = $handler ? $handler->execute($this) : null;
+        $this->addLogEntry($handler, $response);
 
         $this->container->events->trigger('onNotifyProcess', array($this));
     }
@@ -225,17 +211,23 @@ class Notify extends Object
     /**
      * Make an entry in the push notification log
      *
+     * @param string         $handler
+     * @param string         $response
      * @param LogEntry       $entry
      * @param AbstractLogger $logger
      *
      * @return void
      */
-    public function addLogEntry(LogEntry $entry, AbstractLogger $logger = null)
+    public function addLogEntry($handler, $response, LogEntry $entry = null, AbstractLogger $logger = null)
     {
         $logger = $logger ?: $this->container->logger;
+        $entry  = $entry ?: new LogEntry($this);
 
-        $entry->handler  = $entry->handler ?: 'none';
-        $entry->response = $entry->response ?: 'none';
+        $handlerName = $handler ?: 'none';
+
+        $entry->handler  = is_object($handlerName) ? get_class($handlerName) : $handlerName;
+        $entry->response = $response ?: 'none';
+
         $logger->add($entry);
     }
 
