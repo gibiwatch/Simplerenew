@@ -105,7 +105,7 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
             $data[$name] = $value;
         }
 
-        // Adjust Webhook responses for standard API classes
+        // Reformat subscription data for Subscription class
         if (!empty($data['subscription'])) {
             $data['subscription']['plan_code'] = $data['subscription']['plan']['plan_code'];
             if (!empty($data['account'])) {
@@ -113,18 +113,28 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
             }
         }
 
+        // Create a stub Subscription class from invoice if not already included
+        if (!empty($data['invoice']) && empty($data['subscription'])) {
+            $data['subscription']['uuid'] = $data['invoice']['subscription_id'];
+        }
+
         if (!empty($data['transaction'])) {
-            if (!empty($data['account'])) {
-                $data['transaction']['accountCode'] = $data['account']['account_code'];
+            // Create a stub Subscription class if not already included
+            if (empty($data['subscription'])) {
+                $data['subscription']['uuid'] = $data['transaction']['subscription_id'];
             }
+
+            // Reformat transaction data for Transaction class
+            if (!empty($data['account'])) {
+                $data['transaction']['account_code'] = $data['account']['account_code'];
+            }
+
             $data['transaction'] = array_merge(
                 $data['transaction'],
                 array(
-                    'uuid'           => $data['transaction']['id'],
-                    'created_at'     => $data['transaction']['date'],
-                    'amount'         => $data['transaction']['amount_in_cents'] / 100,
-                    'invoiceNumber'  => $data['transaction']['invoice_number'],
-                    'subscriptionId' => $data['transaction']['subscription_id']
+                    'uuid'       => $data['transaction']['id'],
+                    'created_at' => $data['transaction']['date'],
+                    'amount'     => $data['transaction']['amount_in_cents'] / 100
                 )
             );
         }

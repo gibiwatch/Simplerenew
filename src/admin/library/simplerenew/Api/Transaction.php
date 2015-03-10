@@ -41,17 +41,17 @@ class Transaction extends AbstractApiBase
     /**
      * @var string
      */
-    public $accountCode = null;
+    public $account_code = null;
 
     /**
      * @var string
      */
-    public $invoiceNumber = null;
+    public $invoice_number = null;
 
     /**
      * @var string
      */
-    public $subscriptionId = null;
+    public $subscription_id = null;
 
     /**
      * @var string
