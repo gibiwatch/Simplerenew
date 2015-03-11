@@ -28,12 +28,11 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
     <div class="block12">
         <?php
         foreach ($this->plans as $code => $plan):
-            $planId  = 'plan_code_' . $code;
-            $classes = array('plan_code', $planId);
+            $planId  = 'plan-code-' . $code;
             $checked = $plan->selected ? ' checked' : '';
             ?>
-            <div class="<?php echo join(' ', $classes); ?>">
-                <span class="simplerenew-plan <?php echo $planId; ?>">
+            <div class="<?php echo 'plan-code ' . $planId; ?>">
+                <span class="<?php echo 'simplerenew-plan user-group-' . $plan->group_id; ?>">
                     <input<?php echo $checked; ?>
                         id="<?php echo $planId; ?>"
                         name="planCodes[]"
