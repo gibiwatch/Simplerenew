@@ -36,6 +36,7 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
                         name="planCodes"
                         id="<?php echo $planId; ?>"
                         value="<?php echo $plan->code; ?>"
+                        required
                         data-description="<?php echo $plan->name; ?>"/>
                     <?php
                     echo JHtml::_(
