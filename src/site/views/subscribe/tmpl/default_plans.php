@@ -37,7 +37,9 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
                         id="<?php echo $planId; ?>"
                         value="<?php echo $plan->code; ?>"
                         required
-                        data-description="<?php echo $plan->name; ?>"/>
+                        data-description="<?php echo $plan->name; ?>"
+                        data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_PLAN_REQUIRED'); ?>"
+                        data-error-placement="#plancode-error"/>
                     <?php
                     echo JHtml::_(
                         'plan.name',
@@ -55,6 +57,7 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
 
         <?php
         endforeach; ?>
+        <div id="plancode-error"></div>
     </div>
 </div>
 <!-- /.ost-section -->
