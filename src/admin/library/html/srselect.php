@@ -72,7 +72,7 @@ abstract class JHtmlSrselect
      */
     public static function country($name, $attribs = null, $selected = null, $idTag = null)
     {
-        JHtml::_('sr.jquery', true);
+        JHtml::_('sr.jquery');
 
         $id = $idTag ? : str_replace(array('[', ']'), array('_', ''), $idTag);
 
@@ -110,7 +110,7 @@ abstract class JHtmlSrselect
      */
     public static function region($name, $attribs = null, $selected = null, $idTag = null, $countryId = null)
     {
-        JHtml::_('sr.jquery', true);
+        JHtml::_('sr.jquery');
 
         $id = $idTag ? : str_replace(array('[', ']'), array('_', ''), $name);
 

@@ -42,7 +42,7 @@ abstract class JHtmlSr
      * @param bool $noConflict
      * @param bool $debug
      */
-    public static function jquery($utilities = false, $noConflict = true, $debug = null)
+    public static function jquery($utilities = true, $noConflict = true, $debug = null)
     {
         $params = SimplerenewComponentHelper::getParams();
 
@@ -88,7 +88,7 @@ abstract class JHtmlSr
      */
     public static function tabs($selector, $options = null)
     {
-        static::jquery(true);
+        static::jquery();
 
         if ($options && is_string($options)) {
             $options = json_decode($options, true);
@@ -112,7 +112,7 @@ abstract class JHtmlSr
      */
     public static function sliders($selector, $visible = false)
     {
-        static::jquery(true);
+        static::jquery();
 
         $options = json_encode(
             array(
@@ -135,7 +135,7 @@ abstract class JHtmlSr
      */
     public static function clickarea($options)
     {
-        static::jquery(true);
+        static::jquery();
 
         $arrayOptions = array();
         if (is_string($options)) {
@@ -201,7 +201,7 @@ abstract class JHtmlSr
      */
     public static function ajax($selector, $options = array())
     {
-        static::jquery(true);
+        static::jquery();
 
         $options = is_string($options) ? json_decode($options, true) : (array)$options;
         $options = array(
