@@ -259,8 +259,8 @@
                         if (!this.settings.messages[element.name]) {
                             this.settings.messages[element.name] = {};
                         }
-                        previous.originalMessage = this.settings.messages[element.name].remote;
-                        this.settings.messages[element.name].remote = previous.message;
+                        previous.originalMessage = this.settings.messages[element.name].coupon;
+                        this.settings.messages[element.name].coupon = previous.message;
 
                         keyValue = value + ':' + plans.join('|');
                         if (previous.old === keyValue) {
