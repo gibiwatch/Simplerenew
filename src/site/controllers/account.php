@@ -26,10 +26,11 @@ class SimplerenewControllerAccount extends SimplerenewControllerBase
 
         // Check for authorisation
         if (!$user->id || $userId != $user->id) {
-            return $this->callerReturn(
+            $this->callerReturn(
                 JText::_('COM_SIMPLERENEW_ERROR_ACCOUNT_EDIT_NOAUTH'),
                 'error'
             );
+            return;
         }
 
         $container = SimplerenewFactory::getContainer();
@@ -67,10 +68,11 @@ class SimplerenewControllerAccount extends SimplerenewControllerBase
             }
 
         } catch (Exception $e) {
-            return $this->callerReturn(
+            $this->callerReturn(
                 JText::sprintf('COM_SIMPLERENEW_ERROR_ACCOUNT_EDIT', $e->getMessage()),
                 'error'
             );
+            return;
         }
 
         $this->callerReturn(JText::_('COM_SIMPLERENEW_ACCOUNT_EDIT_SUCCESS'));
