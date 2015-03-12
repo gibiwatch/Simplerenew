@@ -118,7 +118,7 @@
 
                 case 'cc':
                 default:
-                    var number = $(form).find('#billing_cc_number').val();
+                    var number = $(form).find('[data-recurly=number]').val();
 
                     if (number) {
                         recurly.token(form, function (err, token) {
