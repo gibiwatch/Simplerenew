@@ -29,9 +29,9 @@
                                     return $(el).val();
                                 };
                         });
-                        $(el).tempName().rules('add', $.extend(true, {}, custom, rule));
+                        $(el).rules('add', $.extend(true, {}, custom, rule));
                     } else {
-                        $(el).tempName().rules('add', rule);
+                        $(el).rules('add', rule);
                     }
                 });
         });
@@ -96,23 +96,27 @@
     };
 
     /**
-     * This will give us a chance to validate no-name fields like
-     * CC Number and CVV
+     * For use in forms. This will give us a chance to validate no-name fields like
+     * CC Number and CVV but not submit them to the server. Any form field that does
+     * not have a name attribute will be given a temporary name that can be cleared
+     * on submit.
      *
      * @param {bool} [clear]
      *
      * @returns {$.fn}
      */
-    $.fn.tempName = function(clear) {
-        var self = $(this);
-        if (self.is('input')) {
-            if (clear && self.data('clearName')) {
-                self.attr('name', null);
-            } else if (!self.attr('name')) {
-                self
-                    .attr('name', self.attr('id'))
-                    .data('clearName', true);
-            }
+    $.fn.tempNames = function(clear) {
+        if ($(this).is('form')) {
+            $(this).find(':input').each(function(idx, element) {
+                var field = $(element);
+                if (clear && field.data('clearName')) {
+                    field.attr('name', null);
+                } else if (!field.attr('name')) {
+                    field
+                        .attr('name', field.attr('id'))
+                        .data('clearName', true);
+                }
+            });
         }
         return this;
     };
@@ -157,12 +161,13 @@
              */
             init: function(selector, options) {
                 var form = $(selector);
-                if (form) {
+                if ($(form).is('form')) {
                     var gateway = this.gateway;
 
-                    // Store the CSRF Token and setup submit buttons
+                    // Store the CSRF Token, set no-name fields and setup submit buttons
                     var csrfToken = form.find('span#token input:hidden');
                     form
+                        .tempNames()
                         .data('csrfToken', {
                             name : csrfToken.attr('name'),
                             value: csrfToken.val()
@@ -184,10 +189,8 @@
 
                             // Disable submit, Clear temporary names to prevent being sent to server
                             $(form)
-                                .disableSubmit()
-                                .find(':input').each(function(idx, element) {
-                                    $(element).tempName(true);
-                                });
+                                .tempNames(true)
+                                .disableSubmit();
 
                             if (typeof gateway.submit === 'function') {
                                 // Gateway is handling form submit
