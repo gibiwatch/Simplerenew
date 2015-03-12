@@ -106,8 +106,9 @@
      * @returns {$.fn}
      */
     $.fn.tempNames = function(clear) {
-        if ($(this).is('form')) {
-            $(this).find(':input').each(function(idx, element) {
+        $(this)
+            .find(':input')
+            .each(function(idx, element) {
                 var field = $(element);
                 if (clear && field.data('clearName')) {
                     field.attr('name', null);
@@ -117,7 +118,6 @@
                         .data('clearName', true);
                 }
             });
-        }
         return this;
     };
 
