@@ -37,7 +37,7 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
                 $currentUser->load();
 
             } catch (Exception $e) {
-
+                // Not logged in is okay
             }
         }
 
