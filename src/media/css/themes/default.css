@@ -62,11 +62,14 @@
 .ost-container h4 {
     font-size: 18px;
     line-height: 23px;
-    margin: 4px 0;
+    margin: 0 0 20px 0;
+    padding: 0 0 5px 0;
 }
 
 .ost-container h3 span,
-.ost-container h3 span i:before {
+.ost-container h3 span i:before,
+.ost-container h4 span,
+.ost-container h4 span i:before {
     color: #999999;
     font-weight: 300;
 }
@@ -463,6 +466,11 @@ div.ost-alert-notify{
 .ost-container .tab-disabled  h4,
 .ost-container .tab-disabled  h4 i:before{
     color: #545454;
+}
+
+.payment-tabs h4{
+    margin: 4px 0;
+    padding: 5px 0;
 }
 
 span.simplerenew-plan{
