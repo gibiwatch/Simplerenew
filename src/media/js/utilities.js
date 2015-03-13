@@ -118,8 +118,8 @@
                         partner = $(id);
                         id = id.substr(1);
                     }
-                    if (partner) {
-                        partners[id] = partner;
+                    if (partner[0]) {
+                        partners[id] = partner[0];
                     }
                 });
             }
