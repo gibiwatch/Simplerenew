@@ -38,7 +38,7 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
                         name="planCodes[]"
                         type="checkbox"
                         value="<?php echo $plan->code; ?>"
-                        required
+                        required="true"
                         data-description="<?php echo $plan->name; ?>"
                         data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_PLAN_REQUIRED'); ?>"
                         data-error-placement="#plancode-error"/>
