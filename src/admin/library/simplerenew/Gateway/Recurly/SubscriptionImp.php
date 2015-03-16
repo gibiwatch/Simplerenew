@@ -58,7 +58,7 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
 
             $subscription->account              = \Recurly_Account::get($account->code, $this->client);
             $subscription->plan_code            = $plan->code;
-            $subscription->unit_amount_in_cents = $plan->amount;
+            $subscription->unit_amount_in_cents = $plan->amount * 100;
             $subscription->coupon_code          = $coupon ? $coupon->code : null;
             $subscription->currency             = $plan->currency;
 
