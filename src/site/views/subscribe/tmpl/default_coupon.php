@@ -40,7 +40,7 @@ if ($couponCode && $planSelected) {
                         id="coupon_code"
                         value="<?php echo $couponCode; ?>"
                         class="check_coupon"
-                        data-plan=".plan_code input"/>
+                        data-plan=".plan-code input"/>
                 </div>
             </div>
         </div>

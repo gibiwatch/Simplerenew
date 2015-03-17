@@ -18,11 +18,11 @@ $container    = SimplerenewFactory::getContainer();
 $subscription = $this->subscription;
 $plan         = $container->getPlan()->load($subscription->plan);
 
-$planId  = 'plan_code_' . $plan->code;
+$planId  = 'plan-code-' . $plan->code;
 $classes = array(
     'ost-toggle',
     'ost-toggle-flat',
-    'plan_code',
+    'plan-code',
     $planId
 );
 $checked = ($subscription->status == Subscription::STATUS_ACTIVE);
