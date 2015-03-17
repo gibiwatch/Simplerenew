@@ -62,11 +62,14 @@
 .ost-container h4 {
     font-size: 18px;
     line-height: 23px;
-    margin: 4px 0;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .ost-container h3 span,
-.ost-container h3 span i:before {
+.ost-container h3 span i:before,
+.ost-container h4 span,
+.ost-container h4 span i:before {
     color: #999999;
     font-weight: 300;
 }
@@ -481,6 +484,11 @@ div.ost-alert-notify{
     color: #545454;
 }
 
+.payment-tabs h4{
+    margin: 4px 0;
+    padding: 5px 0;
+}
+
 .ost-container .tab-disabled{
     box-shadow: 0 -1px 0 #666 inset, 0 1px 0 rgba(255, 255, 255, 0.5) inset;
     -moz-box-shadow: 0 -1px 0 #666 inset, 0 1px 0 rgba(255, 255, 255, 0.5) inset;
@@ -573,6 +581,16 @@ span.simplerenew-plan.simplerenew-plan-selected{
     -webkit-box-shadow: 0 0 5px #ccc inset;
     -o-box-shadow: 0 0 5px #ccc inset;
     background: #f2f2f2;
+}
+
+.ost-container span.simplerenew-plan-trial {
+    background: url(../../images/trial-bg.png) no-repeat right center;
+    background-size: auto 100%;
+    color: #fff;
+    font-weight: 600;
+    padding: 6px 30px 5px 12px;
+    margin-left: -4px;
+    text-shadow: 0 1px 0 #333;
 }
 
 /* Listing
