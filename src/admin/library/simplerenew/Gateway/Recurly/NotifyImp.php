@@ -118,13 +118,13 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
             $data['subscription']['uuid'] = $data['invoice']['subscription_id'];
         }
 
+        // Reformat transaction data for Transaction class
         if (!empty($data['transaction'])) {
             // Create a stub Subscription class if not already included
             if (empty($data['subscription'])) {
                 $data['subscription']['uuid'] = $data['transaction']['subscription_id'];
             }
 
-            // Reformat transaction data for Transaction class
             if (!empty($data['account'])) {
                 $data['transaction']['account_code'] = $data['account']['account_code'];
             }
