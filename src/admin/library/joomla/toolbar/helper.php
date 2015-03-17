@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   com_simplerenew
- * @contact   www.ostraining.com, support@ostraining.com
+ * @contact   www.simplerenew.com, support@simplerenew.com
  * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
