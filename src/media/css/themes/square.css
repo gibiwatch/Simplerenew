@@ -521,6 +521,14 @@ span.simplerenew-plan.simplerenew-plan-selected{
     background: #f2f2f2;
 }
 
+.ost-container span.simplerenew-plan-trial {
+    background: #ed8034;
+    color: #fff;
+    font-weight: 600;
+    padding: 6px 30px 5px 12px;
+    margin-left: -4px;
+}
+
 /* Listing
  ========================================================================== */
 .ost-row-one,

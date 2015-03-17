@@ -548,7 +548,8 @@ span.simplerenew-plan.simplerenew-plan-selected{
     background-size: auto 100%;
     color: #fff;
     font-weight: 600;
-    padding: 6px 30px 6px 12px;
+    padding: 6px 30px 5px 12px;
+    margin-left: -4px;
 }
 
 /* Listing
