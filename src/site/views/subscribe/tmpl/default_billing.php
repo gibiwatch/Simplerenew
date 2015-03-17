@@ -6,31 +6,34 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-use Simplerenew\Primitive as Payment;
+use Simplerenew\Primitive\PayPal;
+use Simplerenew\Primitive\CreditCard;
 
 defined('_JEXEC') or die();
 
 /**
  * @var SimplerenewViewSubscribe $this
- * @var Payment\Paypal           $paypal
- * @var Payment\CreditCard       $creditCard
+ * @var Paypal                   $paypal
  */
 
 $paymentOptions = $this->getParams()->get('basic.paymentOptions');
-if ($this->billing->payment instanceof Payment\PayPal) {
+$tabOptions = array();
+
+$activeTab = null;
+if ($this->billing->payment instanceof PayPal) {
     $paypal = $this->billing->payment;
+    $tabOptions['active'] = '#tab_paypal';
+} elseif ($this->billing->payment instanceof CreditCard) {
+    $tabOptions['active'] = '#tab_card';
 }
 
 JHtml::_('sr.validation.billing');
-
-$options = array(
-    'active' => empty($paypal) ? '#tab_card' : '#tab_paypal'
-);
-JHtml::_('sr.tabs', '.payment-tabs div', $options);
+JHtml::_('sr.tabs', '.payment-tabs div', $tabOptions);
 
 echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BILLING'));
 
-if (!empty($paypal)): ?>
+if (!empty($paypal)):
+    ?>
     <div class="ost-alert-notify m-bottom">
         <?php echo JText::sprintf('COM_SIMPLERENEW_BILLING_EDIT_PAYPAL', $paypal->agreementId); ?>
     </div>
