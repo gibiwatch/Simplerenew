@@ -543,6 +543,14 @@ span.simplerenew-plan.simplerenew-plan-selected{
     background: #f2f2f2;
 }
 
+.ost-container span.simplerenew-plan-trial {
+    background: url(../../images/trial-bg.png) no-repeat right center;
+    background-size: auto 100%;
+    color: #fff;
+    font-weight: 600;
+    padding: 6px 30px 6px 12px;
+}
+
 /* Listing
  ========================================================================== */
 .ost-row-one{

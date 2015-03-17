@@ -50,12 +50,21 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
                         $plan->currency,
                         $plan->amount,
                         $plan->length,
-                        $plan->unit,
-                        $plan->trial_length,
-                        $plan->trial_unit
+                        $plan->unit
                     );
                     ?>
                 </span>
+                <?php if ($plan->trial_length > 0 && $plan->trial_unit) { ?>
+                    <span class="simplerenew-plan-trial">
+                        <?php
+                        echo JHtml::_(
+                            'plan.trial',
+                            $plan->trial_length,
+                            $plan->trial_unit
+                        );
+                        ?>
+                    </span>
+                <?php } ?>
             </div>
 
         <?php
