@@ -1,24 +1,24 @@
-(function ($) {
+(function($) {
     $.extend($.fn, {
         recurly: {
-            calculate: function (coupon, plan) {
+            calculate: function(coupon, plan) {
                 var planCode = $(plan).val();
                 var couponCode = $(coupon).is(':disabled') ? '' : $(coupon).val();
 
                 var pricing = recurly.Pricing();
                 pricing
                     .plan(planCode)
-                    .catch(function (err) {
+                    .catch(function(err) {
                         alert('Simplerenew Configuration Problem: ' + err.message);
                     })
-                    .done(function (price) {
+                    .done(function(price) {
                         pricing.coupon(couponCode)
                             .catch(function(err) {
                                 // Next .done() gets called even on failure
                             })
                             .done(function(price) {
                                 $(plan).data('price', {
-                                    net: price.now.total || 0,
+                                    net   : price.now.total || 0,
                                     symbol: price.currency.symbol || ''
                                 });
                             });
@@ -34,7 +34,7 @@
             key: null
         },
 
-        init: function (form) {
+        init: function(form) {
             if (!this.options.key) {
                 alert('System error: No public key defined');
                 return;
@@ -51,19 +51,19 @@
 
             var coupon = $('#coupon_code')
                 .attr('data-recurly', 'coupon')
-                .on('change sr.disable sr.enable', function (evt) {
-                    plans.each(function (idx, plan) {
+                .on('change sr.disable sr.enable', function(evt) {
+                    plans.each(function(idx, plan) {
                         $(plan).recurly.calculate(coupon, plan);
                     });
                 });
 
             var plans = $('[name^=planCodes]')
                 .attr('data-recurly', 'plan')
-                .on('click', function (evt) {
+                .on('click', function(evt) {
                     $(this).recurly.calculate(coupon, this);
                 });
 
-            plans.filter(':checked').each(function (idx, plan) {
+            plans.filter(':checked').each(function(idx, plan) {
                 $(plan).recurly.calculate(coupon, plan);
             });
 
@@ -81,7 +81,7 @@
             $('#billing_country').attr('data-recurly', 'country');
         },
 
-        submit: function (form) {
+        submit: function(form) {
             var method = $(form).find('input[name=payment_method]:enabled').val();
             var billing_token = $(form).find('#billing_token');
 
@@ -93,7 +93,7 @@
                         items = [],
                         plans = $('[data-recurly=plan]:checked');
 
-                    plans.each(function (idx, plan) {
+                    plans.each(function(idx, plan) {
                         var price = $(plan).data('price');
                         total += parseFloat(price.net);
                         symbol = price.symbol;
@@ -103,7 +103,7 @@
                     description = 'Subscription to ' + items.join(', ')
                     + ' for a total of ' + symbol + total.toFixed(2);
 
-                    recurly.paypal({description: description}, function (err, token) {
+                    recurly.paypal({description: description}, function(err, token) {
                         if (err) {
                             $(form).enableSubmit();
                             if (err.code != 'paypal-canceled') {
@@ -121,7 +121,7 @@
                     var number = $(form).find('[data-recurly=number]').val();
 
                     if (number) {
-                        recurly.token(form, function (err, token) {
+                        recurly.token(form, function(err, token) {
                             if (err) {
                                 $(form).enableSubmit();
                                 alert(err.message);
