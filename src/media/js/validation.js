@@ -193,12 +193,12 @@
                                 .tempNames(true)
                                 .disableSubmit();
 
+                            var success = true;
                             if (typeof gateway.submit === 'function') {
-                                // Gateway is handling form submit
-                                gateway.submit(form);
-                            } else {
-                                form.submit();
+                                // Gateway has something to do on submit
+                                success = gateway.submit(form);
                             }
+                            return success;
                         }
                     });
 

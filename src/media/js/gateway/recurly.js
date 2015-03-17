@@ -85,7 +85,6 @@
             var method = $(form).find('input[name=payment_method]:enabled').val();
             var billing_token = $(form).find('#billing_token');
 
-            billing_token.val('');
             switch (method) {
                 case 'pp':
                     var description, symbol,
@@ -105,10 +104,13 @@
 
                     recurly.paypal({description: description}, function(err, token) {
                         if (err) {
-                            $(form).enableSubmit();
                             if (err.code != 'paypal-canceled') {
                                 alert(err.message);
                             }
+                            $(form)
+                                .tempNames()
+                                .enableSubmit();
+
                         } else {
                             billing_token.val(token.id);
                             form.submit();
@@ -123,18 +125,20 @@
                     if (number) {
                         recurly.token(form, function(err, token) {
                             if (err) {
-                                $(form).enableSubmit();
                                 alert(err.message);
+                                $(form)
+                                    .tempNames()
+                                    .enableSubmit();
+
                             } else {
                                 billing_token.val(token.id);
                                 form.submit();
                             }
                         });
-                    } else {
-                        form.submit();
                     }
                     break;
             }
+            return false;
         }
     });
 })(jQuery);
