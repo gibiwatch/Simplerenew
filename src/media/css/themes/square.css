@@ -529,6 +529,23 @@ span.simplerenew-plan.simplerenew-plan-selected{
     margin-left: -4px;
 }
 
+.ost-container .simplerenew-plan input[type="radio"],
+.ost-container .simplerenew-plan input[type="checkbox"] {
+    display: none;
+}
+.simplerenew-plan:before {
+    content: "\f10c";
+    font-family:'FAwesome';
+    width: 20px;
+    line-height: 18px;
+    display: inline-block;
+    opacity: 0.4;
+}
+.simplerenew-plan.simplerenew-plan-selected:before {
+    content: "\f00c";
+    opacity: 1;
+}
+
 /* Listing
  ========================================================================== */
 .ost-row-one,
