@@ -41,18 +41,12 @@ class SimplerenewFilterInput extends JFilterInput
     public function clean($source, $type = 'string')
     {
         switch (strtoupper($type)) {
-            case 'USER_ARRAY':
-                $filter = $this;
-                $result = array_map(
-                    function ($row) use ($filter) {
-                        $row = array_map(array($filter, 'clean'), (array)$row);
-                        if (isset($row['username'])) {
-                            $row['username'] = $filter->clean($row['username'], 'username');
-                        }
-                        return $row;
-                    },
-                    (array)$source
-                );
+            case 'ARRAY_KEYS':
+                if (is_array($source)) {
+                    $result = $this->cleanArray($source);
+                } else {
+                    $result = $this->_remove($this->_decode($value));
+                }
                 break;
 
             default:
@@ -60,6 +54,29 @@ class SimplerenewFilterInput extends JFilterInput
                 break;
         }
 
+        return $result;
+    }
+
+    /**
+     * Filter an array and its keys to strings. Will recognize a key
+     * of 'username' and use the username filter
+     *
+     * @param $source
+     *
+     * @return array
+     */
+    protected function cleanArray(array $source)
+    {
+        $result = array();
+        foreach ($source as $key => $value) {
+            $key = $this->_remove($this->_decode($key));
+            if (is_string($value)) {
+                $filter       = ($key == 'username' ? 'username' : 'string');
+                $result[$key] = $this->clean($value, $filter);
+            } else {
+                $result[$key] = $this->cleanArray($value);
+            }
+        }
         return $result;
     }
 }
