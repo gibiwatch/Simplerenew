@@ -88,6 +88,8 @@ abstract class SimplerenewHelper
         if ($source === null) {
             $source = $_POST;
         }
+        $filter = SimplerenewFilterInput::getInstance();
+        $source = $filter->clean($source, 'array_keys');
 
         if ($exclude) {
             foreach ($exclude as $key) {
