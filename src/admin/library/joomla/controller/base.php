@@ -32,29 +32,43 @@ class SimplerenewControllerBase extends JControllerLegacy
      * Standard return to calling url. In order:
      *    - Looks for base64 encoded 'return' URL variable
      *    - Uses current 'Itemid' URL variable
-     *    - Uses current 'option', 'view'/'task', 'layout' URL variables
+     *    - Uses current 'option', 'view', 'layout' URL variables
      *    - Goes to site default page
      *
-     * @param string $message
-     * @param string $type
+     * @param string $message The message to queue up
+     * @param string $type    message|notice|error
+     * @param string $return  (optional) base64 encoded url for redirect
      *
-     * @return true
+     * @return void
      */
-    protected function callerReturn($message = null, $type = null)
+    protected function callerReturn($message = null, $type = null, $return = null)
     {
         $app = SimplerenewFactory::getApplication();
-        if ($url = $app->input->getBase64('return')) {
+
+        $url = $return ?: $app->input->getBase64('return');
+        if ($url) {
             $url = base64_decode($url);
 
-        } elseif ($itemid = $app->input->getInt('Itemid')) {
-            $menu = $app->getMenu()->getItem($itemid);
-            $url = new JURI('index.php');
+        } else {
+            $url  = new JURI('index.php');
 
-            $url->setVar('Itemid', $itemid);
-            $url->setVar('option', $menu->component);
+            if ($itemid = $app->input->getInt('Itemid')) {
+                $menu = $app->getMenu()->getItem($itemid);
+
+                $url->setVar('Itemid', $itemid);
+
+            } elseif ($option = $app->input->getCmd('option')) {
+                $url->setVar('option', $option);
+            }
+
+            if ($view = $app->input->getCmd('view')) {
+                $url->setVar('view', $view);
+                if ($layout = $app->input->getCmd('layout')) {
+                    $url->setVar('layout', $layout);
+                }
+            }
         }
 
         $this->setRedirect(JRoute::_((string)$url), $message, $type);
-        return true;
     }
 }
