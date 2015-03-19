@@ -23,7 +23,7 @@ class SimplerenewFilterInput extends JFilterInput
      *
      * @return SimplerenewFilterInput
      */
-    public static function getInstance(
+    public static function &getInstance(
         $tagsArray = array(),
         $attrArray = array(),
         $tagsMethod = 0,
