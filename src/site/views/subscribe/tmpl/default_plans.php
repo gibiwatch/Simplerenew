@@ -51,7 +51,9 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
                     );
                     ?>
                 </span>
-                <?php if ($plan->trial_length > 0 && $plan->trial_unit) { ?>
+                <?php
+                if ($plan->trial_length > 0 && $plan->trial_unit) :
+                ?>
                     <span class="simplerenew-plan-trial">
                         <?php
                         echo JHtml::_(
@@ -61,7 +63,8 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
                         );
                         ?>
                         </span>
-                <?php } ?>
+                <?php
+                endif; ?>
             </div>
 
         <?php
