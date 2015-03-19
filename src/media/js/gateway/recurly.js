@@ -122,7 +122,9 @@
                 default:
                     var number = $(form).find('[data-recurly=number]').val();
 
-                    if (number) {
+                    if (!number) {
+                        form.submit()
+                    } else {
                         recurly.token(form, function(err, token) {
                             if (err) {
                                 alert(err.message);
