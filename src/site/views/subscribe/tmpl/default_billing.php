@@ -13,17 +13,16 @@ defined('_JEXEC') or die();
 
 /**
  * @var SimplerenewViewSubscribe $this
- * @var Paypal                   $paypal
  */
 
+$payment        = $this->billing->payment;
 $paymentOptions = $this->getParams()->get('basic.paymentOptions');
-$tabOptions = array();
+$tabOptions     = array();
 
 $activeTab = null;
-if ($this->billing->payment instanceof PayPal) {
-    $paypal = $this->billing->payment;
+if ($payment instanceof PayPal) {
     $tabOptions['active'] = '#tab_paypal';
-} elseif ($this->billing->payment instanceof CreditCard) {
+} elseif ($payment instanceof CreditCard && !empty($payment->lastFour)) {
     $tabOptions['active'] = '#tab_card';
 }
 
@@ -32,10 +31,10 @@ JHtml::_('sr.tabs', '.payment-tabs div', $tabOptions);
 
 echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BILLING'));
 
-if (!empty($paypal)):
+if ($payment instanceof Paypal):
     ?>
     <div class="ost-alert-notify m-bottom">
-        <?php echo JText::sprintf('COM_SIMPLERENEW_BILLING_EDIT_PAYPAL', $paypal->agreementId); ?>
+        <?php echo JText::sprintf('COM_SIMPLERENEW_BILLING_EDIT_PAYPAL', $payment->agreementId); ?>
     </div>
     <?php
 endif; ?>
@@ -72,10 +71,10 @@ endif; ?>
 <input type="hidden" id="billing_token" name="billing[token]" value=""/>
 
 <?php
-if (in_array('cc', $paymentOptions)) {
-    echo $this->loadTemplate('creditcard');
-}
-
 if (in_array('pp', $paymentOptions)) {
     echo $this->loadTemplate('paypal');
+}
+
+if (in_array('cc', $paymentOptions)) {
+    echo $this->loadTemplate('creditcard');
 }
