@@ -11,7 +11,8 @@ defined('_JEXEC') or die();
 <div class="ost-section content-enabled" id="content_paypal">
     <div class="block12">
         <div class="p-full">
-            <?php echo JText::_('COM_SIMPLERENEW_PROCEED_TO_PAYPAL'); ?>
+            <p><?php echo JText::_('COM_SIMPLERENEW_PROCEED_TO_PAYPAL'); ?></p>
+            <p><?php echo JText::_('COM_SIMPLERENEW_POPUP_PAYPAL_WARN'); ?></p>
             <input type="hidden" name="payment_method" value="pp"/>
         </div>
     </div>
