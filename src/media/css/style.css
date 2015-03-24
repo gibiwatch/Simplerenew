@@ -72,6 +72,10 @@ span.simplerenew-plan:hover{
     display: inline;
 }
 
+.ost-container .ost-breakline-mobile {
+    display: none;
+}
+
 /* Help classes
  ========================================================================== */
 .ost-container .m-bottom {
@@ -97,6 +101,7 @@ span.simplerenew-plan:hover{
 /* Media Queries
  ========================================================================== */
 @media (max-width: 480px){
+    /* Subscribe */
     #tab_card,
     #tab_paypal{
         width: 130px;
@@ -104,5 +109,8 @@ span.simplerenew-plan:hover{
     #tab_card i,
     #tab_paypal i{
         display: none;
+    }
+    .ost-container .ost-breakline-mobile {
+        display: inherit;
     }
 }

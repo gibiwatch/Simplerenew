@@ -54,6 +54,7 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
                 <?php
                 if ($plan->trial_length > 0 && $plan->trial_unit) :
                 ?>
+                    <br class="ost-breakline-mobile" />
                     <span class="simplerenew-plan-trial">
                         <?php
                         echo JHtml::_(

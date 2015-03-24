@@ -675,4 +675,15 @@ span.simplerenew-plan.simplerenew-plan-selected{
     #tab_card h4{
         font-size: 15px;
     }
+    .ost-container span.simplerenew-plan-trial {
+        background: #ed8034;
+        margin-left: 35px;
+        border-radius: 0 0 4px 4px;
+        -moz-border-radius: 0 0 4px 4px;
+        -webkit-border-radius: 0 0 4px 4px;
+        -o-border-radius: 0 0 4px 4px;
+        display: inline-block;
+        margin-bottom: 4px;
+        margin-top: -4px;
+    }
 }
