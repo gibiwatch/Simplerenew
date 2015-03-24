@@ -161,7 +161,8 @@
              */
             init: function(selector, options) {
                 var form = $(selector);
-                if ($(form).is('form')) {
+
+                if (form.is('form')) {
                     var gateway = this.gateway;
 
                     // Store the CSRF Token, set no-name fields and setup submit buttons
