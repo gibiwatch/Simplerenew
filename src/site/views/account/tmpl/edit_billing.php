@@ -46,7 +46,7 @@ if (!empty($paypal)): ?>
     <?php
 endif; ?>
 
-<div class="ost-section">
+<div class="ost-section payment-tabs">
     <div class="block3 tab-enabled" id="tab_card">
         <h4>
             <i class="fa fa-credit-card"></i>
