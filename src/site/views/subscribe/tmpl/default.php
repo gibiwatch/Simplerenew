@@ -24,7 +24,8 @@ $app = SimplerenewFactory::getApplication();
         name="subscribeForm"
         id="subscribeForm"
         action=""
-        method="post">
+        method="post"
+        data-popup-warning="<?php echo JText::sprintf('COM_SIMPLERENEW_WARN_PAYPAL_POPUP_FAIL', JUri::base()); ?>">
 
         <?php
         if ($this->allowMultiple || !count($this->subscriptions)) {

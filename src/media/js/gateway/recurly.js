@@ -31,7 +31,11 @@
 
     $.Simplerenew.validate.gateway = $.extend({}, $.Simplerenew.validate.gateway, {
         options: {
-            key: null
+            key      : null,
+            popupWarn: [
+                'Your browser appears to have blocked the paypal window.',
+                'Please \'allow popups\' in your browser for this site.'
+            ]
         },
 
         /**
@@ -139,8 +143,8 @@
                             function() {
                                 if (windowFocus) {
                                     alert(
-                                        'Your browser appears to have blocked the paypal window.'
-                                        + '\nPlease \'allow popups\' in your browser for this site.'
+                                        form.attr('data-popup-warning')
+                                        || $.Simplerenew.validate.gateway.options.popupWarn.join('\n')
                                     );
                                     resetForm();
                                 }
