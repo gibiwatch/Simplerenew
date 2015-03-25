@@ -24,7 +24,7 @@ JHtml::_(
 
 echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count($this->plans)));
 ?>
-<div class="ost-section">
+<div class="ost-section p-bottom b-bottom">
     <div class="block12">
         <?php
         foreach ($this->plans as $code => $plan):
