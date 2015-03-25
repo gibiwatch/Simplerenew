@@ -132,6 +132,7 @@
                 errorClass    : 'ost_error',
                 validClass    : 'ost_valid',
                 onkeyup       : false,
+                ignore        : ':hidden:not(.validate)',
                 rules         : {
                     password2: {
                         equalTo: '#password'
