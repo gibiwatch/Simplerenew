@@ -24,6 +24,11 @@ if (file_exists($includePath . '/Installer/include.php')) {
 class com_simplerenewInstallerScript extends AbstractScript
 {
     /**
+     * @var string The minimum previous version for updates
+     */
+    protected $minimumVersion = '1.1.0';
+
+    /**
      * @var array Related extensions required or useful with the component
      *            type => [ (folder) => [ (element) => [ (publish), (uninstall), (ordering) ] ] ]
      */
@@ -53,9 +58,9 @@ class com_simplerenewInstallerScript extends AbstractScript
     {
         $success = parent::preFlight($type, $parent);
         if ($success && $type == 'update') {
-            if (version_compare($this->previousVersion, '1.0.0', 'lt')) {
+            if (version_compare($this->previousVersion, $this->minimumVersion, 'lt')) {
                 JFactory::getApplication()->enqueueMessage(
-                    JText::sprintf('COM_SIMPLERENEW_ERROR_INSTALL_MINVERSION', '1.0.0'),
+                    JText::sprintf('COM_SIMPLERENEW_ERROR_INSTALL_MINVERSION', $this->minimumVersion),
                     'error'
                 );
                 return false;
@@ -185,31 +190,6 @@ class com_simplerenewInstallerScript extends AbstractScript
 
         $setParams    = ($type == 'install');
         $defaultGroup = JComponentHelper::getParams('com_users')->get('new_usertype');
-
-        if ($type == 'update') {
-            // v0.3.9: Move system plugin parameters to component
-            if ($plugin = JPluginHelper::getPlugin('system', 'simplerenew')) {
-                $plugin = JTable::getInstance('extension');
-                $plugin->load(
-                    array(
-                        'type'    => 'plugin',
-                        'element' => 'simplerenew',
-                        'folder'  => 'system'
-                    )
-                );
-
-                if ($plugin->extension_id > 0) {
-                    if ($plugin->params) {
-                        $pluginParams   = array('advanced' => json_decode($plugin->params, true));
-                        $merged         = json_encode(array_merge_recursive($params->toArray(), $pluginParams));
-                        $params         = new JRegistry($merged);
-                        $plugin->params = '';
-
-                        $setParams = true;
-                    }
-                }
-            }
-        }
 
         // On initial installation, set some defaults
         if ($setParams) {
