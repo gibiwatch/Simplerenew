@@ -42,7 +42,8 @@ abstract class JHtmlPlan
         }
 
         if ($length > 0 && $unit) {
-            $text .= ' ' . JText::plural('COM_SIMPLERENEW_PLAN_LENGTH_' . $unit, $length, $length);
+            $client = JFactory::getApplication()->getName();
+            $text .= ' ' . JText::plural('COM_SIMPLERENEW_PLAN_' . $client . '_LENGTH_' . $unit, $length);
         }
 
         if ($trial_length > 0 && $trial_unit) {
@@ -72,10 +73,9 @@ abstract class JHtmlPlan
         }
 
         if ($length && $unit) {
-            $string = 'COM_SIMPLERENEW_PLAN_LENGTH_' . ($trial ? 'TRIAL_' : '') . $unit;
-            if (SimplerenewFactory::getLanguage()->hasKey($string)) {
-                return JText::plural($string, $length);
-            }
+            $client = JFactory::getApplication()->getName();
+            $string = 'COM_SIMPLERENEW_PLAN_' . $client . '_LENGTH_' . ($trial ? 'TRIAL_' : '') . $unit;
+            return JText::plural($string, $length);
         }
 
         return '';
