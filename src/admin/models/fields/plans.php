@@ -21,16 +21,6 @@ class JFormFieldPlans extends JFormFieldCheckboxes
      */
     protected $options = null;
 
-    public function __construct($form = null)
-    {
-        parent::__construct($form);
-
-        if (!SimplerenewFactory::getApplication()->isSite()) {
-            $lang = SimplerenewFactory::getLanguage();
-            $lang->load('com_simplerenew', SIMPLERENEW_SITE);
-        }
-    }
-
     protected function getOptions()
     {
         if ($this->options === null) {
