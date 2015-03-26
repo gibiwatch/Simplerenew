@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 
 abstract class JHtmlSr
 {
-    protected static $jqueryLoaded    = array();
+    protected static $jqueryLoaded    = false;
     protected static $utilitiesLoaded = false;
 
     /**
@@ -46,9 +46,11 @@ abstract class JHtmlSr
     {
         $params = SimplerenewComponentHelper::getParams();
 
-        if ($params->get('advanced.jquery', 1)) {
+        $load = $params->get('advanced.jquery', -1);
+        $client = JFactory::getApplication()->getName();
+        if ($load == $client || $load == 1) {
             // Only load once
-            if (empty(static::$jqueryLoaded[__METHOD__])) {
+            if (!static::$jqueryLoaded) {
                 if (version_compare(JVERSION, '3.0', 'lt')) {
                     // pre 3.0 manual loading
 
@@ -69,8 +71,7 @@ abstract class JHtmlSr
                 }
             }
         }
-
-        static::$jqueryLoaded[__METHOD__] = true;
+        static::$jqueryLoaded = true;
 
         if ($utilities && !static::$utilitiesLoaded) {
             JHtml::_('script', 'com_simplerenew/utilities.js', false, true);

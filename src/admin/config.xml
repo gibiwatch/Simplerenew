@@ -191,9 +191,11 @@
                 label="COM_SIMPLERENEW_CONFIG_JQUERY_LABEL"
                 description="COM_SIMPLERENEW_CONFIG_JQUERY_DESC"
                 type="list"
-                default="local">
-                <option value="1">JYES</option>
-                <option value="0">JNO</option>
+                default="1">
+                <option value="1">COM_SIMPLERENEW_OPTION_JQUERY_ALWAYS</option>
+                <option value="0">COM_SIMPLERENEW_OPTION_JQUERY_NEVER</option>
+                <option value="site">COM_SIMPLERENEW_OPTION_JQUERY_SITE</option>
+                <option value="administrator">COM_SIMPLERENEW_OPTION_JQUERY_ADMIN</option>
             </field>
 
             <field
