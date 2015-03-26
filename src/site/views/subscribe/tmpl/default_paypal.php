@@ -12,7 +12,7 @@ defined('_JEXEC') or die();
     <div class="block12">
         <div class="p-full">
             <p><?php echo JText::_('COM_SIMPLERENEW_PROCEED_TO_PAYPAL'); ?></p>
-            <div class="ost-alert ost-alert-warning"><?php echo JText::_('COM_SIMPLERENEW_POPUP_PAYPAL_WARN'); ?></div>
+            <div class="ost-alert ost-alert-notify"><?php echo JText::_('COM_SIMPLERENEW_POPUP_PAYPAL_WARN'); ?></div>
             <input type="hidden" name="payment_method" value="pp"/>
         </div>
     </div>
