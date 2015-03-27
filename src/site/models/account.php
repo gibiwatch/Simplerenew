@@ -150,7 +150,10 @@ class SimplerenewModelAccount extends SimplerenewModelSite
 
     protected function populateState()
     {
-        $userId = SimplerenewFactory::getUser()->get('id');
+        $userId = SimplerenewFactory::getApplication()->input->getInt('uid');
+        if ($userId <= 0) {
+            $userId = SimplerenewFactory::getUser()->get('id');
+        }
         $this->setState('user.id', $userId);
     }
 }
