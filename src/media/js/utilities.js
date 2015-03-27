@@ -370,5 +370,41 @@
         country: null
     };
 
+    $.Simplerenew.openWindow = function(options) {
+        options = $.extend(this.openWindow.options, options);
+
+        $(options.selector).on('click', function(event) {
+            event.preventDefault();
+
+            var height = options.height || ($(window).height() * options.scaling),
+                width = options.width || ($(window).width() * options.scaling),
+                windowOpts = options.windowOpts,
+                loading = $(this).attr('data-loading'),
+                url = this.href || $(this).attr('data-url');
+
+
+            windowOpts.push('height=' + height);
+            windowOpts.push('width=' + width);
+
+            var subWindow = window.open(null, options.name, windowOpts.join(','));
+            subWindow.document.write(loading);
+            subWindow.location.href = url;
+
+        });
+    };
+    $.Simplerenew.openWindow.options = {
+        selector  : 'a.ost-modal',
+        scaling   : .75,
+        height    : null,
+        width     : null,
+        name      : '_blank',
+        windowOpts: [
+            'location=0',
+            'menubar=0',
+            'status=0',
+            'toolbar=0',
+            'scrollbars=1'
+        ]
+    };
 })(jQuery);
 
