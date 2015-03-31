@@ -62,6 +62,16 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             return;
         }
 
+        // Let's do an additional test to head off spammers
+        if (empty($_POST['billing']['token'])) {
+            $this->callerReturn(
+                JText::_('COM_SIMPLERENEW_ERROR_BILLING_MISSING'),
+                'error'
+            );
+            return;
+        }
+
+
         // Create/Load the user
         try {
             $user = $model->saveUser();

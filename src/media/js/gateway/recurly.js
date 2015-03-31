@@ -118,6 +118,8 @@
                 } else {
                     form.tempNames(true).disableSubmit();
 
+                    billing_token.val('');
+
                     var method = $(form).find('input[name=payment_method]:enabled').val();
 
                     if (method == 'pp') {
