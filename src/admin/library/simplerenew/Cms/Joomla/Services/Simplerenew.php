@@ -83,7 +83,7 @@ class Simplerenew implements ServiceProviderInterface
         // API/Gateway classes
         $pimple['account'] = $pimple->factory(function (\Simplerenew\Container $c) {
             $imp = $c->getInstance($c['gatewayNamespace'] . '\AccountImp');
-            return new Account($c['configuration'], $imp, $c['user']);
+            return new Account($c['configuration'], $imp, $c['events'], $c['user']);
         });
 
         $pimple['billing'] = $pimple->factory(function (\Simplerenew\Container $c) {

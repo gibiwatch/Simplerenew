@@ -11,6 +11,7 @@ namespace Simplerenew\Api;
 use Simplerenew\Configuration;
 use Simplerenew\Exception;
 use Simplerenew\Gateway\AccountInterface;
+use Simplerenew\Plugin\Events;
 use Simplerenew\Primitive\Address;
 use Simplerenew\User\User;
 
@@ -86,15 +87,21 @@ class Account extends AbstractApiBase
      */
     protected $codeMask = '%s';
 
-    public function __construct(Configuration $config, AccountInterface $imp, User $user, Address $address = null)
-    {
+    public function __construct(
+        Configuration $config,
+        AccountInterface $imp,
+        Events $events,
+        User $user,
+        Address $address = null
+    ) {
         parent::__construct();
 
         $this->setCodeMask($config->get('account.codeMask', $this->codeMask));
 
         $this->imp     = $imp;
-        $this->address = $address ?: new Address();
+        $this->events  = $events;
         $this->user    = $user;
+        $this->address = $address ?: new Address();
     }
 
     /**
@@ -113,7 +120,10 @@ class Account extends AbstractApiBase
         $this->user = $user;
         $this->code = $this->getAccountCode($user->id);
 
+        $this->events->trigger('onAccountBeforeLoad', array($this));
         $this->imp->load($this);
+        $this->events->trigger('onAccountAfterLoad', array($this));
+
         return $this;
     }
 
