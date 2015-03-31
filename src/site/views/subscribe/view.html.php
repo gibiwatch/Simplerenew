@@ -8,7 +8,7 @@
 
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Billing;
-use Simplerenew\Api\Subscription;
+use Simplerenew\Exception\NotFound;
 use Simplerenew\User\User;
 
 defined('_JEXEC') or die();
@@ -69,7 +69,7 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
                 $this->subscriptions = $model->getSubscriptions();
             }
 
-        } catch (Exception $e) {
+        } catch (NotFound $e) {
             // We don't care if they aren't logged in or don't have an account
         }
 
