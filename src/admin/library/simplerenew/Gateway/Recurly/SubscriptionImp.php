@@ -93,7 +93,7 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
     public function bindSource(Subscription $parent, $data)
     {
         // Find account code
-        $accountCode = $this->getKeyValue($data, 'account_code');
+        $accountCode = $this->getKeyValue($data, 'account');
         if ($accountCode instanceof \Recurly_Stub) {
             \Recurly_Client::$apiKey = $this->client->apiKey();
             $rawAccount              = $data->account->get();
