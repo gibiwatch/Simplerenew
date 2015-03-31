@@ -28,7 +28,7 @@ class plgUserSimplerenew extends JPlugin
     {
         if ($success && !$isNew && $this->isInstalled()) {
             $container = SimplerenewFactory::getContainer();
-            $account = $container->getAccount();
+            $account   = $container->getAccount();
 
             if ($account->validConfiguration()) {
                 $user = $container->getUser();
@@ -39,7 +39,7 @@ class plgUserSimplerenew extends JPlugin
 
                     // Allow API to turn Joomla name into first/last
                     $account->firstname = null;
-                    $account->lastname = null;
+                    $account->lastname  = null;
                     $account->setProperties($user->getProperties());
 
                     $account->save(false);
@@ -58,8 +58,27 @@ class plgUserSimplerenew extends JPlugin
         }
     }
 
-    public function onUserAfterDelete($user, $success, $msg)
+    /**
+     * @param array $data
+     *
+     * @return void
+     */
+    public function onUserBeforeDelete(array $data)
     {
+        if ($this->isInstalled()) {
+            SimplerenewFactory::getContainer()->events->trigger('onUserBeforeDelete', array($data['id']));
+        }
+    }
+
+    /**
+     * @param array $data
+     * @param bool  $success
+     */
+    public function onUserAfterDelete(array $data, $success)
+    {
+        if ($success && $this->isInstalled()) {
+            SimplerenewFactory::getContainer()->events->trigger('onUserAfterDelete', array($data['id']));
+        }
     }
 
     /**
