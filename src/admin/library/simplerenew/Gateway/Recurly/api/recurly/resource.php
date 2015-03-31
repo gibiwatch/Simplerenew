@@ -46,11 +46,32 @@ abstract class Recurly_Resource extends Recurly_Base
     }
   }
 
+  /**
+   * Return all of the values associated with this resource.
+   *
+   * @return array
+   *   The array of values stored with this resource.
+   */
+  public function getValues() {
+    return $this->_values;
+  }
+
   public function getErrors() {
     return $this->_errors;
   }
 
-
+  /**
+   * Does a mass assignment on this resource's values
+   *
+   * @parameter array
+   *   The array of values to set on the resource.
+   */
+  public function setValues($values) {
+    foreach($values as $key => $value) {
+      $this->$key = $value;
+    }
+    return $this;
+  }
 
   protected function _save($method, $uri)
   {
@@ -70,11 +91,19 @@ abstract class Recurly_Resource extends Recurly_Base
 
   public function xml()
   {
-    $doc = new DOMDocument("1.0");
+    $doc = $this->createDocument();
     $root = $doc->appendChild($doc->createElement($this->getNodeName()));
     $this->populateXmlDoc($doc, $root, $this);
     // To be able to consistently run tests across different XML libraries,
     // favor `<foo></foo>` over `<foo/>`.
+    return $this->renderXML($doc);
+  }
+
+  public function createDocument() {
+    return new DOMDocument("1.0");
+  }
+
+  public function renderXML($doc) {
     return $doc->saveXML(null, LIBXML_NOEMPTYTAG);
   }
 
@@ -119,7 +148,7 @@ abstract class Recurly_Resource extends Recurly_Base
         if ($val instanceof DateTime) {
           $val = $val->format('c');
         } else if (is_bool($val)) {
-          $val = ($val ? 1 : 0);
+          $val = ($val ? 'true' : 'false');
         }
         $node->appendChild($doc->createElement($key, $val));
       }

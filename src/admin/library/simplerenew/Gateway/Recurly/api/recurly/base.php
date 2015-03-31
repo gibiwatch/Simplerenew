@@ -73,7 +73,6 @@ abstract class Recurly_Base
   /**
    * Delete the URI, validate the response and return the object.
    * @param string Resource URI, if not fully qualified, the base URL will be appended
-   * @param string Data to post to the URI
    * @param string Optional client for the request, useful for mocking the client
    */
   protected static function _delete($uri, $client = null)
@@ -138,9 +137,9 @@ abstract class Recurly_Base
     $this->_links[$name] = new Recurly_Link($name, $href, $method);
   }
 
-  /******************************************************
+  /* ******************************************************
      ** XML Parser
-     ******************************************************/
+     ****************************************************** */
   /**
    * Mapping of XML node to PHP object name
    */
@@ -150,8 +149,6 @@ abstract class Recurly_Base
     'address' => 'Recurly_Address',
     'add_on' => 'Recurly_Addon',
     'add_ons' => 'Recurly_AddonList',
-    'balance_in_cents_invoiced' => 'Recurly_CurrencyList',
-    'balance_in_cents_uninvoiced' => 'Recurly_CurrencyList',
     'billing_info' => 'Recurly_BillingInfo',
     'adjustment' => 'Recurly_Adjustment',
     'adjustments' => 'Recurly_AdjustmentList',
@@ -192,8 +189,8 @@ abstract class Recurly_Base
     $rootNode = $dom->documentElement;
 
     $obj = Recurly_Resource::__createNodeObject($rootNode);
-    Recurly_Resource::__parseXmlToObject($rootNode->firstChild, $obj);
     $obj->_client = $client;
+    Recurly_Resource::__parseXmlToObject($rootNode->firstChild, $obj);
     return $obj;
   }
 

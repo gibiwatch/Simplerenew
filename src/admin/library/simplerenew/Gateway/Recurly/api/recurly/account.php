@@ -11,15 +11,13 @@ class Recurly_Account extends Recurly_Resource
     if (!is_null($accountCode))
       $this->account_code = $accountCode;
     $this->address = new Recurly_Address();
-    $this->balance_in_cents_invoiced = new Recurly_CurrencyList('balance_in_cents_invoiced');
-    $this->balance_in_cents_uninvoiced = new Recurly_CurrencyList('balance_in_cents_uninvoiced');
   }
 
   public static function init()
   {
     Recurly_Account::$_writeableAttributes = array(
       'account_code','username','first_name','last_name','vat_number',
-      'email','company_name','accept_language','billing_info','address','tax_exempt'
+      'email','company_name','accept_language','billing_info','address','tax_exempt', 'entity_use_code'
     );
     Recurly_Account::$_nestedAttributes = array(
       'adjustments','billing_info','invoices','subscriptions','transactions'
