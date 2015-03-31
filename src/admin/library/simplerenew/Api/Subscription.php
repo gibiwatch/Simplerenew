@@ -136,7 +136,10 @@ class Subscription extends AbstractApiBase
         $this->clearProperties();
 
         $this->id = $id;
+
+        $this->events->trigger('onSubscriptionBeforeLoad', array($this));
         $this->imp->load($this);
+        $this->events->trigger('onSubscriptionAfterLoad', array($this));
 
         return $this;
     }
@@ -180,9 +183,9 @@ class Subscription extends AbstractApiBase
      */
     public function create(Account $account, Plan $plan, Coupon $coupon = null)
     {
-        $this->events->trigger('onSubscriptionBeforeUpdate', array($this, true));
-
         $this->clearProperties();
+
+        $this->events->trigger('onSubscriptionBeforeUpdate', array($this, true));
 
         $this->imp->create($this, $account, $plan, $coupon);
         $account->user->addGroups($plan->code);
