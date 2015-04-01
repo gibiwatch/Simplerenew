@@ -10,6 +10,7 @@ namespace Simplerenew\Api;
 
 use Simplerenew\Configuration;
 use Simplerenew\Exception;
+use Simplerenew\Exception\NotFound;
 use Simplerenew\Gateway\AccountInterface;
 use Simplerenew\Plugin\Events;
 use Simplerenew\Primitive\Address;
@@ -139,6 +140,24 @@ class Account extends AbstractApiBase
     {
         $this->user->load($id);
         return $this->load($this->user);
+    }
+
+    /**
+     * Load account using the account code
+     *
+     * @param $code
+     *
+     * @return Account
+     * @throws NotFound
+     */
+    public function loadByAccountCode($code)
+    {
+        if ($userId = $this->getUserId($code)) {
+            $this->user->load($userId);
+            return $this->load($this->user);
+        }
+
+        throw new NotFound('Not Found - Account code ' . $code);
     }
 
     /**
