@@ -35,9 +35,9 @@ class SimplerenewControllerBase extends JControllerLegacy
      *    - Uses current 'option', 'view', 'layout' URL variables
      *    - Goes to site default page
      *
-     * @param string $message The message to queue up
-     * @param string $type    message|notice|error
-     * @param string $return  (optional) base64 encoded url for redirect
+     * @param array|string $message The message to queue up
+     * @param string       $type    message|notice|error
+     * @param string       $return  (optional) base64 encoded url for redirect
      *
      * @return void
      */
@@ -50,7 +50,7 @@ class SimplerenewControllerBase extends JControllerLegacy
             $url = base64_decode($url);
 
         } else {
-            $url  = new JURI('index.php');
+            $url = new JURI('index.php');
 
             if ($itemid = $app->input->getInt('Itemid')) {
                 $menu = $app->getMenu()->getItem($itemid);
@@ -69,6 +69,9 @@ class SimplerenewControllerBase extends JControllerLegacy
             }
         }
 
+        if (is_array($message)) {
+            $message = join('<br/>', $message);
+        }
         $this->setRedirect(JRoute::_((string)$url), $message, $type);
     }
 }
