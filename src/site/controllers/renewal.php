@@ -31,7 +31,7 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
         );
 
         $container = SimplerenewFactory::getContainer();
-        $messages = array();
+        $messages  = array();
 
         try {
             $user    = $container->getUser()->load();
@@ -44,26 +44,24 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
             $cancel   = array_diff(array_keys($subscriptions), $ids);
             $activate = array_intersect($ids, array_keys($subscriptions));
             foreach ($subscriptions as $subscription) {
-                if (
-                    $subscription->status == Subscription::STATUS_ACTIVE
+                if ($subscription->status == Subscription::STATUS_ACTIVE
                     && in_array($subscription->id, $cancel)
                 ) {
                     $subscription->cancel();
 
-                    $plan      = $container->getPlan()->load($subscription->plan);
+                    $plan       = $container->getPlan()->load($subscription->plan);
                     $messages[] = JText::sprintf(
                         'COM_SIMPLERENEW_RENEWAL_CANCELED',
                         $plan->name,
                         $subscription->period_end->format('F, j, Y')
                     );
 
-                } elseif (
-                    $subscription->status == Subscription::STATUS_CANCELED
+                } elseif ($subscription->status == Subscription::STATUS_CANCELED
                     && in_array($subscription->id, $activate)
                 ) {
                     $subscription->reactivate();
 
-                    $plan = $container->getPlan()->load($subscription->plan);
+                    $plan       = $container->getPlan()->load($subscription->plan);
                     $messages[] = JText::sprintf(
                         'COM_SIMPLERENEW_RENEWAL_REACTIVATED',
                         $plan->name,
@@ -84,9 +82,7 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
         if (!$messages) {
             $messages[] = JText::_('COM_SIMPLERENEW_RENEWAL_NO_CHANGE');
         }
-        foreach ($messages as $message) {
-            $app->enqueueMessage($message);
-        }
+        $app->enqueueMessage(join('<br/>', $messages));
 
         $link = SimplerenewRoute::get('account');
         $this->setRedirect(JRoute::_($link));
