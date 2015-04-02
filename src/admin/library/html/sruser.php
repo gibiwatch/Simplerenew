@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die();
 
-abstract class JHtmlUser
+abstract class JHtmlSruser
 {
     public static function displayname($firstName, $lastName = null, $username = null)
     {
