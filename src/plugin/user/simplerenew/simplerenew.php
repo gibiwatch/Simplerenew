@@ -44,15 +44,8 @@ class plgUserSimplerenew extends JPlugin
 
                     $account->save(false);
 
-                } catch (NotFound $e) {
-                    // Non-subscription user can be ignored
-
                 } catch (Simplerenew\Exception $e) {
-                    SimplerenewFactory::getApplication()
-                        ->enqueueMessage(
-                            JText::sprintf('COM_SIMPLERENEW_ERROR_ACCOUNT_SAVE', $e->getMessage()),
-                            'notice'
-                        );
+                    // Let this fail silently
                 }
             }
         }
