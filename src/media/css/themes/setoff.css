@@ -707,6 +707,10 @@ span.simplerenew-plan.simplerenew-plan-selected{
     .ost-container .ost-row-heading {
         display: none;
     }
+    .ost-row-one [class*="block"],
+    .ost-row-two [class*="block"]{
+        padding: 5px 10px;
+    }
 }
 
 @media (max-width: 480px) {
