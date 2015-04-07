@@ -66,6 +66,8 @@
     padding: 0 0 5px 0;
 }
 
+.ost-container h2 span,
+.ost-container h2 span i:before,
 .ost-container h3 span,
 .ost-container h3 span i:before,
 .ost-container h4 span,
