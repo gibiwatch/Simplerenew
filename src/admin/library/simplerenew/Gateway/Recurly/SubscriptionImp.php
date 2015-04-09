@@ -177,16 +177,26 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
          */
         $subscriptions = array();
 
-        $list = \Recurly_SubscriptionList::getForAccount($account->code, null, $this->client);
-        foreach ($list as $rawSubscription) {
-            $status = $this->translateState($rawSubscription->state);
-            if (!$bitMask || ($bitMask & $status)) {
-                $subscription = clone $template;
-                $this->bindSource($subscription, $rawSubscription);
+        try {
+            $list = \Recurly_SubscriptionList::getForAccount($account->code, null, $this->client);
 
-                $subscriptions[$subscription->id] = $subscription;
+            foreach ($list as $rawSubscription) {
+                $status = $this->translateState($rawSubscription->state);
+                if (!$bitMask || ($bitMask & $status)) {
+                    $subscription = clone $template;
+                    $this->bindSource($subscription, $rawSubscription);
+
+                    $subscriptions[$subscription->id] = $subscription;
+                }
             }
+
+        } catch (\Recurly_NotFoundError $e) {
+            throw new NotFound($e->getMessage(), $e->getCode(), $e);
+
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
+
         return $subscriptions;
     }
 
