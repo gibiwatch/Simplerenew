@@ -38,7 +38,11 @@ class SimplerenewModelGateway extends SimplerenewModelSite
                 $data->set('userId', $user->id);
 
             } catch (NotFound $e) {
-                // User doesn't exist is okay
+                // New user, do additional check
+                $token = $data->get('billing.token');
+                if (!$token) {
+                    throw new Exception(JText::_('COM_SIMPLERENEW_NO_BILLING_INFO'));
+                }
             }
         }
 
