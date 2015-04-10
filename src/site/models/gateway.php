@@ -28,7 +28,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
     public function saveUser(array $data = null)
     {
         $container = SimplerenewFactory::getContainer();
-        $data      = new JRegistry($data ? : $this->getState()->getProperties());
+        $data      = new JRegistry($data ?: $this->getState()->getProperties());
         $user      = $container->getUser();
 
         if (!$data->get('userId')) {
@@ -103,7 +103,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
             // Create a new account
         }
 
-        $data = new JRegistry($data ? : $this->getState()->getProperties());
+        $data = new JRegistry($data ?: $this->getState()->getProperties());
         $data = $data->toObject();
 
         $account->setProperties($data);
@@ -123,7 +123,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
      */
     public function saveBilling(Account $account, array $data = null)
     {
-        $data = new JRegistry($data ? : $this->getState('billing'));
+        $data = new JRegistry($data ?: $this->getState('billing'));
         $data = $data->toArray();
 
         $container = SimplerenewFactory::getContainer();
