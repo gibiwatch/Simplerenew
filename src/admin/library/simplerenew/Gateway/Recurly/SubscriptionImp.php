@@ -169,6 +169,7 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
      * @param int          $bitMask Subscription status codes to retrieve
      *
      * @return array
+     * @throws Exception
      */
     public function getList(Subscription $template, Account $account, $bitMask = null)
     {
@@ -189,6 +190,7 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
                     $subscriptions[$subscription->id] = $subscription;
                 }
             }
+            uasort($subscriptions, array($this, 'subscriptionSort'));
 
         } catch (\Recurly_NotFoundError $e) {
             throw new NotFound($e->getMessage(), $e->getCode(), $e);
@@ -198,6 +200,33 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
         }
 
         return $subscriptions;
+    }
+
+    /**
+     * Reverse sort subscriptions on current period ending date.
+     * For use in uasort()
+     *
+     * @param Subscription $a
+     * @param Subscription $b
+     *
+     * @return int
+     */
+    protected function subscriptionSort(Subscription $a, Subscription $b)
+    {
+        $aDate = $a->period_end;
+        $bDate = $b->period_end;
+        if (!$aDate instanceof \DateTime) {
+            return $bDate instanceof \Datetime ? 1 : 0;
+
+        } elseif (!$bDate instanceof \DateTime) {
+            return 1;
+
+        } else {
+            $aTime = $aDate->getTimestamp();
+            $bTime = $bDate->getTimestamp();
+
+            return $aTime < $bTime ? 1 : ($aTime > $bTime ? -1 : 0);
+        }
     }
 
     /**
