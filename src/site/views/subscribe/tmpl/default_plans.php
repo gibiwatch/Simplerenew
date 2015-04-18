@@ -42,6 +42,7 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
                         data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_PLAN_REQUIRED'); ?>"
                         data-error-placement="#plancode-error"/>
                     <?php
+                    // Plan name
                     echo JHtml::_(
                         'plan.name',
                         $plan->name,
@@ -50,9 +51,14 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
                         $plan->length,
                         $plan->unit
                     );
+                    // Plan setup
+                    if ($plan->setup_cost > 0) :
+                        echo ' + ' . JHtml::_('currency.format', $plan->setup_cost, $currency) . ' ' . JText::_('COM_SIMPLERENEW_PLAN_SETUP_COST_LABEL');
+                    endif;
                     ?>
                 </span>
                 <?php
+                // Plan Trial
                 if ($plan->trial_length > 0 && $plan->trial_unit) :
                 ?>
                     <br class="ost-breakline-mobile" />
