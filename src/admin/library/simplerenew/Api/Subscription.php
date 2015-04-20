@@ -154,7 +154,10 @@ class Subscription extends AbstractApiBase
      */
     public function getList(Account $account, $bitMask = null)
     {
-        return $this->imp->getList($this, $account, $bitMask);
+        $subscriptions = $this->imp->getList($this, $account, $bitMask);
+        uasort($subscriptions, array($this, 'subscriptionSort'));
+
+        return $subscriptions;
     }
 
     /**
@@ -263,5 +266,41 @@ class Subscription extends AbstractApiBase
         return (bool)$this->configuration ?
             $this->configuration->get('subscription.allowMultiple', false) :
             false;
+    }
+
+    /**
+     * Reverse sort subscriptions on current period ending date
+     * with expired subscriptions on the bottom
+     *
+     * For use in uasort()
+     *
+     * @param Subscription $a
+     * @param Subscription $b
+     *
+     * @return int
+     */
+    protected function subscriptionSort(Subscription $a, Subscription $b)
+    {
+        $aDate = $a->period_end;
+        $bDate = $b->period_end;
+        if (!$aDate instanceof \DateTime) {
+            return $bDate instanceof \Datetime ? 1 : 0;
+
+        } elseif (!$bDate instanceof \DateTime) {
+            return 1;
+
+        } else {
+            $aTime = $aDate->getTimestamp();
+            $bTime = $bDate->getTimestamp();
+
+            $aExpired = $a->status == static::STATUS_EXPIRED;
+            $bExpired = $b->status == static::STATUS_EXPIRED;
+
+            if ($aExpired == $bExpired) {
+                return $aTime < $bTime ? 1 : ($aTime > $bTime ? -1 : 0);
+            } else {
+                return $aExpired ? 1 : -1;
+            }
+        }
     }
 }
