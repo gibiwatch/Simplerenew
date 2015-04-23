@@ -55,7 +55,13 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
                     );
                     // Plan setup
                     if ($plan->setup_cost > 0) :
-                        echo ' + ' . JHtml::_('currency.format', $plan->setup_cost, $currency) . ' ' . JText::_('COM_SIMPLERENEW_PLAN_SETUP_COST_LABEL');
+                        echo ' + '
+                            . JHtml::_(
+                                'currency.format',
+                                $plan->setup_cost,
+                                $plan->currency
+                            )
+                            . ' ' . JText::_('COM_SIMPLERENEW_PLAN_SETUP_COST_LABEL');
                     endif;
                     ?>
                 </span>
