@@ -152,14 +152,17 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
         try {
             $plan  = $this->getPlan($parent->code);
             $isNew = false;
+
         } catch (NotFound $e) {
-            $plan            = new \Recurly_Plan(null, $this->client);
+            \Recurly_Client::$apiKey = $this->client->apiKey();
+
+            $plan            = new \Recurly_Plan();
             $plan->plan_code = $parent->code;
             $isNew           = true;
         }
 
-        $plan->name            = $parent->name;
-        $plan->description     = $parent->description;
+        $plan->name        = $parent->name;
+        $plan->description = $parent->description;
 
         $this->convertLength($parent->length, $parent->unit);
         $plan->plan_interval_length = $parent->length;
@@ -196,7 +199,7 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
             if (!$plan->setup_fee_in_cents instanceof \Recurly_CurrencyList) {
                 $plan->setup_fee_in_cents = new \Recurly_CurrencyList('setup_fee_in_cents');
             }
-            $plan->setup_fee_in_cents[$parent->currency]   = $setup_cost;
+            $plan->setup_fee_in_cents[$parent->currency] = $setup_cost;
 
             $plan->update();
         }
