@@ -19,12 +19,14 @@ $payment        = $this->billing->payment;
 $paymentOptions = $this->getParams()->get('basic.paymentOptions');
 $tabOptions     = array();
 
-$activeTab = null;
 if ($payment instanceof PayPal) {
-    $tabOptions['active'] = '#tab_paypal';
+    $activePayment = 'pp';
 } elseif ($payment instanceof CreditCard && !empty($payment->lastFour)) {
-    $tabOptions['active'] = '#tab_card';
+    $activePayment = 'cc';
+} else {
+    $activePayment = $this->getParams()->get('basic.defaultPayment', 'pp');
 }
+$tabOptions['active'] = $activePayment == 'pp' ? '#tab_paypal' : '#tab_card';
 
 JHtml::_('sr.validation.billing');
 JHtml::_('sr.tabs', '.payment-tabs div', $tabOptions);
