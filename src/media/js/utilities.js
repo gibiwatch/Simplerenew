@@ -216,10 +216,11 @@
             .each(function(idx, active) {
                 $(this)
                     .data('contentPanel', $($(this).attr('data-content')))
-                    .on('click', function(evt, options) {
+                    .on('click', function(evt) {
                         headers.each(function(idx) {
                             $(this)
-                                .toggleClass('tab-enabled', active === this)
+                                .toggleClass(options.enabled, active === this)
+                                .toggleClass(options.disabled, active !== this)
                                 .data('contentPanel').closePanel(active !== this, options)
                         });
                     });
@@ -233,7 +234,9 @@
     };
     $.Simplerenew.tabs.options = {
         selector: null,
-        active  : null
+        active  : null,
+        enabled : 'tab-enabled',
+        disabled: 'tab-disabled'
     };
 
     /**
