@@ -37,6 +37,11 @@ class Subscription extends AbstractApiBase
     /**
      * @var string
      */
+    public $invoice_number = null;
+
+    /**
+     * @var string
+     */
     public $plan = null;
 
     /**

@@ -100,6 +100,14 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
             $accountCode             = $this->getKeyValue($rawAccount, 'account_code');
         }
 
+        // Get the invoice number
+        $invoiceNumber = $this->getKeyValue($data, 'invoice');
+        if ($invoiceNumber instanceof \Recurly_Stub) {
+            \Recurly_Client::$apiKey = $this->client->apiKey();
+            $rawInvoice              = $data->invoice->get();
+            $invoiceNumber           = $this->getKeyValue($rawInvoice, 'invoice_number');
+        }
+
         // Look for a pending plan
         $pendingPlan = array(
             'plan'   => null,
@@ -125,7 +133,8 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
                     'amount'         => $this->getKeyValue($data, 'unit_amount_in_cents') / 100,
                     'pending_plan'   => $pendingPlan['plan'],
                     'pending_amount' => $pendingPlan['amount'],
-                    'account_code'   => $accountCode
+                    'account_code'   => $accountCode,
+                    'invoice_number' => $invoiceNumber
                 )
             );
 
