@@ -41,7 +41,7 @@ defined('_JEXEC') or die();
     </div>
 
     <?php echo SimplerenewHelper::renderModule('simplerenew_submit_top'); ?>
-    <div class="m-bottom">
+    <div class="m-bottom ost-subscribe-button">
         <button type="submit" class="btn-main btn-big">
             <span class="ost-text-enabled">
                 <i class="fa fa-check"></i>
