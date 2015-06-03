@@ -69,46 +69,6 @@
         <namespace>Simplerenew</namespace>
         <license>free</license>
 
-        <menus>
-            <menu>
-                <menutype>simplerenewtest</menutype>
-                <title>COM_SIMPLERENEW_MENU_TITLE</title>
-                <description>COM_SIMPLERENEW_MENU_TITLE_DESC</description>
-               <items>
-                    <item>
-                        <title>COM_SIMPLERENEW_MENU_ITEM_SUBSCRIBE</title>
-                        <alias>subscribe</alias>
-                        <link>index.php?option=com_simplerenew&amp;view=subscribe</link>
-                    </item>
-
-                    <item>
-                        <title>COM_SIMPLERENEW_MENU_ITEM_RENEWAL</title>
-                        <alias>renewal</alias>
-                        <link>index.php?option=com_simplerenew&amp;view=renewal</link>
-                    </item>
-
-                    <item>
-                        <title>COM_SIMPLERENEW_MENU_ITEM_ACCOUNT</title>
-                        <alias>account</alias>
-                        <link>index.php?option=com_simplerenew&amp;view=account</link>
-                    </item>
-
-                    <item>
-                        <title>COM_SIMPLERENEW_MENU_ITEM_INVOICES</title>
-                        <alias>invoices</alias>
-                        <link>index.php?option=com_simplerenew&amp;view=invoices</link>
-                    </item>
-
-                    <item>
-                        <title>COM_SIMPLERENEW_MENU_ITEM_ACCOUNT_EDIT</title>
-                        <alias>edit-account</alias>
-                        <link>index.php?option=com_simplerenew&amp;view=account&amp;layout=edit</link>
-                    </item>
-
-                </items>
-            </menu>
-        </menus>
-
         <obsolete>
             <folder>/administrator/components/com_simplerenew/library/simplerenew/User/Adapter</folder>
             <file>/administrator/components/com_simplerenew/library/simplerenew/Logger.php</file>
