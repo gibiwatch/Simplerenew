@@ -37,36 +37,38 @@ abstract class SimplerenewFactory extends JFactory
     {
         $params = $params ?: SimplerenewComponentHelper::getParams();
         $key    = sha1($params->toString());
+        $config = array();
         if (empty(static::$SimplerenewContainers[$key])) {
             // convert Joomla config parameters into Simplerenew configuration options
-            $recurly         = $params->get('gateway.recurly');
-            $billingRequired = explode(',', $params->get('basic.billingAddress'));
+            if ($recurly = $params->get('gateway.recurly')) {
+                $billingRequired = explode(',', $params->get('basic.billingAddress'));
 
-            $config = array(
-                'gateway' => array(
-                    'mode' => $recurly->mode,
-                    'live' => array(
-                        'apiKey'    => $recurly->liveApikey,
-                        'publicKey' => $recurly->livePublickey
+                $config = array(
+                    'gateway'      => array(
+                        'mode' => $recurly->mode,
+                        'live' => array(
+                            'apiKey'    => $recurly->liveApikey,
+                            'publicKey' => $recurly->livePublickey
+                        ),
+                        'test' => array(
+                            'apiKey'    => $recurly->testApikey,
+                            'publicKey' => $recurly->testPublickey
+                        )
                     ),
-                    'test' => array(
-                        'apiKey'    => $recurly->testApikey,
-                        'publicKey' => $recurly->testPublickey
+                    'billing'      => array(
+                        'required' => array_filter(array_map('trim', $billingRequired))
+                    ),
+                    'subscription' => array(
+                        'allowMultiple' => $params->get('basic.allowMultiple')
+                    ),
+                    'user'         => array(
+                        'group' => array(
+                            'default'    => (int)$params->get('basic.defaultGroup'),
+                            'expiration' => (int)$params->get('basic.expirationGroup')
+                        )
                     )
-                ),
-                'billing' => array(
-                    'required' => array_filter(array_map('trim', $billingRequired))
-                ),
-                'subscription' => array(
-                    'allowMultiple' => $params->get('basic.allowMultiple')
-                ),
-                'user'    => array(
-                    'group' => array(
-                        'default'    => (int)$params->get('basic.defaultGroup'),
-                        'expiration' => (int)$params->get('basic.expirationGroup')
-                    )
-                )
-            );
+                );
+            }
 
             // Allow devs to create additional customizations for a site
             $settingsPath = SIMPLERENEW_LIBRARY . '/simplerenew/.settings.json';
