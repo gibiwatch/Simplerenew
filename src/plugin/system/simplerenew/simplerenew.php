@@ -41,7 +41,9 @@ class plgSystemSimplerenew extends JPlugin
 
     public function onAfterInitialise()
     {
-        $this->catchNotify();
+        if (!$this->catchNotify()) {
+            $this->refreshUserSession();
+        }
     }
 
     public function onAfterRoute()
@@ -118,7 +120,7 @@ class plgSystemSimplerenew extends JPlugin
      * Catch notification messages from the gateway
      *
      * @throws Exception
-     * @return void
+     * @return bool
      */
     protected function catchNotify()
     {
@@ -138,8 +140,12 @@ class plgSystemSimplerenew extends JPlugin
                     $uri->setPath('/component/simplerenew');
                     $uri->setQuery($vars);
                 }
+
+                return true;
             }
         }
+
+        return false;
     }
 
     /**
@@ -197,14 +203,30 @@ class plgSystemSimplerenew extends JPlugin
         $app    = JFactory::getApplication();
         $option = $app->input->getCmd('option');
         $view   = $app->input->getCmd('view');
-        if (
-            $app->isSite()
+        if ($app->isSite()
             && $option == 'com_users'
             && $view == 'registration'
             && $this->params->get('advanced.disableRegistration', 1)
             && $this->isInstalled()
         ) {
             $app->redirect(JRoute::_(SimplerenewRoute::get('subscribe')));
+        }
+    }
+
+    /**
+     * Update the default user object since site membership
+     * can be changed at any time by non-session processes
+     * e.g. Recurly or administrator. This prevents the need
+     * for users to logout/login when their subscription changes
+     */
+    protected function refreshUserSession()
+    {
+        $current = JFactory::getUser();
+        if ($current->id > 0) {
+            $user = new JUser($current->id);
+
+            $session = JFactory::getSession();
+            $session->set('user', $user);
         }
     }
 }
