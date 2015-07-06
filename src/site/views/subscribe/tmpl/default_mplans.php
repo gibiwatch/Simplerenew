@@ -21,14 +21,15 @@ JHtml::_(
         'selectClass' => 'simplerenew-plan-selected'
     )
 );
-JHtml::_('script', 'com_simplerenew/calculator', false, true);
+
+JHtml::_('script', 'com_simplerenew/calculator.js', false, true);
 
 echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count($this->plans)));
 ?>
 <div class="ost-section  p-bottom b-bottom ost-plans-list">
     <div class="block12">
         <?php
-        foreach ($this->plans as $code => $plan):
+        foreach ($this->plans as $code => $plan) :
             $planId  = 'plan-code-' . $code;
             $checked = $plan->selected ? ' checked' : '';
             ?>
@@ -92,7 +93,7 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
 <div class="ost-section p-bottom b-bottom simplerenew-calculator">
     <div class="simplerenew-noselections"></div>
     <div class="simplerenew-items">
-        <div class="simplerenew-plan"></div>
+        <div class="simplerenew-item"></div>
         <div class="simplerenew-amount"></div>
         <div class="simplerenew-discount"></div>
     </div>
