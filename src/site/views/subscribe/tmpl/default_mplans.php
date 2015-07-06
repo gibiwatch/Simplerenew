@@ -87,5 +87,20 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
         endforeach; ?>
         <div id="plancode-error"></div>
     </div>
+    <div class="simplerenew-calculator">
+        <div class="simplerenew-noselections"></div>
+        <div class="simplerenew-items">
+            <div class="simplerenew-plan"></div>
+            <div class="simplerenew-amount"></div>
+            <div class="simplerenew-discount"></div>
+        </div>
+        <div class="simplerenew-subtotal">
+            <div class="simplerenew-amount"></div>
+            <div class="simplerenew-discount"></div>
+        </div>
+        <div class="simplerenew-total">
+            <div class="simplerenew-amount"></div>
+        </div>
+    </div>
 </div>
 <!-- /.ost-section -->
