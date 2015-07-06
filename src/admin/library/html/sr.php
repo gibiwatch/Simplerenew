@@ -46,7 +46,7 @@ abstract class JHtmlSr
     {
         $params = SimplerenewComponentHelper::getParams();
 
-        $load = $params->get('advanced.jquery', -1);
+        $load = $params->get('advanced.jquery', 1);
         $client = JFactory::getApplication()->getName();
         if ($load == $client || $load == 1) {
             // Only load once
