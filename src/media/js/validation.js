@@ -152,7 +152,7 @@
                     }
                 },
                 calculator    : {
-                    display: '#calculator'
+                    output: '#calculator'
                 }
             },
 
@@ -462,43 +462,84 @@
          * A calculator that gateway or custom processors can hook into
          */
         calculator: {
+            plans: null,
+            coupon: null,
+            output: null,
+            values: {
+                plans   : [],
+                coupon  : null,
+                subtotal: {
+                    amount  : 0,
+                    discount: 0
+                },
+                total   : {
+                    gross: 0,
+                    net  : 0
+                }
+            },
+            calculate: function(plan) {
+                var calculator = this,
+                    jCalculator = $(this);
+
+                $(this.handlers).each(function (idx, handler) {
+                    jCalculator.queue('sr', function(next) {
+                        handler.calculate.call(calculator, plan, next);
+                    })
+                });
+                jCalculator.queue('sr', function(next) {
+                    calculator.display.call(calculator, next);
+                });
+                jCalculator.dequeue('sr');
+            },
             handlers: [],
 
             init: function(options) {
                 options = $.extend(true, this.options, options);
 
-                var display = $(options.display),
-                    plans = $('[name^=planCodes]'),
-                    coupon = $('#coupon_code');
+                this.output = $(options.output);
+                this.plans = $('[name^=planCodes]');
+                this.coupon = $('#coupon_code');
 
-                var calculate = function(plan, coupon, display) {
-                    $.each($.Simplerenew.calculator.handlers, function(idx, handler) {
-                        handler.calculate(plan, coupon, display);
-                    });
-                };
+                var calculator = this;
 
-                display.prepend('<p>Calculator under construction</p>');
+                // Init any handlers requesting it
+                $(this.handlers).each(function(idx, handler) {
+                    if (typeof handler.init == 'function') {
+                        handler.init.call(calculator);
+                    }
+                });
 
-                coupon
+                // Add event handlers
+                this.coupon
                     .on('change sr.disable sr.enable', function(evt) {
                         plans.each(function(idx, plan) {
-                            calculate(plan, coupon, display);
+                            calculator.calculate(plan);
                         });
                     });
 
-                plans
+                this.plans
                     .on('click', function(evt) {
-                        calculate(this, coupon, display);
+                        calculator.calculate(this);
                     });
 
-                plans.filter(':checked').each(function(idx, plan) {
-                    calculate(plan, coupon, display);
+                // Set initial states
+                this.plans.filter(':checked').each(function(idx, plan) {
+                    calculator.calculate(plan);
                 });
             },
 
-            registerHandler: function(handler) {
+            display: function(next) {
+                this.output.append('<p>Ready for display</p>');
+                next();
+            },
+
+            registerHandler: function(handler, prepend) {
                 if (typeof handler.calculate == 'function') {
-                    $.Simplerenew.calculator.handlers.push(handler);
+                    if (prepend && prepend === true) {
+                        $.Simplerenew.calculator.handlers.unshift(handler);
+                    } else {
+                        $.Simplerenew.calculator.handlers.push(handler);
+                    }
                 }
             }
         }

@@ -158,13 +158,14 @@
          */
         calculator: {
             init: function() {
-                $.Simplerenew.calculator.coupon.attr('data-recurly', 'coupon');
-                $.Simplerenew.calculator.plans.attr('data-recurly', 'plan');
+                this.coupon.attr('data-recurly', 'coupon');
+                this.plans.attr('data-recurly', 'plan');
             },
 
-            calculate: function(plan, coupon) {
-                var planCode = $(plan).val();
-                var couponCode = $(coupon).is(':disabled') ? '' : $(coupon).val();
+            calculate: function(plan, next) {
+                var planCode   = $(plan).val();
+                var couponCode = this.coupon.is(':disabled') ? '' : this.coupon.val();
+                var calculator = this;
 
                 var pricing = recurly.Pricing();
                 pricing
@@ -182,6 +183,8 @@
                                     net   : price.now.total || 0,
                                     symbol: price.currency.symbol || ''
                                 });
+                                calculator.output.append('<p>Recurly Finished</p>');
+                                next();
                             });
                     });
             }
