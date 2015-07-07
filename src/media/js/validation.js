@@ -134,8 +134,8 @@
 
         validate: {
             options: {
-                errorClass    : 'ost_error',
-                validClass    : 'ost_valid',
+                errorClass    : 'ost-error',
+                validClass    : 'ost-valid',
                 onkeyup       : false,
                 ignore        : ':hidden:not(.validate)',
                 rules         : {

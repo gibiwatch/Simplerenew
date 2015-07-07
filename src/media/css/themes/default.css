@@ -136,8 +136,8 @@
 .ost-container input[type="password"]:focus,
 .ost-container textarea:focus,
 .ost-container select:focus,
-.ost-container input:focus:invalid:focus, 
-.ost-container textarea:focus:invalid:focus, 
+.ost-container input:focus:invalid:focus,
+.ost-container textarea:focus:invalid:focus,
 .ost-container select:focus:invalid:focus{
     color: #666666;
     border-color: #999999;
@@ -235,14 +235,14 @@
     padding: 12px 20px;
 }
 
-.ost-container input[type="submit"].btn-warning, 
+.ost-container input[type="submit"].btn-warning,
 .ost-container button.btn-warning{
     background:#ff0000;
 }
 
-.ost-container input[type="submit"].btn-warning:hover, 
-.ost-container input[type="submit"].btn-warning:focus, 
-.ost-container button.btn-warning:hover, 
+.ost-container input[type="submit"].btn-warning:hover,
+.ost-container input[type="submit"].btn-warning:focus,
+.ost-container button.btn-warning:hover,
 .ost-container button.btn-warning:focus{
     background:#FF4D4D;
 }
@@ -337,17 +337,17 @@
 
 /* Validation form
  ========================================================================== */
-.ost-container input.ost_error, 
-.ost-container textarea.ost_error, 
-.ost-container select.ost_error{
+.ost-container input.ost-error,
+.ost-container textarea.ost-error,
+.ost-container select.ost-error{
     border-color: #ff0000;
 }
-.ost-container input.ost_valid, 
-.ost-container textarea.ost_valid, 
-.ost-container select.ost_valid{
+.ost-container input.ost-valid,
+.ost-container textarea.ost-valid,
+.ost-container select.ost-valid{
     border-color: #8cc14c;
 }
-.ost-container label.ost_error{
+.ost-container label.ost-error{
     background: #ff0000;
     color: #ffffff;
     display: block;
@@ -358,7 +358,7 @@
     position: absolute;
 }
 
-.ost-container label.ost_error .ost-tooltip-icon:before {
+.ost-container label.ost-error .ost-tooltip-icon:before {
     color: #fff;
 }
 
@@ -515,7 +515,7 @@ span.simplerenew-plan.simplerenew-plan-selected{
 #billing_cc_cvv,
 #billing_cc_year,
 #billing_cc_month {
-    
+
 }
 
 .ost-container .ost-alert-notify.m-bottom{
