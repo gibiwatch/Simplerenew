@@ -127,6 +127,11 @@
             disableText: '.ost-text-disabled'
         },
 
+        gateway: {
+            init  : null,
+            submit: null
+        },
+
         validate: {
             options: {
                 errorClass    : 'ost_error',
@@ -145,12 +150,10 @@
                     } else {
                         place.insertAfter(element);
                     }
+                },
+                calculator    : {
+                    display: '#calculator'
                 }
-            },
-
-            gateway: {
-                init  : null,
-                submit: null
             },
 
             /**
@@ -164,7 +167,7 @@
                 var form = $(selector);
 
                 if (form.is('form')) {
-                    var gateway = this.gateway;
+                    var gateway = $.Simplerenew.gateway;
 
                     // Store the CSRF Token, set no-name fields and setup submit buttons
                     var csrfToken = form.find('span#token input:hidden');
@@ -181,27 +184,28 @@
                         $.validator.addMethod(name, method.method, method.message);
                     });
 
+                    // Register and initialise extensions and custom processors
+                    options = $.extend(true, this.options, options);
+
                     if (typeof gateway.init === 'function') {
                         // Allow gateway to do custom form setup
                         gateway.init(form);
                     }
+                    $.Simplerenew.calculator.init(options.calculator);
 
-                    options = $.extend(this.options, options, {
-                        submitHandler: function(form) {
+                    options.submitHandler = function(form) {
+                        // Disable submit, Clear temporary names to prevent being sent to server
+                        $(form)
+                            .tempNames(true)
+                            .disableSubmit();
 
-                            // Disable submit, Clear temporary names to prevent being sent to server
-                            $(form)
-                                .tempNames(true)
-                                .disableSubmit();
-
-                            var success = true;
-                            if (typeof gateway.submit === 'function') {
-                                // Gateway has something to do on submit
-                                success = gateway.submit(form);
-                            }
-                            return success;
+                        var success = true;
+                        if (typeof gateway.submit === 'function') {
+                            // Gateway has something to do on submit
+                            success = gateway.submit(form);
                         }
-                    });
+                        return success;
+                    };
 
                     form.validate(options);
                     form.applyRules(this.rules);
@@ -450,6 +454,51 @@
                     ccdate: {
                         partner: 'data-partner'
                     }
+                }
+            }
+        },
+
+        /**
+         * A calculator that gateway or custom processors can hook into
+         */
+        calculator: {
+            handlers: [],
+
+            init: function(options) {
+                options = $.extend(true, this.options, options);
+
+                var display = $(options.display),
+                    plans = $('[name^=planCodes]'),
+                    coupon = $('#coupon_code');
+
+                var calculate = function(plan, coupon, display) {
+                    $.each($.Simplerenew.calculator.handlers, function(idx, handler) {
+                        handler.calculate(plan, coupon, display);
+                    });
+                };
+
+                display.prepend('<p>Calculator under construction</p>');
+
+                coupon
+                    .on('change sr.disable sr.enable', function(evt) {
+                        plans.each(function(idx, plan) {
+                            calculate(plan, coupon, display);
+                        });
+                    });
+
+                plans
+                    .on('click', function(evt) {
+                        calculate(this, coupon, display);
+                    });
+
+                plans.filter(':checked').each(function(idx, plan) {
+                    calculate(plan, coupon, display);
+                });
+            },
+
+            registerHandler: function(handler) {
+                if (typeof handler.calculate == 'function') {
+                    $.Simplerenew.calculator.handlers.push(handler);
                 }
             }
         }

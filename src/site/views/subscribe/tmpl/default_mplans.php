@@ -22,8 +22,6 @@ JHtml::_(
     )
 );
 
-JHtml::_('script', 'com_simplerenew/calculator.js', false, true);
-
 echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count($this->plans)));
 ?>
 <div class="ost-section  p-bottom b-bottom ost-plans-list">
@@ -90,19 +88,6 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
         <div id="plancode-error"></div>
     </div>
 </div>
-<div class="ost-section p-bottom b-bottom simplerenew-calculator">
-    <div class="simplerenew-noselections"></div>
-    <div class="simplerenew-items">
-        <div class="simplerenew-item"></div>
-        <div class="simplerenew-amount"></div>
-        <div class="simplerenew-discount"></div>
-    </div>
-    <div class="simplerenew-subtotal">
-        <div class="simplerenew-amount"></div>
-        <div class="simplerenew-discount"></div>
-    </div>
-    <div class="simplerenew-total">
-        <div class="simplerenew-amount"></div>
-    </div>
-</div>
 <!-- /.ost-section -->
+<?php
+echo $this->loadTemplate('calculator');

@@ -1,35 +1,7 @@
 (function($) {
-    $.extend($.fn, {
-        recurly: {
-            calculate: function(coupon, plan) {
-                var planCode = $(plan).val();
-                var couponCode = $(coupon).is(':disabled') ? '' : $(coupon).val();
+    $.Simplerenew = $.extend({}, $.Simplerenew);
 
-                var pricing = recurly.Pricing();
-                pricing
-                    .plan(planCode)
-                    .catch(function(err) {
-                        alert('Simplerenew Configuration Problem: ' + err.message);
-                    })
-                    .done(function(price) {
-                        pricing.coupon(couponCode)
-                            .catch(function(err) {
-                                // Next .done() gets called even on failure
-                            })
-                            .done(function(price) {
-                                $(plan).data('price', {
-                                    net   : price.now.total || 0,
-                                    symbol: price.currency.symbol || ''
-                                });
-                            });
-                    });
-            }
-        }
-    });
-
-    $.Simplerenew = $.extend({}, {validate: {}}, $.Simplerenew);
-
-    $.Simplerenew.validate.gateway = $.extend({}, $.Simplerenew.validate.gateway, {
+    $.Simplerenew.gateway = $.extend({}, $.Simplerenew.gateway, {
         options: {
             key      : null,
             popupWarn: [
@@ -58,24 +30,6 @@
                 return;
             }
 
-            var coupon = $('#coupon_code')
-                .attr('data-recurly', 'coupon')
-                .on('change sr.disable sr.enable', function(evt) {
-                    plans.each(function(idx, plan) {
-                        $(plan).recurly.calculate(coupon, plan);
-                    });
-                });
-
-            var plans = $('[name^=planCodes]')
-                .attr('data-recurly', 'plan')
-                .on('click', function(evt) {
-                    $(this).recurly.calculate(coupon, this);
-                });
-
-            plans.filter(':checked').each(function(idx, plan) {
-                $(plan).recurly.calculate(coupon, plan);
-            });
-
             $('#billing_cc_number').attr('data-recurly', 'number');
             $('#billing_cc_month').attr('data-recurly', 'month');
             $('#billing_cc_year').attr('data-recurly', 'year');
@@ -88,6 +42,8 @@
             $('#billing_region').attr('data-recurly', 'state');
             $('#billing_postal').attr('data-recurly', 'postal_code');
             $('#billing_country').attr('data-recurly', 'country');
+
+            $.Simplerenew.calculator.registerHandler(this.calculator);
 
             // We're taking over all form submission to minimize paypal popup problem
             $.validator.defaults.onsubmit = false;
@@ -146,7 +102,7 @@
                                 if (windowFocus) {
                                     alert(
                                         form.attr('data-popup-warning')
-                                        || $.Simplerenew.validate.gateway.options.popupWarn.join('\n')
+                                        || $.Simplerenew.gateway.options.popupWarn.join('\n')
                                     );
                                     resetForm();
                                 }
@@ -195,6 +151,40 @@
                     }
                 }
             });
+        },
+
+        /**
+         * The Recurly calculator handler
+         */
+        calculator: {
+            init: function() {
+                $.Simplerenew.calculator.coupon.attr('data-recurly', 'coupon');
+                $.Simplerenew.calculator.plans.attr('data-recurly', 'plan');
+            },
+
+            calculate: function(plan, coupon) {
+                var planCode = $(plan).val();
+                var couponCode = $(coupon).is(':disabled') ? '' : $(coupon).val();
+
+                var pricing = recurly.Pricing();
+                pricing
+                    .plan(planCode)
+                    .catch(function(err) {
+                        alert('Simplerenew Configuration Problem: ' + err.message);
+                    })
+                    .done(function(price) {
+                        pricing.coupon(couponCode)
+                            .catch(function(err) {
+                                // Next .done() gets called even on failure
+                            })
+                            .done(function(price) {
+                                $(plan).data('price', {
+                                    net   : price.now.total || 0,
+                                    symbol: price.currency.symbol || ''
+                                });
+                            });
+                    });
+            }
         }
     });
 })(jQuery);
