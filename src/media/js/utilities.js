@@ -168,7 +168,7 @@
      * @param options
      */
     $.Simplerenew.ajax = function(options) {
-        options = $.extend(this.ajax.options, options);
+        options = $.extend(true, this.ajax.options, options);
 
         $(options.selector).on('click', function(evt) {
             evt.preventDefault();
