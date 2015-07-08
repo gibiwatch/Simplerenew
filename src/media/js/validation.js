@@ -463,9 +463,24 @@
     };
 
     /**
-     * Calculate, store and optionally display all costs based on current selections
+     * Calculator for use customizing and displaying summary of costs
      */
+    $.extend(true, $.Simplerenew, {
+        validate: {
+            options: {
+                calculator: {
+                    output: '#calculator'
+                }
+            }
+        }
+    });
+
     $.Simplerenew.calculator = {
+        settings      : {
+            empty  : '.simplerenew-calculator-empty',
+            display: '.simplerenew-calculator-display',
+            items  : '.simplerenew-calculator-items'
+        },
         plans         : null,
         coupon        : null,
         output        : null,
@@ -538,8 +553,8 @@
 
     $.Simplerenew.calculator.display = function(next) {
         if (this.output) {
-            var empty = $(this.output).find('.simplerenew-calculator-empty');
-            var display = $(this.output).find('.simplerenew-calculator-display');
+            var empty = $(this.output).find(this.settings.empty);
+            var display = $(this.output).find(this.settings.display);
 
             if ($.isEmptyObject(this.selectedValues)) {
                 empty.show();
@@ -548,23 +563,34 @@
                 empty.hide();
                 display.show();
 
-                var items = display.find('.simplerenew-calculator-items');
+                var items = display.find(this.settings.items);
                 items.empty();
 
                 var subtotal = 0.0,
-                    discount = 0.0;
+                    discount = 0.0,
+                    currencySymbol = '$';
 
                 $.each(this.selectedValues, function(idx, price) {
                     subtotal += parseFloat(price.amount);
                     discount += parseFloat(price.discount);
                     items
-                        .append($('<div class="simplerenew-calculator-plan">' + $(price.plan).attr('data-description') + '</div>'))
-                        .append($('<div class="simplerenew-calculator-amount">' + $.formatCurrency(price.amount) + '</div>'));
+                        .append($('<div/>')
+                            .addClass('simplerenew-calculator-plan')
+                            .html($(price.plan).attr('data-description')))
+                        .append($('<div/>')
+                            .addClass('simplerenew-calculator-amount')
+                            .html($.formatCurrency(price.amount, currencySymbol)));
                 });
 
-                display.find('.simplerenew-subtotal .simplerenew-amount').html($.formatCurrency(subtotal));
-                display.find('.simplerenew-subtotal .simplerenew-discount').html($.formatCurrency(discount));
-                display.find('.simplerenew-total .simplerenew-amount').html($.formatCurrency(subtotal - discount));
+                display
+                    .find('.simplerenew-subtotal .simplerenew-amount')
+                    .html($.formatCurrency(subtotal, currencySymbol));
+                display
+                    .find('.simplerenew-subtotal .simplerenew-discount')
+                    .html($.formatCurrency(discount, currencySymbol));
+                display
+                    .find('.simplerenew-total .simplerenew-amount')
+                    .html($.formatCurrency(subtotal - discount, currencySymbol));
             }
         }
         next();
