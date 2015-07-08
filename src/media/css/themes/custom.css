@@ -66,6 +66,10 @@
     padding: 5px 0;
 }
 
+.simplerenew-subtotal > div > span {
+    font-weight: 600;
+}
+
 .simplerenew-amount {
     float: right;
 }
