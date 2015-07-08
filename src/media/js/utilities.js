@@ -127,6 +127,37 @@
         }
     });
 
+    /**
+     * Format a number into standard currency
+     *
+     * @param {*}       number
+     * @param {string=} currencySymbol
+     *
+     * @returns {string}
+     */
+    $.formatCurrency = function(number, currencySymbol) {
+
+        var addCommas = function(nStr) {
+            var x, x1, x2,
+                regex = /(\d+)(\d{3})/;
+
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            while (regex.test(x1)) {
+                x1 = x1.replace(regex, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        };
+
+        currencySymbol = currencySymbol || '$';
+
+        var formatted = addCommas(parseFloat(number).toFixed(2));
+
+        return currencySymbol + formatted;
+    };
+
     $.Simplerenew = $.extend({}, $.Simplerenew);
 
     /**

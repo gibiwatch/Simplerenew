@@ -559,12 +559,12 @@
                     discount += parseFloat(price.discount);
                     items
                         .append($('<div class="simplerenew-calculator-plan">' + $(price.plan).val() + '</div>'))
-                        .append($('<div class="simplerenew-calculator-amount">' + price.amount + '</div>'));
+                        .append($('<div class="simplerenew-calculator-amount">' + $.formatCurrency(price.amount) + '</div>'));
                 });
 
-                display.find('.simplerenew-subtotal .simplerenew-amount').html(subtotal);
-                display.find('.simplerenew-subtotal .simplerenew-discount').html(discount);
-                display.find('.simplerenew-total .simplerenew-amount').html(subtotal - discount);
+                display.find('.simplerenew-subtotal .simplerenew-amount').html($.formatCurrency(subtotal));
+                display.find('.simplerenew-subtotal .simplerenew-discount').html($.formatCurrency(discount));
+                display.find('.simplerenew-total .simplerenew-amount').html($.formatCurrency(subtotal - discount));
             }
         }
         next();
