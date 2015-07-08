@@ -27,7 +27,8 @@ defined('_JEXEC') or die();
             </div>
         </div>
         <div class="simplerenew-total">
-            Total <span class="simplerenew-amount">0.00</span>
+            <div>Total </div>
+            <div class="simplerenew-amount">0.00</div>
         </div>
     </div>
 </div>
