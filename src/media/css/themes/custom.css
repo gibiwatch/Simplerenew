@@ -50,6 +50,33 @@
     margin-left: 0;
 }
 
+.simplerenew-subtotal .simplerenew-subtotal-discount {
+    border-bottom: 1px solid #000000;
+    border-top: 1px solid #000000;
+    padding: 5px 0;
+}
+
+.simplerenew-subtotal .simplerenew-subtotal-subtotal {
+    margin-bottom: 40px;
+}
+
+.ost-container .simplerenew-total div {
+    font-weight: 600;
+    font-size: 16px;
+    padding: 5px 0;
+}
+
+.simplerenew-amount {
+    float: right;
+}
+
+.ost-container .simplerenew-calculator-amount,
+.ost-container .simplerenew-amount,
+.ost-container .simplerenew-discount,
+.ost-container .simplerenew-amount {
+    text-align: right;
+}
+
 .simplerenew-calculator-items,
 .simplerenew-subtotal > div,
 .simplerenew-total,
@@ -64,18 +91,9 @@
 .simplerenew-calculator-amount,
 .simplerenew-total > div,
 .simplerenew-subtotal > div > span {
-    width: 30%;
+    width: 50%;
     float: left;
     display: block;
-}
-
-.simplerenew-calculator-amount,
-.simplerenew-calculator-amount {
-    text-align: right;
-}
-
-.simplerenew-amount {
-    float: right;
 }
 
 /* General
