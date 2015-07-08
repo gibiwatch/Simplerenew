@@ -184,6 +184,7 @@
                                     discount: price.now.discount,
                                     setup   : price.now.setup_fee
                                 });
+                                console.log(calculator.plans);
                                 next();
                             });
                     });

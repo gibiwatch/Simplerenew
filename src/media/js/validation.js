@@ -558,7 +558,7 @@
                     subtotal += parseFloat(price.amount);
                     discount += parseFloat(price.discount);
                     items
-                        .append($('<div class="simplerenew-calculator-plan">' + $(price.plan).val() + '</div>'))
+                        .append($('<div class="simplerenew-calculator-plan">' + $(price.plan).attr('data-description') + '</div>'))
                         .append($('<div class="simplerenew-calculator-amount">' + $.formatCurrency(price.amount) + '</div>'));
                 });
 
