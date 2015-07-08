@@ -121,7 +121,10 @@
         return this;
     };
 
-    $.Simplerenew = $.extend({}, $.Simplerenew, {
+    /**
+     * Settings and default options for validator
+     */
+    $.extend(true, $.Simplerenew, {
         settings: {
             enableText : '.ost-text-enabled',
             disableText: '.ost-text-disabled'
@@ -154,426 +157,426 @@
                 calculator    : {
                     output: '#calculator'
                 }
-            },
+            }
+        }
+    });
 
-            /**
-             * Initialize a form for validation.
-             * Passes the Joomla session token for ajax calls
-             *
-             * @param {string} selector
-             * @param {object} [options]
-             */
-            init: function(selector, options) {
-                var form = $(selector);
+    /**
+     * Initialize a form for validation.
+     * Passes the Joomla session token for ajax calls
+     *
+     * @param {string} selector
+     * @param {object} [options]
+     */
+    $.Simplerenew.validate.init = function(selector, options) {
+        var form = $(selector);
 
-                if (form.is('form')) {
-                    var gateway = $.Simplerenew.gateway;
+        if (form.is('form')) {
+            var gateway = $.Simplerenew.gateway;
 
-                    // Store the CSRF Token, set no-name fields and setup submit buttons
-                    var csrfToken = form.find('span#token input:hidden');
-                    form
-                        .tempNames()
-                        .data('csrfToken', {
-                            name : csrfToken.attr('name'),
-                            value: csrfToken.val()
-                        })
-                        .enableSubmit();
+            // Store the CSRF Token, set no-name fields and setup submit buttons
+            var csrfToken = form.find('span#token input:hidden');
+            form
+                .tempNames()
+                .data('csrfToken', {
+                    name : csrfToken.attr('name'),
+                    value: csrfToken.val()
+                })
+                .enableSubmit();
 
-                    // Load custom methods
-                    $.each(this.methods, function(name, method) {
-                        $.validator.addMethod(name, method.method, method.message);
-                    });
+            // Load custom methods
+            $.each(this.methods, function(name, method) {
+                $.validator.addMethod(name, method.method, method.message);
+            });
 
-                    // Register and initialise extensions and custom processors
-                    options = $.extend(true, this.options, options);
+            // Register and initialise extensions and custom processors
+            options = $.extend(true, this.options, options);
 
-                    if (typeof gateway.init === 'function') {
-                        // Allow gateway to do custom form setup
-                        gateway.init(form);
-                    }
-                    $.Simplerenew.calculator.init(options.calculator);
+            if (typeof gateway.init === 'function') {
+                // Allow gateway to do custom form setup
+                gateway.init(form);
+            }
+            $.Simplerenew.calculator.init(options.calculator);
 
-                    options.submitHandler = function(form) {
-                        // Disable submit, Clear temporary names to prevent being sent to server
-                        $(form)
-                            .tempNames(true)
-                            .disableSubmit();
+            options.submitHandler = function(form) {
+                // Disable submit, Clear temporary names to prevent being sent to server
+                $(form)
+                    .tempNames(true)
+                    .disableSubmit();
 
-                        var success = true;
-                        if (typeof gateway.submit === 'function') {
-                            // Gateway has something to do on submit
-                            success = gateway.submit(form);
-                        }
-                        return success;
-                    };
-
-                    form.validate(options);
-                    form.applyRules(this.rules);
-
-                    // Back link plan selection to coupons
-                    $('.check_coupon[data-plan]').each(function(idx, coupon) {
-                        $(coupon).on('focusout', function(evt) {
-                            if ($(this).val().length == 0) {
-                                $('label[id^=' + this.id + ']').remove();
-                            }
-                        });
-                        $($(this).attr('data-plan')).on('click', function(evt) {
-                            $(coupon).valid();
-                        });
-                    });
-
-                    // Add special validation events for date dropdowns
-                    $('select[class*=check_date]').each(function(idx, element) {
-                        $(element).on('change', function(evt) {
-                            $(this).valid();
-                        });
-                        $($(element).attr('data-partner')).on('change', function(evt) {
-                            $(element).valid();
-                        });
-                    });
+                var success = true;
+                if (typeof gateway.submit === 'function') {
+                    // Gateway has something to do on submit
+                    success = gateway.submit(form);
                 }
-            },
+                return success;
+            };
 
-            /**
-             * Custom methods
-             */
-            methods: {
-                email: {
-                    method: function(value, element) {
-                        var regex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
-                        return this.optional(element) || regex.test(value);
+            form.validate(options);
+            form.applyRules(this.rules);
+
+            // Back link plan selection to coupons
+            $('.check_coupon[data-plan]').each(function(idx, coupon) {
+                $(coupon).on('focusout', function(evt) {
+                    if ($(this).val().length == 0) {
+                        $('label[id^=' + this.id + ']').remove();
                     }
-                },
+                });
+                $($(this).attr('data-plan')).on('click', function(evt) {
+                    $(coupon).valid();
+                });
+            });
 
-                coupon: {
-                    method : function(value, element) {
-                        if (this.optional(element)) {
-                            return 'dependency-mismatch';
-                        }
+            // Add special validation events for date dropdowns
+            $('select[class*=check_date]').each(function(idx, element) {
+                $(element).on('change', function(evt) {
+                    $(this).valid();
+                });
+                $($(element).attr('data-partner')).on('change', function(evt) {
+                    $(element).valid();
+                });
+            });
+        }
+    };
 
-                        var previous = this.previousValue(element),
-                            plans = [],
-                            validator, data, keyValue;
+    /**
+     * Custom methods
+     */
+    $.Simplerenew.validate.methods = {
+        email: {
+            method: function(value, element) {
+                var regex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+                return this.optional(element) || regex.test(value);
+            }
+        },
 
-                        $($(element)
-                            .attr('data-plan'))
-                            .filter(':checked,:selected')
-                            .each(function(idx, plan) {
-                                plans.push($(plan).val());
-                            });
-
-                        if (!this.settings.messages[element.name]) {
-                            this.settings.messages[element.name] = {};
-                        }
-                        previous.originalMessage = this.settings.messages[element.name].coupon;
-                        this.settings.messages[element.name].coupon = previous.message;
-
-                        keyValue = value + ':' + plans.join('|');
-                        if (previous.old === keyValue) {
-                            return previous.valid;
-                        }
-                        previous.old = keyValue;
-
-                        validator = this;
-                        this.startRequest(element);
-
-                        $.ajax({
-                            url     : 'index.php',
-                            type    : 'post',
-                            mode    : 'abort',
-                            port    : 'validate' + element.name,
-                            dataType: 'json',
-                            data    : {
-                                option: 'com_simplerenew',
-                                task  : 'validate.coupon',
-                                format: 'json',
-                                plans : plans,
-                                coupon: value
-                            },
-                            context : validator.currentForm,
-                            success : function(response) {
-                                var valid = response.valid && response.valid === true,
-                                    errors, message, submitted;
-
-                                validator.settings.messages[element.name].coupon = previous.originalMessage;
-                                $('label[id=' + element.id + '-message]').remove();
-                                if (valid) {
-                                    submitted = validator.formSubmitted;
-                                    validator.prepareElement(element);
-                                    validator.formSubmitted = submitted;
-                                    validator.successList.push(element);
-                                    delete validator.invalid[element.name];
-                                    validator.showErrors();
-
-                                    var label = $('<label>', {
-                                        id   : element.id + '-message',
-                                        for  : element.id,
-                                        class: validator.settings.validClass
-                                    }).html(response.message);
-                                    if (response.coupon.description) {
-                                        label.append($('<div>').html(response.coupon.description));
-                                    }
-                                    $(element).after(label);
-                                } else {
-                                    errors = {};
-                                    message = response.error || validator.defaultMessage(element, 'coupon');
-                                    errors[element.name] = previous.message = $.isFunction(message) ? message(value) : message;
-                                    validator.invalid[element.name] = true;
-                                    validator.showErrors(errors);
-                                }
-                                previous.valid = valid;
-                                validator.stopRequest(element, valid);
-                            }
-                        });
-
-                        return 'pending';
-                    },
-                    message: 'Invalid Coupon'
-                },
-
-                ccnumber: {
-                    method : function(value, element) {
-                        return !value || $.Simplerenew.creditCard.verifyNumber(value);
-                    },
-                    message: 'Invalid card number'
-                },
-
-                cvv: {
-                    method : function(value, element, params) {
-                        var ccnumber = $(element).attr(params.partner);
-                        if (ccnumber) {
-                            return $.Simplerenew.creditCard.verifyCVV($(ccnumber).val(), value);
-                        }
-                        return true;
-                    },
-                    message: 'Invalid CVV'
-                },
-
-                ccdate: {
-                    method : function(value, element, params) {
-                        var partner = $(element).attr(params.partner),
-                            result = false;
-
-                        if (partner) {
-                            if (element.id.match(/month/i)) {
-                                result = $.Simplerenew.creditCard.verifyDate(value, $(partner).val());
-                            } else {
-                                result = $.Simplerenew.creditCard.verifyDate($(partner).val(), value);
-                            }
-
-                            if (result) {
-                                this.settings.unhighlight.call(
-                                    this,
-                                    $(partner),
-                                    this.settings.errorClass,
-                                    this.settings.validClass
-                                );
-                            } else {
-                                this.settings.highlight.call(
-                                    this,
-                                    $(partner),
-                                    this.settings.errorClass,
-                                    this.settings.validClass
-                                );
-                            }
-                        }
-
-                        return result;
-                    },
-                    message: 'Invalid Date'
-                },
-
-                password_compare: {
-                    method : function(value, element, params) {
-                        var text = element.id.match(/(\S+?)(\d+)$/)
-                        if (text && text[2] == 2) {
-                            var partner = $('#' + text[1]);
-                            if (partner.length) {
-                                return value == partner.val();
-                            }
-                        }
-                        return true;
-                    },
-                    message: 'Passwords don\'t match'
+        coupon: {
+            method : function(value, element) {
+                if (this.optional(element)) {
+                    return 'dependency-mismatch';
                 }
+
+                var previous = this.previousValue(element),
+                    plans = [],
+                    validator, data, keyValue;
+
+                $($(element)
+                    .attr('data-plan'))
+                    .filter(':checked,:selected')
+                    .each(function(idx, plan) {
+                        plans.push($(plan).val());
+                    });
+
+                if (!this.settings.messages[element.name]) {
+                    this.settings.messages[element.name] = {};
+                }
+                previous.originalMessage = this.settings.messages[element.name].coupon;
+                this.settings.messages[element.name].coupon = previous.message;
+
+                keyValue = value + ':' + plans.join('|');
+                if (previous.old === keyValue) {
+                    return previous.valid;
+                }
+                previous.old = keyValue;
+
+                validator = this;
+                this.startRequest(element);
+
+                $.ajax({
+                    url     : 'index.php',
+                    type    : 'post',
+                    mode    : 'abort',
+                    port    : 'validate' + element.name,
+                    dataType: 'json',
+                    data    : {
+                        option: 'com_simplerenew',
+                        task  : 'validate.coupon',
+                        format: 'json',
+                        plans : plans,
+                        coupon: value
+                    },
+                    context : validator.currentForm,
+                    success : function(response) {
+                        var valid = response.valid && response.valid === true,
+                            errors, message, submitted;
+
+                        validator.settings.messages[element.name].coupon = previous.originalMessage;
+                        $('label[id=' + element.id + '-message]').remove();
+                        if (valid) {
+                            submitted = validator.formSubmitted;
+                            validator.prepareElement(element);
+                            validator.formSubmitted = submitted;
+                            validator.successList.push(element);
+                            delete validator.invalid[element.name];
+                            validator.showErrors();
+
+                            var label = $('<label>', {
+                                id   : element.id + '-message',
+                                for  : element.id,
+                                class: validator.settings.validClass
+                            }).html(response.message);
+                            if (response.coupon.description) {
+                                label.append($('<div>').html(response.coupon.description));
+                            }
+                            $(element).after(label);
+                        } else {
+                            errors = {};
+                            message = response.error || validator.defaultMessage(element, 'coupon');
+                            errors[element.name] = previous.message = $.isFunction(message) ? message(value) : message;
+                            validator.invalid[element.name] = true;
+                            validator.showErrors(errors);
+                        }
+                        previous.valid = valid;
+                        validator.stopRequest(element, valid);
+                    }
+                });
+
+                return 'pending';
             },
+            message: 'Invalid Coupon'
+        },
 
-            /**
-             * Class rules to be applied via $.applyRules()
-             */
-            rules: {
-                unique_user: {
-                    remote: {
-                        url : 'index.php',
-                        type: 'post',
-                        data: {
-                            option: 'com_simplerenew',
-                            format: 'json',
-                            task  : 'validate.username'
-                        }
+        ccnumber: {
+            method : function(value, element) {
+                return !value || $.Simplerenew.creditCard.verifyNumber(value);
+            },
+            message: 'Invalid card number'
+        },
+
+        cvv: {
+            method : function(value, element, params) {
+                var ccnumber = $(element).attr(params.partner);
+                if (ccnumber) {
+                    return $.Simplerenew.creditCard.verifyCVV($(ccnumber).val(), value);
+                }
+                return true;
+            },
+            message: 'Invalid CVV'
+        },
+
+        ccdate: {
+            method : function(value, element, params) {
+                var partner = $(element).attr(params.partner),
+                    result = false;
+
+                if (partner) {
+                    if (element.id.match(/month/i)) {
+                        result = $.Simplerenew.creditCard.verifyDate(value, $(partner).val());
+                    } else {
+                        result = $.Simplerenew.creditCard.verifyDate($(partner).val(), value);
                     }
-                },
 
-                unique_email: {
-                    remote: {
-                        url : 'index.php',
-                        type: 'post',
-                        data: {
-                            option: 'com_simplerenew',
-                            format: 'json',
-                            task  : 'validate.email'
-                        }
+                    if (result) {
+                        this.settings.unhighlight.call(
+                            this,
+                            $(partner),
+                            this.settings.errorClass,
+                            this.settings.validClass
+                        );
+                    } else {
+                        this.settings.highlight.call(
+                            this,
+                            $(partner),
+                            this.settings.errorClass,
+                            this.settings.validClass
+                        );
                     }
-                },
+                }
 
-                verify_password: {
-                    remote: {
-                        url : 'index.php',
-                        type: 'post',
-                        data: {
-                            option: 'com_simplerenew',
-                            format: 'json',
-                            task  : 'validate.password'
-                        }
+                return result;
+            },
+            message: 'Invalid Date'
+        },
+
+        password_compare: {
+            method : function(value, element, params) {
+                var text = element.id.match(/(\S+?)(\d+)$/)
+                if (text && text[2] == 2) {
+                    var partner = $('#' + text[1]);
+                    if (partner.length) {
+                        return value == partner.val();
                     }
-                },
+                }
+                return true;
+            },
+            message: 'Passwords don\'t match'
+        }
+    };
 
-                password_compare: 'password_compare',
-
-                check_coupon: 'coupon',
-
-                check_ccnumber: 'ccnumber',
-
-                check_cvv: {
-                    cvv: {
-                        partner: 'data-ccnumber'
-                    }
-                },
-
-                check_date: {
-                    ccdate: {
-                        partner: 'data-partner'
-                    }
+    /**
+     * Class rules to be applied via $.applyRules()
+     */
+    $.Simplerenew.validate.rules = {
+        unique_user: {
+            remote: {
+                url : 'index.php',
+                type: 'post',
+                data: {
+                    option: 'com_simplerenew',
+                    format: 'json',
+                    task  : 'validate.username'
                 }
             }
         },
 
-        /**
-         * A calculator that gateway or custom processors can hook into
-         */
-        calculator: {
-            plans         : null,
-            coupon        : null,
-            output        : null,
-            selectedValues: {},
-
-            calculate: function(plans) {
-                var calculator = this,
-                    jCalculator = $(this);
-
-                $(plans).each(function(idx, plan) {
-                    $(calculator.handlers).each(function(idx, handler) {
-                        jCalculator.queue('sr', function(next) {
-                            handler.calculate.call(calculator, plan, next);
-                        })
-                    });
-                });
-                jCalculator.queue('sr', function(next) {
-                    calculator.display.call(calculator, next);
-                });
-                jCalculator.dequeue('sr');
-            },
-            handlers : [],
-
-            init: function(options) {
-                options = $.extend(true, this.options, options);
-
-                this.output = $(options.output);
-                this.plans = $('[name^=planCodes]');
-                this.coupon = $('#coupon_code');
-
-                var calculator = this;
-
-                // Init any handlers requesting it
-                $(this.handlers).each(function(idx, handler) {
-                    if (typeof handler.init == 'function') {
-                        handler.init.call(calculator);
-                    }
-                });
-
-                // Add event handlers
-                this.coupon
-                    .on('change sr.disable sr.enable', function(evt) {
-                        calculator.calculate(this.plans);
-                    }, this);
-
-                this.plans
-                    .on('click', function(evt) {
-                        calculator.calculate([this]);
-                    });
-
-                // Set initial states
-                var checkedPlans = this.plans.filter(':checked');
-                calculator.calculate(checkedPlans);
-            },
-
-            setValue: function(plan, price) {
-                var planCode = $(plan).val();
-                if ($(plan).prop('checked')) {
-                    this.selectedValues[planCode] = $.extend({
-                        plan    : plan,
-                        amount  : null,
-                        discount: null,
-                        setup   : null
-                    }, price);
-                } else if (this.selectedValues[planCode]) {
-                    delete this.selectedValues[planCode];
-                }
-            },
-
-            display: function(next) {
-                if (this.output) {
-                    var empty = $(this.output).find('.simplerenew-calculator-empty');
-                    var display = $(this.output).find('.simplerenew-calculator-display');
-
-                    if ($.isEmptyObject(this.selectedValues)) {
-                        empty.show();
-                        display.hide();
-                    } else {
-                        empty.hide();
-                        display.show();
-
-                        var items = display.find('.simplerenew-calculator-items');
-                        items.empty();
-
-                        var subtotal = 0.0,
-                            discount = 0.0;
-
-                        $.each(this.selectedValues, function(idx, price) {
-                            subtotal += parseFloat(price.amount);
-                            discount += parseFloat(price.discount);
-                            items
-                                .append($('<div class="simplerenew-calculator-plan">' + $(price.plan).val() + '</div>'))
-                                .append($('<div class="simplerenew-calculator-amount">' + price.amount + '</div>'));
-                        });
-
-                        display.find('.simplerenew-subtotal .simplerenew-amount').html(subtotal);
-                        display.find('.simplerenew-subtotal .simplerenew-discount').html(discount);
-                        display.find('.simplerenew-total .simplerenew-amount').html(subtotal - discount);
-                    }
-                }
-                next();
-            },
-
-            registerHandler: function(handler, prepend) {
-                if (typeof handler.calculate == 'function') {
-                    if (prepend && prepend === true) {
-                        $.Simplerenew.calculator.handlers.unshift(handler);
-                    } else {
-                        $.Simplerenew.calculator.handlers.push(handler);
-                    }
+        unique_email: {
+            remote: {
+                url : 'index.php',
+                type: 'post',
+                data: {
+                    option: 'com_simplerenew',
+                    format: 'json',
+                    task  : 'validate.email'
                 }
             }
+        },
+
+        verify_password: {
+            remote: {
+                url : 'index.php',
+                type: 'post',
+                data: {
+                    option: 'com_simplerenew',
+                    format: 'json',
+                    task  : 'validate.password'
+                }
+            }
+        },
+
+        password_compare: 'password_compare',
+
+        check_coupon: 'coupon',
+
+        check_ccnumber: 'ccnumber',
+
+        check_cvv: {
+            cvv: {
+                partner: 'data-ccnumber'
+            }
+        },
+
+        check_date: {
+            ccdate: {
+                partner: 'data-partner'
+            }
         }
-    });
+    };
+
+    /**
+     * Calculate, store and optionally display all costs based on current selections
+     */
+    $.Simplerenew.calculator = {
+        plans         : null,
+        coupon        : null,
+        output        : null,
+        selectedValues: {},
+        handlers      : []
+    };
+
+    $.Simplerenew.calculator.calculate = function(plans) {
+        var calculator = this,
+            jCalculator = $(this);
+
+        $(plans).each(function(idx, plan) {
+            $(calculator.handlers).each(function(idx, handler) {
+                jCalculator.queue('sr', function(next) {
+                    handler.calculate.call(calculator, plan, next);
+                })
+            });
+        });
+        jCalculator.queue('sr', function(next) {
+            calculator.display.call(calculator, next);
+        });
+        jCalculator.dequeue('sr');
+    };
+
+    $.Simplerenew.calculator.init = function(options) {
+        options = $.extend(true, this.options, options);
+
+        this.output = $(options.output);
+        this.plans = $('[name^=planCodes]');
+        this.coupon = $('#coupon_code');
+
+        var calculator = this;
+
+        // Init any handlers requesting it
+        $(this.handlers).each(function(idx, handler) {
+            if (typeof handler.init == 'function') {
+                handler.init.call(calculator);
+            }
+        });
+
+        // Add event handlers
+        this.coupon
+            .on('change sr.disable sr.enable', function(evt) {
+                calculator.calculate(this.plans);
+            }, this);
+
+        this.plans
+            .on('click', function(evt) {
+                calculator.calculate([this]);
+            });
+
+        // Set initial states
+        var checkedPlans = this.plans.filter(':checked');
+        calculator.calculate(checkedPlans);
+    };
+
+    $.Simplerenew.calculator.setValue = function(plan, price) {
+        var planCode = $(plan).val();
+        if ($(plan).prop('checked')) {
+            this.selectedValues[planCode] = $.extend({
+                plan    : plan,
+                amount  : null,
+                discount: null,
+                setup   : null
+            }, price);
+        } else if (this.selectedValues[planCode]) {
+            delete this.selectedValues[planCode];
+        }
+    };
+
+    $.Simplerenew.calculator.display = function(next) {
+        if (this.output) {
+            var empty = $(this.output).find('.simplerenew-calculator-empty');
+            var display = $(this.output).find('.simplerenew-calculator-display');
+
+            if ($.isEmptyObject(this.selectedValues)) {
+                empty.show();
+                display.hide();
+            } else {
+                empty.hide();
+                display.show();
+
+                var items = display.find('.simplerenew-calculator-items');
+                items.empty();
+
+                var subtotal = 0.0,
+                    discount = 0.0;
+
+                $.each(this.selectedValues, function(idx, price) {
+                    subtotal += parseFloat(price.amount);
+                    discount += parseFloat(price.discount);
+                    items
+                        .append($('<div class="simplerenew-calculator-plan">' + $(price.plan).val() + '</div>'))
+                        .append($('<div class="simplerenew-calculator-amount">' + price.amount + '</div>'));
+                });
+
+                display.find('.simplerenew-subtotal .simplerenew-amount').html(subtotal);
+                display.find('.simplerenew-subtotal .simplerenew-discount').html(discount);
+                display.find('.simplerenew-total .simplerenew-amount').html(subtotal - discount);
+            }
+        }
+        next();
+    };
+
+    $.Simplerenew.calculator.registerHandler = function(handler, prepend) {
+        if (typeof handler.calculate == 'function') {
+            if (prepend && prepend === true) {
+                $.Simplerenew.calculator.handlers.unshift(handler);
+            } else {
+                $.Simplerenew.calculator.handlers.push(handler);
+            }
+        }
+    };
 })(jQuery);
