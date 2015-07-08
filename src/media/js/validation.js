@@ -529,7 +529,6 @@
                 } else if (this.selectedValues[planCode]) {
                     delete this.selectedValues[planCode];
                 }
-                console.log(this.selectedValues);
             },
 
             display: function(next) {
