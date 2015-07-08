@@ -555,10 +555,11 @@
         var planCode = $(plan).val();
         if ($(plan).prop('checked')) {
             this.selectedValues[planCode] = $.extend({
-                plan    : plan,
-                amount  : null,
-                discount: null,
-                setup   : null
+                plan          : plan,
+                amount        : null,
+                discount      : null,
+                setup         : null,
+                currencySymbol: null
             }, price);
         } else if (this.selectedValues[planCode]) {
             delete this.selectedValues[planCode];
@@ -585,6 +586,8 @@
                     currencySymbol = '$';
 
                 $.each(this.selectedValues, function(idx, price) {
+                    currencySymbol = price.currencySymbol || currencySymbol;
+
                     subtotal += parseFloat(price.amount);
                     discount += parseFloat(price.discount);
                     items

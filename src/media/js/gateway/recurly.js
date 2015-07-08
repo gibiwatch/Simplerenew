@@ -180,9 +180,10 @@
                     })
                     .done(function(price) {
                         calculator.setValue(plan, {
-                            amount  : price.now.plan,
-                            discount: price.now.discount,
-                            setup   : price.now.setup_fee
+                            amount        : price.now.plan,
+                            discount      : price.now.discount,
+                            setup         : price.now.setup_fee,
+                            currencySymbol: price.currency.symbol
                         });
                         next();
                     });
