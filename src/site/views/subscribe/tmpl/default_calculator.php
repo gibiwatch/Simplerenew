@@ -17,11 +17,11 @@ defined('_JEXEC') or die();
         <p>Got some selections here!</p>
         <div class="simplerenew-calculator-items"></div>
         <div class="simplerenew-subtotal">
-            <div>
+            <div class="simplerenew-subtotal-subtotal">
                 <span>Subtotal</span>
                 <span class="simplerenew-amount">0.00</span>
             </div>
-            <div>
+            <div class="simplerenew-subtotal-discount">
                 <span>Discount</span>
                 <span class="simplerenew-discount">0.00</span>
             </div>
