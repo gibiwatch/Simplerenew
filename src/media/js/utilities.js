@@ -157,47 +157,6 @@
     };
 
     /**
-     * Turn any element into an ajax submitter.
-     * Element must contain a data-task attribute
-     * that references a defined object in $.Simplerenew
-     * containing all jQuery.ajax() options needed to complete
-     * the request.
-     *
-     * Expects dot-notation [see this.find()]
-     *
-     * @param options
-     */
-    $.Simplerenew.ajax = function(options) {
-        options = $.extend(true, this.ajax.options, options);
-
-        $(options.selector).on('click', function(evt) {
-            evt.preventDefault();
-            var keys = $(this).attr('data-task');
-            if (keys) {
-                $(this).prop('disabled', true).css('cursor', 'default');
-                $(this).find($.Simplerenew.settings.enableText).hide();
-                $(this).find($.Simplerenew.settings.disableText).show();
-
-                var ajaxOptions = $.extend(true, $.Simplerenew.find(keys), options.ajax),
-                    success = $.extend(ajaxOptions.success, {});
-
-                ajaxOptions.success = function(response) {
-                    $(this).find($.Simplerenew.settings.enableText).show();
-                    $(this).find($.Simplerenew.settings.disableText).hide();
-                    $(this).prop('disabled', false).css('cursor', 'pointer');
-                    if (typeof success === 'function') {
-                        success.bind(this)(response);
-                    }
-                };
-                $.ajax($.extend(ajaxOptions, {context: this}));
-            }
-        });
-    };
-    $.Simplerenew.ajax.options = {
-        selector: null
-    };
-
-    /**
      * Simple tabs. Define tab headings with any selector
      * and include the attribute data-content with a selector
      * for the content area it controls. All tabs selected by

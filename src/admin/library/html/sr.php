@@ -190,27 +190,4 @@ abstract class JHtmlSr
         $attribs['value'] = $selected;
         return '<input ' . SimplerenewUtilitiesArray::toString($attribs) . '/>';
     }
-
-    /**
-     * Turn any clickable element into an ajax submitter. See
-     * media/js/utilities.js:ajax() for notes on defined tasks
-     *
-     * @param string $selector
-     * @param array  $options
-     *
-     * @return void
-     */
-    public static function ajax($selector, $options = array())
-    {
-        static::jquery();
-
-        $options = is_string($options) ? json_decode($options, true) : (array)$options;
-        $options = array(
-            'selector' => $selector,
-            'ajax'     => $options
-        );
-        $options = json_encode($options);
-
-        static::onready("$.Simplerenew.ajax({$options});");
-    }
 }
