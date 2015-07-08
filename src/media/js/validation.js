@@ -462,36 +462,28 @@
          * A calculator that gateway or custom processors can hook into
          */
         calculator: {
-            plans: null,
-            coupon: null,
-            output: null,
-            values: {
-                plans   : [],
-                coupon  : null,
-                subtotal: {
-                    amount  : 0,
-                    discount: 0
-                },
-                total   : {
-                    gross: 0,
-                    net  : 0
-                }
-            },
-            calculate: function(plan) {
+            plans         : null,
+            coupon        : null,
+            output        : null,
+            selectedValues: {},
+
+            calculate: function(plans) {
                 var calculator = this,
                     jCalculator = $(this);
 
-                $(this.handlers).each(function (idx, handler) {
-                    jCalculator.queue('sr', function(next) {
-                        handler.calculate.call(calculator, plan, next);
-                    })
+                $(plans).each(function(idx, plan) {
+                    $(calculator.handlers).each(function(idx, handler) {
+                        jCalculator.queue('sr', function(next) {
+                            handler.calculate.call(calculator, plan, next);
+                        })
+                    });
                 });
                 jCalculator.queue('sr', function(next) {
                     calculator.display.call(calculator, next);
                 });
                 jCalculator.dequeue('sr');
             },
-            handlers: [],
+            handlers : [],
 
             init: function(options) {
                 options = $.extend(true, this.options, options);
@@ -512,24 +504,65 @@
                 // Add event handlers
                 this.coupon
                     .on('change sr.disable sr.enable', function(evt) {
-                        plans.each(function(idx, plan) {
-                            calculator.calculate(plan);
-                        });
-                    });
+                        calculator.calculate(this.plans);
+                    }, this);
 
                 this.plans
                     .on('click', function(evt) {
-                        calculator.calculate(this);
+                        calculator.calculate([this]);
                     });
 
                 // Set initial states
-                this.plans.filter(':checked').each(function(idx, plan) {
-                    calculator.calculate(plan);
-                });
+                var checkedPlans = this.plans.filter(':checked');
+                calculator.calculate(checkedPlans);
+            },
+
+            setValue: function(plan, price) {
+                var planCode = $(plan).val();
+                if ($(plan).prop('checked')) {
+                    this.selectedValues[planCode] = $.extend({
+                        plan    : plan,
+                        amount  : null,
+                        discount: null,
+                        setup   : null
+                    }, price);
+                } else if (this.selectedValues[planCode]) {
+                    delete this.selectedValues[planCode];
+                }
+                console.log(this.selectedValues);
             },
 
             display: function(next) {
-                this.output.append('<p>Ready for display</p>');
+                if (this.output) {
+                    var empty = $(this.output).find('.simplerenew-calculator-empty');
+                    var display = $(this.output).find('.simplerenew-calculator-display');
+
+                    if ($.isEmptyObject(this.selectedValues)) {
+                        empty.show();
+                        display.hide();
+                    } else {
+                        empty.hide();
+                        display.show();
+
+                        var items = display.find('.simplerenew-calculator-items');
+                        items.empty();
+
+                        var subtotal = 0.0,
+                            discount = 0.0;
+
+                        $.each(this.selectedValues, function(idx, price) {
+                            subtotal += parseFloat(price.amount);
+                            discount += parseFloat(price.discount);
+                            items
+                                .append($('<div class="simplerenew-calculator-plan">' + $(price.plan).val() + '</div>'))
+                                .append($('<div class="simplerenew-calculator-amount">' + price.amount + '</div>'));
+                        });
+
+                        display.find('.simplerenew-subtotal .simplerenew-amount').html(subtotal);
+                        display.find('.simplerenew-subtotal .simplerenew-discount').html(discount);
+                        display.find('.simplerenew-total .simplerenew-amount').html(subtotal - discount);
+                    }
+                }
                 next();
             },
 

@@ -9,18 +9,25 @@
 defined('_JEXEC') or die();
 
 ?>
-<div id="calculator" class="ost-section p-bottom b-bottom">
-    <div class="simplerenew-noselections"></div>
-    <div class="simplerenew-items">
-        <div class="simplerenew-item"></div>
-        <div class="simplerenew-amount"></div>
-        <div class="simplerenew-discount"></div>
+<div id="calculator">
+    <div class="simplerenew-calculator-empty">
+        <p>Message for no selections made yet</p>
     </div>
-    <div class="simplerenew-subtotal">
-        <div class="simplerenew-amount"></div>
-        <div class="simplerenew-discount"></div>
-    </div>
-    <div class="simplerenew-total">
-        <div class="simplerenew-amount" data-recurly="total_now"></div>
+    <div class="simplerenew-calculator-display">
+        <p>Got some selections here!</p>
+        <div class="simplerenew-calculator-items"></div>
+        <div class="simplerenew-subtotal">
+            <div>
+                <span>Subtotal</span>
+                <span class="simplerenew-amount">0.00</span>
+            </div>
+            <div>
+                <span>Discount</span>
+                <span class="simplerenew-discount">0.00</span>
+            </div>
+        </div>
+        <div class="simplerenew-total">
+            Total <span class="simplerenew-amount">0.00</span>
+        </div>
     </div>
 </div>

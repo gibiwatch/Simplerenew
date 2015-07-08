@@ -163,7 +163,7 @@
             },
 
             calculate: function(plan, next) {
-                var planCode   = $(plan).val();
+                var planCode = $(plan).val();
                 var couponCode = this.coupon.is(':disabled') ? '' : this.coupon.val();
                 var calculator = this;
 
@@ -179,11 +179,11 @@
                                 // Next .done() gets called even on failure
                             })
                             .done(function(price) {
-                                $(plan).data('price', {
-                                    net   : price.now.total || 0,
-                                    symbol: price.currency.symbol || ''
+                                calculator.setValue(plan, {
+                                    amount  : price.now.plan,
+                                    discount: price.now.discount,
+                                    setup   : price.now.setup_fee
                                 });
-                                calculator.output.append('<p>Recurly Finished</p>');
                                 next();
                             });
                     });
