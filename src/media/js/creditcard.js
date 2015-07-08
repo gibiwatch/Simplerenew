@@ -18,7 +18,7 @@
             ];
 
             /**
-             * @param {string} ccnumber
+             * @param {String} [ccnumber]
              *
              * Look up the card prefix in the list we know about
              *
@@ -41,7 +41,7 @@
             };
 
             /**
-             * @param {string} value
+             * @param {String} [value]
              *
              * Determine if a credit card number could be valid before submitting it for
              * real-time online authentication. Based on ANSI X4.13, the LUHN formula,
@@ -77,12 +77,12 @@
             };
 
             /**
-             * @param {string} rawNumber
-             * @param {string} cvv
+             * @param {String} [rawNumber]
+             * @param {String} [cvv]
              *
              * Verify the security code only if we know the credit card type
              *
-             * @returns {boolean}
+             * @returns {Boolean}
              */
             var verifyCVV = function(rawNumber, cvv) {
                 var ccnumber = rawNumber.replace(/[\s-]/g, '');
@@ -94,12 +94,12 @@
             };
 
             /**
-             * @param {integer} ccmonth
-             * @param {integer} ccyear
+             * @param {Integer} [ccmonth]
+             * @param {Integer} [ccyear]
              *
              * Valid expiration date is anytime after the end of current month
              *
-             * @returns {boolean}
+             * @returns {Boolean}
              */
             var verifyDate = function(ccmonth, ccyear) {
                 if (ccmonth > 0 && ccyear > 0) {

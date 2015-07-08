@@ -83,8 +83,8 @@
          * in this case the current element will be returned as a partner
          * to itself
          *
-         * @param {string} list
-         * @param {bool}   [useAttribute]
+         * @param {String}  [list]
+         * @param {Boolean} [useAttribute]
          *
          * @returns {Object}
          */
@@ -130,10 +130,10 @@
     /**
      * Format a number into standard currency
      *
-     * @param {*}       number
-     * @param {string=} currencySymbol
+     * @param {*}       [number]
+     * @param {String=} [currencySymbol]
      *
-     * @returns {string}
+     * @returns {String}
      */
     $.formatCurrency = function(number, currencySymbol) {
 
@@ -164,8 +164,8 @@
      * Traverse a plain object using dot-notation key syntax
      * Default source is $.Simplerenew
      *
-     * @param keys
-     * @param source
+     * @param {String} [keys]
+     * @param {Object} [source]
      *
      * @returns {*}
      */
@@ -194,8 +194,8 @@
      * the passed selector will hide all content panels
      * except the one(s) controlled by the active tab.
      *
-     * @param options
-     *        selector : A jQuery selector for the tab headers
+     * @param {Object} [options]
+     *
      */
     $.Simplerenew.tabs = function(options) {
         options = $.extend(this.tabs.options, options);
@@ -235,9 +235,8 @@
      * data-content attribute to select the content
      * panels to slide Up/Down on clicking the control.
      *
-     * @param options
-     *        selector : a jQuery selector for the slider headers
-     *        visible  : bool - initial visible state (default: false)
+     * @param {Object} [options]
+     *
      */
     $.Simplerenew.sliders = function(options) {
         options = $.extend(this.sliders.options, options);
@@ -261,9 +260,14 @@
     /**
      * Create a clickable area for a radio button or checkbox somewhere inside it
      *
-     * @param options
+     * {
+     *     options: {
      *        selector : A jQuery selector for the area
      *        target   : alternative selector for the radio/checkbox(es)
+     *     }
+     * }
+     *
+     * @param {Object} [options]
      */
     $.Simplerenew.clickArea = function(options) {
         options = $.extend(this.clickArea.options, options);
@@ -308,7 +312,7 @@
     /**
      * use combination of input/select fields for controlling region/country values
      *
-     * @param options
+     * @param {Object} [options]
      */
     $.Simplerenew.region = function(options) {
         options = $.extend(this.region.options, options);

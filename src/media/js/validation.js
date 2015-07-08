@@ -2,7 +2,7 @@
     /**
      * Custom method for assigning validation by class
      *
-     * @param rules
+     * @param {Object} [rules]
      */
     $.fn.applyRules = function(rules) {
         var form = $(this[0]);
@@ -57,7 +57,7 @@
      * state == true  : (default) Disable buttons, show text marked for disabled state
      * state == false : Enable buttons, show text marked for enabled state
      *
-     * @param {boolean} [state]
+     * @param {Boolean} [state]
      *
      * @returns {$.fn}
      */
@@ -86,7 +86,7 @@
      * state == true  : (default) Enable buttons, show text marked for enabled state
      * state == false : Disable buttons, show text marked for disabled state
      *
-     * @param {boolean} [state]
+     * @param {Boolean} [state]
      *
      * @returns {$.fn}
      */
@@ -101,7 +101,7 @@
      * not have a name attribute will be given a temporary name that can be cleared
      * on submit.
      *
-     * @param {bool} [clear]
+     * @param {Boolean} [clear]
      *
      * @returns {$.fn}
      */
@@ -131,8 +131,10 @@
         },
 
         gateway: {
-            init  : null,
-            submit: null
+            options   : {},
+            init      : null,
+            submit    : null,
+            calculator: {}
         },
 
         validate: {
@@ -165,8 +167,8 @@
      * Initialize a form for validation.
      * Passes the Joomla session token for ajax calls
      *
-     * @param {string} selector
-     * @param {object} [options]
+     * @param {String} [selector]
+     * @param {Object=} [options]
      */
     $.Simplerenew.validate.init = function(selector, options) {
         var form = $(selector);
@@ -463,7 +465,7 @@
     };
 
     /**
-     * Calculator for use customizing and displaying summary of costs
+     * Calculator for use in customizing and displaying prices
      */
     $.extend(true, $.Simplerenew, {
         validate: {
@@ -488,23 +490,13 @@
         handlers      : []
     };
 
-    $.Simplerenew.calculator.calculate = function(plans) {
-        var calculator = this,
-            jCalculator = $(this);
-
-        $(plans).each(function(idx, plan) {
-            $(calculator.handlers).each(function(idx, handler) {
-                jCalculator.queue('sr', function(next) {
-                    handler.calculate.call(calculator, plan, next);
-                })
-            });
-        });
-        jCalculator.queue('sr', function(next) {
-            calculator.display.call(calculator, next);
-        });
-        jCalculator.dequeue('sr');
-    };
-
+    /**
+     * Initialise the calculator. Gateway methods and custom methods can use their own
+     * init code with registerHandler() (see below)
+     *
+     * @param {Object=} [options]
+     *
+     */
     $.Simplerenew.calculator.init = function(options) {
         options = $.extend(true, this.options, options);
 
@@ -535,6 +527,28 @@
         // Set initial states
         var checkedPlans = this.plans.filter(':checked');
         calculator.calculate(checkedPlans);
+    };
+
+    /**
+     * Update all prices based on current plan and coupon selections
+     *
+     * @param {Array} [plans]
+     */
+    $.Simplerenew.calculator.calculate = function(plans) {
+        var calculator = this,
+            jCalculator = $(this);
+
+        $(plans).each(function(idx, plan) {
+            $(calculator.handlers).each(function(idx, handler) {
+                jCalculator.queue('sr', function(next) {
+                    handler.calculate.call(calculator, plan, next);
+                })
+            });
+        });
+        jCalculator.queue('sr', function(next) {
+            calculator.display.call(calculator, next);
+        });
+        jCalculator.dequeue('sr');
     };
 
     $.Simplerenew.calculator.setValue = function(plan, price) {
