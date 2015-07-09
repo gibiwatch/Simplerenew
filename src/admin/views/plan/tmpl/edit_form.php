@@ -7,7 +7,6 @@
  */
 
 defined('_JEXEC') or die();
-JHtml::stylesheet('com_simplerenew/admin.css', null, true);
 
 $app = SimplerenewFactory::getApplication();
 $input = $app->input;
