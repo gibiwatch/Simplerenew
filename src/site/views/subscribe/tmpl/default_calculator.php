@@ -10,24 +10,24 @@ defined('_JEXEC') or die();
 
 ?>
 <div id="calculator">
+    <h3><?php echo JText::_('COM_SIMPLERENEW_CALCULATOR_SELECTED_PLANS'); ?></h3>
     <div class="simplerenew-calculator-empty">
-        <p>Message for no selections made yet</p>
+        <p><?php echo JText::_('COM_SIMPLERENEW_CALCULATOR_NONE_SELECTED'); ?></p>
     </div>
     <div class="simplerenew-calculator-display">
-        <p>Got some selections here!</p>
         <div class="simplerenew-calculator-items"></div>
         <div class="simplerenew-subtotal">
             <div class="simplerenew-subtotal-subtotal">
-                <span>Subtotal</span>
+                <span><?php echo JText::_('COM_SIMPLERENEW_CALCULATOR_SUBTOTAL'); ?></span>
                 <span class="simplerenew-amount">0.00</span>
             </div>
             <div class="simplerenew-subtotal-discount">
-                <span>Discount</span>
+                <span><?php echo JText::_('COM_SIMPLERENEW_CALCULATOR_DISCOUNT'); ?></span>
                 <span class="simplerenew-discount">0.00</span>
             </div>
         </div>
         <div class="simplerenew-total">
-            <div>Total </div>
+            <div><?php echo JText::_('COM_SIMPLERENEW_CALCULATOR_TOTAL'); ?></div>
             <div class="simplerenew-amount">0.00</div>
         </div>
     </div>

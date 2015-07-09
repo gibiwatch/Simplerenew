@@ -603,14 +603,10 @@
                     .find('.simplerenew-subtotal .simplerenew-amount')
                     .html($.formatCurrency(subtotal, currencySymbol));
 
-                if (discount > 0) {
-                    display
-                        .find('.simplerenew-subtotal .simplerenew-discount')
-                        .html($.formatCurrency(discount, currencySymbol))
-                        .show();
-                } else {
-                    display.find('.simplerenew-subtotal').hide();
-                }
+                display
+                    .find('.simplerenew-subtotal .simplerenew-discount')
+                    .html($.formatCurrency(discount, currencySymbol))
+                    .show();
 
                 display
                     .find('.simplerenew-total .simplerenew-amount')
