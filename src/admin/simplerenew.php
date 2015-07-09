@@ -9,6 +9,7 @@
 defined('_JEXEC') or die();
 
 require_once JPATH_COMPONENT_ADMINISTRATOR . '/include.php';
+JHtml::_('stylesheet', 'com_simplerenew/admin.css', null, true);
 
 // Access check.
 if (!SimplerenewFactory::getUser()->authorise('core.manage', 'com_simplerenew')) {

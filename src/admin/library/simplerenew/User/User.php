@@ -19,6 +19,7 @@ defined('_JEXEC') or die();
  *
  * @package Simplerenew
  *
+ * @property-read string $fullname
  */
 class User extends Object
 {
@@ -81,6 +82,14 @@ class User extends Object
     {
         $this->configuration = $config;
         $this->adapter       = $adapter;
+    }
+
+    public function __get($name)
+    {
+        if ($name == 'fullname') {
+            return $this->getFullName();
+        }
+        return null;
     }
 
     /**
@@ -253,5 +262,15 @@ class User extends Object
     public function getConfig($key, $default = null)
     {
         return $this->configuration->get($key, $default);
+    }
+
+    /**
+     * Wrapper function for easy and consistent retrieval of full name
+     *
+     * @return string
+     */
+    public function getFullName()
+    {
+        return trim($this->firstname . ' ' . $this->lastname);
     }
 }

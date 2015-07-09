@@ -27,6 +27,10 @@
 .ost-container-dashboard{
     margin: 25px 0;
 }
+body.com_simplerenew .page-title {
+    background: rgba(0, 0, 0, 0) url("../images/logo.png") no-repeat 0 50%;
+    padding-left: 60px;
+}
 
 /* Override of normal input fields
 =============================================================================== */
