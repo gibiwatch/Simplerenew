@@ -600,16 +600,16 @@
                 });
 
                 display
-                    .find('.simplerenew-subtotal .simplerenew-amount')
+                    .find('.simplerenew-subtotal-amount')
                     .html($.formatCurrency(subtotal, currencySymbol));
 
                 display
-                    .find('.simplerenew-subtotal .simplerenew-discount')
+                    .find('.simplerenew-discount-amount')
                     .html($.formatCurrency(discount, currencySymbol))
                     .show();
 
                 display
-                    .find('.simplerenew-total .simplerenew-amount')
+                    .find('.simplerenew-total-amount')
                     .html($.formatCurrency(subtotal - discount, currencySymbol));
             }
         }
