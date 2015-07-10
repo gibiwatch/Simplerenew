@@ -225,7 +225,8 @@ else:
 
                 <td>
                     <?php
-                    echo JHtml::link(
+                    echo JHtml::_(
+                        'link',
                         JRoute::_($editLink),
                         $this->escape($item->name),
                         array('title' => $editTitle)

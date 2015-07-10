@@ -25,6 +25,6 @@ abstract class JHtmlInvoice
         }
 
         $link = JRoute::_('index.php?' . http_build_query($query));
-        return JHtml::link($link, $number);
+        return JHtml::_('link', $link, $number);
     }
 }

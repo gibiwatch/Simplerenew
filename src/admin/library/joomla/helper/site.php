@@ -43,13 +43,12 @@ abstract class SimplerenewHelperSite
         // Load the selected font
         $font = explode('|', $params->get('themes.fontFamily', 'none'));
         if ($font[0] != 'none') {
-
             /* Load Google fonts files when font-weight exists
             *  Example: "Droid Sans|sans-serif|400,700"
             *  400,700 is the font-weight */
             if (count($font) > 2) {
                 $href = static::$googleFonts . '/css?family=' . $font[0] . ':' . $font[2];
-                JHtml::stylesheet($href);
+                JHtml::_('stylesheet', $href);
             }
 
             // Assign font-family to specific tags
@@ -75,20 +74,20 @@ abstract class SimplerenewHelperSite
 
         // Load font Awesome
         if ($params->get('themes.fontAwesome', true)) {
-            JHtml::stylesheet('com_simplerenew/awesome/css/font-awesome.min.css', null, true);
+            JHtml::_('stylesheet', 'com_simplerenew/awesome/css/font-awesome.min.css', null, true);
         }
 
         // Load responsive grids
-        JHtml::stylesheet('com_simplerenew/grid.css', null, true);
-        JHtml::stylesheet('com_simplerenew/grid-responsive.css', null, true);
-        JHtml::stylesheet('com_simplerenew/style.css', null, true);
+        JHtml::_('stylesheet', 'com_simplerenew/grid.css', null, true);
+        JHtml::_('stylesheet', 'com_simplerenew/grid-responsive.css', null, true);
+        JHtml::_('stylesheet', 'com_simplerenew/style.css', null, true);
 
         // Load the selected theme
         if ($theme === null) {
             $theme = $params->get('themes.theme', 'default.css');
         }
         if ($theme != 'none') {
-            JHtml::stylesheet('com_simplerenew/themes/' . $theme, null, true);
+            JHtml::_('stylesheet', 'com_simplerenew/themes/' . $theme, null, true);
         }
     }
 }

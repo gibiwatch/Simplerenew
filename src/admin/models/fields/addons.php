@@ -46,14 +46,16 @@ class JFormFieldAddons extends JFormFieldText
                         $registerCount++;
 
                         if ($current->enabled && (!$addon->init || is_file($addon->init))) {
-                            $statusImage = JHTML::image(
+                            $statusImage = JHtml::_(
+                                'image',
                                 'admin/icon-16-allow.png',
                                 JText::_('COM_SIMPLERENEW_ENABLED'),
                                 null,
                                 true
                             );
                         } else {
-                            $statusImage = JHTML::image(
+                            $statusImage = JHtml::_(
+                                'image',
                                 'admin/icon-16-deny.png',
                                 JText::_('COM_SIMPLERENEW_DISABLED'),
                                 null,
