@@ -44,7 +44,7 @@
         $('#billing_postal').attr('data-recurly', 'postal_code');
         $('#billing_country').attr('data-recurly', 'country');
 
-        $.Simplerenew.calculator.registerHandler(this.calculator);
+        $.Simplerenew.calculator.registerHandler(this.calculator,true);
 
         // We're taking over all form submission to minimize paypal popup problem
         $.validator.defaults.onsubmit = false;
