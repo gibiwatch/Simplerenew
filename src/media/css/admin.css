@@ -28,7 +28,7 @@
     margin: 25px 0;
 }
 body.com_simplerenew .page-title {
-    background: rgba(0, 0, 0, 0) url("../images/logo.png") no-repeat 0 0 / 35px auto;
+    background: rgba(0, 0, 0, 0) url("../images/logo-white.png") no-repeat 0 0 / 35px auto;
     padding-left: 12px;
 }
 
@@ -55,4 +55,11 @@ body.com_simplerenew .page-title {
 
 #ost-narrative label {
     display: none;
+}
+
+@media (max-width: 768px) {
+    /* Admin */
+    body.com_simplerenew .page-title {
+        background-size: 25px auto;
+    }
 }
