@@ -208,7 +208,7 @@
      *        selector : A jQuery selector for the tab headers
      */
     $.Simplerenew.tabs = function(options) {
-        options = $.extend(this.tabs.options, options);
+        options = $.extend({}, this.tabs.options, options);
 
         var headers = $(options.selector);
         headers
@@ -230,7 +230,7 @@
         if (!options.active) {
             options.active = '#' + $(headers[0]).attr('id');
         }
-        $(headers.filter(options.active)).trigger('click', {focus: false});
+        $(headers.filter(options.active)).trigger('click');
     };
     $.Simplerenew.tabs.options = {
         selector: null,
@@ -250,17 +250,17 @@
      *        visible  : bool - initial visible state (default: false)
      */
     $.Simplerenew.sliders = function(options) {
-        options = $.extend(this.sliders.options, options);
+        options = $.extend({}, this.sliders.options, options);
 
         $(options.selector).each(function() {
             $(this)
                 .css('cursor', 'pointer')
                 .data('contentPanel', $($(this).attr('data-content')))
-                .on('click', function(evt, options) {
+                .on('click', function(evt) {
                     var contentPanel = $(this).data('contentPanel');
                     contentPanel.closePanelSlide(contentPanel.is(':visible'), options);
                 })
-                .data('contentPanel').closePanel(!options.visible, {focus: false});
+                .data('contentPanel').closePanel(!options.visible);
         });
     };
     $.Simplerenew.sliders.options = {
