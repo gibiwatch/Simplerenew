@@ -20,9 +20,9 @@ defined('_JEXEC') or die();
             <span><?php echo JText::_('COM_SIMPLERENEW_CALCULATOR_SUBTOTAL'); ?></span>
             <span class="simplerenew-subtotal-amount">0.00</span>
         </div>
-        <div class="simplerenew-discount">
+        <div class="simplerenew-calculator-discount">
             <span><?php echo JText::_('COM_SIMPLERENEW_CALCULATOR_DISCOUNT'); ?></span>
-            <span class="simplerenew-discount-amount">0.00</span>
+            <span class="simplerenew-calculator-discount-amount">0.00</span>
         </div>
         <div class="simplerenew-total">
             <div><?php echo JText::_('COM_SIMPLERENEW_CALCULATOR_TOTAL'); ?></div>

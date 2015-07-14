@@ -615,7 +615,7 @@
                     .html($.formatCurrency(subtotal, currencySymbol));
 
                 display
-                    .find('.simplerenew-discount-amount')
+                    .find('.simplerenew-calculator-discount-amount')
                     .html($.formatCurrency(discount, currencySymbol))
                     .show();
 
