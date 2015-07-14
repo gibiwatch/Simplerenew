@@ -465,27 +465,28 @@
      * Calculator for use in customizing and displaying prices
      */
     $.extend(true, $.Simplerenew, {
-        validate: {
+        validate  : {
             options: {
                 calculator: {
                     output: '.simplerenew-calculator'
                 }
             }
+        },
+        calculator: {
+            settings      : {
+                empty  : '.simplerenew-calculator-empty',
+                display: '.simplerenew-calculator-display',
+                items  : '.simplerenew-calculator-items',
+                overlay: '.simplerenew-calculator-overlay'
+            },
+            plans         : null,
+            coupon        : null,
+            output        : null,
+            overlay       : null,
+            selectedValues: {},
+            handlers      : []
         }
     });
-
-    $.Simplerenew.calculator = {
-        settings      : {
-            empty  : '.simplerenew-calculator-empty',
-            display: '.simplerenew-calculator-display',
-            items  : '.simplerenew-calculator-items'
-        },
-        plans         : null,
-        coupon        : null,
-        output        : null,
-        selectedValues: {},
-        handlers      : []
-    };
 
     /**
      * Initialise the calculator. Gateway methods and custom methods can use their own
@@ -498,6 +499,18 @@
         options = $.extend(true, this.options, options);
 
         this.output = $(options.output);
+        this.overlay = this.output.find(this.settings.overlay);
+
+        if (this.overlay[0]) {
+            this.output.css('position', 'relative');
+            this.overlay.css({
+                position : 'absolute',
+                width    : 0,
+                height   : 0,
+                'z-index': 9999
+            }).hide();
+        }
+
         this.plans = $('[name^=planCodes]');
         this.coupon = $('#coupon_code');
 
@@ -535,6 +548,12 @@
         var calculator = this,
             jCalculator = $(this);
 
+        if ($(plans).length > 0 && this.overlay) {
+            this.overlay.css({
+                height: this.output.height(),
+                width: this.output.width()
+            }).show();
+        }
         $(plans).each(function(idx, plan) {
             $(calculator.handlers).each(function(idx, handler) {
                 if (typeof handler.calculate === 'function') {
@@ -629,6 +648,10 @@
                     handler.display($.Simplerenew.calculator);
                 }
             });
+
+            if (this.overlay) {
+                this.overlay.hide();
+            }
         }
         next();
     };
