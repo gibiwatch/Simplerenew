@@ -509,7 +509,7 @@
         // Init any handlers requesting it
         $(this.handlers).each(function(idx, handler) {
             if (typeof handler.init === 'function') {
-                handler.init.call(calculator);
+                handler.init(calculator);
             }
         });
 
@@ -542,7 +542,7 @@
             $(calculator.handlers).each(function(idx, handler) {
                 if (typeof handler.calculate === 'function') {
                     jCalculator.queue('sr', function(next) {
-                        handler.calculate.call(calculator, plan, next);
+                        handler.calculate(calculator, plan, next);
                     });
                 }
             });
@@ -553,6 +553,13 @@
         jCalculator.dequeue('sr');
     };
 
+    /**
+     * Stores/Removes a price object for a plan on the form
+     *
+     * @param {Object} plan  The <input> element of the plan
+     * @param {Object} price When the plan is selected, the price information supplied by the gateway
+     *
+     */
     $.Simplerenew.calculator.setValue = function(plan, price) {
         var planCode = $(plan).val();
         if ($(plan).prop('checked')) {
@@ -568,6 +575,11 @@
         }
     };
 
+    /**
+     * Display the results of all calculations if an output area has been provided
+     *
+     * @param {Function} next The jQuery provided function to process the asynchronous queue
+     */
     $.Simplerenew.calculator.display = function(next) {
         if (this.output) {
             var empty = $(this.output).find(this.settings.empty);
@@ -617,13 +629,27 @@
 
             $(this.handlers).each(function (idx, handler) {
                 if (typeof handler.display === 'function') {
-                    handler.display.call($.Simplerenew.calculator);
+                    handler.display($.Simplerenew.calculator);
                 }
             });
         }
         next();
     };
 
+    /**
+     * Registers additional/custom calculator handlers to hook into the calculation/display process.
+     * All functions are optional.
+     *
+     * Functions recognized:
+     *
+     * init(calculator)                 : After the core initialization is completed
+     * calculate(calculator, plan, next): After core calculations are completed (the 'next' function MUST
+     *                                    be called on completion to continue the async calculation chain!
+     * display(calculator)              : After core display is completed
+     *
+     * @param {Object}  handler
+     * @param {Boolean} prepend Add handler to beginning of handler list
+     */
     $.Simplerenew.calculator.registerHandler = function(handler, prepend) {
         if (prepend && prepend === true) {
             $.Simplerenew.calculator.handlers.unshift(handler);

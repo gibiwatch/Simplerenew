@@ -157,15 +157,14 @@
     /**
      * The Recurly calculator handler
      */
-    $.Simplerenew.gateway.calculator.init = function() {
-        this.coupon.attr('data-recurly', 'coupon');
-        this.plans.attr('data-recurly', 'plan');
+    $.Simplerenew.gateway.calculator.init = function(calculator) {
+        calculator.coupon.attr('data-recurly', 'coupon');
+        calculator.plans.attr('data-recurly', 'plan');
     };
 
-    $.Simplerenew.gateway.calculator.calculate = function(plan, next) {
+    $.Simplerenew.gateway.calculator.calculate = function(calculator, plan, next) {
         var planCode = $(plan).val();
-        var couponCode = this.coupon.is(':disabled') ? '' : this.coupon.val();
-        var calculator = this;
+        var couponCode = calculator.coupon.is(':disabled') ? '' : calculator.coupon.val();
 
         var pricing = recurly.Pricing();
         pricing
