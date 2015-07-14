@@ -62,8 +62,8 @@
      * @returns {$.fn}
      */
     $.fn.disableSubmit = function(state) {
-        var buttons = $(this).find(':button[type=submit]'),
-            enabled = buttons.find($.Simplerenew.settings.enableText),
+        var buttons  = $(this).find(':button[type=submit]'),
+            enabled  = buttons.find($.Simplerenew.settings.enableText),
             disabled = buttons.find($.Simplerenew.settings.disableText);
 
         if ($.type(state) === 'undefined' || state) {
@@ -256,7 +256,7 @@
                 }
 
                 var previous = this.previousValue(element),
-                    plans = [],
+                    plans    = [],
                     validator, data, keyValue;
 
                 $($(element)
@@ -356,7 +356,7 @@
         ccdate: {
             method : function(value, element, params) {
                 var partner = $(element).attr(params.partner),
-                    result = false;
+                    result  = false;
 
                 if (partner) {
                     if (element.id.match(/month/i)) {
@@ -545,13 +545,13 @@
      * @param {Array} [plans]
      */
     $.Simplerenew.calculator.calculate = function(plans) {
-        var calculator = this,
+        var calculator  = this,
             jCalculator = $(this);
 
         if ($(plans).length > 0 && this.overlay) {
             this.overlay.css({
                 height: this.output.height(),
-                width: this.output.width()
+                width : this.output.width()
             }).show();
         }
         $(plans).each(function(idx, plan) {
@@ -611,8 +611,8 @@
                 var items = display.find(this.settings.items);
                 items.empty();
 
-                var subtotal = 0.0,
-                    discount = 0.0,
+                var subtotal       = 0.0,
+                    discount       = 0.0,
                     currencySymbol = '$';
 
                 $.each(this.selectedValues, function(idx, price) {
@@ -643,7 +643,7 @@
                     .html($.formatCurrency(subtotal - discount, currencySymbol));
             }
 
-            $(this.handlers).each(function (idx, handler) {
+            $(this.handlers).each(function(idx, handler) {
                 if (typeof handler.display === 'function') {
                     handler.display($.Simplerenew.calculator);
                 }
