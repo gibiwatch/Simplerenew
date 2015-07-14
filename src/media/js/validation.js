@@ -611,7 +611,7 @@
                 });
 
                 display
-                    .find('.simplerenew-subtotal-amount')
+                    .find('.simplerenew-calculator-subtotal-amount')
                     .html($.formatCurrency(subtotal, currencySymbol));
 
                 display
