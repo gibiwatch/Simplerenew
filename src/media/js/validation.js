@@ -468,7 +468,7 @@
         validate: {
             options: {
                 calculator: {
-                    output: '.ost-calculator'
+                    output: '.simplerenew-calculator'
                 }
             }
         }
