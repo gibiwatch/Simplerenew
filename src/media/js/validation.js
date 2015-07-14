@@ -508,7 +508,7 @@
 
         // Init any handlers requesting it
         $(this.handlers).each(function(idx, handler) {
-            if (typeof handler.init == 'function') {
+            if (typeof handler.init === 'function') {
                 handler.init.call(calculator);
             }
         });
@@ -540,9 +540,11 @@
 
         $(plans).each(function(idx, plan) {
             $(calculator.handlers).each(function(idx, handler) {
-                jCalculator.queue('sr', function(next) {
-                    handler.calculate.call(calculator, plan, next);
-                })
+                if (typeof handler.calculate === 'function') {
+                    jCalculator.queue('sr', function(next) {
+                        handler.calculate.call(calculator, plan, next);
+                    });
+                }
             });
         });
         jCalculator.queue('sr', function(next) {
@@ -612,17 +614,21 @@
                     .find('.simplerenew-total-amount')
                     .html($.formatCurrency(subtotal - discount, currencySymbol));
             }
+
+            $(this.handlers).each(function (idx, handler) {
+                if (typeof handler.display === 'function') {
+                    handler.display.call($.Simplerenew.calculator);
+                }
+            });
         }
         next();
     };
 
     $.Simplerenew.calculator.registerHandler = function(handler, prepend) {
-        if (typeof handler.calculate == 'function') {
-            if (prepend && prepend === true) {
-                $.Simplerenew.calculator.handlers.unshift(handler);
-            } else {
-                $.Simplerenew.calculator.handlers.push(handler);
-            }
+        if (prepend && prepend === true) {
+            $.Simplerenew.calculator.handlers.unshift(handler);
+        } else {
+            $.Simplerenew.calculator.handlers.push(handler);
         }
     };
 })(jQuery);
