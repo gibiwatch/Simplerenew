@@ -158,6 +158,20 @@
         return currencySymbol + formatted;
     };
 
+    /**
+     * A very simplistic token replacer for strings. Replaces all occurances of %s in
+     * the first argument passed with each successive argument passed.
+     *
+     * @returns {String}
+     */
+    $.tokenReplace = function() {
+        var text = arguments[0];
+        for (var i=1; i<arguments.length; i++) {
+            text = text.replace('%s', arguments[i]);
+        }
+        return text;
+    };
+
     $.Simplerenew = $.extend({}, $.Simplerenew);
 
     /**
