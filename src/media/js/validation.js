@@ -620,7 +620,7 @@
                     .show();
 
                 display
-                    .find('.simplerenew-total-amount')
+                    .find('.simplerenew-calculator-total-amount')
                     .html($.formatCurrency(subtotal - discount, currencySymbol));
             }
 
