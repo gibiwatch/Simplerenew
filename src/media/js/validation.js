@@ -155,9 +155,6 @@
                     } else {
                         place.insertAfter(element);
                     }
-                },
-                calculator    : {
-                    output: '#calculator'
                 }
             }
         }
@@ -471,7 +468,7 @@
         validate: {
             options: {
                 calculator: {
-                    output: '#calculator'
+                    output: '.ost-calculator'
                 }
             }
         }
