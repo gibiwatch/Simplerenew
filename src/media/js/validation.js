@@ -483,6 +483,7 @@
             coupon        : null,
             output        : null,
             overlay       : null,
+            cover         : null,
             selectedValues: {},
             handlers      : []
         }
@@ -548,6 +549,7 @@
         var calculator  = this,
             jCalculator = $(this);
 
+        this.addCover();
         if ($(plans).length > 0 && this.overlay) {
             this.overlay.css({
                 height: this.output.height(),
@@ -652,8 +654,25 @@
             if (this.overlay) {
                 this.overlay.hide();
             }
+            if (this.cover) {
+                this.cover.remove();
+                this.cover = null;
+            }
         }
         next();
+    };
+
+    $.Simplerenew.calculator.addCover = function() {
+        var plansList = $('.ost-plans-list').css('position', 'relative');
+        this.cover = $('<div/>')
+            .css({
+                position : 'absolute',
+                width    : plansList.width(),
+                height   : plansList.height(),
+                'z-index': 9999
+            });
+
+        plansList.prepend(this.cover);
     };
 
     /**
