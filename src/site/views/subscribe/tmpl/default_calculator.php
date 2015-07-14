@@ -9,7 +9,7 @@
 defined('_JEXEC') or die();
 
 ?>
-<div id="calculator">
+<div class="ost-calculator">
     <h3><?php echo JText::_('COM_SIMPLERENEW_CALCULATOR_SELECTED_PLANS'); ?></h3>
     <div class="simplerenew-calculator-empty">
         <p><?php echo JText::_('COM_SIMPLERENEW_CALCULATOR_NONE_SELECTED'); ?></p>
