@@ -600,56 +600,61 @@
      */
     $.Simplerenew.calculator.display = function(next) {
         if (this.output) {
-            var empty = $(this.output).find(this.settings.empty);
-            var display = $(this.output).find(this.settings.display);
+            var result = {
+                prices        : [],
+                empty         : $(this.output).find(this.settings.empty),
+                display       : $(this.output).find(this.settings.display),
+                currencySymbol: '',
+                subtotal      : 0,
+                discount      : 0,
+                total         : 0
+            };
+
+            var priceDisplay = result.display.find(this.settings.items);
+            priceDisplay.empty();
 
             if ($.isEmptyObject(this.selectedValues)) {
-                empty.show();
-                display.hide();
+                result.empty.show();
+                result.display.hide();
             } else {
-                empty.hide();
-                display.show();
-
-                var items = display.find(this.settings.items);
-                items.empty();
-
-                var subtotal       = 0.0,
-                    discount       = 0.0,
-                    currencySymbol = '$';
-
+                result.empty.hide();
+                result.display.show();
                 $.each(this.selectedValues, function(idx, price) {
-                    currencySymbol = price.currencySymbol || currencySymbol;
+                    result.currencySymbol = price.currencySymbol || result.currencySymbol;
 
-                    subtotal += parseFloat(price.amount);
-                    discount += parseFloat(price.discount);
-                    items
-                        .append($('<div/>')
-                            .addClass('simplerenew-calculator-plan')
-                            .html($(price.plan).attr('data-description')))
-                        .append($('<div/>')
-                            .addClass('simplerenew-calculator-amount')
-                            .html($.formatCurrency(price.amount, currencySymbol)));
+                    result.subtotal += parseFloat(price.amount);
+                    result.discount += parseFloat(price.discount);
+                    result.prices.push(price);
                 });
-
-                display
-                    .find('.simplerenew-calculator-subtotal-amount')
-                    .html($.formatCurrency(subtotal, currencySymbol));
-
-                display
-                    .find('.simplerenew-calculator-discount-amount')
-                    .html($.formatCurrency(discount, currencySymbol))
-                    .show();
-
-                display
-                    .find('.simplerenew-calculator-total-amount')
-                    .html($.formatCurrency(subtotal - discount, currencySymbol));
+                result.total = result.subtotal - result.discount;
             }
-
             $(this.handlers).each(function(idx, handler) {
                 if (typeof handler.display === 'function') {
-                    handler.display($.Simplerenew.calculator);
+                    handler.display($.Simplerenew.calculator, result);
                 }
             });
+
+            $(result.prices).each(function(idx, price) {
+                priceDisplay
+                    .append($('<div/>')
+                        .addClass('simplerenew-calculator-plan')
+                        .html($(price.plan).attr('data-description')))
+                    .append($('<div/>')
+                        .addClass('simplerenew-calculator-amount')
+                        .html($.formatCurrency(price.amount, result.currencySymbol)));
+            });
+            result.display
+                .find('.simplerenew-calculator-subtotal-amount')
+                .html($.formatCurrency(result.subtotal, result.currencySymbol));
+
+            result.display
+                .find('.simplerenew-calculator-discount-amount')
+                .html($.formatCurrency(result.discount, result.currencySymbol))
+                .show();
+
+            result.display
+                .find('.simplerenew-calculator-total-amount')
+                .html($.formatCurrency(result.total, result.currencySymbol));
 
             if (this.overlay) {
                 this.overlay.hide();
