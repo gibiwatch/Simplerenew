@@ -692,7 +692,7 @@
      * display(calculator)              : After core display is completed
      *
      * @param {Object}  handler
-     * @param {Boolean} prepend Add handler to beginning of handler list
+     * @param {Boolean=} prepend Add handler to beginning of handler list
      */
     $.Simplerenew.calculator.registerHandler = function(handler, prepend) {
         if (prepend && prepend === true) {
