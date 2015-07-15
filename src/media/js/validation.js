@@ -649,8 +649,12 @@
 
             result.display
                 .find('.simplerenew-calculator-discount-amount')
-                .html($.formatCurrency(result.discount, result.currencySymbol))
-                .show();
+                .html($.formatCurrency(result.discount, result.currencySymbol));
+            if (result.discount > 0) {
+                result.display.find('.simplerenew-calculator-discount').show();
+            } else {
+                result.display.find('.simplerenew-calculator-discount').hide();
+            }
 
             result.display
                 .find('.simplerenew-calculator-total-amount')
