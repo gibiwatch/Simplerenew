@@ -156,6 +156,40 @@ class Object
     }
 
     /**
+     * Converts SR fields/values
+     *
+     * See self::map() for explanation of fieldMaps
+     *
+     * @param $values
+     * @param $map
+     *
+     * @return \stdClass
+     */
+    public function reverseMap(array $values, array $map)
+    {
+        $data   = new \stdClass();
+
+        foreach ($values as $srField => $value) {
+            if (isset($map[$srField])) {
+                $mapField = $map[$srField];
+                if (is_string($mapField)) {
+                    $data->$mapField = $value;
+
+                } else {
+                    $options    = current($mapField);
+                    $key        = key($mapField);
+                    $data->$key = array_search($value, $options);
+                }
+
+            } else {
+                $data->$srField = $value;
+            }
+        }
+
+        return $data;
+    }
+
+    /**
      * Safely get a value from an object|array
      *
      * @param object|array $data
