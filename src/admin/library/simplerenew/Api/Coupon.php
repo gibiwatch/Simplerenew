@@ -150,4 +150,12 @@ class Coupon extends AbstractApiBase
 
         return $amount;
     }
+
+    /**
+     * Create a new coupon on the gateway using current property values
+     */
+    public function create()
+    {
+        $this->imp->create($this);
+    }
 }
