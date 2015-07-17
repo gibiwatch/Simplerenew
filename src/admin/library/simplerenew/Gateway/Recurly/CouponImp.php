@@ -19,9 +19,13 @@ defined('_JEXEC') or die();
 
 class CouponImp extends AbstractRecurlyBase implements CouponInterface
 {
+    const CODE_ILLEGAL    = '/([^a-zA-Z0-9@\-_\.])/';
+    const CODE_MAX_LENGTH = 50;
+
     protected $fieldMap = array(
         'code'              => 'coupon_code',
         'short_description' => 'invoice_description',
+        'description'       => 'hosted_description',
         'status'            => array(
             'state' => array(
                 'redeemable'          => Coupon::STATUS_ACTIVE,
@@ -54,7 +58,42 @@ class CouponImp extends AbstractRecurlyBase implements CouponInterface
      */
     public function create(Coupon $parent)
     {
-        // TODO: Implement create() method.
+        $required = array(
+            'Code'   => $parent->code,
+            'Name'   => $parent->name,
+            'Type'   => $parent->type,
+            'Amount' => $parent->amount
+        );
+        if ($missing = array_diff($required, array_filter($required))) {
+            throw new Exception('Required coupon data missing: ' . join(', ', array_keys($missing)));
+        }
+        if (preg_match_all(static::CODE_ILLEGAL, $parent->code, $illegal)) {
+            throw new Exception('Invalid characters \'' . join('', $illegal[1]) . '\' in coupon code');
+        }
+        if (strlen($parent->code) > static::CODE_MAX_LENGTH) {
+            throw new Exception('Coupon code must be no longer than ' . static::CODE_MAX_LENGTH . ' characters');
+        }
+
+        \Recurly_Client::$apiKey = $this->client->apiKey();
+        $coupon                  = new \Recurly_Coupon();
+
+        $data = $this->reverseMap($parent->getProperties(), $this->fieldMap);
+        foreach ($data as $field => $value) {
+            $coupon->$field = $value;
+        }
+        $coupon->applies_to_all_plans = (bool)!$parent->plans;
+
+        if ($parent->type == Coupon::TYPE_AMOUNT) {
+            if (!$parent->currency) {
+                throw new Exception('Currency must be specified for fixed amount coupons');
+            }
+            $coupon->discount_in_cents->addCurrency($parent->currency, $parent->amount * 100);
+        } else {
+            $coupon->discount_percent = $parent->amount;
+        }
+
+        $coupon->create();
+        $this->bindSource($parent, $coupon);
     }
 
     /**
@@ -96,6 +135,8 @@ class CouponImp extends AbstractRecurlyBase implements CouponInterface
                 if ($parent->amount instanceof \Recurly_CurrencyList) {
                     $parent->amount = $this->getCurrency($parent->amount);
                 }
+                $parent->currency = $this->currency;
+
                 break;
 
             case Coupon::TYPE_PERCENT:
