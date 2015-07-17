@@ -158,4 +158,33 @@ class Coupon extends AbstractApiBase
     {
         $this->imp->create($this);
     }
+
+    /**
+     * Get list of coupons from the Gateway
+     *
+     * @param int $status
+     *
+     * @return array Associative array of coupons keyed on coupon code
+     * @throws Exception
+     */
+    public function getList($status = self::STATUS_ACTIVE)
+    {
+        $template = clone $this;
+        $template->clearProperties();
+
+        $coupons = $this->imp->getList($template, $status);
+        ksort($coupons);
+        return $coupons;
+    }
+
+    /**
+     * Remove the coupon from usage
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function delete()
+    {
+        $this->imp->delete($this);
+    }
 }

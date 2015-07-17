@@ -166,7 +166,8 @@ class CouponImp extends AbstractRecurlyBase implements CouponInterface
      */
     public function delete(Coupon $parent)
     {
-        // TODO: Implement delete() method.
+        $coupon = $this->getCoupon($parent->code);
+        $coupon->delete();
     }
 
     /**
@@ -180,7 +181,37 @@ class CouponImp extends AbstractRecurlyBase implements CouponInterface
      */
     public function getList(Coupon $template, $status = null)
     {
-        // TODO: Implement getList() method.
+        $coupons = array();
+        $states  = $this->translateStatus($status);
+
+        $rawCoupons = \Recurly_CouponList::get(null, $this->client);
+        foreach ($rawCoupons as $rawCoupon) {
+            if (in_array($rawCoupon->state, $states)) {
+                $coupon = clone $template;
+                $this->bindSource($coupon, $rawCoupon);
+                $coupons[$coupon->code] = $coupon;
+            }
+        }
+        return $coupons;
+    }
+
+    /**
+     * Translate a SR status into Recurly states. There can be multiple
+     * states for a single status.
+     *
+     * @param int $status
+     *
+     * @return array
+     */
+    protected function translateStatus($status)
+    {
+        $states = array();
+        foreach ($this->fieldMap['status']['state'] as $state => $value) {
+            if ($status == $value) {
+                $states[] = $state;
+            }
+        }
+        return $states;
     }
 
     /**
