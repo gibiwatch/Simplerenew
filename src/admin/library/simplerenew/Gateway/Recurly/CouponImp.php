@@ -11,6 +11,7 @@ namespace Simplerenew\Gateway\Recurly;
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Coupon;
 use Simplerenew\Exception;
+use Simplerenew\Exception\Duplicate;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\Gateway\CouponInterface;
 use Simplerenew\Object;
@@ -92,8 +93,25 @@ class CouponImp extends AbstractRecurlyBase implements CouponInterface
             $coupon->discount_percent = $parent->amount;
         }
 
-        $coupon->create();
-        $this->bindSource($parent, $coupon);
+        try {
+            $coupon->create();
+            $this->bindSource($parent, $coupon);
+
+        } catch (\Recurly_ValidationError $e) {
+            $message = array();
+
+            foreach ($e->errors as $fieldError) {
+                if ($fieldError->field == 'coupon_code' && $fieldError->symbol == 'taken') {
+                    $message = sprintf("'%s' %s", $coupon->coupon_code, $fieldError->description);
+                    throw new Duplicate($message, 0, $e);
+                }
+                $message[] = sprintf("'%s' %s", $fieldError->field, $fieldError->description);
+            }
+            throw new Exception(join("\n", $message), 0, $e);
+
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), 0, $e);
+        }
     }
 
     /**
