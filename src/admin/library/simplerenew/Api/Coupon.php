@@ -176,4 +176,15 @@ class Coupon extends AbstractApiBase
         ksort($coupons);
         return $coupons;
     }
+
+    /**
+     * Remove the coupon from usage
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function delete()
+    {
+        $this->imp->delete($this);
+    }
 }

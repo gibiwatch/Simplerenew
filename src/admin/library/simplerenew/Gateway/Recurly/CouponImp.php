@@ -166,7 +166,8 @@ class CouponImp extends AbstractRecurlyBase implements CouponInterface
      */
     public function delete(Coupon $parent)
     {
-        // TODO: Implement delete() method.
+        $coupon = $this->getCoupon($parent->code);
+        $coupon->delete();
     }
 
     /**
