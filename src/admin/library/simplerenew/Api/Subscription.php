@@ -193,7 +193,7 @@ class Subscription extends AbstractApiBase
     {
         $this->clearProperties();
 
-        $this->events->trigger('onSubscriptionBeforeUpdate', array($this, true));
+        $this->events->trigger('onSubscriptionBeforeCreate', array($account, $plan, $coupon));
 
         $this->imp->create($this, $account, $plan, $coupon);
         $account->user->addGroups($plan->code);
