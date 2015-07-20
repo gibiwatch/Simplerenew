@@ -195,7 +195,11 @@ class Subscription extends AbstractApiBase
 
         $this->events->trigger('onSubscriptionBeforeCreate', array($account, $plan, $coupon));
 
-        $this->imp->create($this, $account, $plan, $coupon);
+        if ($coupon->isAvailable($plan)) {
+            $this->imp->create($this, $account, $plan, $coupon);
+        } else {
+            $this->imp->create($this, $account, $plan);
+        }
         $account->user->addGroups($plan->code);
 
         $this->events->trigger('onSubscriptionAfterUpdate', array($this, true));
