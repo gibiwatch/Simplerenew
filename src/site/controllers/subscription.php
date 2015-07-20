@@ -62,6 +62,9 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             return;
         }
 
+        $events = SimplerenewFactory::getContainer()->events;
+        $events->trigger('onSubscribeFormBeforeProcess', array($model, true));
+
         // Create/Load the user
         try {
             $user = $model->saveUser();
@@ -142,6 +145,11 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             return;
         }
 
+        $container = SimplerenewFactory::getContainer();
+        $model     = $this->getGatewayModel();
+
+        $container->events->trigger('onSubscribeFormBeforeProcess', array($model, false));
+
         // Only accept a single plan code
         $planCodes = $app->input->get('planCodes', array(), 'array');
         $planCodes = array_filter(
@@ -152,13 +160,12 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
         );
         $planCode  = array_shift($planCodes);
 
-        $container = SimplerenewFactory::getContainer();
         try {
             $user    = $container->getUser()->load();
             $account = $container->getAccount()->load($user);
 
             // Update the billing info
-            $this->getGatewayModel()->saveBilling($account);
+            $model->saveBilling($account);
 
             $subscription = $container
                 ->getSubscription()
