@@ -67,9 +67,29 @@ interface CouponInterface
      * Map raw data from the Gateway to SR fields
      *
      * @param Coupon $parent
-     * @param mixed   $data
+     * @param mixed  $data
      *
      * @return void
      */
     public function bindSource(Coupon $parent, $data);
+
+    /**
+     * Activate a coupon for a selected account
+     *
+     * @param Coupon  $parent
+     * @param Account $account
+     *
+     * @return void
+     */
+    public function activate(Coupon $parent, Account $account);
+
+    /**
+     * Deactivate a coupon for the selected account
+     *
+     * @param Coupon  $parent
+     * @param Account $account
+     *
+     * @return void
+     */
+    public function deactivate(Coupon $parent, Account $account);
 }

@@ -256,4 +256,51 @@ class CouponImp extends AbstractRecurlyBase implements CouponInterface
 
         return $coupon;
     }
+
+    /**
+     * Activate a coupon for a selected account
+     *
+     * @param Coupon  $parent
+     * @param Account $account
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function activate(Coupon $parent, Account $account)
+    {
+        // @TODO: not clear this will work for percentage coupons because there is no currency setting
+        try {
+            $coupon = $this->getCoupon($parent->code);
+            $coupon->redeemCoupon($account->code, $parent->currency);
+
+        } catch (\Recurly_NotFoundError $e) {
+            throw new NotFound($e->getMessage(), 404, $e);
+
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), 500, $e);
+        }
+    }
+
+    /**
+     * Deactivate a coupon for the selected account
+     *
+     * @param Coupon  $parent
+     * @param Account $account
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function deactivate(Coupon $parent, Account $account)
+    {
+        try {
+            $redemption = \Recurly_CouponRedemption::get($account->code, $this->client);
+            $redemption->delete();
+
+        } catch (\Recurly_NotFoundError $e) {
+            // This is fine, nothing to deactivate
+
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), 500, $e);
+        }
+    }
 }
