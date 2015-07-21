@@ -26,7 +26,7 @@ class com_simplerenewInstallerScript extends AbstractScript
     /**
      * @var string The minimum previous version for updates
      */
-    protected $minimumVersion = '1.1.0';
+    protected $minimumVersion = '1.1.1';
 
     /**
      * @var array Related extensions required or useful with the component
