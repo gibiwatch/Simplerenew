@@ -186,7 +186,7 @@
                         gateway.init(form);
                     }
 
-                    options = $.extend(this.options, options, {
+                    options = $.extend({}, this.options, options, {
                         submitHandler: function(form) {
 
                             // Disable submit, Clear temporary names to prevent being sent to server

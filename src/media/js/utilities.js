@@ -276,7 +276,7 @@
      *        target   : alternative selector for the radio/checkbox(es)
      */
     $.Simplerenew.clickArea = function(options) {
-        options = $.extend(this.clickArea.options, options);
+        options = $.extend({}, this.clickArea.options, options);
 
         var areas = $(options.selector);
         areas.on('click', function(evt) {
@@ -321,7 +321,7 @@
      * @param options
      */
     $.Simplerenew.region = function(options) {
-        options = $.extend(this.region.options, options);
+        options = $.extend({}, this.region.options, options);
 
         var region = $(options.region),
             regionLists = $('select[id^=' + options.region.substr(1) + '_]'),
