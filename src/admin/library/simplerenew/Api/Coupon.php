@@ -187,4 +187,24 @@ class Coupon extends AbstractApiBase
     {
         $this->imp->delete($this);
     }
+
+    /**
+     * Activate this coupon for the selected account
+     *
+     * @param Account $account
+     */
+    public function activate(Account $account)
+    {
+        $this->imp->activate($this, $account);
+    }
+
+    /**
+     * Deactivate this coupon for the selected account
+     *
+     * @param Account $account
+     */
+    public function deactivate(Account $account)
+    {
+        $this->imp->deactivate($this, $account);
+    }
 }
