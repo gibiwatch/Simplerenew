@@ -223,6 +223,16 @@ class com_simplerenewInstallerScript extends AbstractScript
             $setParams = true;
         }
 
+        // As of v1.1.10 - make addon init paths relative
+        if ($addons = $params->get('addons')) {
+            foreach ($addons as $addon) {
+                if (strpos($addon->init, JPATH_ROOT) === 0) {
+                    $addon->init = substr($addon->init, strlen(JPATH_ROOT));
+                    $setParams = true;
+                }
+            }
+        }
+
         if ($setParams) {
             $table->params = $params->toString();
             $table->store();
