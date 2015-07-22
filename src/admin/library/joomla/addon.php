@@ -24,8 +24,11 @@ abstract class SimplerenewAddon
     {
         $simplerenew = SimplerenewHelper::getExtensionTable();
 
-        if ($addon->type == 'component') {
-            $initPath = $initPath ?: JPATH_ADMINISTRATOR . '/components/' . $addon->element . '/include.php';
+        if ($addon->type == 'component' && !$initPath) {
+            $path = '/administrator/components/' . $addon->element . '/include.php';
+            if (is_file(JPATH_ROOT . $path)) {
+                $initPath = $path;
+            }
         }
 
         $addons = $simplerenew->params->get('addons', array());
@@ -67,10 +70,10 @@ abstract class SimplerenewAddon
         $extension = JTable::getInstance('Extension');
 
         foreach ($addons as $addon) {
-            if (!empty($addon->init) && is_file($addon->init)) {
+            if (!empty($addon->init) && is_file(JPATH_ROOT . $addon->init)) {
                 $extension->load($addon->extension_id);
                 if ($extension->enabled) {
-                    require_once $addon->init;
+                    require_once JPATH_ROOT . $addon->init;
                 }
             }
         }

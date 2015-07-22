@@ -26,7 +26,7 @@ class com_simplerenewInstallerScript extends AbstractScript
     /**
      * @var string The minimum previous version for updates
      */
-    protected $minimumVersion = '1.1.0';
+    protected $minimumVersion = '1.1.1';
 
     /**
      * @var array Related extensions required or useful with the component
@@ -221,6 +221,16 @@ class com_simplerenewInstallerScript extends AbstractScript
         if (!$params->get('basic.paymentOptions', array())) {
             $params->set('basic.paymentOptions', array('cc'));
             $setParams = true;
+        }
+
+        // As of v1.1.10 - make addon init paths relative
+        if ($addons = $params->get('addons')) {
+            foreach ($addons as $addon) {
+                if (strpos($addon->init, JPATH_ROOT) === 0) {
+                    $addon->init = substr($addon->init, strlen(JPATH_ROOT));
+                    $setParams = true;
+                }
+            }
         }
 
         if ($setParams) {
