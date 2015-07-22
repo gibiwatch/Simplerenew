@@ -189,7 +189,7 @@
             });
 
             // Register and initialise extensions and custom processors
-            options = $.extend(true, this.options, options);
+            options = $.extend(true, {}, this.options, options);
 
             if (typeof gateway.init === 'function') {
                 // Allow gateway to do custom form setup
@@ -497,7 +497,7 @@
      *
      */
     $.Simplerenew.calculator.init = function(options) {
-        options = $.extend(true, this.options, options);
+        options = $.extend(true, {}, this.options, options);
 
         this.output = $(options.output);
         this.overlay = this.output.find(this.settings.overlay);
