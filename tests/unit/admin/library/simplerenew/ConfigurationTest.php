@@ -67,10 +67,27 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expect, $actual);
     }
 
-    public function testGetConfig()
+    public function testToConfig()
     {
-        $actual = $this->sample->getConfig('layer1');
+        $actual = $this->sample->toConfig('layer1');
         $expect = new Configuration($this->sampleData['layer1']);
         $this->assertEquals($expect, $actual);
+    }
+
+    public function testToString()
+    {
+        $actual = $this->sample->toString('layer1');
+        $expect = json_encode($this->sampleData['layer1']);
+        $this->assertEquals($expect, $actual);
+
+        $actual = (string)$this->sample;
+        $expect = json_encode($this->sampleData);
+        $this->assertEquals($expect, $actual);
+    }
+
+    public function testToArray()
+    {
+        $actual = $this->sample->toArray('layer1');
+        $this->assertEquals($this->sampleData['layer1'], $actual);
     }
 }
