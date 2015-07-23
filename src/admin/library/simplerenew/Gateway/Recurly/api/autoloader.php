@@ -15,7 +15,10 @@ abstract class RecurlyLoader
     protected static $exceptions = array(
         'Recurly_CouponRedemption' => 'redemption.php',
         'Recurly_ClientResponse'   => 'response.php',
+        'Recurly_Error'            => 'errors.php',
         'Recurly_HmacHash'         => 'util/hmac_hash.php',
+        'Recurly_js'               => 'recurly_js.php',
+        'Recurly_Tax_Detail'       => 'tax_detail.php',
         'Recurly_TransactionError' => 'transaction_error.php'
     );
 
@@ -29,8 +32,6 @@ abstract class RecurlyLoader
         if (!class_exists($class) && strpos($class, 'Recurly_') === 0) {
             if (array_key_exists($class, static::$exceptions)) {
                 $file = static::$exceptions[$class];
-            } elseif (strpos($class, 'Error') == (strlen($class) - 5)) {
-                $file = 'errors.php';
             } else {
                 list(, $file) = explode('_', $class, 2);
                 $parts = preg_split('/(?<=[a-z])(?=[A-Z])/x', $file);
