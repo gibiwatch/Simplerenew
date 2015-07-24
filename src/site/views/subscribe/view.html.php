@@ -108,9 +108,9 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
         $overrides     = $app->input->getString('select');
         $selectedPlans = array();
 
-        if (!empty($formData['planCode'])) {
+        if (!empty($formData['planCodes'])) {
             // Plans selected on last form submit
-            $selectedPlans = array_fill_keys((array)$formData['planCode'], true);
+            $selectedPlans = array_fill_keys((array)$formData['planCodes'], true);
 
         } elseif ($this->subscriptions) {
             // Load current active/canceled subscriptions
