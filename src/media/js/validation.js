@@ -171,6 +171,16 @@
         var form = $(selector);
 
         if (form.is('form')) {
+            // Keep track of window focus (for possible off site pages)
+            var windowFocus = true;
+            $(window)
+                .on('focus', function(event) {
+                    windowFocus = true;
+                })
+                .on('blur', function(event) {
+                    windowFocus = false;
+                });
+
             var gateway = $.Simplerenew.gateway;
 
             // Store the CSRF Token, set no-name fields and setup submit buttons
@@ -498,16 +508,6 @@
      */
     $.Simplerenew.calculator.init = function(options) {
         options = $.extend(true, {}, this.options, options);
-
-        // Keep track of window focus
-        var windowFocus = true;
-        $(window)
-            .on('focus', function(event) {
-                windowFocus = true;
-            })
-            .on('blur', function(event) {
-                windowFocus = false;
-            });
 
         this.output = $(options.output);
         this.overlay = this.output.find(this.settings.overlay);
