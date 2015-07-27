@@ -89,9 +89,9 @@
          * @returns {Object}
          */
         findPartners: function(list, useAttribute) {
-            var name = $(this).attr('name'),
-                id = $(this).attr('id'),
-                prefix = '#',
+            var name     = $(this).attr('name'),
+                id       = $(this).attr('id'),
+                prefix   = '#',
                 partners = {};
 
             // 2nd arg defaults to true
@@ -166,7 +166,7 @@
      */
     $.tokenReplace = function() {
         var text = arguments[0];
-        for (var i=1; i<arguments.length; i++) {
+        for (var i = 1; i < arguments.length; i++) {
             text = text.replace('%s', arguments[i]);
         }
         return text;
@@ -331,9 +331,9 @@
     $.Simplerenew.region = function(options) {
         options = $.extend({}, this.region.options, options);
 
-        var region = $(options.region),
+        var region      = $(options.region),
             regionLists = $('select[id^=' + options.region.substr(1) + '_]'),
-            country = $(options.country);
+            country     = $(options.country);
 
         var updateValues = function(newValue) {
             var selected = findSelected();
