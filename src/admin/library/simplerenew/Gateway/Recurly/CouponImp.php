@@ -26,7 +26,6 @@ class CouponImp extends AbstractRecurlyBase implements CouponInterface
     protected $fieldMap = array(
         'code'              => 'coupon_code',
         'short_description' => 'invoice_description',
-        'description'       => 'hosted_description',
         'status'            => array(
             'state' => array(
                 'redeemable'          => Coupon::STATUS_ACTIVE,
