@@ -562,8 +562,7 @@
      * Update all prices based on current plan and coupon selections
      */
     $.Simplerenew.calculator.calculate = function() {
-        var calculator  = this,
-            jCalculator = $(this);
+        var calculator  = $(this);
 
         this.addCover();
         this.overlay.css({
@@ -571,17 +570,17 @@
             width : this.output.width()
         }).show();
 
-        $(calculator.handlers).each(function(idx, handler) {
+        $(calculator[0].handlers).each(function(idx, handler) {
             if (typeof handler.calculate === 'function') {
-                jCalculator.queue('sr', function(next) {
-                    handler.calculate(calculator, next);
+                calculator.queue('sr', function(next) {
+                    handler.calculate(calculator[0], next);
                 });
             }
         });
-        jCalculator.queue('sr', function(next) {
-            calculator.display.call(calculator, next);
+        calculator.queue('sr', function(next) {
+            calculator[0].display.call(calculator[0], next);
         });
-        jCalculator.dequeue('sr');
+        calculator.dequeue('sr');
     };
 
     /**
