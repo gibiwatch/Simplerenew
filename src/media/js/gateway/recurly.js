@@ -55,16 +55,6 @@
             form.tempNames().enableSubmit();
         };
 
-        // Keep track of window focus
-        var windowFocus = true;
-        $(window)
-            .on('focus', function(event) {
-                windowFocus = true;
-            })
-            .on('blur', function(event) {
-                windowFocus = false;
-            });
-
         buttons.on('click', function(event) {
             event.preventDefault();
 

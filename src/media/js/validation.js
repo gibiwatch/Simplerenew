@@ -499,6 +499,16 @@
     $.Simplerenew.calculator.init = function(options) {
         options = $.extend(true, {}, this.options, options);
 
+        // Keep track of window focus
+        var windowFocus = true;
+        $(window)
+            .on('focus', function(event) {
+                windowFocus = true;
+            })
+            .on('blur', function(event) {
+                windowFocus = false;
+            });
+
         this.output = $(options.output);
         this.overlay = this.output.find(this.settings.overlay);
 
