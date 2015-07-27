@@ -291,19 +291,25 @@
                 validator = this;
                 this.startRequest(element);
 
+                var data = {
+                    option: 'com_simplerenew',
+                    task  : 'validate.coupon',
+                    format: 'json',
+                    plans : plans,
+                    coupon: value
+                };
+                var token = $(this.currentForm).data('csrfToken');
+                if (token) {
+                    data[token.name] = token.value;
+                }
+
                 $.ajax({
                     url     : 'index.php',
                     type    : 'post',
                     mode    : 'abort',
                     port    : 'validate' + element.name,
                     dataType: 'json',
-                    data    : {
-                        option: 'com_simplerenew',
-                        task  : 'validate.coupon',
-                        format: 'json',
-                        plans : plans,
-                        coupon: value
-                    },
+                    data    : data,
                     context : validator.currentForm,
                     success : function(response) {
                         var valid = response.valid && response.valid === true,
@@ -337,6 +343,7 @@
                         }
                         previous.valid = valid;
                         validator.stopRequest(element, valid);
+                        $.Simplerenew.calculator.calculate();
                     }
                 });
 
@@ -535,45 +542,41 @@
         });
 
         // Add event handlers
-        this.coupon
-            .on('change sr.disable sr.enable', function(evt) {
-                calculator.calculate(calculator.plans);
-            });
-
         this.plans
             .on('click', function(evt) {
-                calculator.calculate([this]);
+                calculator.calculate();
             });
 
-        // Set initial states
-        var checkedPlans = this.plans.filter(':checked');
-        calculator.calculate(checkedPlans);
+        // If a coupon area exists , it will trigger the initial calculation
+        if (this.coupon[0]) {
+            this.coupon
+                .on('sr.disable sr.enable', function(evt) {
+                    calculator.calculate();
+                });
+        } else {
+            calculator.calculate();
+        }
     };
 
     /**
      * Update all prices based on current plan and coupon selections
-     *
-     * @param {Array} [plans]
      */
-    $.Simplerenew.calculator.calculate = function(plans) {
+    $.Simplerenew.calculator.calculate = function() {
         var calculator  = this,
             jCalculator = $(this);
 
         this.addCover();
-        if ($(plans).length > 0 && this.overlay) {
-            this.overlay.css({
-                height: this.output.height(),
-                width : this.output.width()
-            }).show();
-        }
-        $(plans).each(function(idx, plan) {
-            $(calculator.handlers).each(function(idx, handler) {
-                if (typeof handler.calculate === 'function') {
-                    jCalculator.queue('sr', function(next) {
-                        handler.calculate(calculator, plan, next);
-                    });
-                }
-            });
+        this.overlay.css({
+            height: this.output.height(),
+            width : this.output.width()
+        }).show();
+
+        $(calculator.handlers).each(function(idx, handler) {
+            if (typeof handler.calculate === 'function') {
+                jCalculator.queue('sr', function(next) {
+                    handler.calculate(calculator, next);
+                });
+            }
         });
         jCalculator.queue('sr', function(next) {
             calculator.display.call(calculator, next);
