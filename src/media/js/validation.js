@@ -527,8 +527,8 @@
         // Add event handlers
         this.coupon
             .on('change sr.disable sr.enable', function(evt) {
-                calculator.calculate(this.plans);
-            }, this);
+                calculator.calculate(calculator.plans);
+            });
 
         this.plans
             .on('click', function(evt) {
