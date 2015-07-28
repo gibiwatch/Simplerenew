@@ -77,14 +77,14 @@
                         plans = $('[data-recurly=plan]:checked');
 
                     plans.each(function(idx, plan) {
-                        var price = $(plan).data('price');
-                        total += parseFloat(price.net);
-                        symbol = price.symbol;
+                        var price = $.Simplerenew.calculator.getValue(plan);
+                        total += parseFloat(price.amount - price.discount);
+                        symbol = price.currencySymbol;
                         items.push($(plan).attr('data-description'));
                     });
 
                     description = 'Subscription to ' + items.join(', ')
-                        + ' for a total of ' + symbol + total.toFixed(2);
+                    + ' for a total of ' + $.formatCurrency(total, symbol);
 
                     // Prepare for a blocked popup
                     var popupWait = setTimeout(
