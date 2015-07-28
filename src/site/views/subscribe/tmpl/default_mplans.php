@@ -86,8 +86,11 @@ echo $this->stepHeading(JText::plural('COM_SIMPLERENEW_HEADING_PLANLIST', count(
         <?php
         endforeach; ?>
         <div id="plancode-error"></div>
+        <?php
+        if ($this->getParams()->get('basic.showCalculator', 0)) {
+            echo $this->loadTemplate('calculator');
+        }
+        ?>
     </div>
 </div>
 <!-- /.ost-section -->
-<?php
-echo $this->loadTemplate('calculator');

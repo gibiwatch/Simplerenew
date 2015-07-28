@@ -490,19 +490,17 @@
             }
         },
         calculator: {
-            settings      : {
+            settings: {
                 empty  : '.simplerenew-calculator-empty',
                 display: '.simplerenew-calculator-display',
                 items  : '.simplerenew-calculator-items',
                 overlay: '.simplerenew-calculator-overlay'
             },
-            plans         : null,
-            coupon        : null,
-            output        : null,
-            overlay       : null,
-            cover         : null,
-            selectedValues: {},
-            handlers      : []
+            plans   : null,
+            coupon  : null,
+            output  : null,
+            overlay : null,
+            handlers: []
         }
     });
 
@@ -531,6 +529,7 @@
 
         this.plans = $('[name^=planCodes]');
         this.coupon = $('#coupon_code');
+        this.form = this.plans.parents('form');
 
         var calculator = this;
 
@@ -544,7 +543,9 @@
         // Add event handlers
         this.plans
             .on('click', function(evt) {
-                calculator.calculate();
+                if (!calculator.coupon.is(':visible')) {
+                    calculator.calculate();
+                }
             });
 
         // If a coupon area exists , it will trigger the initial calculation
@@ -562,14 +563,9 @@
      * Update all prices based on current plan and coupon selections
      */
     $.Simplerenew.calculator.calculate = function() {
-        var calculator  = $(this);
+        var calculator = $(this);
 
-        this.addCover();
-        this.overlay.css({
-            height: this.output.height(),
-            width : this.output.width()
-        }).show();
-
+        calculator.queue('sr', this.getPricing);
         $(calculator[0].handlers).each(function(idx, handler) {
             if (typeof handler.calculate === 'function') {
                 calculator.queue('sr', function(next) {
@@ -583,6 +579,51 @@
         calculator.dequeue('sr');
     };
 
+    $.Simplerenew.calculator.getPricing = function(next) {
+        var changes = [],
+            plans   = [],
+            coupon  = this.coupon.val();
+
+        this.plans.each(function(idx, plan) {
+            var data = $(plan).data('pricing');
+            if (!data || data.coupon != coupon) {
+                changes.push($(plan).val());
+            }
+            plans.push($(plan).val());
+        });
+        if (changes.length == 0) {
+            next();
+
+        } else {
+            var data = {
+                option: 'com_simplerenew',
+                task  : 'validate.pricing',
+                format: 'json',
+                plans : plans,
+                coupon: coupon
+            };
+            var token = $(this.form).data('csrfToken');
+            if (token) {
+                data[token.name] = token.value;
+            }
+
+            var calculator = this;
+            $.ajax({
+                url     : 'index.php',
+                type    : 'post',
+                dataType: 'json',
+                data    : data,
+                success : function(response) {
+                    calculator.plans.each(function(idx, plan) {
+                        calculator.setValue(plan, response[$(plan).val()]);
+                    });
+
+                    next();
+                }
+            });
+        }
+    };
+
     /**
      * Stores/Removes a price object for a plan on the form
      *
@@ -591,18 +632,21 @@
      *
      */
     $.Simplerenew.calculator.setValue = function(plan, price) {
-        var planCode = $(plan).val();
-        if ($(plan).prop('checked')) {
-            this.selectedValues[planCode] = $.extend({
-                plan          : plan,
-                amount        : null,
-                discount      : null,
-                setup         : null,
-                currencySymbol: null
-            }, price);
-        } else if (this.selectedValues[planCode]) {
-            delete this.selectedValues[planCode];
-        }
+        $(plan).data(
+            'pricing',
+            $.extend({
+                    name          : $(plan).attr('data-description'),
+                    coupon        : null,
+                    amount        : null,
+                    discount      : null,
+                    setup_cost    : null,
+                    trial_length  : null,
+                    trial_unit    : null,
+                    currency      : null,
+                    currencySymbol: null
+                }, price
+            )
+        );
     };
 
     /**
@@ -625,13 +669,16 @@
             var priceDisplay = result.display.find(this.settings.items);
             priceDisplay.empty();
 
-            if ($.isEmptyObject(this.selectedValues)) {
+            var selectedPlans = $(this.plans).filter(':checked, :selected');
+
+            if (selectedPlans.length == 0) {
                 result.empty.show();
                 result.display.hide();
             } else {
                 result.empty.hide();
                 result.display.show();
-                $.each(this.selectedValues, function(idx, price) {
+                $.each(selectedPlans, function(idx, plan) {
+                    var price = $(plan).data('pricing');
                     result.currencySymbol = price.currencySymbol || result.currencySymbol;
 
                     result.subtotal += parseFloat(price.amount);
@@ -650,7 +697,7 @@
                 priceDisplay
                     .append($('<div/>')
                         .addClass('simplerenew-calculator-plan')
-                        .html($(price.plan).attr('data-description')))
+                        .html(price.name))
                     .append($('<div/>')
                         .addClass('simplerenew-calculator-amount')
                         .html($.formatCurrency(price.amount, result.currencySymbol)));
@@ -675,25 +722,8 @@
             if (this.overlay) {
                 this.overlay.hide();
             }
-            if (this.cover) {
-                this.cover.remove();
-                this.cover = null;
-            }
         }
         next();
-    };
-
-    $.Simplerenew.calculator.addCover = function() {
-        var plansList = $('.ost-plans-list').css('position', 'relative');
-        this.cover = $('<div/>')
-            .css({
-                position : 'absolute',
-                width    : plansList.width(),
-                height   : plansList.height(),
-                'z-index': 9999
-            });
-
-        plansList.prepend(this.cover);
     };
 
     /**

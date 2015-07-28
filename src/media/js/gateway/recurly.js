@@ -44,11 +44,11 @@
         $('#billing_postal').attr('data-recurly', 'postal_code');
         $('#billing_country').attr('data-recurly', 'country');
 
-        $.Simplerenew.calculator.registerHandler(this.calculator,true);
+        $.Simplerenew.calculator.registerHandler(this.calculator, true);
 
         // We're taking over all form submission to minimize paypal popup problem
         $.validator.defaults.onsubmit = false;
-        var buttons = form.find(':submit'),
+        var buttons       = form.find(':submit'),
             billing_token = $(form).find('#billing_token');
 
         var resetForm = function() {
@@ -71,7 +71,6 @@
 
                 if (method == 'pp') {
                     // Open paypal window
-                    // @TODO: Ideally use the recurly pricing object for this
                     var description, symbol,
                         total = 0,
                         items = [],
@@ -85,7 +84,7 @@
                     });
 
                     description = 'Subscription to ' + items.join(', ')
-                    + ' for a total of ' + symbol + total.toFixed(2);
+                        + ' for a total of ' + symbol + total.toFixed(2);
 
                     // Prepare for a blocked popup
                     var popupWait = setTimeout(
@@ -150,32 +149,5 @@
     $.Simplerenew.gateway.calculator.init = function(calculator) {
         calculator.coupon.attr('data-recurly', 'coupon');
         calculator.plans.attr('data-recurly', 'plan');
-    };
-
-    $.Simplerenew.gateway.calculator.calculate = function(calculator, plan, next) {
-        var planCode = $(plan).val();
-        var couponCode = calculator.coupon.is(':disabled') ? '' : calculator.coupon.val();
-
-        var pricing = recurly.Pricing();
-        pricing
-            .plan(planCode)
-            .catch(function(err) {
-                alert('Simplerenew Configuration Problem: ' + err.message);
-            })
-            .done(function(price) {
-                pricing.coupon(couponCode)
-                    .catch(function(err) {
-                        // Next .done() gets called even on failure
-                    })
-                    .done(function(price) {
-                        calculator.setValue(plan, {
-                            amount        : price.now.plan,
-                            discount      : price.now.discount,
-                            setup         : price.now.setup_fee,
-                            currencySymbol: price.currency.symbol
-                        });
-                        next();
-                    });
-            });
     };
 })(jQuery);

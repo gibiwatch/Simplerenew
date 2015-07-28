@@ -175,6 +175,8 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
      */
     public function coupon()
     {
+        $this->checkToken();
+
         $app       = SimplerenewFactory::getApplication();
         $container = SimplerenewFactory::getContainer();
         $filter    = JFilterInput::getInstance();
@@ -224,6 +226,49 @@ class SimplerenewControllerValidate extends SimplerenewControllerJson
 
         } catch (Exception $e) {
             $result['error'] = JText::sprintf('COM_SIMPLERENEW_ERROR_COUPON_LOOKUP', $e->getCode());
+        }
+
+        echo json_encode($result);
+    }
+
+    public function pricing()
+    {
+        $this->checkToken();
+
+        $app       = SimplerenewFactory::getApplication();
+        $container = SimplerenewFactory::getContainer();
+        $filter    = SimplerenewFilterInput::getInstance();
+
+        $couponCode = $app->input->getString('coupon');
+        $coupon     = $container->coupon;
+        if ($couponCode) {
+            try {
+                $coupon->load($couponCode);
+            } catch (Exception $e) {
+                // no problem - just return all current plan prices
+            }
+        }
+
+        $planCodes = $app->input->get('plans', array(), 'array');
+        $planCodes = array_map(
+            function ($code) use ($filter) {
+                return $filter->clean($code, 'cmd');
+            },
+            $planCodes
+        );
+        $plans     = $container->plan->getList();
+
+        $result = array();
+        /**
+         * @var string                $planCode
+         * @var \Simplerenew\Api\Plan $plan
+         */
+        foreach ($plans as $planCode => $plan) {
+            $price             = $plan->getProperties();
+            $price['discount'] = $coupon->getDiscount($plan);
+            $price['coupon']   = $couponCode;
+
+            $result[$planCode] = $price;
         }
 
         echo json_encode($result);

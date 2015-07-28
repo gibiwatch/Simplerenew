@@ -11,10 +11,10 @@ defined('_JEXEC') or die();
 ?>
 <div class="simplerenew-calculator">
     <h3><?php echo JText::_('COM_SIMPLERENEW_CALCULATOR_SELECTED_PLANS'); ?></h3>
-    <div class="simplerenew-calculator-empty">
+    <div class="simplerenew-calculator-empty" style="display: none;">
         <p><?php echo JText::_('COM_SIMPLERENEW_CALCULATOR_NONE_SELECTED'); ?></p>
     </div>
-    <div class="simplerenew-calculator-display">
+    <div class="simplerenew-calculator-display" style="display: none;">
         <div class="simplerenew-calculator-items"></div>
         <div class="simplerenew-calculator-subtotal">
             <span><?php echo JText::_('COM_SIMPLERENEW_CALCULATOR_SUBTOTAL'); ?></span>
