@@ -594,6 +594,21 @@
     };
 
     /**
+     * Gets the stored price object for the plan
+     *
+     * @param {Object} plan The <input> element of the plan
+     *
+     * @returns {Object} The price information stored with the plan
+     */
+    $.Simplerenew.calculator.getValue = function(plan) {
+        var planCode = $(plan).val();
+        if (this.selectedValues[planCode]) {
+            return this.selectedValues[planCode];
+        }
+        return null;
+    };
+
+    /**
      * Display the results of all calculations if an output area has been provided
      *
      * @param {Function} next The jQuery provided function to process the asynchronous queue
