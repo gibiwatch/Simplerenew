@@ -12,6 +12,8 @@ if (!defined('SIMPLERENEW_LOADED')) {
     require_once JPATH_ADMINISTRATOR . '/components/com_simplerenew/include.php';
 }
 
+JFormHelper::loadFieldClass('Text');
+
 class JFormFieldAddons extends JFormFieldText
 {
 
