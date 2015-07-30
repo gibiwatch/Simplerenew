@@ -229,4 +229,19 @@ class plgSystemSimplerenew extends JPlugin
             $session->set('user', $user);
         }
     }
+
+    public function onContentPrepareForm(JForm $form, $data)
+    {
+        $app = JFactory::getApplication();
+
+        if ($app->isAdmin()) {
+            $name = $form->getName() . '.' . $app->input->getCmd('component');
+            if ($name == 'com_config.component.com_simplerenew') {
+                if ($this->isInstalled()) {
+                    $path = SIMPLERENEW_LIBRARY . '/simplerenew/Gateway/Recurly/config.xml';
+                    $form->loadFile($path, false, '//config');
+                }
+            }
+        }
+    }
 }

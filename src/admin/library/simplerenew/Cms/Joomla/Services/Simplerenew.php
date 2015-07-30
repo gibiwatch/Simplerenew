@@ -51,16 +51,21 @@ class Simplerenew implements ServiceProviderInterface
     public function register(Container $pimple, array $config = array())
     {
         // Parameters
-        $pimple['configData']       = $this->config;
-        $pimple['cmsNamespace']     = 'Simplerenew\Cms\Joomla';
-        $pimple['gatewayNamespace'] = 'Simplerenew\Gateway\Recurly';
+        $pimple['configData']     = $config ?: $this->config;
+        $pimple['cmsNamespace']   = 'Simplerenew\Cms\Joomla';
+        $pimple['defaultGateway'] = 'recurly';
 
         // Services
         $pimple['configuration'] = function (\Simplerenew\Container $c) {
             return new Configuration($c['configData']);
         };
 
-        $pimple['logger'] = function(\Simplerenew\Container $c) {
+        $pimple['gatewayNamespace'] = function (\Simplerenew\Container $c) {
+            $name = ucfirst(strtolower($c['defaultGateway']));
+            return '\Simplerenew\Gateway\\' . $name;
+        };
+
+        $pimple['logger'] = function (\Simplerenew\Container $c) {
             $className = $c['cmsNamespace'] . '\Logger';
             return new $className();
         };
