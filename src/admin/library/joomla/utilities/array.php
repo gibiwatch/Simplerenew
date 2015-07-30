@@ -33,14 +33,48 @@ abstract class SimplerenewUtilitiesArray
             return call_user_func_array(array('\Joomla\Utilities\ArrayHelper', $name), $arguments);
 
         } else {
-            if ($name == 'toInteger') {
-                $array   = $arguments[0];
-                $default = empty($arguments[1]) ? null : $arguments[1];
-                JArrayHelper::toInteger($array, $default);
-                return $array;
+            $array   = $arguments[0];
+            $default = empty($arguments[1]) ? null : $arguments[1];
+
+            switch ($name) {
+                case 'fromObject':
+                    $recurse = empty($arguments[1]) ? true : $arguments[1];
+                    $regex   = empty($arguments[2]) ? null : $arguments[2];
+                    return JArrayHelper::fromObject($array, $recurse, $regex);
+
+                case 'toObject':
+                    $class     = empty($arguments[1]) ? 'stdClass' : $arguments[1];
+                    $recursive = empty($arguments[2]) ? true : $arguments[2];
+                    return JArrayHelper::toObject($array, $class, $recursive);
+
+                case 'getColumn':
+                    $index = isset($arguments[1]) ? $arguments[1] : null;
+                    return JArrayHelper::getColumn($array, $index);
+
+                case 'getValue':
+                    $name    = empty($arguments[1]) ? null : $arguments[1];
+                    $default = empty($arguments[2]) ? null : $arguments[2];
+                    $type    = empty($arguments[3]) ? '' : $arguments[3];
+
+                    return JArrayHelper::getValue($array, $name, $default, $type);
+
+                case 'toString':
+                    $inner_glue = empty($arguments[1]) ?  '=' : $arguments[1];
+                    $outer_glue = !array_key_exists(2, $arguments) ? ' ' : $arguments[2];
+                    $keepOuterKey = empty($arguments[3]) ? false : $arguments[3];
+
+                    if (!$keepOuterKey || $outer_glue === null) {
+                        $outer_glue = '';
+                    }
+                    return JArrayHelper::toString($array, $inner_glue, $outer_glue, true);
+
+                case 'arrayUnique':
+                case 'invert':
+                    return JArrayHelper::$name($array, $default);
             }
 
-            return call_user_func_array(array('\JArrayHelper', $name), $arguments);
+            JArrayHelper::$name($array, $default);
+            return $array;
         }
     }
 }
