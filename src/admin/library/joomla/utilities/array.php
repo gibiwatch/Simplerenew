@@ -30,7 +30,7 @@ abstract class SimplerenewUtilitiesArray
     {
 
         if (class_exists('\\Joomla\\Utilities\\ArrayHelper')) {
-            return Joomla\Utilities\ArrayHelper::$name($arguments);
+            return call_user_func_array(array('\Joomla\Utilities\ArrayHelper', $name), $arguments);
 
         } else {
             if ($name == 'toInteger') {
@@ -40,7 +40,7 @@ abstract class SimplerenewUtilitiesArray
                 return $array;
             }
 
-            return JArrayHelper::$name($arguments);
+            return call_user_func_array(array('\JArrayHelper', $name), $arguments);
         }
     }
 }
