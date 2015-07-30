@@ -30,14 +30,24 @@ class RecurlyLoaderTest extends \PHPUnit_Framework_TestCase
                 }
             } elseif (preg_match('/(.*?)\.php$/', $file, $match)) {
                 $fileName = $match[1];
-                if (in_array($fileName . '.php', $this->exceptions)) {
+                if ($fileName == 'errors') {
+                    // Checks that all classes in the errors file autoload
+                    $fileText = file_get_contents($path . '/' . $file);
+                    preg_match_all('/^class\s+(Recurly_[^\s]*)\s/m', $fileText, $matches);
+
+                    $classes = array_merge($classes, $matches[1]);
+
+                } elseif (in_array($fileName . '.php', $this->exceptions)) {
+                    // Files/Classes that don't follow the normal conventions
                     $classes[] = array_search($fileName . '.php', $this->exceptions);
 
                 } else {
+                    // underscore in filename creates camelBase
                     $classAtoms = explode('_', $match[1]);
                     array_walk($classAtoms, function (&$atom) {
                         $atom = ucfirst(strtolower($atom));
                     });
+                    // All classes use the same prefix
                     $classes[] = 'Recurly_' . join('', $classAtoms);
                 }
             }
