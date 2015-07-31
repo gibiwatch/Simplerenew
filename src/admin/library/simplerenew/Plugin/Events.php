@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Plugin;
 
+use Simplerenew\Cms\CmsEventsInterface;
 use Simplerenew\Configuration;
 use Simplerenew\Exception;
 
@@ -21,17 +22,24 @@ class Events
     protected $events = array();
 
     /**
+     * @var CmsEventsInterface
+     */
+    protected $cmsEvents = null;
+
+    /**
      * @var array
      */
     protected $handlers = array();
 
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $config, CmsEventsInterface $cmsEvents = null)
     {
         $this->configuration = $config;
 
         if ($events = $config->get('events')) {
             $this->registerEvents($events);
         }
+
+        $this->cmsEvents = $cmsEvents;
     }
 
     /**
@@ -101,6 +109,9 @@ class Events
                     $results[] = call_user_func_array($callable, $params);
                 }
             }
+        }
+        if ($this->cmsEvents) {
+            $results = array_merge($results, $this->cmsEvents->trigger($event, $params));
         }
         return $results;
     }

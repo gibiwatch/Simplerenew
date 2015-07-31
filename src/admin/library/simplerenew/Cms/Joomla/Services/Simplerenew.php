@@ -82,7 +82,12 @@ class Simplerenew implements ServiceProviderInterface
 
         // Events class
         $pimple['events'] = function (\Simplerenew\Container $c) {
-            return new Events($c['configuration']);
+            $cmsDispatcher = null;
+            $classname = $c['cmsNamespace'] . '\Events';
+            if (class_exists($classname)) {
+                $cmsDispatcher = new $classname();
+            }
+            return new Events($c['configuration'], $cmsDispatcher);
         };
 
         // API/Gateway classes
