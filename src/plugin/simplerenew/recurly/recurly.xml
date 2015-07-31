@@ -16,6 +16,10 @@
         <filename plugin="recurly">recurly.php</filename>
     </files>
 
+    <media folder="media" destination="com_simplerenew">
+        <folder>js/recurly</folder>
+    </media>
+
     <simplerenew>
         <config>
             <fields name="gateway">

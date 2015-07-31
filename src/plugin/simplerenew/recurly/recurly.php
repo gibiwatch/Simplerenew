@@ -34,4 +34,32 @@ class plgSimplerenewRecurly extends Plugin
             }
         }
     }
+
+    /**
+     * Additional Recurly JS for using billing tokens to validate sensitive
+     * data like credit card numbers.
+     *
+     * @return array
+     */
+    public function simplerenewAdditionalValidation()
+    {
+        $js = array(
+            'https://js.recurly.com/v3/recurly.js',
+            ':com_simplerenew/recurly/validation.js'
+        );
+
+        $config = SimplerenewFactory::getContainer()->configuration;
+
+        $mode = $config->get('gateway.recurly.mode');
+        $key  = $config->get("gateway.recurly.{$mode}.publicKey");
+
+        $js[] = "(function($) {"
+            . "$.Simplerenew.validate.gateway.options"
+            . " = $.extend({},"
+            . " $.Simplerenew.validate.gateway.options,"
+            . " {key: '{$key}'});"
+            . "})(jQuery);";
+
+        return $js;
+    }
 }

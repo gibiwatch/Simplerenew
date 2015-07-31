@@ -16,8 +16,6 @@ defined('_JEXEC') or die();
  * @var Payment\CreditCard     $creditCard
  */
 
-JHtml::_('sr.validation.billing');
-
 $billing = $this->billing;
 
 if (!$billing) {
