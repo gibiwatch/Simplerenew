@@ -1871,17 +1871,13 @@ class SimplerenewUtiltiesArrayTest extends \PHPUnit_Framework_TestCase
      */
     public function testFromObject($input, $recurse, $regex, $expect, $defaults)
     {
-        if ($this->skipObsolete()) {
-            $this->markTestSkipped('::fromObject must be used with care in Joomla 2');
+        if ($defaults) {
+            $output = SimplerenewUtilitiesArray::fromObject($input);
         } else {
-            if ($defaults) {
-                $output = SimplerenewUtilitiesArray::fromObject($input);
-            } else {
-                $output = SimplerenewUtilitiesArray::fromObject($input, $recurse, $regex);
-            }
-
-            $this->assertEquals($expect, $output);
+            $output = SimplerenewUtilitiesArray::fromObject($input, $recurse, $regex);
         }
+
+        $this->assertEquals($expect, $output);
     }
 
     /**
@@ -1964,21 +1960,17 @@ class SimplerenewUtiltiesArrayTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsAssociative()
     {
-        if ($this->skipObsolete()) {
-            $this->markTestSkipped('::isAssociative has problems in Joomla 2');
-        } else {
-            $this->assertThat(
-                SimplerenewUtilitiesArray::isAssociative(
-                    array(
-                        1,
-                        2,
-                        3
-                    )
-                ),
-                $this->isFalse(),
-                'Line: ' . __LINE__ . ' This array should not be associative.'
-            );
-        }
+        $this->assertThat(
+            SimplerenewUtilitiesArray::isAssociative(
+                array(
+                    1,
+                    2,
+                    3
+                )
+            ),
+            $this->isFalse(),
+            'Line: ' . __LINE__ . ' This array should not be associative.'
+        );
 
         $this->assertThat(
             SimplerenewUtilitiesArray::isAssociative(
@@ -2020,14 +2012,10 @@ class SimplerenewUtiltiesArrayTest extends \PHPUnit_Framework_TestCase
      */
     public function testPivot($source, $key, $expected)
     {
-        if ($this->skipObsolete()) {
-            $this->markTestSkipped('::pivot should be avoided in Joomla 2');
-        } else {
-            $this->assertThat(
-                SimplerenewUtilitiesArray::pivot($source, $key),
-                $this->equalTo($expected)
-            );
-        }
+        $this->assertThat(
+            SimplerenewUtilitiesArray::pivot($source, $key),
+            $this->equalTo($expected)
+        );
     }
 
     /**
@@ -2051,11 +2039,6 @@ class SimplerenewUtiltiesArrayTest extends \PHPUnit_Framework_TestCase
      */
     public function testSortObjects($input, $key, $direction, $casesensitive, $locale, $expect, $message, $defaults)
     {
-        if ($this->skipObsolete()) {
-            $this->markTestSkipped('::sortObjects should be avoided in Joomla 2');
-            return;
-
-        }
         // Convert the $locale param to a string if it is an array
         if (is_array($locale)) {
             $locale = "'" . implode("', '", $locale) . "'";
