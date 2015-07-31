@@ -6,11 +6,11 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-namespace Simplerenew\Cms;
+namespace Simplerenew\Plugin;
 
 defined('_JEXEC') or die();
 
-interface CmsEventsInterface
+interface CmsInterface
 {
     /**
      * Translate SR events into registered native CMS events

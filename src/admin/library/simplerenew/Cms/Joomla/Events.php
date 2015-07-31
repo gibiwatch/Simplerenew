@@ -8,11 +8,11 @@
 
 namespace Simplerenew\Cms\Joomla;
 
-use Simplerenew\Cms\CmsEventsInterface;
+use Simplerenew\Plugin\CmsInterface;
 
 defined('_JEXEC') or die();
 
-class Events implements CmsEventsInterface
+class Events implements CmsInterface
 {
     /**
      * @var \JEventDispatcher|\JDispatcher

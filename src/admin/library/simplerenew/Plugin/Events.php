@@ -8,7 +8,6 @@
 
 namespace Simplerenew\Plugin;
 
-use Simplerenew\Cms\CmsEventsInterface;
 use Simplerenew\Configuration;
 use Simplerenew\Exception;
 
@@ -22,7 +21,7 @@ class Events
     protected $events = array();
 
     /**
-     * @var CmsEventsInterface
+     * @var CmsInterface
      */
     protected $cmsEvents = null;
 
@@ -31,7 +30,7 @@ class Events
      */
     protected $handlers = array();
 
-    public function __construct(Configuration $config, CmsEventsInterface $cmsEvents = null)
+    public function __construct(Configuration $config, CmsInterface $cmsEvents = null)
     {
         $this->configuration = $config;
 
