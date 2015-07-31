@@ -41,8 +41,11 @@ class plgSystemSimplerenew extends JPlugin
 
     public function onAfterInitialise()
     {
-        if (!$this->catchNotify()) {
-            $this->refreshUserSession();
+        if ($this->isInstalled()) {
+            JPluginHelper::importPlugin('simplerenew');
+            if (!$this->catchNotify()) {
+                $this->refreshUserSession();
+            }
         }
     }
 
@@ -227,21 +230,6 @@ class plgSystemSimplerenew extends JPlugin
 
             $session = JFactory::getSession();
             $session->set('user', $user);
-        }
-    }
-
-    public function onContentPrepareForm(JForm $form, $data)
-    {
-        $app = JFactory::getApplication();
-
-        if ($app->isAdmin()) {
-            $name = $form->getName() . '.' . $app->input->getCmd('component');
-            if ($name == 'com_config.component.com_simplerenew') {
-                if ($this->isInstalled()) {
-                    $path = SIMPLERENEW_LIBRARY . '/simplerenew/Gateway/Recurly/config.xml';
-                    $form->loadFile($path, false, '//config');
-                }
-            }
         }
     }
 }

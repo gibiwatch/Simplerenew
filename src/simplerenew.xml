@@ -70,6 +70,7 @@
         <license>free</license>
 
         <obsolete>
+            <folder>/administrator/components/com_simplerenew/library/simplerenew/Gateway/Recurly</folder>
         </obsolete>
     </alledia>
 

@@ -34,10 +34,13 @@ class com_simplerenewInstallerScript extends AbstractScript
      */
     protected $relatedExtensions = array(
         'plugin' => array(
-            'system' => array(
+            'simplerenew' => array(
+                'recurly' => array(1, 1, null)
+            ),
+            'system'      => array(
                 'simplerenew' => array(1, 1, null)
             ),
-            'user'   => array(
+            'user'        => array(
                 'simplerenew' => array(1, 1, null)
             )
         )
@@ -228,28 +231,30 @@ class com_simplerenewInstallerScript extends AbstractScript
             foreach ($addons as $addon) {
                 if (strpos($addon->init, JPATH_ROOT) === 0) {
                     $addon->init = substr($addon->init, strlen(JPATH_ROOT));
-                    $setParams = true;
+                    $setParams   = true;
                 }
             }
         }
 
         // As of v1.1.11b1 - Nest Recurly params the way we always wanted to
-        $recurlyOld = $params->get('gateway.recurly');
-        if (property_exists($recurlyOld, 'liveApikey')) {
-            $setParams = true;
-            $recurlyNew = array(
-                'mode' => $recurlyOld->mode,
-                'live' => array(
-                    'apiKey'    => $recurlyOld->liveApikey,
-                    'publicKey' => $recurlyOld->livePublickey
-                ),
-                'test' => array(
-                    'apiKey'    => $recurlyOld->testApikey,
-                    'publicKey' => $recurlyOld->testPublickey
-                ),
-            );
-            $params->set('gateway.recurly', $recurlyNew);
+        if ($type == 'upgrade') {
+            $recurlyOld = $params->get('gateway.recurly');
+            if (property_exists($recurlyOld, 'liveApikey')) {
+                $setParams  = true;
+                $recurlyNew = array(
+                    'mode' => $recurlyOld->mode,
+                    'live' => array(
+                        'apiKey'    => $recurlyOld->liveApikey,
+                        'publicKey' => $recurlyOld->livePublickey
+                    ),
+                    'test' => array(
+                        'apiKey'    => $recurlyOld->testApikey,
+                        'publicKey' => $recurlyOld->testPublickey
+                    ),
+                );
+                $params->set('gateway.recurly', $recurlyNew);
 
+            }
         }
 
         if ($setParams) {
