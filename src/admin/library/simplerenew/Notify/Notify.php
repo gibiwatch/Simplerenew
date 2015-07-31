@@ -143,7 +143,7 @@ class Notify extends Object
         $response = $handler ? $handler->execute($this) : null;
         $this->addLogEntry($handler, $response);
 
-        $this->container->events->trigger('onNotifyProcess', array($this));
+        $this->container->events->trigger('simplerenewNotifyProcess', array($this));
     }
 
     /**

@@ -29,7 +29,7 @@ abstract class SimplerenewHelper
     public static function addSubmenu($vName)
     {
         $events = SimplerenewFactory::getContainer()->getEvents();
-        if ($results = array_filter($events->trigger('onAdminSubmenu'))) {
+        if ($results = array_filter($events->trigger('simplerenewAdminSubmenu'))) {
             static::addMenuEntry(
                 JText::_('COM_SIMPLERENEW_SUBMENU_PLANS'),
                 'index.php?option=com_simplerenew&view=plans',

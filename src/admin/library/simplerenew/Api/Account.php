@@ -121,9 +121,9 @@ class Account extends AbstractApiBase
         $this->user = $user;
         $this->code = $this->getAccountCode($user->id);
 
-        $this->events->trigger('onAccountBeforeLoad', array($this));
+        $this->events->trigger('simplerenewAccountBeforeLoad', array($this));
         $this->imp->load($this);
-        $this->events->trigger('onAccountAfterLoad', array($this));
+        $this->events->trigger('simplerenewAccountAfterLoad', array($this));
 
         return $this;
     }

@@ -142,9 +142,9 @@ class Subscription extends AbstractApiBase
 
         $this->id = $id;
 
-        $this->events->trigger('onSubscriptionBeforeLoad', array($this));
+        $this->events->trigger('simplerenewSubscriptionBeforeLoad', array($this));
         $this->imp->load($this);
-        $this->events->trigger('onSubscriptionAfterLoad', array($this));
+        $this->events->trigger('simplerenewSubscriptionAfterLoad', array($this));
 
         return $this;
     }
@@ -193,7 +193,7 @@ class Subscription extends AbstractApiBase
     {
         $this->clearProperties();
 
-        $this->events->trigger('onSubscriptionBeforeCreate', array($account, $plan, $coupon));
+        $this->events->trigger('simplerenewSubscriptionBeforeCreate', array($account, $plan, $coupon));
 
         if ($coupon && $coupon->isAvailable($plan)) {
             $this->imp->create($this, $account, $plan, $coupon);
@@ -202,7 +202,7 @@ class Subscription extends AbstractApiBase
         }
         $account->user->addGroups($plan->code);
 
-        $this->events->trigger('onSubscriptionAfterUpdate', array($this, true));
+        $this->events->trigger('simplerenewSubscriptionAfterUpdate', array($this, true));
 
         return $this;
     }
@@ -240,11 +240,11 @@ class Subscription extends AbstractApiBase
      */
     public function update(Plan $plan, Coupon $coupon = null)
     {
-        $this->events->trigger('onSubscriptionBeforeUpdate', array($this, false));
+        $this->events->trigger('simplerenewSubscriptionBeforeUpdate', array($this, false));
 
         $this->imp->update($this, $plan, $coupon);
 
-        $this->events->trigger('onSubscriptionAfterUpdate', array($this, false));
+        $this->events->trigger('simplerenewSubscriptionAfterUpdate', array($this, false));
     }
 
     /**
