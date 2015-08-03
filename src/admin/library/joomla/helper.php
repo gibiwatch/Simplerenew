@@ -148,17 +148,14 @@ abstract class SimplerenewHelper
         );
 
         if (SimplerenewFactory::getApplication()->isAdmin()) {
-            // Test Gateway Configuration
             $status = SimplerenewFactory::getStatus();
-            if ($status->configured) {
-                try {
-                    $valid = SimplerenewFactory::getContainer()->getAccount()->validConfiguration();
-                    if (!$valid) {
-                        $message->errors[] = JText::_('COM_SIMPLERENEW_ERROR_GATEWAY_CONFIGURATION');
-                    }
-
-                } catch (Exception $e) {
-                    $message->errors[] = JText::_('COM_SIMPLERENEW_ERROR_GATEWAY_CONFIGURATION');
+            if (!$status->configured) {
+                $message->errors[] = JText::_('COM_SIMPLERENEW_ERROR_GATEWAY_CONFIGURATION');
+            }
+            if (!$status->gateway) {
+                $gateway = ucfirst(strtolower(SimplerenewFactory::getContainer()->gateway));
+                if (!JPluginHelper::isEnabled('Simplerenew', $gateway)) {
+                    $message->errors[] = JText::sprintf('COM_SIMPLERENEW_ERROR_GATEWAY_PLUGIN_UNAVAILABLE', $gateway);
                 }
             }
 
