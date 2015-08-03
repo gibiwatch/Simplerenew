@@ -243,11 +243,12 @@ abstract class SimplerenewHelper
      */
     protected static function addMenuEntry($name, $link, $active = false)
     {
-        if (version_compare(JVERSION, '3.0', 'lt')) {
-            JSubMenuHelper::addEntry($name, $link, $active);
-        } else {
+        if (method_exists('JHtmlSidebar', 'addEntry')) {
             JHtmlSidebar::addEntry($name, $link, $active);
         }
+
+        // Deprecated after J2.5
+        JSubMenuHelper::addEntry($name, $link, $active);
     }
 
     /**
@@ -426,11 +427,12 @@ abstract class SimplerenewHelper
      */
     public static function getApplication($client)
     {
-        if (version_compare(JVERSION, '3.0', 'lt')) {
-            return JApplication::getInstance($client);
+        if (class_exists('JApplicationCms')) {
+            return JApplicationCms::getInstance($client);
         }
 
-        return JApplicationCms::getInstance($client);
+        // Deprecated in later Joomla versions
+        return JApplication::getInstance($client);
     }
 
     /**

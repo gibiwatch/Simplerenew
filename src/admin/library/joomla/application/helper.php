@@ -12,10 +12,11 @@ abstract class SimplerenewApplicationHelper extends JApplicationHelper
 {
     public static function stringURLSafe($string)
     {
-        if (version_compare(JVERSION, '3.0', 'lt')) {
-            return JApplication::stringURLSafe($string);
+        if (method_exists('JApplicationHelper', 'stringURLSafe')) {
+            return parent::stringURLSafe($string);
         }
 
-        return parent::stringURLSafe($string);
+        // Deprecated in later Joomla versions
+        return JApplication::stringURLSafe($string);
     }
 }
