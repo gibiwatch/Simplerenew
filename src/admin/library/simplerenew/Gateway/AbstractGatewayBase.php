@@ -54,12 +54,12 @@ abstract class AbstractGatewayBase extends Object
      */
     protected function getCfg($key, $default = null)
     {
-        return $this->configuration->get('gateway.recurly.' . $key, $default);
+        return $this->configuration->get('gateway.' . $key, $default);
     }
 
     protected function setCfg($key, $value)
     {
-        return $this->configuration->set('gateway.recurly.' . $key, $value);
+        return $this->configuration->set('gateway.' . $key, $value);
     }
 
     /**

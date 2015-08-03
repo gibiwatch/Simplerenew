@@ -50,8 +50,8 @@ class plgSimplerenewRecurly extends Plugin
 
         $config = SimplerenewFactory::getContainer()->configuration;
 
-        $mode = $config->get('gateway.recurly.mode');
-        $key  = $config->get("gateway.recurly.{$mode}.publicKey");
+        $mode = $config->get('gateway.mode');
+        $key  = $config->get("gateway.{$mode}.publicKey");
 
         $js[] = "(function($) {"
             . "$.Simplerenew.validate.gateway.options"

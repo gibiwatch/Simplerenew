@@ -27,39 +27,37 @@ abstract class SimplerenewFactory extends JFactory
     /**
      * Get the Simplerenew container class
      *
-     * @TODO: Review Factory/DI pattern for possible improvement
-     *
-     * @param JRegistry $params
+     * @param string $gateway
      *
      * @return Container
      * @throws Exception
      */
-    public static function getContainer(JRegistry $params = null)
+    public static function getContainer($gateway = null)
     {
-        $params = $params ?: SimplerenewComponentHelper::getParams();
-        $key    = sha1($params->toString());
-        $config = array();
-        if (empty(static::$SimplerenewContainers[$key])) {
-            // convert Joomla config parameters into Simplerenew configuration options
-            if ($gateway = $params->get('gateway')) {
-                $billingRequired = explode(',', $params->get('basic.billingAddress'));
+        $params  = SimplerenewComponentHelper::getParams();
+        $gateway = $gateway ?: 'recurly';
 
-                $config = array(
-                    'gateway'      => SimplerenewUtilitiesArray::fromObject($gateway),
-                    'billing'      => array(
-                        'required' => array_filter(array_map('trim', $billingRequired))
-                    ),
-                    'subscription' => array(
-                        'allowMultiple' => $params->get('basic.allowMultiple')
-                    ),
-                    'user'         => array(
-                        'group' => array(
-                            'default'    => (int)$params->get('basic.defaultGroup'),
-                            'expiration' => (int)$params->get('basic.expirationGroup')
-                        )
+        $config = array();
+        if (empty(static::$SimplerenewContainers[$gateway])) {
+            // convert Joomla config parameters into Simplerenew configuration options
+            $gatewayConfig   = $params->get('gateway.' . $gateway);
+            $billingRequired = explode(',', $params->get('basic.billingAddress'));
+
+            $config = array(
+                'gateway'      => SimplerenewUtilitiesArray::fromObject($gatewayConfig),
+                'billing'      => array(
+                    'required' => array_filter(array_map('trim', $billingRequired))
+                ),
+                'subscription' => array(
+                    'allowMultiple' => $params->get('basic.allowMultiple')
+                ),
+                'user'         => array(
+                    'group' => array(
+                        'default'    => (int)$params->get('basic.defaultGroup'),
+                        'expiration' => (int)$params->get('basic.expirationGroup')
                     )
-                );
-            }
+                )
+            );
 
             // Allow devs to create additional customizations for a site
             $settingsPath = SIMPLERENEW_LIBRARY . '/simplerenew/.settings.json';
@@ -69,16 +67,16 @@ abstract class SimplerenewFactory extends JFactory
 
             $container = new Container(
                 array(
-                    'cmsNamespace'   => 'Simplerenew\Cms\Joomla',
-                    'defaultGateway' => 'recurly',
-                    'configuration'  => new Configuration($config)
+                    'cmsNamespace'  => 'Simplerenew\Cms\Joomla',
+                    'gateway'       => $gateway,
+                    'configuration' => new Configuration($config)
                 )
             );
             $container->register(new Services());
 
-            static::$SimplerenewContainers[$key] = $container;
+            static::$SimplerenewContainers[$gateway] = $container;
         }
-        return static::$SimplerenewContainers[$key];
+        return static::$SimplerenewContainers[$gateway];
     }
 
     /**
