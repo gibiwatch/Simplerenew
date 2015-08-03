@@ -26,24 +26,21 @@ abstract class SrValidation
         JHtml::_('script', 'com_simplerenew/creditcard.js', false, true);
 
         JHtml::_('sr.onready', "$.Simplerenew.validate.init('{$selector}');");
-    }
 
-    /**
-     * Add gateway specific js support for payment screens
-     *
-     * @return void
-     */
-    public static function billing()
-    {
-        $jsAssets = SimplerenewFactory::getContainer()
-            ->getBilling()
-            ->getJSAssets();
+        // additional validation code - to be expected from the gateways
+        $additionalJS = new RecursiveIteratorIterator(
+            new RecursiveArrayIterator(
+                SimplerenewFactory::getContainer()
+                    ->events
+                    ->trigger('simplerenewAdditionalValidation')
+            )
+        );
 
-        foreach ($jsAssets as $js) {
+        foreach ($additionalJS as $js) {
             if (substr($js, 0, 4) == 'http') {
                 JHtml::_('script', $js);
-            } elseif ($js[0] == '/') {
-                jhtml::_('script', 'com_simplerenew/gateway' . $js, false, true);
+            } elseif ($js[0] == ':') {
+                jhtml::_('script', substr($js, 1), false, true);
             } else {
                 SimplerenewFactory::getDocument()
                     ->addScriptDeclaration($js);

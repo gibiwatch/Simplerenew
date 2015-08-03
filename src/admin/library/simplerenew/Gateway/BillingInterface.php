@@ -16,21 +16,6 @@ defined('_JEXEC') or die();
 interface BillingInterface
 {
     /**
-     * Get the javascript assets needed for processing
-     * sensitive financial data on a web form.
-     *
-     * If values in returned array begin with:
-     *
-     * http : treated as external script
-     * /    : treated as local script
-     *
-     * Anything else will be added as an inline script
-     *
-     * @return array
-     */
-    public function getJSAssets();
-
-    /**
      * @param Billing $parent
      *
      * @return void

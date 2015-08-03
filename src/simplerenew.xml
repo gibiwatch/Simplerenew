@@ -2,7 +2,7 @@
 <extension type="component" version="2.5" method="upgrade">
     <name>COM_SIMPLERENEW</name>
     <author>OSTraining</author>
-    <creationDate>July 28, 2015</creationDate>
+    <creationDate>July 31, 2015</creationDate>
     <copyright>Copyright (C) 2014-2015 OSTraining.com</copyright>
     <license>GPL v3</license>
     <authorEmail>info@simplerenew.com</authorEmail>
@@ -70,6 +70,8 @@
         <license>free</license>
 
         <obsolete>
+            <folder>/administrator/components/com_simplerenew/library/simplerenew/Gateway/Recurly</folder>
+            <folder>/media/com_simplerenew/js/gateway</folder>
         </obsolete>
     </alledia>
 

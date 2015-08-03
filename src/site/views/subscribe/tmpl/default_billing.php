@@ -28,7 +28,6 @@ if ($payment instanceof PayPal) {
 }
 $tabOptions['active'] = $activePayment == 'pp' ? '#tab_paypal' : '#tab_card';
 
-JHtml::_('sr.validation.billing');
 JHtml::_('sr.tabs', '.payment-tabs div', $tabOptions);
 
 echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BILLING'));

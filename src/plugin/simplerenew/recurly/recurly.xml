@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="simplerenew" method="upgrade">
+    <name>plg_simplerenew_recurly</name>
+    <author>OSTraining</author>
+    <creationDate>July 30, 2015</creationDate>
+    <copyright>Copyright (C) 2014-2105 OSTraining.com</copyright>
+    <license>GPL v3</license>
+    <authorEmail>info@ostraining.com</authorEmail>
+    <authorUrl>http://www.ostraining.com</authorUrl>
+    <version>1.0.0</version>
+    <description>plg_simplerenew_recurly_description</description>
+
+    <files>
+        <folder>language</folder>
+        <folder>library</folder>
+        <filename plugin="recurly">recurly.php</filename>
+    </files>
+
+    <media folder="media" destination="com_simplerenew">
+        <folder>js/recurly</folder>
+    </media>
+
+    <simplerenew>
+        <config>
+            <fields name="gateway">
+                <fields name="recurly">
+                    <fieldset
+                        name="recurly"
+                        label="COM_SIMPLERENEW_CONFIG_FIELDSET_RECURLY_LABEL"
+                        description="COM_SIMPLERENEW_CONFIG_FIELDSET_RECURLY_DESC">
+                        <field
+                            name="mode"
+                            label="COM_SIMPLERENEW_CONFIG_GATEWAY_MODE_LABEL"
+                            type="tablist">
+                            <option value="live" show=".recurly.live">COM_SIMPLERENEW_OPTION_GATEWAY_MODE_LIVE</option>
+                            <option value="test" show=".recurly.test">COM_SIMPLERENEW_OPTION_GATEWAY_MODE_TEST</option>
+                        </field>
+
+                        <fields name="live">
+                            <field
+                                name="head"
+                                label="COM_SIMPLERENEW_CONFIG_GATEWAY_HEAD_LIVE"
+                                type="heading"
+                                tag="h4"
+                                class="recurly live"/>
+
+                            <field
+                                name="apiKey"
+                                label="COM_SIMPLERENEW_CONFIG_RECURLY_APIKEY_LABEL"
+                                description="COM_SIMPLERENEW_CONFIG_RECURLY_APIKEY_DESC"
+                                type="text"
+                                size="50"
+                                class="recurly live"/>
+
+                            <field
+                                name="publicKey"
+                                label="COM_SIMPLERENEW_CONFIG_RECURLY_PUBLICKEY_LABEL"
+                                description="COM_SIMPLERENEW_CONFIG_RECURLY_PUBLICKEY_DESC"
+                                type="text"
+                                size="50"
+                                class="recurly live"/>
+                        </fields>
+
+                        <fields name="test">
+                            <field
+                                name="head"
+                                label="COM_SIMPLERENEW_CONFIG_GATEWAY_HEAD_TEST"
+                                type="heading"
+                                tag="h4"
+                                class="recurly test"/>
+
+                            <field
+                                name="apiKey"
+                                label="COM_SIMPLERENEW_CONFIG_RECURLY_APIKEY_LABEL"
+                                description="COM_SIMPLERENEW_CONFIG_RECURLY_APIKEY_DESC"
+                                type="text"
+                                size="50"
+                                class="recurly test"/>
+
+                            <field
+                                name="publicKey"
+                                label="COM_SIMPLERENEW_CONFIG_RECURLY_PUBLICKEY_LABEL"
+                                description="COM_SIMPLERENEW_CONFIG_RECURLY_PUBLICKEY_DESC"
+                                type="text"
+                                size="50"
+                                class="recurly test"/>
+                        </fields>
+                    </fieldset>
+                </fields>
+            </fields>
+        </config>
+    </simplerenew>
+</extension>

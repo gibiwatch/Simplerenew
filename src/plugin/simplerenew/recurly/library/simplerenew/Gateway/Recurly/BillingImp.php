@@ -31,11 +31,6 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
         'agreementId' => 'paypal_billing_agreement_id'
     );
 
-    protected $jsScripts = array(
-        'https://js.recurly.com/v3/recurly.js',
-        '/recurly.js'
-    );
-
     /**
      * @param Billing $parent
      *
@@ -196,33 +191,5 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
         }
 
         $parent->setPayment($payment);
-    }
-
-    /**
-     * Get the javascript assets needed for processing
-     * sensitive financial data on a web form.
-     *
-     * If values in returned array begin with:
-     *
-     * http : treated as external script
-     * /    : treated as local script
-     *
-     * Anything else will be added as an inline script
-     *
-     * @return array
-     */
-    public function getJSAssets()
-    {
-        $js = $this->jsScripts;
-
-        $key = $this->getCfg($this->mode . '.publicKey');
-
-        $js[] = "(function($) {"
-            . "$.Simplerenew.gateway.options"
-            . " = $.extend({},"
-            . " $.Simplerenew.gateway.options,"
-            . " {key: '{$key}'});"
-            . "})(jQuery);";
-        return $js;
     }
 }

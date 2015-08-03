@@ -83,25 +83,6 @@ class Billing extends AbstractApiBase
     }
 
     /**
-     * Get the javascript assets needed for processing
-     * sensitive financial data on a web form.
-     *
-     * If values in returned array begin with:
-     *
-     * http : treated as external script
-     * /    : treated as local script
-     *
-     * Anything else will be added as an inline script
-     *
-     *
-     * @return array
-     */
-    public function getJSAssets()
-    {
-        return $this->imp->getJSAssets();
-    }
-
-    /**
      * @param Account $account
      *
      * @return Billing

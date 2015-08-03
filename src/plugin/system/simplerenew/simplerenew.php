@@ -41,8 +41,11 @@ class plgSystemSimplerenew extends JPlugin
 
     public function onAfterInitialise()
     {
-        if (!$this->catchNotify()) {
-            $this->refreshUserSession();
+        if ($this->isInstalled()) {
+            JPluginHelper::importPlugin('simplerenew');
+            if (!$this->catchNotify()) {
+                $this->refreshUserSession();
+            }
         }
     }
 

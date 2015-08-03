@@ -6,7 +6,8 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-use Simplerenew\Cms\Joomla\Services\Simplerenew;
+use Simplerenew\Configuration;
+use Simplerenew\Services;
 use Simplerenew\Container;
 
 defined('_JEXEC') or die();
@@ -40,21 +41,11 @@ abstract class SimplerenewFactory extends JFactory
         $config = array();
         if (empty(static::$SimplerenewContainers[$key])) {
             // convert Joomla config parameters into Simplerenew configuration options
-            if ($recurly = $params->get('gateway.recurly')) {
+            if ($gateway = $params->get('gateway')) {
                 $billingRequired = explode(',', $params->get('basic.billingAddress'));
 
                 $config = array(
-                    'gateway'      => array(
-                        'mode' => $recurly->mode,
-                        'live' => array(
-                            'apiKey'    => $recurly->liveApikey,
-                            'publicKey' => $recurly->livePublickey
-                        ),
-                        'test' => array(
-                            'apiKey'    => $recurly->testApikey,
-                            'publicKey' => $recurly->testPublickey
-                        )
-                    ),
+                    'gateway'      => SimplerenewUtilitiesArray::fromObject($gateway),
                     'billing'      => array(
                         'required' => array_filter(array_map('trim', $billingRequired))
                     ),
@@ -76,9 +67,14 @@ abstract class SimplerenewFactory extends JFactory
                 $config = array_merge(json_decode($settings, true), $config);
             }
 
-            $container = new Container();
-            $services  = new Simplerenew($config);
-            $container->register($services);
+            $container = new Container(
+                array(
+                    'cmsNamespace'   => 'Simplerenew\Cms\Joomla',
+                    'defaultGateway' => 'recurly',
+                    'configuration'  => new Configuration($config)
+                )
+            );
+            $container->register(new Services());
 
             static::$SimplerenewContainers[$key] = $container;
         }

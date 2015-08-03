@@ -47,10 +47,10 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
      */
     protected function getCurrency(\Recurly_CurrencyList $amounts, $currency = null)
     {
-        $currency = $currency ? : $this->currency;
+        $currency = $currency ?: $this->currency;
         if (!isset($amounts[$currency])) {
             $this->currency = key($amounts->getIterator()->getArrayCopy());
-            $currency = $this->currency;
+            $currency       = $this->currency;
         }
 
         $amount = $amounts[$currency]->amount_in_cents / 100;
@@ -64,12 +64,10 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
      */
     public function validConfiguration()
     {
-        if (
-            $this->client instanceof \Recurly_Client
+        if ($this->client instanceof \Recurly_Client
             && ($this->client->apiKey() != '')
             && ($this->getCfg($this->mode . '.publicKey') != '')
         ) {
-
             $url = sprintf($this->client->baseUri() . '/accounts');
             $ch  = curl_init($url);
             curl_setopt_array(

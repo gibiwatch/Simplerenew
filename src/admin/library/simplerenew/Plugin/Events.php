@@ -21,17 +21,24 @@ class Events
     protected $events = array();
 
     /**
+     * @var CmsInterface
+     */
+    protected $cmsEvents = null;
+
+    /**
      * @var array
      */
     protected $handlers = array();
 
-    public function __construct(Configuration $config)
+    public function __construct(Configuration $config, CmsInterface $cmsEvents = null)
     {
         $this->configuration = $config;
 
         if ($events = $config->get('events')) {
             $this->registerEvents($events);
         }
+
+        $this->cmsEvents = $cmsEvents;
     }
 
     /**
@@ -101,6 +108,9 @@ class Events
                     $results[] = call_user_func_array($callable, $params);
                 }
             }
+        }
+        if ($this->cmsEvents) {
+            $results = array_merge($results, $this->cmsEvents->trigger($event, $params));
         }
         return $results;
     }
