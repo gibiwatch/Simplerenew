@@ -245,10 +245,10 @@ abstract class SimplerenewHelper
     {
         if (method_exists('JHtmlSidebar', 'addEntry')) {
             JHtmlSidebar::addEntry($name, $link, $active);
+        } else {
+            // Deprecated after J2.5
+            JSubMenuHelper::addEntry($name, $link, $active);
         }
-
-        // Deprecated after J2.5
-        JSubMenuHelper::addEntry($name, $link, $active);
     }
 
     /**
