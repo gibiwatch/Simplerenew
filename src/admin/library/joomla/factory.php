@@ -25,7 +25,7 @@ abstract class SimplerenewFactory extends JFactory
     protected static $SimplerenewStatus = null;
 
     /**
-     * Get the Simplerenew container class
+     * Get a Simplerenew container class for the designated gateway
      *
      * @param string $gateway
      *
@@ -35,12 +35,12 @@ abstract class SimplerenewFactory extends JFactory
     public static function getContainer($gateway = null)
     {
         $params  = SimplerenewComponentHelper::getParams();
-        $gateway = $gateway ?: 'recurly';
+        $gateway = $gateway ?: 'Recurly';
 
         $config = array();
         if (empty(static::$SimplerenewContainers[$gateway])) {
             // convert Joomla config parameters into Simplerenew configuration options
-            $gatewayConfig   = $params->get('gateway.' . $gateway);
+            $gatewayConfig   = $params->get('gateway.' . strtolower($gateway));
             $billingRequired = explode(',', $params->get('basic.billingAddress'));
 
             $config = array(
@@ -77,6 +77,28 @@ abstract class SimplerenewFactory extends JFactory
             static::$SimplerenewContainers[$gateway] = $container;
         }
         return static::$SimplerenewContainers[$gateway];
+    }
+
+    /**
+     * Get containers for all known/installed gateways
+     *
+     * @TODO: This isn't well done. Need a better means of finding installed gateways
+     *
+     * @return array
+     */
+    public static function getAllGatewayContainers()
+    {
+        $primary  = static::getContainer();
+        $gateways = SimplerenewFactory::getContainer()->events->trigger('simplerenewLoadGateway');
+
+        $containers = array($primary);
+        foreach ($gateways as $gateway) {
+            if ($primary->gateway != $gateway) {
+                $containers[] = static::getContainer($gateway);
+            }
+        }
+
+        return $containers;
     }
 
     /**

@@ -62,4 +62,14 @@ class plgSimplerenewRecurly extends Plugin
 
         return $js;
     }
+
+    /**
+     * Provide namespace for our gateway classes
+     *
+     * @return string
+     */
+    public function simplerenewLoadGateway()
+    {
+        return 'Recurly';
+    }
 }

@@ -53,8 +53,7 @@ class Services implements ServiceProviderInterface
     {
         // Services
         $pimple['gatewayNamespace'] = function (Container $c) {
-            $name = ucfirst(strtolower($c['gateway']));
-            return '\Simplerenew\Gateway\\' . $name;
+            return '\Simplerenew\Gateway\\' . $c['gateway'];
         };
 
         $pimple['logger'] = function (Container $c) {
