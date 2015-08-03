@@ -16,11 +16,11 @@ class SimplerenewModelInvoice extends SimplerenewModelAccount
     {
         $invoice = $this->getState('invoice');
         if (!$invoice instanceof Simplerenew\Api\Invoice) {
-            $container = SimplerenewFactory::getContainer();
-            $number    = $this->getState('invoice.number');
+            $account   = $this->getAccount();
+            $container = SimplerenewFactory::getContainer($account->getGatewayName());
 
+            $number  = $this->getState('invoice.number');
             $invoice = $container->getInvoice()->load($number);
-            $account = $this->getAccount();
             if ($invoice->account_code != $account->code) {
                 throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_INVOICE_NOAUTH'), 401);
             }
