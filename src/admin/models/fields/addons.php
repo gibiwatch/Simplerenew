@@ -47,7 +47,7 @@ class JFormFieldAddons extends JFormFieldText
                     if ($current) {
                         $registerCount++;
 
-                        if ($current->enabled && (!$addon->init || is_file($addon->init))) {
+                        if ($current->enabled && (!$addon->init || is_file(JPATH_ROOT . $addon->init))) {
                             $statusImage = JHtml::_(
                                 'image',
                                 'admin/icon-16-allow.png',
