@@ -226,35 +226,54 @@ class com_simplerenewInstallerScript extends AbstractScript
             $setParams = true;
         }
 
-        // As of v1.1.10 - make addon init paths relative
-        if ($addons = $params->get('addons')) {
-            foreach ($addons as $addon) {
-                if (strpos($addon->init, JPATH_ROOT) === 0) {
-                    $addon->init = substr($addon->init, strlen(JPATH_ROOT));
-                    $setParams   = true;
+        if ($addonsOld = $params->get('addons')) {
+            $addonsNew = array();
+
+            foreach ($addonsOld as $addon) {
+                if (property_exists($addon, 'init')) {
+                    $setParams = true;
+                    // As of v1.1.10 - make addon init paths relative
+                    if (strpos($addon->init, JPATH_ROOT) === 0) {
+                        $addon->init = substr($addon->init, strlen(JPATH_ROOT));
+                    }
                 }
+
+                if (property_exists($addon, 'extension_id')) {
+                    $setParams = true;
+                    // As of v1.1.11b2 - Addon parameters are keyed on extension ID
+                    $addonsNew[$addon->extension_id] = array(
+                        'title' => $addon->title,
+                        'init'  => $addon->init
+                    );
+                }
+            }
+
+            if ($addonsNew) {
+                $params->set('addons', $addonsNew);
             }
         }
 
         // As of v1.1.11b1 - Nest Recurly params the way we always wanted to
-        if ($type == 'upgrade') {
-            $recurlyOld = $params->get('gateway.recurly');
-            if (property_exists($recurlyOld, 'liveApikey')) {
-                $setParams  = true;
-                $recurlyNew = array(
-                    'mode' => $recurlyOld->mode,
-                    'live' => array(
-                        'apiKey'    => $recurlyOld->liveApikey,
-                        'publicKey' => $recurlyOld->livePublickey
-                    ),
-                    'test' => array(
-                        'apiKey'    => $recurlyOld->testApikey,
-                        'publicKey' => $recurlyOld->testPublickey
-                    ),
-                );
-                $params->set('gateway.recurly', $recurlyNew);
+        $recurlyOld = $params->get('gateway.recurly');
+        if (property_exists($recurlyOld, 'liveApikey')) {
+            $setParams  = true;
+            $recurlyNew = array(
+                'mode' => $recurlyOld->mode,
+                'live' => array(
+                    'apiKey'    => $recurlyOld->liveApikey,
+                    'publicKey' => $recurlyOld->livePublickey
+                ),
+                'test' => array(
+                    'apiKey'    => $recurlyOld->testApikey,
+                    'publicKey' => $recurlyOld->testPublickey
+                ),
+            );
 
-            }
+            $paramsData             = $params->toArray();
+            $paramsData['gateways'] = $paramsData['gateway'];
+            unset($paramsData['gateway']);
+            $params = new JRegistry($paramsData);
+            $params->set('gateways.recurly', $recurlyNew);
         }
 
         if ($setParams) {

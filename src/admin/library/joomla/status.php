@@ -48,7 +48,7 @@ class SimplerenewStatus
 
     public function __construct()
     {
-        $this->configured = (bool)SimplerenewComponentHelper::getParams()->get('gateway');
+        $this->configured = (bool)SimplerenewComponentHelper::getParams()->get('gateways');
 
         if ($this->configured) {
             try {

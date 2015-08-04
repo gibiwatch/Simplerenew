@@ -41,9 +41,9 @@ class JFormFieldAddons extends JFormFieldText
                     '<tbody>'
                 ));
 
-                foreach ($this->value as $idx => $addon) {
+                foreach ($this->value as $id => $addon) {
                     $addon = (object)$addon;
-                    $current = isset($status[$addon->extension_id]) ? $status[$addon->extension_id] : null;
+                    $current = isset($status[$id]) ? $status[$id] : null;
                     if ($current) {
                         $registerCount++;
 
@@ -67,12 +67,12 @@ class JFormFieldAddons extends JFormFieldText
 
                         $html = array_merge($html, array(
                             '<tr>',
-                            '<td style="text-align: right;">' . $addon->extension_id . '</td>',
+                            '<td style="text-align: right;">' . $id . '</td>',
                             '<td style="text-align: left;">' . $addon->title . '</td>',
                             '<td style="text-align: center;">' . $statusImage
                         ));
 
-                        $baseName = $this->name . "[{$idx}]";
+                        $baseName = $this->name . "[{$id}]";
                         foreach (get_object_vars($addon) as $key => $value) {
                             $name   = $baseName . '[' . $key . ']';
                             $value  = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');

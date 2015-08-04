@@ -37,10 +37,9 @@ abstract class SimplerenewFactory extends JFactory
         $params  = SimplerenewComponentHelper::getParams();
         $gateway = $gateway ?: 'Recurly';
 
-        $config = array();
         if (empty(static::$SimplerenewContainers[$gateway])) {
             // convert Joomla config parameters into Simplerenew configuration options
-            $gatewayConfig   = $params->get('gateway.' . strtolower($gateway));
+            $gatewayConfig   = $params->get('gateways.' . strtolower($gateway));
             $billingRequired = explode(',', $params->get('basic.billingAddress'));
 
             $config = array(
