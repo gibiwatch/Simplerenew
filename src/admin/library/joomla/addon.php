@@ -31,7 +31,7 @@ abstract class SimplerenewAddon
             }
         }
 
-        $addons = $simplerenew->params->get('addons', array());
+        $addons = (array)$simplerenew->params->get('addons', array());
 
         $addons[$addon->extension_id] = array(
             'title' => $title,
