@@ -21,7 +21,7 @@ class Events implements CmsInterface
 
     public function __construct()
     {
-        if (class_exists('\JEventDispatcher')) {
+        if (version_compare(JVERSION, '3.0', 'ge')) {
             $this->dispatcher = \JEventDispatcher::getInstance();
         } else {
             $this->dispatcher = \JDispatcher::getInstance();
