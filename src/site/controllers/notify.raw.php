@@ -36,6 +36,8 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
         if ($user) {
             $user->logout();
         }
+
+        jexit();
     }
 
     /**
