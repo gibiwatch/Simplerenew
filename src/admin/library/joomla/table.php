@@ -24,6 +24,18 @@ abstract class SimplerenewTable extends JTable
     }
 
     /**
+     * Accommodate bad use of statics in J2.5
+     *
+     * @param string $path
+     *
+     * @return array
+     */
+    public static function addIncludePath($path = null)
+    {
+        return JTable::addIncludePath($path);
+    }
+
+    /**
      * Automatically set create/modified dates
      *
      * @param boolean $updateNulls [optional]
@@ -47,8 +59,8 @@ abstract class SimplerenewTable extends JTable
             && property_exists($this, 'created_by')
             && property_exists($this, 'created_by_alias')
         ) {
-            $this->created_by       = $this->created_by ? : $user->id;
-            $this->created_by_alias = $this->created_by_alias ? : $user->name;
+            $this->created_by       = $this->created_by ?: $user->id;
+            $this->created_by_alias = $this->created_by_alias ?: $user->name;
         }
 
         if (property_exists($this, 'modified')) {
