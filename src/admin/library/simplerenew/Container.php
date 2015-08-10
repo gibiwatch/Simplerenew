@@ -27,18 +27,20 @@ defined('_JEXEC') or die();
  *
  * @package Simplerenew
  *
- * @property Account        $account
- * @property Billing        $billing
- * @property Configuration  $configuration
- * @property Coupon         $coupon
- * @property Events         $events
- * @property Invoice        $invoice
- * @property AbstractLogger $logger
- * @property Notify         $notify
- * @property Plan           $plan
- * @property Subscription   $subscription
- * @property Transaction    $transaction
- * @property User           $user
+ * @property Account        account
+ * @property Billing        billing
+ * @property string         cmsNamespace
+ * @property Configuration  configuration
+ * @property Coupon         coupon
+ * @property Events         events
+ * @property string         gateway
+ * @property Invoice        invoice
+ * @property AbstractLogger logger
+ * @property Notify         notify
+ * @property Plan           plan
+ * @property Subscription   subscription
+ * @property Transaction    transaction
+ * @property User           user
  *
  * @method Account        getAccount()
  * @method Billing        getBilling()

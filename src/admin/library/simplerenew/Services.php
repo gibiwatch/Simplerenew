@@ -31,9 +31,9 @@ defined('_JEXEC') or die();
  *
  * new \Simplerenew\Container(
  *    array(
- *       'cmsNamespace'   => [The namespace for CMS specific adapters],
- *       'defaultGateway' => [index to the default gateway in configuration],
- *       'configuration'  => new Configuration($config)
+ *       'cmsNamespace'  => [The namespace for CMS specific adapters],
+ *       'gateway'       => [index to the default gateway in configuration],
+ *       'configuration' => new Configuration($config)
  *    )
  * )
  *
@@ -53,8 +53,7 @@ class Services implements ServiceProviderInterface
     {
         // Services
         $pimple['gatewayNamespace'] = function (Container $c) {
-            $name = ucfirst(strtolower($c['defaultGateway']));
-            return '\Simplerenew\Gateway\\' . $name;
+            return '\Simplerenew\Gateway\\' . $c['gateway'];
         };
 
         $pimple['logger'] = function (Container $c) {

@@ -10,6 +10,16 @@ defined('_JEXEC') or die();
 
 abstract class SimplerenewToolbarHelper extends JToolbarHelper
 {
+    /**
+     * Add a custom link accommodating J25/J3x differences
+     *
+     * @param string $task
+     * @param string $icon
+     * @param string $iconOver
+     * @param string $alt
+     * @param bool   $listSelect
+     * @param string $iconColor
+     */
     public static function custom(
         $task = '',
         $icon = '',
@@ -33,4 +43,20 @@ abstract class SimplerenewToolbarHelper extends JToolbarHelper
         }
         parent::custom($task, $icon, $iconOver, $alt, $listSelect);
     }
+
+    /**
+     * Add a simple link to the toolbar.
+     *
+     * @param string $href
+     * @param string $alt
+     * @param string $icon
+     */
+    public static function link($href, $alt, $icon)
+    {
+        $bar = JToolbar::getInstance('toolbar');
+
+        // Add a raw link button.
+        $bar->appendButton('Link', $icon, $alt, $href);
+    }
+
 }

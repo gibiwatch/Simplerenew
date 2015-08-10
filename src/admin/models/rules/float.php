@@ -8,9 +8,7 @@
 
 defined('_JEXEC') or die();
 
-class SimplerenewFormRuleInteger extends JFormRule
+class SimplerenewFormRuleFloat extends JFormRule
 {
-    protected $regex = '^[0-9\-]*$';
-
-    protected $modifiers = 'i';
+    protected $regex = '^[0-9\-\.]*$';
 }

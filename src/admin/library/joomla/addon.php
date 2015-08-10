@@ -31,26 +31,11 @@ abstract class SimplerenewAddon
             }
         }
 
-        $addons = $simplerenew->params->get('addons', array());
+        $addons = (array)$simplerenew->params->get('addons', array());
 
-        // Prevent duplication of already registered addons
-        $idx = call_user_func(
-            function ($id, array $addons) {
-                foreach ($addons as $i => $addon) {
-                    if ($id == $addon->extension_id) {
-                        return $i;
-                    }
-                }
-                return count($addons);
-            },
-            $addon->extension_id,
-            $addons
-        );
-
-        $addons[$idx] = array(
-            'title'        => $title,
-            'extension_id' => $addon->extension_id,
-            'init'         => $initPath
+        $addons[$addon->extension_id] = array(
+            'title' => $title,
+            'init'  => $initPath
         );
 
         $simplerenew->params->set('addons', $addons);
@@ -69,9 +54,9 @@ abstract class SimplerenewAddon
         $addons    = SimplerenewComponentHelper::getParams()->get('addons', array());
         $extension = JTable::getInstance('Extension');
 
-        foreach ($addons as $addon) {
+        foreach ($addons as $id => $addon) {
             if (!empty($addon->init) && is_file(JPATH_ROOT . $addon->init)) {
-                $extension->load($addon->extension_id);
+                $extension->load($id);
                 if ($extension->enabled) {
                     require_once JPATH_ROOT . $addon->init;
                 }
@@ -86,11 +71,8 @@ abstract class SimplerenewAddon
      */
     public static function getList()
     {
-        if ($registered = SimplerenewComponentHelper::getParams()->get('addons', array())) {
-            $ids = array();
-            foreach ($registered as $addon) {
-                $ids[] = $addon->extension_id;
-            }
+        if ($registered = (array)SimplerenewComponentHelper::getParams()->get('addons', array())) {
+            $ids = array_keys($registered);
 
             $db    = SimplerenewFactory::getDbo();
             $query = $db->getQuery(true)
@@ -99,10 +81,10 @@ abstract class SimplerenewAddon
                 ->where('extension_id in (' . join(',', $ids) . ')');
 
             if ($list = $db->setQuery($query)->loadObjectList('extension_id')) {
-                foreach ($list as $idx => $addon) {
+                foreach ($list as $id => $addon) {
                     $table = JTable::getInstance('Extension');
                     $table->setProperties($addon);
-                    $list[$idx] = $table;
+                    $list[$id] = $table;
                 }
             }
 

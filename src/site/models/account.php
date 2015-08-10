@@ -25,9 +25,10 @@ class SimplerenewModelAccount extends SimplerenewModelSite
         if (!$user instanceof User) {
             $uid = (int)$this->getState('user.id');
             try {
-                $user = $this->getContainer()
+                $user = SimplerenewFactory::getContainer()
                     ->getUser()
                     ->load($uid);
+
             } catch (NotFound $e) {
                 // most likely not logged in
             }
@@ -42,16 +43,23 @@ class SimplerenewModelAccount extends SimplerenewModelSite
      */
     public function getAccount()
     {
+        /** @var Container $container */
+
         $account = $this->getState('account');
         if (!$account instanceof Account) {
             if ($user = $this->getUser()) {
-                try {
-                    $account = $this->getContainer()
-                        ->getAccount()
-                        ->load($user);
-                    $this->setState('account', $account);
-                } catch (NotFound $e) {
-                    // No account, no worries
+                $containers = SimplerenewFactory::getAllGatewayContainers();
+                foreach ($containers as $container) {
+                    try {
+                        $account = $container
+                            ->getAccount()
+                            ->load($user);
+                        $this->setState('account', $account);
+                        break;
+
+                    } catch (NotFound $e) {
+                        // No account, no worries
+                    }
                 }
             }
         }
@@ -66,11 +74,13 @@ class SimplerenewModelAccount extends SimplerenewModelSite
         $billing = $this->getState('account.billing');
         if (!$billing instanceof Billing) {
             if ($account = $this->getAccount()) {
+                $container = SimplerenewFactory::getContainer($account->getGatewayName());
                 try {
-                    $billing = $this->getContainer()
+                    $billing = $container
                         ->getBilling()
                         ->load($account);
                     $this->setState('account.billing', $billing);
+
                 } catch (NotFound $e) {
                     // No billing is okay
                 }
@@ -92,9 +102,11 @@ class SimplerenewModelAccount extends SimplerenewModelSite
             $subscriptions = array();
 
             if ($account = $this->getAccount()) {
+                $container = SimplerenewFactory::getContainer($account->getGatewayName());
+
                 try {
-                    $status = (int)$this->getState('status.subscription', null);
-                    $subscriptions = $this->getContainer()
+                    $status        = (int)$this->getState('status.subscription', null);
+                    $subscriptions = $container
                         ->getSubscription()
                         ->getList($account, $status);
 
@@ -120,8 +132,10 @@ class SimplerenewModelAccount extends SimplerenewModelSite
             $invoices = array();
 
             if ($account = $this->getAccount()) {
+                $container = SimplerenewFactory::getContainer($account->getGatewayName());
+
                 try {
-                    $invoices = $this->getContainer()
+                    $invoices = $container
                         ->getInvoice()
                         ->getAccountList($account);
 
@@ -133,19 +147,6 @@ class SimplerenewModelAccount extends SimplerenewModelSite
         }
 
         return $invoices;
-    }
-
-    /**
-     * @return Container
-     */
-    protected function getContainer()
-    {
-        $container = $this->getState('container');
-        if (!$container instanceof Container) {
-            $container = SimplerenewFactory::getContainer();
-            $this->setState('container', $container);
-        }
-        return $container;
     }
 
     protected function populateState()

@@ -8,6 +8,10 @@
 
 defined('_JEXEC') or die();
 
+if (!defined('SIMPLERENEW_LOADED')) {
+    require_once JPATH_ADMINISTRATOR . '/components/com_simplerenew/include.php';
+}
+
 JFormHelper::loadFieldClass('List');
 
 class JFormFieldFilteredgroup extends JFormFieldList

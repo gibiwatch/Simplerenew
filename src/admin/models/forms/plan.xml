@@ -42,7 +42,7 @@
             type="text"
             label="COM_SIMPLERENEW_PLAN_LENGTH_LABEL"
             description="COM_SIMPLERENEW_PLAN_LENGTH_DESC"
-            validate="integer"
+            validate="simplerenew.integer"
             message="COM_SIMPLERENEW_PLAN_LENGTH_INVALID"
             required="true"
             size="2"/>
@@ -59,7 +59,7 @@
             type="text"
             label="COM_SIMPLERENEW_PLAN_TRIAL_LENGTH_LABEL"
             description="COM_SIMPLERENEW_PLAN_TRIAL_LENGTH_DESC"
-            validate="integer"
+            validate="simplerenew.integer"
             message="COM_SIMPLERENEW_PLAN_TRIAL_LENGTH_INVALID"
             size="2"/>
 

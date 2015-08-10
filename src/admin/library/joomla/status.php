@@ -48,10 +48,15 @@ class SimplerenewStatus
 
     public function __construct()
     {
-        $this->configured = (bool)SimplerenewComponentHelper::getParams()->get('gateway');
+        $this->configured = (bool)SimplerenewComponentHelper::getParams()->get('gateways');
 
         if ($this->configured) {
-            $this->gateway = SimplerenewFactory::getContainer()->getAccount()->validConfiguration();
+            try {
+                $this->gateway = SimplerenewFactory::getContainer()->getAccount()->validConfiguration();
+
+            } catch (Exception $e) {
+                $this->gateway = false;
+            }
         }
 
         // Count of existing plans

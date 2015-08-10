@@ -6,11 +6,16 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+namespace Simplerenew\Exception;
+
+use Simplerenew\Exception;
+
 defined('_JEXEC') or die();
 
-class SimplerenewFormRuleInteger extends JFormRule
+class NotSupported extends Exception
 {
-    protected $regex = '^[0-9\-]*$';
-
-    protected $modifiers = 'i';
+    public function __construct($message = "", $code = 404, \Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
 }

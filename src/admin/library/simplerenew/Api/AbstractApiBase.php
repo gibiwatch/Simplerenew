@@ -67,4 +67,20 @@ abstract class AbstractApiBase extends Object
         }
         return false;
     }
+
+    /**
+     * Get the name of the Gateway being used
+     *
+     * @return string|null
+     */
+    public function getGatewayName()
+    {
+        if ($this->imp) {
+            $refClass    = new \ReflectionClass($this->imp);
+            $namespace = explode('\\', $refClass->getNamespaceName());
+            return array_pop($namespace);
+        }
+
+        return null;
+    }
 }

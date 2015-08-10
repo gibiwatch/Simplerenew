@@ -22,7 +22,7 @@
 
     <simplerenew>
         <config>
-            <fields name="gateway">
+            <fields name="gateways">
                 <fields name="recurly">
                     <fieldset
                         name="recurly"
