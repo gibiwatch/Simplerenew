@@ -235,6 +235,8 @@ class UserAdapter implements UserInterface
             }
         }
 
+        $this->load($parent);
+
         // If current user, refresh the session data
         if ($user->id == SimplerenewFactory::getUser()->id) {
             $session = SimplerenewFactory::getSession();
