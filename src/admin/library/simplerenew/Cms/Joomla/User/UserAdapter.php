@@ -46,6 +46,11 @@ class UserAdapter implements UserInterface
      */
     protected $localPlans = null;
 
+    /**
+     * @var array
+     */
+    protected $subscriberGroups = null;
+
     public function __construct()
     {
         SimplerenewModel::addIncludePath(JPATH_SITE . '/components/com_users/models');
@@ -374,6 +379,31 @@ class UserAdapter implements UserInterface
     }
 
     /**
+     * Get a list of groups assigned to plans
+     *
+     * @return array
+     */
+    protected function getSubscriberGroups()
+    {
+        if ($this->subscriberGroups === null) {
+            $db     = \SimplerenewFactory::getDbo();
+            $query  = $db->getQuery(true)
+                ->select('g.id, g.title')
+                ->from('#__simplerenew_plans p')
+                ->innerJoin('#__usergroups g on g.id = p.group_id')
+                ->group('g.id, g.title');
+            $groups = $db->setQuery($query)->loadObjectList();
+
+            $this->subscriberGroups = array();
+            foreach ($groups as $group) {
+                $this->subscriberGroups[$group->id] = $group->title;
+            }
+        }
+
+        return $this->subscriberGroups;
+    }
+
+    /**
      * Add user groups based on plans
      *
      * @param User  $parent
@@ -414,6 +444,28 @@ class UserAdapter implements UserInterface
         }
 
         $parent->groups = $newGroups;
+        $this->update($parent);
+    }
+
+    /**
+     * Remove all subscriber groups
+     *
+     * @param User $parent
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function resetGroups(User $parent)
+    {
+        // Ensure current data
+        $this->load($parent);
+
+        $groups    = $this->getSubscriberGroups();
+        $expireId  = $parent->getConfig('user.group.expiration');
+
+        $newGroups = array_diff($parent->groups, array_keys($groups));
+
+        $parent->groups = $newGroups ?: array($expireId);
         $this->update($parent);
     }
 

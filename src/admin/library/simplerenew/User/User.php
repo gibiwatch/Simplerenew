@@ -233,6 +233,19 @@ class User extends Object
     }
 
     /**
+     * Remove all subscriber groups and reset to a default state
+     *
+     * @return User
+     * @throws Exception
+     */
+    public function resetGroups()
+    {
+        $this->adapter->resetGroups($this);
+
+        return $this;
+    }
+
+    /**
      * @param mixed $planCodes Plan code or array of plan codes
      *
      * @return User
