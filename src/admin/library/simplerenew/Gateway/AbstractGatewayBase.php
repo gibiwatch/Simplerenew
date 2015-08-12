@@ -9,7 +9,6 @@
 namespace Simplerenew\Gateway;
 
 use Simplerenew\Configuration;
-use Simplerenew\Cache;
 use Simplerenew\Exception;
 use Simplerenew\Object;
 
@@ -19,8 +18,6 @@ defined('_JEXEC') or die();
  * Class AbstractGatewayBase
  *
  * @package Simplerenew\Gateway
- *
- * @property Cache $cache
  */
 abstract class AbstractGatewayBase extends Object
 {
@@ -33,11 +30,6 @@ abstract class AbstractGatewayBase extends Object
      * @var string
      */
     protected $currency = null;
-
-    /**
-     * @var Cache
-     */
-    private $cache = null;
 
     public function __construct(Configuration $config = null)
     {
