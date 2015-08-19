@@ -9,16 +9,15 @@
 namespace Simplerenew\Gateway;
 
 use Simplerenew\Configuration;
-use Simplerenew\Cache;
+use Simplerenew\Exception;
 use Simplerenew\Object;
 
 defined('_JEXEC') or die();
 
 /**
  * Class AbstractGatewayBase
- * @package Simplerenew\Gateway
  *
- * @property Cache $cache
+ * @package Simplerenew\Gateway
  */
 abstract class AbstractGatewayBase extends Object
 {
@@ -31,11 +30,6 @@ abstract class AbstractGatewayBase extends Object
      * @var string
      */
     protected $currency = null;
-
-    /**
-     * @var Cache
-     */
-    private $cache = null;
 
     public function __construct(Configuration $config = null)
     {
@@ -76,6 +70,26 @@ abstract class AbstractGatewayBase extends Object
 
         } elseif ($value instanceof \DateTime) {
             return $value;
+        }
+
+        return null;
+    }
+
+    /**
+     * Normalize a variable to a SQL date/time string
+     *
+     * @param string|\DateTime $value
+     *
+     * @return string
+     */
+    protected function fromDateTime($value)
+    {
+        if (is_string($value)) {
+            $value = new \DateTime($value);
+        }
+
+        if ($value instanceof \DateTime) {
+            return $value->format('Y-m-d h:i:s');
         }
 
         return null;
