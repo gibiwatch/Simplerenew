@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 
 class SimplerenewControllerRequest extends SimplerenewControllerJson
 {
-    public function display()
+    public function display($cachable = false, $urlparams = false)
     {
         throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_INVALID_REQUEST'), 404);
     }
