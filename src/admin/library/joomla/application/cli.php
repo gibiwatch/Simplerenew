@@ -12,16 +12,11 @@ class SimplerenewApplicationCli extends JApplicationCli
 {
     public function __construct(JInputCli $input = null, JRegistry $config = null, JDispatcher $dispatcher = null)
     {
-        // Addresses some configurations where STDIN/STDOUT are not defined
-        defined('STDIN') or define('STDIN', null);
-        defined('STDOUT') or define('STDOUT', null);
+        parent::__construct($input, $config, $dispatcher);
 
         if (!defined('SIMPLERENEW_CLI_TASK')) {
             define('SIMPLERENEW_CLI_TASK', JText::sprintf('COM_SIMPLERENEW_CLI_TASK', date('Y-m-d H:i:s')));
         }
-
-        parent::__construct($input, $config, $dispatcher);
-
         $this->heading(SIMPLERENEW_CLI_TASK);
     }
 
