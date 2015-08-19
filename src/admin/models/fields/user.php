@@ -51,7 +51,7 @@ class SimplerenewFormFieldUser extends JFormField
         $noChange = (string)$this->element['nochange'];
         $noChange = ($noChange == 'true' || $noChange == '1');
         if (!$noChange || !$this->value) {
-            $html[]  = '<div class="button2-left">';
+            $html[]  = '<div class="button2-left btn btn-small">';
             $html[]  = '  <div class="blank">';
 
             $attribs = SimplerenewUtilitiesArray::toString(
@@ -82,10 +82,18 @@ class SimplerenewFormFieldUser extends JFormField
         $onchange = (string)$this->element['onchange'];
 
         $script = <<<JSCODE
+function closeModal() {
+    if (SqueezeBox) {
+        SqueezeBox.close();
+    } else {
+        jModalClose();
+    }
+}
 function jSelectUser_{$this->id} (id, title) {
     var old_id = document.getElementById('{$this->id}_id').value;
+
     if (old_id == id) {
-        SqueezeBox.close();
+        closeModal();
     } else {
         jQuery.getJSON(
             'index.php',
@@ -108,7 +116,7 @@ function jSelectUser_{$this->id} (id, title) {
 
                 document.getElementById('{$this->id}_id').value = id;
                 {$onchange}
-                SqueezeBox.close();
+                closeModal();
             }
         );
     }
