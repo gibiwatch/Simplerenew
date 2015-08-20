@@ -37,8 +37,16 @@ class Subscription implements HandlerInterface
 
                 case Notify::ACTION_UPDATE:
                 case Notify::ACTION_RENEW:
-                    $notice->user->addGroups($notice->subscription->plan);
-                    $message = 'Update User Group';
+                    $subscriptions = $notice
+                        ->subscription
+                        ->getList($notice->account, !\Simplerenew\Api\Subscription::STATUS_EXPIRED);
+
+                    $plans = array();
+                    foreach ($subscriptions as $subscription) {
+                        $plans[] = $subscription->plan;
+                    }
+                    $notice->user->addGroups($notice->subscription->plan, true);
+                    $message = 'Update User Groups';
                     break;
 
                 case Notify::ACTION_EXPIRE:
