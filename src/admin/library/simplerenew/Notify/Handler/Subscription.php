@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Notify\Handler;
 
+use Simplerenew\Api;
 use Simplerenew\Exception;
 use Simplerenew\Notify\Notify;
 
@@ -39,7 +40,7 @@ class Subscription implements HandlerInterface
                 case Notify::ACTION_RENEW:
                     $subscriptions = $notice
                         ->subscription
-                        ->getList($notice->account, !\Simplerenew\Api\Subscription::STATUS_EXPIRED);
+                        ->getList($notice->account, !Api\Subscription::STATUS_EXPIRED);
 
                     $plans = array();
                     foreach ($subscriptions as $subscription) {
