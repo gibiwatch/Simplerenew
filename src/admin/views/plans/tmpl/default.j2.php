@@ -31,7 +31,7 @@ $saveOrder = $listOrder == 'plan.ordering';
     <fieldset id="filter-bar">
         <div class="filter-search fltlft">
             <label class="filter-search-lbl" for="filter_search">
-                <?php echo JText::_('JSEARCH_FILTER_LABEL'); ?>
+                <?php echo JText::_('COM_SIMPLERENEW_FILTER_SEARCH_LABEL'); ?>
             </label>
 
             <input
