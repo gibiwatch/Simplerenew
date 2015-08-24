@@ -5,7 +5,6 @@
  * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
 ?>
 <div class="<?php echo $this->getPageClass('ost-container simplerenew-account'); ?>">
@@ -15,8 +14,15 @@ defined('_JEXEC') or die();
         <div class="page-header">
             <h1><?php echo $heading; ?></h1>
         </div>
-    <?php
-    endif; ?>
+    <?php endif;
+    ?>
+
+    <?php if ($this->getParams()->get('themes.profileEditButton', 0)): ?>
+        <a href="<?php echo SimplerenewRoute::get('account', 'edit'); ?>">
+            <i class="fa fa-edit"></i>
+            <?php echo JText::_('COM_SIMPLERENEW_ACCOUNT_EDIT'); ?>
+        </a>
+    <?php endif ?>
 
     <h3><span><i class="fa fa-info-circle"></i></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'); ?></h3>
 
