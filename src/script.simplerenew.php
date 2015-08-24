@@ -255,7 +255,7 @@ class com_simplerenewInstallerScript extends AbstractScript
 
         // As of v1.1.11b1 - Nest Recurly params the way we always wanted to
         $recurlyOld = $params->get('gateway.recurly');
-        if (property_exists($recurlyOld, 'liveApikey')) {
+        if (is_object($recurlyOld) && property_exists($recurlyOld, 'liveApikey')) {
             $setParams  = true;
             $recurlyNew = array(
                 'mode' => $recurlyOld->mode,
