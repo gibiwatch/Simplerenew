@@ -17,13 +17,17 @@ class SimplerenewFormFieldGrouporder extends JFormField
     public function getInput()
     {
         $sortableID = $this->id . '-sortable';
-
-        $class   = (string)$this->element['class'];
-        $options = $this->getOptions();
+        $this->addAssets($sortableID);
 
         // Build the sortable list
+        $attribs = array(
+            'id' => $sortableID
+        );
+        if ($class = (string)$this->element['class']) {
+            $attribs['class'] = $class;
+        }
         $html = array(
-            "<ul id=\"{$sortableID}\">"
+            '<ul ' . SimplerenewUtilitiesArray::toString($attribs) . '>'
         );
 
         $listItem = '<li class="ui-state-default" data-id="%s">'
@@ -31,6 +35,7 @@ class SimplerenewFormFieldGrouporder extends JFormField
             . '%s'
             . '</li>';
 
+        $options = $this->getOptions();
         foreach ($options as $option) {
             $html[] = sprintf($listItem, $option->id, $option->title);
         }
@@ -38,12 +43,12 @@ class SimplerenewFormFieldGrouporder extends JFormField
 
         // Storage for actual value
         $attribs = array(
-            'type'  => 'hidden',
-            'name'  => $this->name,
-            'id'    => $this->id,
-            'class' => $class
+            'type' => 'hidden',
+            'name' => $this->name,
+            'id'   => $this->id
         );
-        $html[]  = '<input ' . SimplerenewUtilitiesArray::toString($attribs)  . ' />';
+
+        $html[] = '<input ' . SimplerenewUtilitiesArray::toString($attribs) . ' />';
 
         return join("\n", $html);
     }
