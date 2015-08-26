@@ -87,7 +87,7 @@ class Plan extends AbstractApiBase
      */
     public function __construct(Configuration $config, PlanInterface $imp)
     {
-        parent::__construct();
+        parent::__construct($config);
 
         $this->imp = $imp;
     }

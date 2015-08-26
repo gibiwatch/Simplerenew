@@ -93,6 +93,8 @@ class Coupon extends AbstractApiBase
 
     public function __construct(Configuration $config, CouponInterface $imp)
     {
+        parent::__construct($config);
+
         $this->imp = $imp;
     }
 

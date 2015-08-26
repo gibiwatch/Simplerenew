@@ -75,7 +75,7 @@ class Billing extends AbstractApiBase
         Address $address = null,
         AbstractPayment $payment = null
     ) {
-        parent::__construct();
+        parent::__construct($config);
 
         $this->imp     = $imp;
         $this->address = $address ?: new Address();

@@ -121,10 +121,9 @@ class Subscription extends AbstractApiBase
      */
     public function __construct(Configuration $config, SubscriptionInterface $imp, Events $events)
     {
-        parent::__construct();
+        parent::__construct($config);
 
         $this->imp           = $imp;
-        $this->configuration = $config;
         $this->events        = $events;
     }
 

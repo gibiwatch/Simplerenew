@@ -95,7 +95,7 @@ class Account extends AbstractApiBase
         User $user,
         Address $address = null
     ) {
-        parent::__construct();
+        parent::__construct($config);
 
         $this->setCodeMask($config->get('account.codeMask', $this->codeMask));
 
