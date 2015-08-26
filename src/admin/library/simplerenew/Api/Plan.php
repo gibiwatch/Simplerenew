@@ -35,6 +35,11 @@ class Plan extends AbstractApiBase
     /**
      * @var string
      */
+    public $group = null;
+
+    /**
+     * @var string
+     */
     public $currency = null;
 
     /**
