@@ -43,9 +43,10 @@ class SimplerenewFormFieldGrouporder extends JFormField
 
         // Storage for actual value
         $attribs = array(
-            'type' => 'hidden',
-            'name' => $this->name,
-            'id'   => $this->id
+            'type'  => 'hidden',
+            'name'  => $this->name,
+            'id'    => $this->id,
+            'value' => $this->value
         );
 
         $html[] = '<input ' . SimplerenewUtilitiesArray::toString($attribs) . ' />';
@@ -53,6 +54,11 @@ class SimplerenewFormFieldGrouporder extends JFormField
         return join("\n", $html);
     }
 
+    /**
+     * Gets the user groups assigned to plans in the order currently specified
+     *
+     * @return array
+     */
     public function getOptions()
     {
         $db    = SimplerenewFactory::getDbo();
@@ -63,24 +69,57 @@ class SimplerenewFormFieldGrouporder extends JFormField
             ->order('id desc');
 
         $options = $db->setQuery($query)->loadObjectList();
+        $ids     = explode('|', $this->value);
 
+        usort($options, function ($a, $b) use ($ids) {
+            $orderA = (int)array_search($a->id, $ids);
+            $orderB = (int)array_search($b->id, $ids);
+
+            if ($orderA < $orderB) {
+                return -1;
+            } elseif ($orderA > $orderB) {
+                return 1;
+            }
+            return 0;
+        });
         return $options;
     }
 
-    protected function addAssets($id)
+    /**
+     * Add all css and js needed to run this field
+     *
+     * @param string $sortableId
+     *
+     * @return void
+     */
+    protected function addAssets($sortableId)
     {
         $css = <<<CSS
-#{$id} { list-style-type: none; margin: 0; padding: 0; float: left; }
-#{$id} li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
-#{$id} li:hover {cursor: pointer; }
-#{$id} li span { position: absolute; margin-left: -1.3em; }
+#{$sortableId} { list-style-type: none; margin: 0; padding: 0; float: left; }
+#{$sortableId} li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+#{$sortableId} li:hover {cursor: pointer; }
+#{$sortableId} li span { position: absolute; margin-left: -1.3em; }
 CSS;
 
         $js = <<<JSCRIPT
   (function($) {
     $(document).ready(function() {
-        $('#{$id}').sortable();
-        $('#{$id}').disableSelection();
+        $('#{$sortableId}').sortable({
+            'update': function(event, ui) {
+                var items = ui.item.parent('ul').find('li'),
+                    target = $('#{$this->id}'),
+                    ids;
+
+                 ids = items
+                    .map(
+                        function() {
+                            return $(this).attr('data-id');
+                        })
+                    .get();
+
+                target.val(ids.join('|'));
+            }
+        });
     });
   })(jQuery);
 JSCRIPT;
