@@ -298,11 +298,12 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
      * @param Subscription $parent
      * @param Plan         $plan
      * @param Coupon       $coupon
+     * @param bool         $immediate
      *
      * @return void
      * @throws Exception
      */
-    public function update(Subscription $parent, Plan $plan, Coupon $coupon = null)
+    public function update(Subscription $parent, Plan $plan, Coupon $coupon = null, $immediate = false)
     {
         $subscription = $this->getSubscription($parent->id);
 
@@ -328,7 +329,12 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
             }
 
             $subscription->plan_code = $plan->code;
-            $subscription->updateAtRenewal();
+            if ($immediate) {
+                $subscription->updateImmediately();
+            } else {
+                $subscription->updateAtRenewal();
+            }
+            
         } catch (\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }

@@ -85,11 +85,12 @@ interface SubscriptionInterface
      * @param Subscription $parent
      * @param Plan         $plan
      * @param Coupon       $coupon
+     * @param bool         $immediate
      *
      * @return void
      * @throws Exception
      */
-    public function update(Subscription $parent, Plan $plan, Coupon $coupon = null);
+    public function update(Subscription $parent, Plan $plan, Coupon $coupon = null, $immediate = false);
 
     /**
      * Map raw data from the Gateway to SR fields
