@@ -334,7 +334,8 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
             } else {
                 $subscription->updateAtRenewal();
             }
-            
+            $this->load($parent);
+
         } catch (\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
