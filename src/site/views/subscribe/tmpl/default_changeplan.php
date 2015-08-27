@@ -20,9 +20,13 @@ $current = current($this->subscriptions);
     <div class="page-header">
         <h1><?php echo $heading; ?></h1>
         <?php
-        if ($this->getParams()->get('basic.enableUpgrade')) {
-            echo JText::_('COM_SIMPLERENEW_SUBSCRIPTION_PLAN_CHANGE');
-        }
+        if ($this->getParams()->get('basic.enableUpgrade')) :
+            ?>
+            <div class="ost-section p-bottom b-bottom">
+                <?php echo JText::_('COM_SIMPLERENEW_SUBSCRIPTION_PLAN_CHANGE'); ?>
+            </div>
+            <?php
+        endif;
         ?>
     </div>
 <?php endif; ?>
