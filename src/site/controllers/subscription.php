@@ -191,16 +191,24 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
             return;
         }
 
-        $link = SimplerenewRoute::get('account');
-        $this->setRedirect(
-            JRoute::_($link),
-            JText::sprintf(
+        if ($subscription->pending_plan) {
+            $message = JText::sprintf(
                 'COM_SIMPLERENEW_SUBSCRIPTION_CHANGE_SUCCESS',
                 $oldPlan->name,
                 $newPlan->name,
                 $subscription->period_end->format('F, j, Y')
-            )
-        );
+            );
+
+        } else {
+            $message = JText::sprintf(
+                'COM_SIMPLERENEW_SUBSCRIPTION_CHANGE_IMMEDIATE_SUCCESS',
+                $oldPlan->name,
+                $newPlan->name
+            );
+        }
+
+        $link = SimplerenewRoute::get('account');
+        $this->setRedirect(JRoute::_($link), $message);
     }
 
     /**
