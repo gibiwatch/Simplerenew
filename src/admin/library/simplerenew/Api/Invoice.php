@@ -88,7 +88,7 @@ class Invoice extends AbstractApiBase
 
     public function __construct(Configuration $config, InvoiceInterface $imp)
     {
-        parent::__construct();
+        parent::__construct($config);
 
         $this->imp = $imp;
     }

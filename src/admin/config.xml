@@ -90,8 +90,24 @@
                 type="list"
                 default="0">
                 <option value="1">COM_SIMPLERENEW_OPTION_MULTIPLE_ALLOWED</option>
-                <option value="0">COM_SIMPLERENEW_OPTION_MULTIPLE_NOT_ALLOWED</option>
+                <option value="0" show=".single-subs">COM_SIMPLERENEW_OPTION_MULTIPLE_NOT_ALLOWED</option>
             </field>
+            <field
+                name="enableUpgrade"
+                label="COM_SIMPLERENEW_CONFIG_ENABLE_UPGRADE_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_ENABLE_UPGRADE_DESC"
+                type="tablist"
+                default="0">
+                <option value="0">COM_SIMPLERENEW_OPTION_DISABLE</option>
+                <option value="1" show=".enableupgrade">COM_SIMPLERENEW_OPTION_ENABLE</option>
+            </field>
+            <field
+                name="upgradeOrder"
+                label="COM_SIMPLERENEW_CONFIG_UPGRADE_ORDER_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_UPGRADE_ORDER_DESC"
+                type="simplerenew.grouporder"
+                class="enableupgrade"/>
+
         </fieldset>
     </fields>
 

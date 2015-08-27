@@ -121,11 +121,10 @@ class Subscription extends AbstractApiBase
      */
     public function __construct(Configuration $config, SubscriptionInterface $imp, Events $events)
     {
-        parent::__construct();
+        parent::__construct($config);
 
-        $this->imp           = $imp;
-        $this->configuration = $config;
-        $this->events        = $events;
+        $this->imp    = $imp;
+        $this->events = $events;
     }
 
     /**
@@ -242,7 +241,8 @@ class Subscription extends AbstractApiBase
     {
         $this->events->trigger('simplerenewSubscriptionBeforeUpdate', array($this, false));
 
-        $this->imp->update($this, $plan, $coupon);
+        $isUpgrade = $plan->isUpgradeFrom($this->plan);
+        $this->imp->update($this, $plan, $coupon, $isUpgrade);
 
         $this->events->trigger('simplerenewSubscriptionAfterUpdate', array($this, false));
     }
@@ -272,9 +272,7 @@ class Subscription extends AbstractApiBase
      */
     public function allowMultiple()
     {
-        return (bool)$this->configuration ?
-            $this->configuration->get('subscription.allowMultiple', false) :
-            false;
+        return $this->configuration->get('subscription.allowMultiple', false);
     }
 
     /**

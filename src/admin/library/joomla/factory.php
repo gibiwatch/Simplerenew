@@ -64,11 +64,19 @@ abstract class SimplerenewFactory extends JFactory
                 $config = array_merge(json_decode($settings, true), $config);
             }
 
+            $config = new Configuration($config);
+
+            $upgradeOrder = explode('|', (string)$params->get('basic.upgradeOrder'));
+            if (!$config->get('subscription.allowMultiple') && $params->get('basic.enableUpgrade')) {
+                $config->set('subscription.upgradeOrder', $upgradeOrder);
+            }
+
+
             $container = new Container(
                 array(
                     'cmsNamespace'  => 'Simplerenew\Cms\Joomla',
                     'gateway'       => $gateway,
-                    'configuration' => new Configuration($config)
+                    'configuration' => $config
                 )
             );
             $container->register(new Services());

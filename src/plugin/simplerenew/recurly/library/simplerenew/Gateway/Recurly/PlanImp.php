@@ -79,6 +79,7 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
 
         $parent->setProperties(
             array(
+                'group'      => $this->getPlanGroup($parent->code),
                 'currency'   => $this->currency,
                 'amount'     => $amount,
                 'setup_cost' => $setup
@@ -251,5 +252,28 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
                 $unit     = 'months';
                 break;
         }
+    }
+
+    /**
+     * Gets the user group id from the hosting CMS
+     * Only recognizes Joomla! for now
+     *
+     * @param string $planCode
+     *
+     * @return int|null
+     */
+    protected function getPlanGroup($planCode)
+    {
+        if (class_exists('\JFactory')) {
+            $db    = \JFactory::getDbo();
+            $query = $db->getQuery(true)
+                ->select('group_id')
+                ->from('#__simplerenew_plans')
+                ->where('code = ' . $db->quote($planCode));
+
+            return $db->setQuery($query)->loadResult();
+        }
+
+        return null;
     }
 }
