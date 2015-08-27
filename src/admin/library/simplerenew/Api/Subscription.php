@@ -239,23 +239,9 @@ class Subscription extends AbstractApiBase
      */
     public function update(Plan $plan, Coupon $coupon = null)
     {
-        $isUpgrade = false;
-        if ($upgradeOrder = $this->configuration->get('subscription.upgradeOrder')) {
-            try {
-                $currentPlan = clone $plan;
-                $currentPlan->load($this->plan);
-
-                $fromLevel = (int)array_search($currentPlan->group, $upgradeOrder);
-                $toLevel   = (int)array_search($plan->group, $upgradeOrder);
-                $isUpgrade = $fromLevel < $toLevel;
-
-            } catch (Exception $e) {
-                // This will count as not an upgrade
-            }
-        }
-
         $this->events->trigger('simplerenewSubscriptionBeforeUpdate', array($this, false));
 
+        $isUpgrade = $plan->isUpgradeFrom($this->plan);
         $this->imp->update($this, $plan, $coupon, $isUpgrade);
 
         $this->events->trigger('simplerenewSubscriptionAfterUpdate', array($this, false));
@@ -286,9 +272,7 @@ class Subscription extends AbstractApiBase
      */
     public function allowMultiple()
     {
-        return (bool)$this->configuration ?
-            $this->configuration->get('subscription.allowMultiple', false) :
-            false;
+        return $this->configuration->get('subscription.allowMultiple', false);
     }
 
     /**
