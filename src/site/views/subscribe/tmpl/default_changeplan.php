@@ -12,7 +12,8 @@ defined('_JEXEC') or die();
  * @var SimplerenewViewSubscribe $this
  */
 
-$current = array_shift($this->subscriptions);
+reset($this->subscriptions);
+$current = current($this->subscriptions);
 
 ?>
 <?php if ($heading = $this->getHeading('COM_SIMPLERENEW_HEADING_CHANGE_PLAN')): ?>
