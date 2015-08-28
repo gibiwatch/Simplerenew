@@ -40,7 +40,7 @@
                             <field
                                 name="head"
                                 label="COM_SIMPLERENEW_CONFIG_GATEWAY_HEAD_LIVE"
-                                type="heading"
+                                type="simplerenew.heading"
                                 tag="h4"
                                 class="recurly live"/>
 
@@ -65,7 +65,7 @@
                             <field
                                 name="head"
                                 label="COM_SIMPLERENEW_CONFIG_GATEWAY_HEAD_TEST"
-                                type="heading"
+                                type="simplerenew.heading"
                                 tag="h4"
                                 class="recurly test"/>
 

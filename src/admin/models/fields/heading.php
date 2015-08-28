@@ -8,14 +8,14 @@
 
 defined('_JEXEC') or die();
 
-class JFormFieldHeading extends JFormField
+class SimplerenewFormFieldHeading extends JFormField
 {
-    public function getInput()
+    protected function getInput()
     {
         return '';
     }
 
-    public function getLabel()
+    protected function getLabel()
     {
         $tag  = $this->element['tag'] ? (string)$this->element['tag'] : 'p';
         $text = JText::_((string)$this->element['label']);
