@@ -103,9 +103,10 @@ abstract class SimplerenewAddon
      * Addons can extend the configuration options in Simplerenew. Registered
      * component addons can have this done automatically by setting their
      * administration menu to hidden and providing a standard config.xml
-     * file. Existing Simplernew config fields will not be overwritten and
+     * file. Existing Simplerenew config fields will not be overwritten and
      * it is expected that addons will properly namespace their own options. For
-     * example, the SRGroupLeaders addon could add a single new field this way:
+     * example, to create a parameter srgroupleaders.discount and place it on
+     * the addons tab:
      *
      * <config>
      *    <fieldset name="addons">
