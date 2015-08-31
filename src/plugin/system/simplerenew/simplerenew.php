@@ -232,4 +232,21 @@ class plgSystemSimplerenew extends JPlugin
             $session->set('user', $user);
         }
     }
+
+    public function onContentPrepareForm(JForm $form, $data)
+    {
+        $app = JFactory::getApplication();
+
+        /**
+         * When preparing the Simplerenew configuration form, check for
+         * addons that want to add their own parameters
+         */
+        if ($app->isAdmin()) {
+            $name = $form->getName() . '.' . $app->input->getCmd('component');
+            if ($name == 'com_config.component.com_simplerenew') {
+                SimplerenewAddon::mergeAddonConfigs($form);
+            }
+        }
+    }
+
 }
