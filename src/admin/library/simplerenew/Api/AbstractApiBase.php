@@ -13,7 +13,6 @@ use Simplerenew\Exception;
 use Simplerenew\Gateway\AbstractGatewayBase;
 use Simplerenew\Object;
 use Simplerenew\Plugin\Events;
-use Zend\ServiceManager\Config;
 
 defined('_JEXEC') or die();
 
