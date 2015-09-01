@@ -289,6 +289,9 @@ abstract class SimplerenewHelper
         $plansDisable = array();
         $plansUpdate  = array();
         foreach ($plansLocal as $code => $plan) {
+            // Need to translate from db field to Plan property
+            $plan['group'] = $plan['group_id'];
+            unset($plan['group_id']);
             if (!array_key_exists($code, $plansRemote)) {
                 if ($plan['published']) {
                     $plansDisable[] = $plan['id'];
