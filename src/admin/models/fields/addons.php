@@ -32,62 +32,19 @@ class JFormFieldAddons extends JFormFieldText
         if ($registerCount) {
             $registerCount = 0;
             if ($status = SimplerenewAddon::getList()) {
-                $html = array_merge($html, array(
-                    '<table cellpadding="5"><thead><tr>',
-                    '<th>' . JText::_('COM_SIMPLERENEW_ADDONS_ID') . '</th>',
-                    '<th>' . JText::_('COM_SIMPLERENEW_ADDONS_NAME') . '</th>',
-                    '<th>' . JText::_('COM_SIMPLERENEW_ADDONS_STATUS') . '</th>',
-                    '</tr></thead>',
-                    '<tbody>'
-                ));
-
                 foreach ($this->value as $id => $addon) {
                     $addon = (object)$addon;
                     $current = isset($status[$id]) ? $status[$id] : null;
                     if ($current) {
                         $registerCount++;
-
-                        if ($current->enabled && (!$addon->init || is_file(JPATH_ROOT . $addon->init))) {
-                            $statusImage = JHtml::_(
-                                'image',
-                                'admin/icon-16-allow.png',
-                                JText::_('COM_SIMPLERENEW_ENABLED'),
-                                null,
-                                true
-                            );
-                        } else {
-                            $statusImage = JHtml::_(
-                                'image',
-                                'admin/icon-16-deny.png',
-                                JText::_('COM_SIMPLERENEW_DISABLED'),
-                                null,
-                                true
-                            );
-                        }
-
-                        $html = array_merge($html, array(
-                            '<tr>',
-                            '<td style="text-align: right;">' . $id . '</td>',
-                            '<td style="text-align: left;">' . $addon->title . '</td>',
-                            '<td style="text-align: center;">' . $statusImage
-                        ));
-
                         $baseName = $this->name . "[{$id}]";
                         foreach (get_object_vars($addon) as $key => $value) {
                             $name   = $baseName . '[' . $key . ']';
                             $value  = htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
                             $html[] = "<input type=\"hidden\" name=\"{$name}\" value=\"{$value}\"/>";
                         }
-
-                        $html[] = '</td>';
-                        $html[] = '</tr>';
                     }
                 }
-
-                $html = array_merge($html, array(
-                    '</tbody>',
-                    '</table>'
-                ));
             }
         }
 

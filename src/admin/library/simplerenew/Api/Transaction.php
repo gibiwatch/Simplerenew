@@ -109,7 +109,7 @@ class Transaction extends AbstractApiBase
      */
     public function __construct(Configuration $config, TransactionInterface $imp)
     {
-        parent::__construct();
+        parent::__construct($config);
 
         $this->imp = $imp;
     }

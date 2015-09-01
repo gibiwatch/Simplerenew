@@ -35,6 +35,11 @@ class Plan extends AbstractApiBase
     /**
      * @var string
      */
+    public $group = null;
+
+    /**
+     * @var string
+     */
     public $currency = null;
 
     /**
@@ -78,11 +83,12 @@ class Plan extends AbstractApiBase
     protected $imp = null;
 
     /**
+     * @param Configuration $config
      * @param PlanInterface $imp
      */
     public function __construct(Configuration $config, PlanInterface $imp)
     {
-        parent::__construct();
+        parent::__construct($config);
 
         $this->imp = $imp;
     }
@@ -166,5 +172,36 @@ class Plan extends AbstractApiBase
         $data = array_intersect_key($data, $baseData);
 
         return ($baseData == $data);
+    }
+
+    /**
+     * Determine if this plan is an upgrade
+     *
+     * @param string|Plan $fromPlan
+     *
+     * @return bool
+     */
+    public function isUpgradeFrom($fromPlan)
+    {
+        $isUpgrade     = false;
+        $allowMultiple = $this->configuration->get('subscription.allowMultiple');
+        $upgradeOrder  = $this->configuration->get('subscription.upgradeOrder');
+        if (!$allowMultiple && $upgradeOrder) {
+            try {
+                if (!$fromPlan instanceof Plan) {
+                    $planCode = $fromPlan;
+                    $fromPlan = clone $this;
+                    $fromPlan->load($planCode);
+                }
+
+                $fromLevel = (int)array_search($fromPlan->group, $upgradeOrder);
+                $toLevel   = (int)array_search($this->group, $upgradeOrder);
+                $isUpgrade = $fromLevel < $toLevel;
+
+            } catch (Exception $e) {
+                // This will count as not an upgrade
+            }
+        }
+        return $isUpgrade;
     }
 }

@@ -46,7 +46,7 @@ class Subscription implements HandlerInterface
                     foreach ($subscriptions as $subscription) {
                         $plans[] = $subscription->plan;
                     }
-                    $notice->user->addGroups($notice->subscription->plan, true);
+                    $notice->user->addGroups($plans, true);
                     $message = 'Update User Groups';
                     break;
 
