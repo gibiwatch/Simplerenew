@@ -83,8 +83,11 @@ define('SIMPLERENEW_ADMIN', SIMPLERENEW_SRC . '/admin');
 define('SIMPLERENEW_SITE', SIMPLERENEW_SRC . '/site');
 define('SIMPLERENEW_MEDIA', SIMPLERENEW_SRC . '/media');
 define('SIMPLERENEW_LIBRARY', SIMPLERENEW_ADMIN . '/library');
+define('SIMPLERENEW_PLUGIN', SIMPLERENEW_SRC . '/plugin');
 
 // Setup autoloaded libraries
 require_once SIMPLERENEW_LIBRARY . '/simplerenew/AutoLoader.php';
 Simplerenew\AutoLoader::register('Simplerenew', SIMPLERENEW_LIBRARY . '/simplerenew');
 Simplerenew\AutoLoader::registerCamelBase('Simplerenew', SIMPLERENEW_LIBRARY . '/joomla');
+
+Simplerenew\AutoLoader::register('Simplerenew', SIMPLERENEW_PLUGIN . '/simplerenew/recurly/library/simplerenew');
