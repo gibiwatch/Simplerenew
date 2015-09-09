@@ -18,7 +18,10 @@ defined('_JEXEC') or die();
     <?php
     endif; ?>
 
-    <h3><span><i class="fa fa-info-circle"></i></span> <?php echo JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'); ?></h3>
+    <h3>
+        <span><i class="fa fa-info-circle"></i></span>
+        <?php echo JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'); ?>
+    </h3>
 
     <div class="m-bottom b-bottom ost-table">
 
