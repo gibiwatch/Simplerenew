@@ -41,12 +41,28 @@ class SimplerenewApplicationCli extends JApplicationCli
      * Output a message prefixed with a timestamp
      *
      * @param string $message
+     * @param float  $interval
      *
      * @return $this
      */
-    public function timestamp($message = null)
+    public function timestamp($message = null, $interval = null)
     {
+        if (is_numeric($interval)) {
+            $hours   = intval($interval / 60 / 60);
+            $minutes = intval($interval / 60) - ($hours * 60);
+            $seconds = intval($interval) - ($hours * 60 * 60) - ($minutes * 60);
+            $msec    = number_format(fmod($interval, (int)$interval), 2);
+            $msec    = substr($msec, strpos($msec, '.'));
+
+            $elapsed = ($hours ? sprintf('%02s:', $hours) : '')
+                . ($minutes ? sprintf('%02s:', $minutes) : '')
+                . sprintf('%02s', $seconds) . $msec;
+        }
+
         if ($message) {
+            if (!empty($elapsed)) {
+                $message = "[{$elapsed}] " . $message;
+            }
             $this->out(date('H:i:s') . ' ' . $message);
         } else {
             $this->out();
