@@ -149,16 +149,6 @@
                 type="themes"
                 default="default.css">
             </field>
- 
-            <field
-                name="profileEditButton"
-                label="COM_SIMPLERENEW_CONFIG_EDITBUTTON_LABEL"
-                description="COM_SIMPLERENEW_CONFIG_EDITBUTTON_DESC"
-                type="list"
-                default="0">
-                <option value="1">JYES</option>
-                <option value="0">JNO</option>                
-            </field>
 
         </fieldset>
     </fields>

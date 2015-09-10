@@ -9,20 +9,22 @@ defined('_JEXEC') or die();
 ?>
 <div class="<?php echo $this->getPageClass('ost-container simplerenew-account'); ?>">
     <?php
-    if ($heading = $this->getHeading('COM_SIMPLERENEW_HEADING_ACCOUNT_INFO')):
+    if ($heading = $this->getHeading('COM_SIMPLERENEW_HEADING_ACCOUNT_INFO')) :
         ?>
         <div class="page-header">
             <h1><?php echo $heading; ?></h1>
         </div>
-    <?php endif;
+        <?php
+    endif;
     ?>
 
-    <?php if ($this->getParams()->get('themes.profileEditButton', 0)): ?>
-        <a href="<?php echo SimplerenewRoute::get('account', 'edit'); ?>">
-            <i class="fa fa-edit"></i>
-            <?php echo JText::_('COM_SIMPLERENEW_ACCOUNT_EDIT'); ?>
-        </a>
-    <?php endif ?>
+    <?php
+    echo JHtml::_(
+        'link',
+        SimplerenewRoute::get('account', 'edit'),
+        '<i class="fa fa-edit"></i> ' . JText::_('COM_SIMPLERENEW_ACCOUNT_EDIT')
+    );
+    ?>
 
     <h3>
         <span><i class="fa fa-info-circle"></i></span>
