@@ -18,14 +18,17 @@ defined('_JEXEC') or die();
     endif;
     ?>
 
-    <?php
-    echo JHtml::_(
-        'link',
-        SimplerenewRoute::get('account', 'edit'),
-        '<i class="fa fa-edit"></i> ' . JText::_('COM_SIMPLERENEW_ACCOUNT_EDIT')
-    );
-    ?>
-
+    <div class="b-bottom p-bottom m-bottom">
+        <?php
+        echo JHtml::_(
+            'link',
+            SimplerenewRoute::get('account', 'edit'),
+            '<i class="fa fa-edit"></i> ' . JText::_('COM_SIMPLERENEW_ACCOUNT_EDIT'),
+            'class="btn-main"'
+        );
+        ?>
+    </div>
+    
     <h3>
         <span><i class="fa fa-info-circle"></i></span>
         <?php echo JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'); ?>
