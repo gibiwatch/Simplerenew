@@ -185,8 +185,8 @@
 }
 
 .ost-container input[type="submit"],
-.ost-container button {
-    background: #666666;
+.ost-container button,
+.ost-container a.btn-main {
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
@@ -196,8 +196,6 @@
     display: inline-block;
     font-size: 13px;
     line-height: 18px;
-    margin-bottom: 0;
-    padding: 4px 12px;
     text-align: center;
     transition: all 0.2s linear 0s;
     -moz-transition: all 0.2s linear 0s;
@@ -207,6 +205,12 @@
     border: none;
     padding: 9px 15px;
     margin-bottom: 10px;
+    text-decoration: none;
+}
+
+.ost-container input[type="submit"],
+.ost-container button {
+    background: #666666;
 }
 
 .ost-container input[type="submit"]:hover,
@@ -217,7 +221,8 @@
 }
 
 .ost-container input[type="submit"].btn-main,
-.ost-container button.btn-main {
+.ost-container button.btn-main,
+.ost-container a.btn-main {
     background: #2184CD;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
     -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
@@ -230,7 +235,9 @@
 .ost-container input[type="submit"].btn-main:hover,
 .ost-container input[type="submit"].btn-main:focus,
 .ost-container button.btn-main:hover,
-.ost-container button.btn-main:focus {
+.ost-container button.btn-main:focus,
+.ost-container a.btn-main:hover,
+.ost-container a.btn-main:focus {
     background: #41A1D6;
 }
 
@@ -265,7 +272,8 @@
     color: #ff0000;
 }
 
-.ost-container button i:before{
+.ost-container button i:before,
+.ost-container a.btn-main i:before {
     color:#ffffff;
 }
 

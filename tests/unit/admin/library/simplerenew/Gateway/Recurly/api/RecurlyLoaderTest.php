@@ -16,7 +16,8 @@ class RecurlyLoaderTest extends \PHPUnit_Framework_TestCase
         $exceptions->setAccessible(true);
         $this->exceptions = $exceptions->getValue();
 
-        $this->allClasses = $this->getClasses(SIMPLERENEW_LIBRARY . '/simplerenew/Gateway/Recurly/api/recurly');
+        $basePath = SIMPLERENEW_PLUGIN . '/simplerenew/recurly/library/simplerenew/Gateway/Recurly/api/recurly';
+        $this->allClasses = $this->getClasses($basePath);
     }
 
     protected function getClasses($path)

@@ -11,6 +11,11 @@ defined('_JEXEC') or die();
 class SimplerenewViewPlans extends SimplerenewViewAdmin
 {
     /**
+     * @var SimplerenewModelPlans
+     */
+    protected $model = null;
+
+    /**
      * @var JObject
      */
     protected $state = null;
@@ -37,11 +42,12 @@ class SimplerenewViewPlans extends SimplerenewViewAdmin
 
     public function display($tpl = null)
     {
-        $this->state         = $this->get('State');
-        $this->items         = $this->get('Items');
-        $this->filterForm    = $this->get('FilterForm');
-        $this->activeFilters = $this->get('ActiveFilters');
-        $this->pagination    = $this->get('Pagination');
+        $this->model = $this->getModel();
+        $this->state         = $this->model->getState();
+        $this->items         = $this->model->getItems();
+        $this->filterForm    = $this->model->getFilterForm();
+        $this->activeFilters = $this->model->getActiveFilters();
+        $this->pagination    = $this->model->getPagination();
 
         if (count($errors = $this->get('Errors'))) {
             throw new Exception(implode("\n", $errors));

@@ -15,11 +15,12 @@ abstract class SimplerenewHelper
      * onAdminSubmenu event for component addons to attach
      * their own admin screens.
      *
-     * The expected response must be an array
+     * The expected responses must be an array or an array of arrays
+     * in the form:
      * [
-     *    "text" => Static language string,
-     *    "link" => Link to the screen
-     *    "view" => unique view name
+     *    'text' => Static language string,
+     *    'link' => Link to the screen
+     *    'view' => unique view name
      * ]
      *
      * @param $vName
@@ -30,18 +31,38 @@ abstract class SimplerenewHelper
     {
         $events = SimplerenewFactory::getContainer()->getEvents();
         if ($results = array_filter($events->trigger('simplerenewAdminSubmenu'))) {
-            static::addMenuEntry(
-                JText::_('COM_SIMPLERENEW_SUBMENU_PLANS'),
-                'index.php?option=com_simplerenew&view=plans',
-                $vName == 'plans'
+            $subMenus = array(
+                array(
+                    'text' => 'COM_SIMPLERENEW_SUBMENU_PLANS',
+                    'link' => 'index.php?option=com_simplerenew&view=plans',
+                    'view' => 'plans'
+                )
+            );
+
+            $base = array(
+                'text' => null,
+                'link' => null,
+                'view' => null
             );
 
             foreach ($results as $result) {
-                if (is_array($result)) {
+                if ($newMenu = array_intersect_key($result, $base)) {
+                    $subMenus[] = $result;
+                } elseif (is_array($result)) {
+                    foreach ($result as $subMenu) {
+                        if ($newMenu = array_intersect_key($subMenu, $base)) {
+                            $subMenus[] = $subMenu;
+                        }
+                    }
+                }
+            }
+
+            foreach ($subMenus as $subMenu) {
+                if (is_array($subMenu)) {
                     static::addMenuEntry(
-                        JText::_($result['text']),
-                        $result['link'],
-                        $vName == $result['view']
+                        JText::_($subMenu['text']),
+                        $subMenu['link'],
+                        $vName == $subMenu['view']
                     );
                 }
             }
@@ -289,6 +310,9 @@ abstract class SimplerenewHelper
         $plansDisable = array();
         $plansUpdate  = array();
         foreach ($plansLocal as $code => $plan) {
+            // Need to translate from db field to Plan property
+            $plan['group'] = $plan['group_id'];
+            unset($plan['group_id']);
             if (!array_key_exists($code, $plansRemote)) {
                 if ($plan['published']) {
                     $plansDisable[] = $plan['id'];

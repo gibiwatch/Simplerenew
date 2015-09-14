@@ -45,7 +45,7 @@ class SimplerenewFilterInput extends JFilterInput
                 if (is_array($source)) {
                     $result = $this->cleanArray($source);
                 } else {
-                    $result = $this->_remove($this->_decode($value));
+                    $result = $this->_remove($this->_decode($source));
                 }
                 break;
 
