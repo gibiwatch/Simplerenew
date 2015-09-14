@@ -19,7 +19,8 @@ class SimplerenewModelPlans extends SimplerenewModelList
             'setup_cost', 'plan.setup_cost',
             'published', 'plan.published',
             'group', 'ug.title',
-            'ordering', 'plan.ordering'
+            'ordering', 'plan.ordering',
+            'trial', 'plan.trial_length'
         );
 
         parent::__construct($config);
