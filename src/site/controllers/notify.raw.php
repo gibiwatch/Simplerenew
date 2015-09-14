@@ -31,7 +31,7 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
 
         $container = SimplerenewFactory::getContainer();
         $notify    = $container->getNotify();
-        $notify->process($package, $container);
+        $notify->process($package);
 
         if ($user) {
             $user->logout();
