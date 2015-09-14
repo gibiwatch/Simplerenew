@@ -84,7 +84,11 @@
                     });
 
                     description = 'Subscription to ' + items.join(', ')
-                    + ' for a total of ' + $.formatCurrency(total, symbol);
+                        + ' for a total of ' + $.formatCurrency(total, symbol);
+                    if (description.length > 127) {
+                        description = 'Subscriptions to ' + items.length
+                            + ' plans for a total of ' + symbol + total.toFixed(2);
+                    }
 
                     // Prepare for a blocked popup
                     var popupWait = setTimeout(
