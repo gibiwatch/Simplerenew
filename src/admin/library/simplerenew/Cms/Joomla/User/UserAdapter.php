@@ -135,7 +135,7 @@ class UserAdapter implements UserInterface
             $this->getName($user->name)
         );
 
-        $data['enabled'] = !$user->block && empty($user->activation);
+        $data['enabled'] = !$user->block;
         $parent->setProperties($data);
     }
 
@@ -219,9 +219,6 @@ class UserAdapter implements UserInterface
             'groups'   => $parent->groups,
             'block'    => !$parent->enabled
         );
-        if ($parent->enabled) {
-            $data['activation'] = '';
-        }
 
         if (!empty($parent->password)) {
             $data['password']  = $parent->password;
