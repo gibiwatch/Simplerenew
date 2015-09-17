@@ -233,7 +233,7 @@ class User extends Object
     }
 
     /**
-     * Remove all subscriber groups and reset to a default state
+     * Remove all subscriber groups
      *
      * @return User
      * @throws Exception
