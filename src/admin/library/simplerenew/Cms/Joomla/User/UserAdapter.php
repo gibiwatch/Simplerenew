@@ -437,7 +437,7 @@ class UserAdapter implements UserInterface
         }
         $newGroups = array_unique($newGroups);
         if (count($newGroups) == 0) {
-            $newGroups[] = $defaultId;
+            $newGroups[] = $parent->groups ? $expireId : $defaultId;
         }
 
         $parent->groups = $newGroups;
