@@ -35,7 +35,7 @@ abstract class SimplerenewFactory extends JFactory
     public static function getContainer($gateway = null)
     {
         $params  = SimplerenewComponentHelper::getParams();
-        $gateway = $gateway ?: 'Recurly';
+        $gateway = ucfirst(strtolower($gateway)) ?: 'Recurly';
 
         if (empty(static::$SimplerenewContainers[$gateway])) {
             // convert Joomla config parameters into Simplerenew configuration options
@@ -95,17 +95,15 @@ abstract class SimplerenewFactory extends JFactory
      */
     public static function getAllGatewayContainers()
     {
-        $primary  = static::getContainer();
         $gateways = SimplerenewFactory::getContainer()->events->trigger('simplerenewLoadGateway');
 
-        $containers = array($primary);
         foreach ($gateways as $gateway) {
-            if ($primary->gateway != $gateway) {
-                $containers[] = static::getContainer($gateway);
+            if (!isset(static::$SimplerenewContainers[$gateway])) {
+                static::getContainer($gateway);
             }
         }
 
-        return $containers;
+        return static::$SimplerenewContainers;
     }
 
     /**
