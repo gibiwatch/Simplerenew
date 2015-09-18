@@ -124,6 +124,11 @@ class Notify extends Object
      */
     protected $container = null;
 
+    /**
+     * @var array
+     */
+    protected $allContainers = array();
+
     public function __construct(Container $container, NotifyInterface $adapter)
     {
         $this->container = $container;
@@ -134,78 +139,28 @@ class Notify extends Object
      * Process the push notification
      *
      * @param string $package
+     * @param array  $containers
      */
-    public function process($package)
+    public function process($package, array $containers)
     {
-        $this->loadFromGatewayData($package);
+        // Verify and save list of gateway containers for possible later use
+        foreach ($containers as $container) {
+            if ($container instanceof Container) {
+                $this->allContainers[$container->gateway] = $container;
+            }
+        }
+        $this->adapter->loadPackage($this, $package);
+
+        $this->package         = $package;
+        $this->account_code    = $this->account ? $this->account->code : null;
+        $this->user_id         = $this->user ? $this->user->id : null;
+        $this->subscription_id = $this->subscription ? $this->subscription->id : null;
 
         $handler  = $this->getHandler($this->type);
         $response = $handler ? $handler->execute($this) : null;
         $this->addLogEntry($handler, $response);
 
         $this->container->events->trigger('simplerenewNotifyProcess', array($this));
-    }
-
-    /**
-     * Load data from gateway package and convert to standardized objects
-     *
-     * @return void;
-     */
-    protected function loadFromGatewayData($package)
-    {
-        $this->package = $package;
-
-        $this->adapter->loadPackage($this, $package);
-
-        // Account
-        if ($this->account) {
-            $this->account = $this->container
-                ->getAccount()
-                ->bindSource($this->account);
-
-            $this->account_code = $this->account->code;
-
-            // Load the user for this account
-            $userId = $this->account->getUserId();
-            if ($userId) {
-                try {
-                    $this->user = $this->container
-                        ->getUser()
-                        ->load($userId);
-
-                    $this->user_id = $this->user->id;
-
-                } catch (NotFound $e) {
-                    // User must have been deleted from system
-                }
-            }
-        }
-
-        if ($this->billing) {
-            $this->billing = $this->container
-                ->getBilling()
-                ->bindSource($this->billing);
-        }
-
-        if ($this->subscription) {
-            $this->subscription = $this->container
-                ->getSubscription()
-                ->bindSource($this->subscription);
-
-            $this->subscription_id = $this->subscription->id;
-        }
-
-        if ($this->invoice) {
-            $this->invoice = $this->container
-                ->getInvoice()
-                ->bindSource($this->invoice);
-        }
-
-        if ($this->transaction) {
-            $this->transaction = $this->container
-                ->getTransaction()
-                ->bindSource($this->transaction);
-        }
     }
 
     /**
@@ -289,5 +244,33 @@ class Notify extends Object
             }
         }
         return false;
+    }
+
+    /**
+     * Update the user's groups based on subscribed plans in all gateways
+     *
+     * @return void
+     */
+    public function updateUserGroups()
+    {
+        if ($this->user) {
+            $plans = array();
+            foreach ($this->allContainers as $container) {
+                try {
+                    $account       = $container->account->load($this->user);
+                    $subscriptions = $container
+                        ->subscription
+                        ->getList($account, !Subscription::STATUS_EXPIRED);
+
+                    foreach ($subscriptions as $subscription) {
+                        $plans[] = $subscription->plan;
+                    }
+
+                } catch (NotFound $e) {
+                    // Perfectly fine
+                }
+            }
+            $this->user->addGroups($plans, true);
+        }
     }
 }

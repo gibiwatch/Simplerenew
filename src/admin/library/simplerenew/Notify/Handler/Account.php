@@ -32,20 +32,9 @@ class Account implements HandlerInterface
                     if (!$notice->user->enabled) {
                         $notice->user->enabled = true;
                         $response .= ': Re-enabled';
+                        $notice->user->update();
+                        $notice->updateUserGroups();
                     }
-
-                    $oldGroups = array_values($notice->user->groups);
-                    sort($oldGroups);
-
-                    $notice->user->addGroups($notice->subscription->plan);
-                    $newGroups = array_values($notice->user->groups);
-                    sort($newGroups);
-
-                    if ($oldGroups != $newGroups) {
-                        $response .= ': ' . $notice->subscription->plan;
-                    }
-                    $notice->user->update();
-
                     return $response;
             }
         }
