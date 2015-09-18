@@ -260,7 +260,7 @@ class Notify extends Object
                     $account       = $container->account->load($this->user);
                     $subscriptions = $container
                         ->subscription
-                        ->getList($account, !Subscription::STATUS_EXPIRED);
+                        ->getList($account, ~Subscription::STATUS_EXPIRED);
 
                     foreach ($subscriptions as $subscription) {
                         $plans[] = $subscription->plan;
