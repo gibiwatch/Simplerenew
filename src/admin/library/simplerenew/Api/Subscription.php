@@ -214,7 +214,11 @@ class Subscription extends AbstractApiBase
      */
     public function cancel()
     {
+        $this->events->trigger('simplerenewSubscriptionBeforeCancel', array($this));
+
         $this->imp->cancel($this);
+
+        $this->events->trigger('simplerenewSubscriptionAfterCancel', array($this));
     }
 
     /**
@@ -225,7 +229,11 @@ class Subscription extends AbstractApiBase
      */
     public function reactivate()
     {
+        $this->events->trigger('simplerenewSubscriptionBeforeReactivate', array($this));
+
         $this->imp->reactivate($this);
+
+        $this->events->trigger('simplerenewSubscriptionAfterReactivate', array($this));
     }
 
     /**
