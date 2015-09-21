@@ -97,22 +97,28 @@ class SimplerenewModelAccount extends SimplerenewModelSite
      */
     public function getSubscriptions()
     {
+        /** @var Container $container */
+
         $subscriptions = $this->getState('subscriptions', null);
         if ($subscriptions === null) {
             $subscriptions = array();
 
             if ($account = $this->getAccount()) {
-                $container = SimplerenewFactory::getContainer($account->getGatewayName());
+                $containers = SimplerenewFactory::getAllGatewayContainers();
+                $subscriptions = array();
+                foreach ($containers as $container) {
+                    try {
+                        $status        = (int)$this->getState('status.subscription', null);
+                        $subscriptions = array_merge(
+                            $subscriptions,
+                            $container->subscription->getList($account, $status)
+                        );
 
-                try {
-                    $status        = (int)$this->getState('status.subscription', null);
-                    $subscriptions = $container
-                        ->getSubscription()
-                        ->getList($account, $status);
-
-                } catch (NotFound $e) {
-                    // no subs, no problem
+                    } catch (NotFound $e) {
+                        // no subs, no problem
+                    }
                 }
+
             }
             $this->setState('subscriptions', $subscriptions);
         }
