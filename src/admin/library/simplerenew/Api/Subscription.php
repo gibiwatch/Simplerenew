@@ -19,10 +19,20 @@ defined('_JEXEC') or die();
 
 class Subscription extends AbstractApiBase
 {
+    /**
+     * Status codes are used as bitmasks
+     */
     const STATUS_ACTIVE   = 1;
     const STATUS_CANCELED = 2;
     const STATUS_EXPIRED  = 4;
     const STATUS_UNKNOWN  = 0;
+
+    /**
+     * For use in termination
+     */
+    const REFUND_NONE    = 1;
+    const REFUND_PARTIAL = 2;
+    const REFUND_FULL    = 3;
 
     /**
      * @var string
@@ -234,6 +244,23 @@ class Subscription extends AbstractApiBase
         $this->imp->reactivate($this);
 
         $this->events->trigger('simplerenewSubscriptionAfterReactivate', array($this));
+    }
+
+    /**
+     * Terminate this subscription
+     *
+     * @param int $refundType
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function terminate($refundType = self::REFUND_PARTIAL)
+    {
+        $this->events->trigger('simplerenewSubscriptionBeforeTerminate', array($this));
+
+        $this->imp->terminate($this, $refundType);
+
+        $this->events->trigger('simplerenewSubscriptionAfterTerminate', array($this));
     }
 
     /**
