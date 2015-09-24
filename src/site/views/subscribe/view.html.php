@@ -46,6 +46,11 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
     protected $subscriptions = array();
 
     /**
+     * @var string
+     */
+    protected $requiredTag = '<span>*</span>';
+
+    /**
      * @var bool
      */
     protected $allowMultiple = false;
