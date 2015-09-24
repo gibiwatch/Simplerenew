@@ -6,6 +6,8 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Api\Subscription;
+
 defined('_JEXEC') or die();
 
 if (!defined('SIMPLERENEW_LOADED')) {
@@ -74,7 +76,7 @@ abstract class JHtmlSrselect
     {
         JHtml::_('sr.jquery');
 
-        $id = $idTag ? : str_replace(array('[', ']'), array('_', ''), $idTag);
+        $id = $idTag ?: str_replace(array('[', ']'), array('_', ''), $idTag);
 
         $countries = SimplerenewFactory::getDbo()
             ->setQuery('Select * From #__simplerenew_countries order By name')
@@ -112,7 +114,7 @@ abstract class JHtmlSrselect
     {
         JHtml::_('sr.jquery');
 
-        $id = $idTag ? : str_replace(array('[', ']'), array('_', ''), $name);
+        $id = $idTag ?: str_replace(array('[', ']'), array('_', ''), $name);
 
         $html = array(
             JHtml::_('sr.inputfield', $name, $attribs, $selected, $id)
@@ -158,5 +160,86 @@ abstract class JHtmlSrselect
             }
         }
         return join("\n", $html);
+    }
+
+    /**
+     * Create select box dropdown for plans. Use $required == false
+     * to include a blank 'Select Plan' option.
+     *
+     * @param string       $name
+     * @param string|array $attribs
+     * @param string       $selected
+     * @param bool         $required
+     *
+     * @return string
+     */
+    public static function plans($name, $attribs = null, $selected = null, $required = false)
+    {
+        $db    = SimplerenewFactory::getDbo();
+        $query = $db->getQuery(true)
+            ->select(
+                array(
+                    'plan.code',
+                    'CONCAT(plan.code, \' / \', plan.name) AS name'
+                )
+            )
+            ->from('#__simplerenew_plans AS plan')
+            ->innerJoin('#__simplerenew_subscriptions AS subscription ON subscription.plan = plan.code')
+            ->group('plan.code, plan.name')
+            ->order('plan.code ASC, plan.name ASC');
+
+        $plans = $db->setQuery($query)->loadObjectList();
+        if (!$required) {
+            array_unshift(
+                $plans,
+                JHtml::_('select.option', '', JText::_('COM_SRSUBSCRIPTIONS_OPTION_SELECT_PLAN'), 'code', 'name')
+            );
+        }
+
+        return JHtml::_('select.genericlist', $plans, $name, $attribs, 'code', 'name', $selected);
+    }
+
+    /**
+     * Create a select box dropdown for subscription status. Use $required == false
+     * to include a blank 'Select status' option
+     *
+     * @param  string      $name
+     * @param string|array $attribs
+     * @param string       $selected
+     * @param bool         $required
+     *
+     * @return string
+     */
+    public static function status($name, $attribs = null, $selected = null, $required = false)
+    {
+        if ($required) {
+            $options = array();
+        } else {
+            $options = array(
+                JHtml::_('select.option', '', JText::_('COM_SIMPLERENEW_OPTION_SELECT_STATUS'))
+            );
+        }
+        $options = array_merge(
+            $options,
+            array(
+                JHtml::_(
+                    'select.option',
+                    Subscription::STATUS_ACTIVE,
+                    JText::_('COM_SIMPLERENEW_OPTION_STATUS_ACTIVE')
+                ),
+                JHtml::_(
+                    'select.option',
+                    Subscription::STATUS_EXPIRED,
+                    JText::_('COM_SIMPLERENEW_OPTION_STATUS_EXPIRED')
+                ),
+                JHtml::_(
+                    'select.option',
+                    Subscription::STATUS_CANCELED,
+                    JText::_('COM_SIMPLERENEW_OPTION_STATUS_CANCELED')
+                )
+            )
+        );
+
+        return JHtml::_('select.genericlist', $options, $name, $attribs, 'value', 'text', $selected);
     }
 }
