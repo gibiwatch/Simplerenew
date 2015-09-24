@@ -17,6 +17,11 @@ if (!defined('SIMPLERENEW_LOADED')) {
 abstract class JHtmlSrselect
 {
     /**
+     * @var array
+     */
+    protected static $plans = null;
+
+    /**
      * Create a Credit Card expiration year dropdown
      *
      * @param string $name
@@ -188,20 +193,24 @@ abstract class JHtmlSrselect
      */
     public static function planoptions($required = false)
     {
-        $db    = SimplerenewFactory::getDbo();
-        $query = $db->getQuery(true)
-            ->select(
-                array(
-                    'plan.code AS ' . $db->quoteName('value'),
-                    'CONCAT(plan.code, \' / \', plan.name) AS ' . $db->quoteName('text')
+        if (static::$plans === null) {
+            $db    = SimplerenewFactory::getDbo();
+            $query = $db->getQuery(true)
+                ->select(
+                    array(
+                        'plan.code AS ' . $db->quoteName('value'),
+                        'CONCAT(plan.code, \' / \', plan.name) AS ' . $db->quoteName('text')
+                    )
                 )
-            )
-            ->from('#__simplerenew_plans AS plan')
-            ->innerJoin('#__simplerenew_subscriptions AS subscription ON subscription.plan = plan.code')
-            ->group('plan.code, plan.name')
-            ->order('plan.code ASC, plan.name ASC');
+                ->from('#__simplerenew_plans AS plan')
+                ->innerJoin('#__simplerenew_subscriptions AS subscription ON subscription.plan = plan.code')
+                ->group('plan.code, plan.name')
+                ->order('plan.code ASC, plan.name ASC');
 
-        $plans = $db->setQuery($query)->loadObjectList();
+            static::$plans = $db->setQuery($query)->loadObjectList();
+        }
+
+        $plans = static::$plans;
         if (!$required) {
             array_unshift(
                 $plans,
