@@ -269,6 +269,53 @@
     };
 
     /**
+     * Creates a toggle control that will cycle through a collection of display panels.
+     * Panels are selected using a jQuery selector in the data-panels attribute of the
+     * control element.
+     *
+     * @param options
+     *        selector : a jQuery selector for the control button(s)
+     *        current  : integer or selector for initial panel to display. Default is first one found
+     *        focus    : Set focus to first input field in the panel
+     */
+    $.Simplerenew.toggles = function(options) {
+        options = $.extend({}, this.toggles.options, options);
+
+        var control = $(options.selector),
+            panels  = $(control.attr('data-panels')),
+            current = options.current;
+
+        panels.hide();
+        if ($.type(options.current) == 'string') {
+            current = 0;
+            panels.each(function (index) {
+                if (this == $(options.current)[0]) {
+                    current = index;
+                }
+            });
+        }
+        if (panels[options.current]) {
+            $(panels[options.current]).show();
+        }
+
+        $(control)
+            .css('cursor', 'pointer')
+            .on('click', function(evt) {
+                evt.preventDefault();
+
+                $(panels[options.current]).closePanelSlide(true, options);
+                options.current = (options.current + 1) % panels.length;
+                $(panels[options.current]).closePanelSlide(false, options);
+            });
+    };
+    $.Simplerenew.toggles.options = {
+        selector: null,
+        current : 0,
+        focus   : true
+
+    };
+
+    /**
      * Create a clickable area for a radio button or checkbox somewhere inside it
      *
      * @param options
