@@ -175,12 +175,25 @@ abstract class JHtmlSrselect
      */
     public static function plans($name, $attribs = null, $selected = null, $required = false)
     {
+        $options = static::planoptions($required);
+        return JHtml::_('select.genericlist', $options, $name, $attribs, 'value', 'text', $selected);
+    }
+
+    /**
+     * Create array of plans for use in option lists
+     *
+     * @param bool $required
+     *
+     * @return mixed
+     */
+    public static function planoptions($required = false)
+    {
         $db    = SimplerenewFactory::getDbo();
         $query = $db->getQuery(true)
             ->select(
                 array(
-                    'plan.code',
-                    'CONCAT(plan.code, \' / \', plan.name) AS name'
+                    'plan.code AS ' . $db->quoteName('value'),
+                    'CONCAT(plan.code, \' / \', plan.name) AS ' . $db->quoteName('text')
                 )
             )
             ->from('#__simplerenew_plans AS plan')
@@ -192,11 +205,11 @@ abstract class JHtmlSrselect
         if (!$required) {
             array_unshift(
                 $plans,
-                JHtml::_('select.option', '', JText::_('COM_SRSUBSCRIPTIONS_OPTION_SELECT_PLAN'), 'code', 'name')
+                JHtml::_('select.option', '', JText::_('COM_SRSUBSCRIPTIONS_OPTION_SELECT_PLAN'))
             );
         }
 
-        return JHtml::_('select.genericlist', $plans, $name, $attribs, 'code', 'name', $selected);
+        return $plans;
     }
 
     /**
@@ -211,6 +224,19 @@ abstract class JHtmlSrselect
      * @return string
      */
     public static function status($name, $attribs = null, $selected = null, $required = false)
+    {
+        $options = static::statusoptions($required);
+        return JHtml::_('select.genericlist', $options, $name, $attribs, 'value', 'text', $selected);
+    }
+
+    /**
+     * Create option list for subscription statuses
+     *
+     * @param bool $required
+     *
+     * @return array
+     */
+    public static function statusoptions($required = false)
     {
         if ($required) {
             $options = array();
@@ -240,6 +266,6 @@ abstract class JHtmlSrselect
             )
         );
 
-        return JHtml::_('select.genericlist', $options, $name, $attribs, 'value', 'text', $selected);
+        return $options;
     }
 }
