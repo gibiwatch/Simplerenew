@@ -268,16 +268,19 @@ class Subscription extends AbstractApiBase
      *
      * @param Plan   $plan
      * @param Coupon $coupon
+     * @param bool   $immediate
      *
      * @return void
      * @throws Exception
      */
-    public function update(Plan $plan, Coupon $coupon = null)
+    public function update(Plan $plan, Coupon $coupon = null, $immediate = null)
     {
         $this->events->trigger('simplerenewSubscriptionBeforeUpdate', array($this, $plan));
 
-        $isUpgrade = $plan->isUpgradeFrom($this->plan);
-        $this->imp->update($this, $plan, $coupon, $isUpgrade);
+        if ($immediate === null) {
+            $immediate = $plan->isUpgradeFrom($this->plan);
+        }
+        $this->imp->update($this, $plan, $coupon, $immediate);
 
         $this->events->trigger('simplerenewSubscriptionAfterUpdate', array($this, $plan));
     }
