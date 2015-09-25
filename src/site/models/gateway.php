@@ -29,7 +29,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
     {
         $container = SimplerenewFactory::getContainer();
         $data      = new JRegistry($data ?: $this->getState()->getProperties());
-        $user      = $container->getUser();
+        $user      = $container->user;
 
         if (!$data->get('userId')) {
             // Check for existing user
@@ -99,7 +99,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
     public function saveAccount(User $user, array $data = null)
     {
         $container = SimplerenewFactory::getContainer();
-        $account   = $container->getAccount();
+        $account   = $container->account;
 
         try {
             $account->load($user);
@@ -131,7 +131,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
         $data = $data->toArray();
 
         $container = SimplerenewFactory::getContainer();
-        $billing   = $container->getBilling();
+        $billing   = $container->billing;
         try {
             $billing->load($account);
         } catch (NotFound $e) {
@@ -171,7 +171,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
         }
 
         $plan   = $container->plan->load($plan);
-        $coupon = $coupon ? $container->getCoupon()->load($coupon) : null;
+        $coupon = $coupon ? $container->coupon->load($coupon) : null;
 
         $subscription->create($account, $plan, $coupon);
 
