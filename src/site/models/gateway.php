@@ -29,7 +29,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
     {
         $container = SimplerenewFactory::getContainer();
         $data      = new JRegistry($data ?: $this->getState()->getProperties());
-        $user      = $container->getUser();
+        $user      = $container->user;
 
         if (!$data->get('userId')) {
             // Check for existing user
@@ -99,7 +99,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
     public function saveAccount(User $user, array $data = null)
     {
         $container = SimplerenewFactory::getContainer();
-        $account   = $container->getAccount();
+        $account   = $container->account;
 
         try {
             $account->load($user);
@@ -131,7 +131,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
         $data = $data->toArray();
 
         $container = SimplerenewFactory::getContainer();
-        $billing   = $container->getBilling();
+        $billing   = $container->billing;
         try {
             $billing->load($account);
         } catch (NotFound $e) {
@@ -160,10 +160,18 @@ class SimplerenewModelGateway extends SimplerenewModelSite
     public function createSubscription(Account $account, $plan, $coupon = null)
     {
         $container    = SimplerenewFactory::getContainer();
-        $subscription = $container->getSubscription();
+        $subscription = $container->subscription;
 
-        $plan   = $container->getPlan()->load($plan);
-        $coupon = $coupon ? $container->getCoupon()->load($coupon) : null;
+        // Prevent creation of multiple subscriptions on single-sub sites
+        $allowMultiple = SimplerenewComponentHelper::getParams()->get('basic.allowMultiple');
+        if (!$allowMultiple) {
+            if ($activeSubscriptions = $subscription->getList($account, ~Subscription::STATUS_EXPIRED)) {
+                throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_MULTIPLE'));
+            }
+        }
+
+        $plan   = $container->plan->load($plan);
+        $coupon = $coupon ? $container->coupon->load($coupon) : null;
 
         $subscription->create($account, $plan, $coupon);
 
