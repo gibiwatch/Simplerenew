@@ -20,8 +20,8 @@ defined('_JEXEC') or die();
                 echo 'readonly';
             }
             ?>
-            id="username"
-            name="username"
+            id="usernameLogin"
+            name="usernameLogin"
             type="text"
             value="<?php echo $this->user->username; ?>"
             maxlength="50"
@@ -34,10 +34,9 @@ defined('_JEXEC') or die();
             <?php echo $this->requiredTag; ?>
         </label>
         <input
-            id="password"
-            name="password"
+            id="passwordLogin"
+            name="passwordLogin"
             type="password"
-            class="verify_password"
             value=""
             required="true"
             data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_PASSWORD_REQUIRED'); ?>"/>
