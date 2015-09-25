@@ -7,6 +7,12 @@
  */
 
 defined('_JEXEC') or die();
+
+/**
+ * @var SimplerenewViewSubscribe $this
+ */
+SimplerenewFactory::getLanguage()->load('com_users');
+
 ?>
 <div class="ost-section">
     <div class="block6">
@@ -27,6 +33,10 @@ defined('_JEXEC') or die();
             maxlength="50"
             required="true"
             data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_USERNAME_REQUIRED'); ?>"/>
+
+        <a href="<?php echo JRoute::_('index.php?option=com_users&view=remind'); ?>">
+            <?php echo JText::_('COM_USERS_LOGIN_REMIND'); ?>
+        </a>
     </div>
     <div class="block6">
         <label for="password">
@@ -40,5 +50,9 @@ defined('_JEXEC') or die();
             value=""
             required="true"
             data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_PASSWORD_REQUIRED'); ?>"/>
+
+        <a href="<?php echo JRoute::_('index.php?option=com_users&view=reset'); ?>">
+            <?php echo JText::_('COM_USERS_LOGIN_RESET'); ?>
+        </a>
     </div>
 </div>
