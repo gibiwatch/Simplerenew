@@ -20,7 +20,7 @@ class Subscription implements HandlerInterface
      * Execute a notify handler which should return a short string
      * explaining what was done if anything.
      *
-     * @param Notify    $notice
+     * @param Notify $notice
      *
      * @return string
      */
@@ -28,31 +28,17 @@ class Subscription implements HandlerInterface
     {
         $message = null;
         if (!empty($notice->user->id)) {
-            $isNew = false;
-
             switch ($notice->action) {
-                /** @noinspection PhpMissingBreakStatementInspection */
                 case Notify::ACTION_NEW:
-                    $isNew = true;
-                    // intentional fall-through
-
                 case Notify::ACTION_UPDATE:
                 case Notify::ACTION_RENEW:
-                    $subscriptions = $notice
-                        ->subscription
-                        ->getList($notice->account, !Api\Subscription::STATUS_EXPIRED);
-
-                    $plans = array();
-                    foreach ($subscriptions as $subscription) {
-                        $plans[] = $subscription->plan;
-                    }
-                    $notice->user->addGroups($plans, true);
                     $message = 'Update User Groups';
+                    $notice->updateUserGroups();
                     break;
 
                 case Notify::ACTION_EXPIRE:
-                    $notice->user->removeGroups($notice->subscription->plan);
                     $message = 'Remove plan user group';
+                    $notice->updateUserGroups();
                     break;
             }
 
@@ -62,7 +48,10 @@ class Subscription implements HandlerInterface
                 $notice
                     ->getContainer()
                     ->events
-                    ->trigger('simplerenewSubscriptionAfterUpdate', array($notice->subscription, $isNew));
+                    ->trigger(
+                        'simplerenewSubscriptionAfterUpdate',
+                        array($notice->subscription, $notice->plan)
+                    );
             }
         }
         return $message;

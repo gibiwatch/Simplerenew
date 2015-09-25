@@ -127,6 +127,23 @@ abstract class JHtmlSr
     }
 
     /**
+     * Setup collection of toggle panels
+     *
+     * @param string     $selector
+     * @param int|string $visible
+     */
+    public static function toggles($selector, $visible = 0)
+    {
+        $options = json_encode(
+            array(
+                'selector' => $selector,
+                'current'  => $visible
+            )
+        );
+        static::onready("$.Simplerenew.toggles({$options});");
+    }
+
+    /**
      * Create a clickable area for radio buttons and checkboxes.
      * Will accept a string as the jQuery selector for areas or
      * more detailed options as either json string or an array

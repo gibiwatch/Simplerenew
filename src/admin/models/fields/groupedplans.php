@@ -18,31 +18,7 @@ class SimplerenewFormFieldGroupedplans extends JFormFieldGroupedList
 {
     public function getGroups()
     {
-        $db    = SimplerenewFactory::getDbo();
-        $query = $db->getQuery(true)
-            ->select(
-                array(
-                    $db->quoteName('group.title') . ' AS ' . $db->quote('group'),
-                    $db->quoteName('plan.code'),
-                    $db->quoteName('plan.name')
-                )
-            )
-            ->from('#__simplerenew_plans AS plan')
-            ->innerJoin(
-                '#__usergroups AS ' . $db->quoteName('group')
-                . ' ON ' . $db->quoteName('group.id') . ' = plan.group_id'
-            )
-            ->order('group.title, plan.code, plan.name');
-
-        $groups = array();
-
-        $plans = $db->setQuery($query)->loadObjectList();
-        foreach ($plans as $plan) {
-            if (!isset($groups[$plan->group])) {
-                $groups[$plan->group] = array();
-            }
-            $groups[$plan->group][] = JHtml::_('select.option', $plan->code, $plan->code . ' / ' . $plan->name);
-        }
+        $groups = JHtml::_('srselect.groupedplanoptions', true);
 
         return array_merge_recursive(parent::getGroups(), $groups);
     }

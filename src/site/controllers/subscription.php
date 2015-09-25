@@ -67,7 +67,23 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
 
         // Create/Load the user
         try {
-            $user = $model->saveUser();
+            if ($username = $app->input->getUsername('usernameLogin', '')) {
+                $password = $app->input->getString('passwordLogin', '');
+
+                $user = SimplerenewFactory::getContainer()->user;
+                $user->loadByUsername($username);
+                try {
+                    $user->login($password);
+
+                } catch (Exception $e) {
+                    // bleah!! stupid Joomla User object....error messages already queued
+                    $this->callerReturn();
+                    return;
+                }
+
+            } else {
+                $user = $model->saveUser();
+            }
 
         } catch (Exception $e) {
             $this->callerReturn($e->getMessage(), 'error');

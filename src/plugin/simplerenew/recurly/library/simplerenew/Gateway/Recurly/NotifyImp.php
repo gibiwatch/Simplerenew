@@ -8,8 +8,8 @@
 
 namespace Simplerenew\Gateway\Recurly;
 
-use Simplerenew\Api\Subscription;
 use Simplerenew\Exception;
+use Simplerenew\Exception\NotAuthorised;
 use Simplerenew\Gateway\NotifyInterface;
 use Simplerenew\Notify\Notify;
 use Simplerenew\Object;
@@ -19,7 +19,7 @@ defined('_JEXEC') or die();
 class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
 {
     protected $validIpAddresses = array(
-        '75.98.92.96/28',  // < 2014-09-10
+        '76.105.255.197', // BT Testing
         '74.201.212.0/24',
         '64.74.141.0/24'
     );
@@ -76,7 +76,7 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
      * source should be done here.
      *
      * @param Notify $parent
-     * @param mixed  $package
+     * @param string $package
      *
      * @return void
      * @throws Exception
@@ -85,16 +85,20 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
     {
         $ip = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
         if (!$parent->IPAllowed($ip, $this->validIpAddresses)) {
-            throw new Exception('Notice came from unrecognized IP - ' . $ip);
+            throw new NotAuthorised('Notice came from unrecognized IP - ' . $ip);
         }
 
         $xml = simplexml_load_string($package);
 
-        $data = array(
-            'type'    => $xml->getName(),
-            'package' => $package
+        $parent->setProperties(
+            array(
+                'type'    => $xml->getName(),
+                'package' => $package
+            ),
+            $this->fieldMap
         );
 
+        $data = array();
         foreach ($xml->children() as $node) {
             $name = $node->getName();
             if ($node->count()) {
@@ -105,28 +109,38 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
             $data[$name] = $value;
         }
 
-        // Reformat subscription data for Subscription class
-        if (!empty($data['subscription'])) {
-            $data['subscription']['plan_code'] = $data['subscription']['plan']['plan_code'];
-            if (!empty($data['account'])) {
-                $data['subscription']['account_code'] = $data['account']['account_code'];
-            }
+        $container = $parent->getContainer();
+
+        if (!empty($data['subscription']['uuid'])) {
+            $subscriptionId = $data['subscription']['uuid'];
+        } elseif (!empty($data['invoice']['subscription_id'])) {
+            $subscriptionId = $data['invoice']['subscription_id'];
+        }
+        if (!empty($subscriptionId)) {
+            $parent->subscription = $container->subscription->load($subscriptionId);
         }
 
-        // Create a stub Subscription class from invoice if not already included
-        if (!empty($data['invoice']) && empty($data['subscription'])) {
-            $data['subscription']['uuid'] = $data['invoice']['subscription_id'];
+        if (!empty($data['account']['account_code'])) {
+            $parent->account = $container->account;
+            try {
+                $parent->account->loadByAccountCode($data['account']['account_code']);
+                $parent->user = $parent->account->user;
+
+            } catch (Exception $e) {
+                // This should handle possibly deleted users
+                $parent->account->bindSource($data['account']);
+            }
+            $parent->billing = $container->billing->load($parent->account);
+        }
+
+        if (!empty($data['invoice'])) {
+            $parent->invoice = $container->invoice->bindSource($data['invoice']);
         }
 
         // Reformat transaction data for Transaction class
         if (!empty($data['transaction'])) {
-            // Create a stub Subscription class if not already included
-            if (empty($data['subscription'])) {
-                $data['subscription']['uuid'] = $data['transaction']['subscription_id'];
-            }
-
-            if (!empty($data['account'])) {
-                $data['transaction']['account_code'] = $data['account']['account_code'];
+            if ($parent->account->code) {
+                $data['transaction']['account_code'] = $parent->account->code;
             }
 
             $data['transaction'] = array_merge(
@@ -137,9 +151,8 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
                     'amount'     => $data['transaction']['amount_in_cents'] / 100
                 )
             );
+            $parent->transaction = $container->transaction->bindSource($data['transaction']);
         }
-
-        $parent->setProperties($data, $this->fieldMap);
     }
 
     protected function xmlNodeToObject(\SimpleXMLElement $node)

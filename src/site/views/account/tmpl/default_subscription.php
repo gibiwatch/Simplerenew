@@ -16,14 +16,14 @@ defined('_JEXEC') or die();
  */
 $container = SimplerenewFactory::getContainer();
 
-if ($this->subscriptions):
+if ($this->subscriptions) :
     ?>
     <h3>
         <span><i class="fa fa-check"></i></span>
         <?php echo JText::plural('COM_SIMPLERENEW_HEADING_SUBSCRIPTION', count($this->subscriptions)); ?>
     </h3>
     <?php
-    foreach ($this->subscriptions as $subscription):
+    foreach ($this->subscriptions as $subscription) :
         $plan = $this->getPlan($subscription->plan);
         ?>
         <div class="ost-table">
@@ -44,7 +44,7 @@ if ($this->subscriptions):
         <div class="ost-subscriptions-list m-bottom">
 
             <?php
-            if ($subscription->status == Subscription::STATUS_EXPIRED):
+            if ($subscription->status == Subscription::STATUS_EXPIRED) :
                 ?>
                 <div class="ost-alert-warning">
                     <?php
@@ -55,7 +55,7 @@ if ($this->subscriptions):
                     ?>
                 </div>
                 <?php
-            else:
+            else :
                 ?>
                 <div class="ost-alert-success">
                     <?php
@@ -67,13 +67,13 @@ if ($this->subscriptions):
                     ?>
                 </div>
                 <?php
-                if ($subscription->canceled):
+                if ($subscription->canceled) :
                     ?>
                     <div class="ost-alert-warning">
                         <?php echo JText::_('COM_SIMPLERENEW_SUBSCRIPTION_CANCELED'); ?>
                     </div>
                 <?php
-                elseif ($subscription->pending_plan):
+                elseif ($subscription->pending_plan) :
                     $pending = $container->getPlan()->load($subscription->pending_plan);
                     ?>
                     <div class="ost-alert-notify">
@@ -87,7 +87,7 @@ if ($this->subscriptions):
                         ?>
                     </div>
                 <?php
-                else:
+                else :
                     ?>
                     <div class="ost-alert-notify">
                         <?php
@@ -107,7 +107,7 @@ if ($this->subscriptions):
 
     <?php
     endforeach;
-else:
+else :
     ?>
 
     <div class="ost-alert-warning">

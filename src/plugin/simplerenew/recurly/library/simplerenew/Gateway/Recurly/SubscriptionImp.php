@@ -340,4 +340,41 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
     }
+
+    /**
+     * Terminate this subscription immediately
+     *
+     * @param Subscription $parent
+     * @param int          $refundType Subscription::REFUND_<type>
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function terminate(Subscription $parent, $refundType)
+    {
+        $subscription = $this->getSubscription($parent->id);
+
+        try {
+            switch ($refundType) {
+                case Subscription::REFUND_FULL:
+                    $subscription->terminateAndRefund();
+                    break;
+
+                case Subscription::REFUND_PARTIAL:
+                    $subscription->terminateAndPartialRefund();
+                    break;
+
+                case Subscription::REFUND_NONE:
+                    $subscription->terminateWithoutRefund();
+                    break;
+
+                default:
+                    throw new Exception('Unknown Refund Type - ' . $refundType);
+                    break;
+            }
+
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
+        }
+    }
 }

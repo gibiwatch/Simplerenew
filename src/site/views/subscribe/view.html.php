@@ -46,6 +46,11 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
     protected $subscriptions = array();
 
     /**
+     * @var string
+     */
+    protected $requiredTag = '<span>*</span>';
+
+    /**
      * @var bool
      */
     protected $allowMultiple = false;
@@ -95,6 +100,9 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
 
         // Fill in data from previous form attempt if any
         if ($formData = SimplerenewHelper::loadFormData('subscribe')) {
+            if (!empty($formData['usernameLogin'])) {
+                $formData['username'] = $formData['usernameLogin'];
+            }
             $this->user->setProperties($formData);
 
             $this->account->setProperties($formData);

@@ -6,6 +6,8 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Api\Subscription;
+
 defined('_JEXEC') or die();
 
 if (!defined('SIMPLERENEW_LOADED')) {
@@ -14,6 +16,16 @@ if (!defined('SIMPLERENEW_LOADED')) {
 
 abstract class JHtmlSrselect
 {
+    /**
+     * @var array
+     */
+    protected static $plans = null;
+
+    /**
+     * @var array
+     */
+    protected static $groupedPlans = null;
+
     /**
      * Create a Credit Card expiration year dropdown
      *
@@ -74,7 +86,7 @@ abstract class JHtmlSrselect
     {
         JHtml::_('sr.jquery');
 
-        $id = $idTag ? : str_replace(array('[', ']'), array('_', ''), $idTag);
+        $id = $idTag ?: str_replace(array('[', ']'), array('_', ''), $idTag);
 
         $countries = SimplerenewFactory::getDbo()
             ->setQuery('Select * From #__simplerenew_countries order By name')
@@ -112,7 +124,7 @@ abstract class JHtmlSrselect
     {
         JHtml::_('sr.jquery');
 
-        $id = $idTag ? : str_replace(array('[', ']'), array('_', ''), $name);
+        $id = $idTag ?: str_replace(array('[', ']'), array('_', ''), $name);
 
         $html = array(
             JHtml::_('sr.inputfield', $name, $attribs, $selected, $id)
@@ -158,5 +170,191 @@ abstract class JHtmlSrselect
             }
         }
         return join("\n", $html);
+    }
+
+    /**
+     * Create select box dropdown for plans. Use $required == false
+     * to include a blank 'Select Plan' option.
+     *
+     * @param string       $name
+     * @param string|array $attribs
+     * @param string       $selected
+     * @param bool         $required
+     *
+     * @return string
+     */
+    public static function plans($name, $attribs = null, $selected = null, $required = false)
+    {
+        $options = static::planoptions($required);
+        return JHtml::_('select.genericlist', $options, $name, $attribs, 'value', 'text', $selected);
+    }
+
+    /**
+     * Create array of plans for use in option lists
+     *
+     * @param bool $required
+     *
+     * @return mixed
+     */
+    public static function planoptions($required = false)
+    {
+        if (static::$plans === null) {
+            $db    = SimplerenewFactory::getDbo();
+            $query = $db->getQuery(true)
+                ->select(
+                    array(
+                        'plan.code AS ' . $db->quoteName('value'),
+                        'CONCAT(plan.code, \' / \', plan.name) AS ' . $db->quoteName('text')
+                    )
+                )
+                ->from('#__simplerenew_plans AS plan')
+                ->innerJoin('#__simplerenew_subscriptions AS subscription ON subscription.plan = plan.code')
+                ->group('plan.code, plan.name')
+                ->order('plan.code ASC, plan.name ASC');
+
+            static::$plans = $db->setQuery($query)->loadObjectList();
+        }
+
+        $plans = static::$plans;
+        if (!$required) {
+            array_unshift(
+                $plans,
+                JHtml::_('select.option', '', JText::_('COM_SIMPLERENEW_OPTION_SELECT_PLAN'))
+            );
+        }
+
+        return $plans;
+    }
+
+    /**
+     * Create a select box dropdown for subscription status. Use $required == false
+     * to include a blank 'Select status' option
+     *
+     * @param  string      $name
+     * @param string|array $attribs
+     * @param string       $selected
+     * @param bool         $required
+     *
+     * @return string
+     */
+    public static function status($name, $attribs = null, $selected = null, $required = false)
+    {
+        $options = static::statusoptions($required);
+        return JHtml::_('select.genericlist', $options, $name, $attribs, 'value', 'text', $selected);
+    }
+
+    /**
+     * Create option list for subscription statuses
+     *
+     * @param bool $required
+     *
+     * @return array
+     */
+    public static function statusoptions($required = false)
+    {
+        if ($required) {
+            $options = array();
+        } else {
+            $options = array(
+                JHtml::_('select.option', '', JText::_('COM_SIMPLERENEW_OPTION_SELECT_STATUS'))
+            );
+        }
+        $options = array_merge(
+            $options,
+            array(
+                JHtml::_(
+                    'select.option',
+                    Subscription::STATUS_ACTIVE,
+                    JText::_('COM_SIMPLERENEW_OPTION_STATUS_ACTIVE')
+                ),
+                JHtml::_(
+                    'select.option',
+                    Subscription::STATUS_EXPIRED,
+                    JText::_('COM_SIMPLERENEW_OPTION_STATUS_EXPIRED')
+                ),
+                JHtml::_(
+                    'select.option',
+                    Subscription::STATUS_CANCELED,
+                    JText::_('COM_SIMPLERENEW_OPTION_STATUS_CANCELED')
+                )
+            )
+        );
+
+        return $options;
+    }
+
+    /**
+     * Create select dropdown for plans grouped by user group. Use $required == false
+     * to include a blank 'Select Plan' option
+     *
+     * @param string       $name
+     * @param string|array $attribs
+     * @param string       $selected
+     * @param bool         $required
+     *
+     * @return mixed
+     */
+    public static function groupedplans($name, $attribs = null, $selected = null, $required = false)
+    {
+        $plans = static::groupedplanoptions($required);
+
+        $options = array(
+            'list.attr'          => $attribs,
+            'list.select'        => $selected,
+            'group.items'        => null,
+            'option.key.toHtml'  => false,
+            'option.text.toHtml' => false
+        );
+
+        return JHtml::_('select.groupedlist', $plans, $name, $options);
+    }
+
+    /**
+     * Build option list for plans grouped by user group. Use $required == false
+     * to include a blank 'Select Plan' option
+     *
+     * @param bool $required
+     *
+     * @return array
+     */
+    public static function groupedplanoptions($required = false)
+    {
+        if (static::$groupedPlans === null) {
+            $db    = SimplerenewFactory::getDbo();
+            $query = $db->getQuery(true)
+                ->select(
+                    array(
+                        $db->quoteName('group.title') . ' AS ' . $db->quoteName('group'),
+                        $db->quoteName('plan.code'),
+                        $db->quoteName('plan.name')
+                    )
+                )
+                ->from('#__simplerenew_plans AS plan')
+                ->innerJoin(
+                    '#__usergroups AS ' . $db->quoteName('group')
+                    . ' ON ' . $db->quoteName('group.id') . ' = plan.group_id'
+                )
+                ->order('group.title, plan.code, plan.name');
+
+            static::$groupedPlans = array();
+
+            $plans = $db->setQuery($query)->loadObjectList();
+            foreach ($plans as $plan) {
+                if (!isset(static::$groupedPlans[$plan->group])) {
+                    static::$groupedPlans[$plan->group] = array();
+                }
+                static::$groupedPlans[$plan->group][] = JHtml::_(
+                    'select.option',
+                    $plan->code,
+                    $plan->code . ' / ' . $plan->name
+                );
+            }
+        }
+
+        $plans = static::$groupedPlans;
+        if (!$required) {
+            array_unshift($plans, array(JText::_('COM_SIMPLERENEW_OPTION_SELECT_PLAN')));
+        }
+        return $plans;
     }
 }
