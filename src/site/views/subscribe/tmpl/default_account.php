@@ -12,8 +12,8 @@ defined('_JEXEC') or die();
  * @var SimplerenewViewSubscribe $this
  */
 
-$loggedIn    = ($this->user->id > 0);
-$stepHeading = JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION');
+$loggedIn     = ($this->user->id > 0);
+$stepHeading  = JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION');
 
 if (!$loggedIn) {
     JHtml::_('sr.toggles', '#simplerenew-toggle-login');
