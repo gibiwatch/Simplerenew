@@ -32,19 +32,23 @@ class SimplerenewViewAccount extends SimplerenewViewSite
 
     public function display($tpl = null)
     {
+        /**
+         * @var SimplerenewModelAccount $model
+         * @var Subscription            $subscription
+         */
+
         if ($this->getLayout() == 'edit') {
             $this->enforceSSL();
         }
 
         $allowMultiple = $this->getParams()->get('basic.allowMultiple');
+        $currentSubs   = Subscription::STATUS_ACTIVE | Subscription::STATUS_CANCELED;
         if ($allowMultiple) {
             // On multi-sub sites we won't be interested in expired subscriptions
-            $model       = $this->getModel();
-            $currentSubs = Subscription::STATUS_ACTIVE | Subscription::STATUS_CANCELED;
+            $model = $this->getModel();
             $model->setState('status.subscription', $currentSubs);
         }
 
-        /** @var SimplerenewModelAccount $model */
         $model = $this->getModel();
         try {
             $this->user = $model->getUser();
@@ -57,8 +61,14 @@ class SimplerenewViewAccount extends SimplerenewViewSite
             }
 
             if (!$allowMultiple && count($this->subscriptions)) {
-                // Single sub sites only look at the most recent subscription
-                $this->subscriptions = array(array_shift($this->subscriptions));
+                // Single sub sites only look at the most recent active subscriptions
+                $filteredSubscriptions = array();
+                foreach ($this->subscriptions as $id => $subscription) {
+                    if ($subscription->status & $currentSubs) {
+                        $filteredSubscriptions[$id] = $subscription;
+                    }
+                    $this->subscriptions = $filteredSubscriptions;
+                }
             }
 
         } catch (Simplerenew\Exception $e) {

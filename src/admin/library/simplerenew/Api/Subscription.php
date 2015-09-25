@@ -19,10 +19,20 @@ defined('_JEXEC') or die();
 
 class Subscription extends AbstractApiBase
 {
+    /**
+     * Status codes are used as bitmasks
+     */
     const STATUS_ACTIVE   = 1;
     const STATUS_CANCELED = 2;
     const STATUS_EXPIRED  = 4;
     const STATUS_UNKNOWN  = 0;
+
+    /**
+     * For use in termination
+     */
+    const REFUND_NONE    = 1;
+    const REFUND_PARTIAL = 2;
+    const REFUND_FULL    = 3;
 
     /**
      * @var string
@@ -192,7 +202,7 @@ class Subscription extends AbstractApiBase
     {
         $this->clearProperties();
 
-        $this->events->trigger('simplerenewSubscriptionBeforeCreate', array($this, $account, $plan, $coupon));
+        $this->events->trigger('simplerenewSubscriptionBeforeCreate', array($this, $plan, $account, $coupon));
 
         if ($coupon && $coupon->isAvailable($plan)) {
             $this->imp->create($this, $account, $plan, $coupon);
@@ -201,7 +211,7 @@ class Subscription extends AbstractApiBase
         }
         $account->user->addGroups($plan->code);
 
-        $this->events->trigger('simplerenewSubscriptionAfterCreate', array($this, $account, $plan, $coupon));
+        $this->events->trigger('simplerenewSubscriptionAfterCreate', array($this, $plan, $account, $coupon));
 
         return $this;
     }
@@ -237,23 +247,42 @@ class Subscription extends AbstractApiBase
     }
 
     /**
-     * Update subscription to a different plan
+     * Terminate this subscription
      *
-     * @param Plan   $plan
-     * @param Coupon $coupon
+     * @param int $refundType
      *
      * @return void
      * @throws Exception
      */
-    public function update(Plan $plan, Coupon $coupon = null)
+    public function terminate($refundType = self::REFUND_PARTIAL)
     {
-        $isUpgrade = $plan->isUpgradeFrom($this->plan);
+        $this->events->trigger('simplerenewSubscriptionBeforeTerminate', array($this));
 
-        $this->events->trigger('simplerenewSubscriptionBeforeUpdate', array($this, $plan, $coupon, $isUpgrade));
+        $this->imp->terminate($this, $refundType);
 
-        $this->imp->update($this, $plan, $coupon, $isUpgrade);
+        $this->events->trigger('simplerenewSubscriptionAfterTerminate', array($this));
+    }
 
-        $this->events->trigger('simplerenewSubscriptionAfterUpdate', array($this, $plan, $coupon, $isUpgrade));
+    /**
+     * Update subscription to a different plan
+     *
+     * @param Plan   $plan
+     * @param Coupon $coupon
+     * @param bool   $immediate
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function update(Plan $plan, Coupon $coupon = null, $immediate = null)
+    {
+        $this->events->trigger('simplerenewSubscriptionBeforeUpdate', array($this, $plan));
+
+        if ($immediate === null) {
+            $immediate = $plan->isUpgradeFrom($this->plan);
+        }
+        $this->imp->update($this, $plan, $coupon, $immediate);
+
+        $this->events->trigger('simplerenewSubscriptionAfterUpdate', array($this, $plan));
     }
 
     /**

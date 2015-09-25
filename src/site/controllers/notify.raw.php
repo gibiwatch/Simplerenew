@@ -6,6 +6,7 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Exception\NotFound;
 use Simplerenew\User\User;
 
 defined('_JEXEC') or die();
@@ -29,9 +30,16 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
                 break;
         }
 
-        $container = SimplerenewFactory::getContainer();
-        $notify    = $container->getNotify();
-        $notify->process($package);
+        // Send request to designated responder
+        $containers = SimplerenewFactory::getAllGatewayContainers();
+
+        $gateway = $app->input->getCmd('gateway');
+        if (!isset($containers[$gateway])) {
+            throw new NotFound(JText::sprintf('COM_SIMPLERENEW_ERROR_NOTIFY_INVALID_GATEWAY', $gateway));
+        }
+
+        $notify = $containers[$gateway]->getNotify();
+        $notify->process($package, $containers);
 
         if ($user) {
             $user->logout();

@@ -21,7 +21,7 @@ interface NotifyInterface
      * source should be done here.
      *
      * @param Notify $parent
-     * @param mixed  $package
+     * @param string $package
      *
      * @return void
      * @throws Exception

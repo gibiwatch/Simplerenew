@@ -16,6 +16,7 @@ use Simplerenew\Api\Invoice;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
 use Simplerenew\Api\Transaction;
+use Simplerenew\Exception\NotFound;
 use Simplerenew\Notify\Notify;
 use Simplerenew\Plugin\Events;
 use Simplerenew\User\User;
@@ -83,36 +84,43 @@ class Container extends \Pimple\Container
      * @param $className
      *
      * @return object
+     * @throws NotFound
      */
     public function getInstance($className)
     {
-        $class = new \ReflectionClass($className);
-        if ($instance = $this->getServiceEntry($class)) {
-            return $instance;
-        }
+        try {
+            $class = new \ReflectionClass($className);
+            if ($instance = $this->getServiceEntry($class)) {
+                return $instance;
+            }
 
-        $dependencies = array();
-        if (!is_null($class->getConstructor())) {
-            $params = $class->getConstructor()->getParameters();
-            foreach ($params as $param) {
-                $dependentClass = $param->getClass();
-                if ($dependentClass) {
-                    $dependentClassName  = $dependentClass->name;
-                    $dependentReflection = new \ReflectionClass($dependentClassName);
-                    if ($dependentReflection->isInstantiable()) {
-                        //use recursion to get dependencies
-                        $dependencies[] = $this->getInstance($dependentClassName);
-                    } elseif ($dependentReflection->isInterface()) {
-                        // Interfaces need to be pre-registered in the container
-                        if ($concrete = $this->getServiceEntry($dependentReflection, true)) {
-                            $dependencies[] = $concrete;
+            $dependencies = array();
+            if (!is_null($class->getConstructor())) {
+                $params = $class->getConstructor()->getParameters();
+                foreach ($params as $param) {
+                    $dependentClass = $param->getClass();
+                    if ($dependentClass) {
+                        $dependentClassName  = $dependentClass->name;
+                        $dependentReflection = new \ReflectionClass($dependentClassName);
+                        if ($dependentReflection->isInstantiable()) {
+                            //use recursion to get dependencies
+                            $dependencies[] = $this->getInstance($dependentClassName);
+                        } elseif ($dependentReflection->isInterface()) {
+                            // Interfaces need to be pre-registered in the container
+                            if ($concrete = $this->getServiceEntry($dependentReflection, true)) {
+                                $dependencies[] = $concrete;
+                            }
                         }
                     }
                 }
             }
+
+            $instance = $class->newInstanceArgs($dependencies);
+
+        } catch (\Exception $e) {
+            throw new NotFound($e->getMessage(), 404, $e);
         }
 
-        $instance = $class->newInstanceArgs($dependencies);
         return $instance;
     }
 

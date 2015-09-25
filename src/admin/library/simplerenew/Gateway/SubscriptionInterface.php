@@ -80,6 +80,17 @@ interface SubscriptionInterface
     public function reactivate(Subscription $parent);
 
     /**
+     * Terminate this subscription immediately
+     *
+     * @param Subscription $parent
+     * @param int          $refundType Subscription::REFUND_<type>
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function terminate(Subscription $parent, $refundType);
+
+    /**
      * Update subscription to a different plan
      *
      * @param Subscription $parent

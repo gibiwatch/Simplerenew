@@ -130,10 +130,17 @@ class plgSystemSimplerenew extends JPlugin
         $app = JFactory::getApplication();
         if ($app->isSite() && $this->isInstalled()) {
             $uri = JUri::getInstance();
-            if (preg_match('#/simplerenew/notify/?$#', $uri->getPath())) {
+            if (preg_match('#/simplerenew/notify(?:/(.*))?$#', $uri->getPath(), $matches)) {
+                if (empty($matches[1])) {
+                    $gateway = SimplerenewFactory::getContainer()->gateway;
+                } else {
+                    $gateway = $matches[1];
+                }
+
                 $vars = array(
                     'option' => 'com_simplerenew',
                     'task'   => 'notify.receive',
+                    'gateway' => $gateway,
                     'format' => 'raw'
                 );
                 foreach ($vars as $var => $value) {
