@@ -160,9 +160,17 @@ class SimplerenewModelGateway extends SimplerenewModelSite
     public function createSubscription(Account $account, $plan, $coupon = null)
     {
         $container    = SimplerenewFactory::getContainer();
-        $subscription = $container->getSubscription();
+        $subscription = $container->subscription;
 
-        $plan   = $container->getPlan()->load($plan);
+        // Prevent creation of multiple subscriptions on single-sub sites
+        $allowMultiple = SimplerenewComponentHelper::getParams()->get('basic.allowMultiple');
+        if (!$allowMultiple) {
+            if ($activeSubscriptions = $subscription->getList($account, ~Subscription::STATUS_EXPIRED)) {
+                throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_SUBSCRIPTION_MULTIPLE'));
+            }
+        }
+
+        $plan   = $container->plan->load($plan);
         $coupon = $coupon ? $container->getCoupon()->load($coupon) : null;
 
         $subscription->create($account, $plan, $coupon);
