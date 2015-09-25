@@ -34,9 +34,11 @@ SimplerenewFactory::getLanguage()->load('com_users');
             required="true"
             data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_USERNAME_REQUIRED'); ?>"/>
 
-        <a href="<?php echo JRoute::_('index.php?option=com_users&view=remind'); ?>">
-            <?php echo JText::_('COM_USERS_LOGIN_REMIND'); ?>
-        </a>
+        <div class="m-bottom">
+            <a href="<?php echo JRoute::_('index.php?option=com_users&view=remind'); ?>">
+                <?php echo JText::_('COM_USERS_LOGIN_REMIND'); ?>
+            </a>
+        </div>
     </div>
     <div class="block6">
         <label for="password">
@@ -51,8 +53,10 @@ SimplerenewFactory::getLanguage()->load('com_users');
             required="true"
             data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_PASSWORD_REQUIRED'); ?>"/>
 
-        <a href="<?php echo JRoute::_('index.php?option=com_users&view=reset'); ?>">
-            <?php echo JText::_('COM_USERS_LOGIN_RESET'); ?>
-        </a>
+        <div class="m-bottom">
+            <a href="<?php echo JRoute::_('index.php?option=com_users&view=reset'); ?>">
+                <?php echo JText::_('COM_USERS_LOGIN_RESET'); ?>
+            </a>
+        </div>
     </div>
 </div>
