@@ -149,18 +149,72 @@ class Notify extends Object
                 $this->allContainers[$container->gateway] = $container;
             }
         }
-        $this->adapter->loadPackage($this, $package);
 
-        $this->package         = $package;
-        $this->account_code    = $this->account ? $this->account->code : null;
-        $this->user_id         = $this->user ? $this->user->id : null;
-        $this->subscription_id = $this->subscription ? $this->subscription->id : null;
+        $this->loadFromGatewayData($package);
 
         $handler  = $this->getHandler($this->type);
         $response = $handler ? $handler->execute($this) : null;
         $this->addLogEntry($handler, $response);
 
         $this->container->events->trigger('simplerenewNotifyProcess', array($this));
+    }
+
+    /**
+     * Load data from gateway package and convert to standardized objects
+     *
+     * @param string $package
+     *
+     * @return void;
+     */
+    protected function loadFromGatewayData($package)
+    {
+        $this->package = $package;
+
+        $this->adapter->loadPackage($this, $package);
+
+        // Account
+        if ($this->account) {
+            $this->account = $this->container->account
+                ->bindSource($this->account);
+
+            $this->account_code = $this->account->code;
+
+            // Load the user for this account
+            $userId = $this->account->getUserId();
+            if ($userId) {
+                try {
+                    $this->user = $this->container->user
+                        ->load($userId);
+
+                    $this->user_id = $this->user->id;
+
+                } catch (NotFound $e) {
+                    // User must have been deleted from system
+                }
+            }
+        }
+
+        if ($this->billing) {
+            $this->billing = $this->container->billing
+                ->bindSource($this->billing);
+        }
+
+        if ($this->subscription) {
+            $this->subscription = $this->container->subscription
+                ->bindSource($this->subscription);
+
+            $this->subscription_id = $this->subscription->id;
+        }
+
+        if ($this->invoice) {
+            $this->invoice = $this->container->invoice
+                ->bindSource($this->invoice);
+        }
+
+        if ($this->transaction) {
+            $this->transaction = $this->container->transaction
+                ->bindSource($this->transaction);
+        }
     }
 
     /**

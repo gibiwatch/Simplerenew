@@ -7,6 +7,7 @@
  */
 
 use Simplerenew\Exception\NotFound;
+use Simplerenew\Notify\Notify;
 use Simplerenew\User\User;
 
 defined('_JEXEC') or die();
@@ -15,7 +16,11 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
 {
     public function receive()
     {
+        JLog::addLogger(array('text_file' => 'simplerenew.log.php'), JLog::ALL, array('simplerenew'));
+        $this->timeLog('BEGIN WEBHOOK', true);
+
         $user = $this->authenticate();
+        $this->timeLog('Authenticate');
 
         $app    = SimplerenewFactory::getApplication();
         $method = $app->input->getMethod();
@@ -32,19 +37,23 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
 
         // Send request to designated responder
         $containers = SimplerenewFactory::getAllGatewayContainers();
+        $this->timeLog('Load Containers');
 
         $gateway = $app->input->getCmd('gateway');
         if (!isset($containers[$gateway])) {
             throw new NotFound(JText::sprintf('COM_SIMPLERENEW_ERROR_NOTIFY_INVALID_GATEWAY', $gateway));
         }
 
-        $notify = $containers[$gateway]->getNotify();
+        /** @var Notify $notify */
+        $notify = $containers[$gateway]->notify;
         $notify->process($package, $containers);
+        $this->timeLog('Process package');
 
         if ($user) {
             $user->logout();
         }
 
+        $this->timeLog('END WEBHOOK', true);
         jexit();
     }
 
@@ -89,5 +98,37 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
         }
 
         return null;
+    }
+
+    /**
+     * Log elapsed processing time
+     *
+     * @param string $message
+     * @param bool   $divider
+     */
+    protected function timeLog($message, $divider = false)
+    {
+        static $start = null;
+        static $lastEntry, $lastDivider;
+        if ($start === null) {
+            $start     = microtime(true);
+            $lastEntry = $start;
+        }
+
+        $now       = microtime(true);
+        $elapsed   = $now - $lastEntry;
+        $lastEntry = $now;
+
+        if ($divider) {
+            if ($lastDivider !== null) {
+                $message .= ' (' . number_format($now - $lastDivider, 4) . ')';
+            }
+            $message     = str_pad(' ' . $message . ' ', 40, '*', STR_PAD_BOTH);
+            $lastDivider = $now;
+
+        } else {
+            $message = number_format($elapsed, 4) . ' ' . $message;
+        }
+        JLog::add($message, JLog::INFO);
     }
 }
