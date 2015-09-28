@@ -16,11 +16,9 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
 {
     public function receive()
     {
-        JLog::addLogger(array('text_file' => 'simplerenew.log.php'), JLog::ALL, array('simplerenew'));
-        $this->timeLog('BEGIN WEBHOOK', true);
+        //JLog::addLogger(array('text_file' => 'simplerenew.log.php'), JLog::ALL, array('simplerenew'));
 
         $user = $this->authenticate();
-        $this->timeLog('Authenticate');
 
         $app    = SimplerenewFactory::getApplication();
         $method = $app->input->getMethod();
@@ -37,7 +35,6 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
 
         // Send request to designated responder
         $containers = SimplerenewFactory::getAllGatewayContainers();
-        $this->timeLog('Load Containers');
 
         $gateway = $app->input->getCmd('gateway');
         if (!isset($containers[$gateway])) {
@@ -47,13 +44,11 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
         /** @var Notify $notify */
         $notify = $containers[$gateway]->notify;
         $notify->process($package, $containers);
-        $this->timeLog('Process package');
 
         if ($user) {
             $user->logout();
         }
 
-        $this->timeLog('END WEBHOOK', true);
         jexit();
     }
 
