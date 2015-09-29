@@ -227,6 +227,39 @@ abstract class JHtmlSrselect
     }
 
     /**
+     * @param string       $name
+     * @param array|string $attribs
+     * @param string       $selected
+     * @param bool         $required
+     *
+     * @return string
+     */
+    public static function published($name, $attribs = null, $selected = null, $required = false)
+    {
+        $options = JHtml::_(
+            'jgrid.publishedOptions',
+            array(
+                'archived' => false,
+                'trash'    => false,
+                'all'      => false
+            )
+        );
+
+        if (!$required) {
+            array_unshift(
+                $options,
+                JHtml::_(
+                    'select.option',
+                    '',
+                    'COM_SIMPLERENEW_OPTION_SELECT_PUBLISHED'
+                )
+            );
+        }
+
+        return JHtml::_('select.genericlist', $options, $name, $attribs, 'value', 'text', $selected, null, true);
+    }
+
+    /**
      * Create a select box dropdown for subscription status. Use $required == false
      * to include a blank 'Select status' option
      *

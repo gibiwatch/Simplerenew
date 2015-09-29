@@ -48,7 +48,11 @@ $saveOrder = $listOrder == 'plan.ordering';
                 <?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>
             </button>
         </div>
-        <div class="filter-select fltrt"></div>
+        <div class="filter-select fltrt">
+            <?php
+            echo JHtml::_('srselect.published', 'filter_published', null, $this->state->get('filter.published'));
+            ?>
+        </div>
     </fieldset>
     <div class="clr"></div>
 
