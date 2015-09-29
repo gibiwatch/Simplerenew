@@ -8,7 +8,9 @@
 
 namespace Simplerenew\User;
 
+use Simplerenew\Api\Subscription;
 use Simplerenew\Configuration;
+use Simplerenew\Container;
 use Simplerenew\Exception;
 use Simplerenew\Object;
 
@@ -233,14 +235,35 @@ class User extends Object
     }
 
     /**
-     * Remove all subscriber groups
+     * Update user group settings based on subscriptions through the selected containers
+     *
+     * @param array $containers
      *
      * @return User
-     * @throws Exception
      */
-    public function resetGroups()
+    public function resetGroups(array $containers = null)
     {
-        $this->adapter->resetGroups($this);
+        $plans = array();
+        if ($this->id) {
+            foreach ($containers as $container) {
+                if ($container instanceof Container) {
+                    try {
+                        $account       = $container->account->load($this);
+                        $subscriptions = $container
+                            ->subscription
+                            ->getList($account, ~Subscription::STATUS_EXPIRED);
+
+                        foreach ($subscriptions as $subscription) {
+                            $plans[] = $subscription->plan;
+                        }
+
+                    } catch (Exception\NotFound $e) {
+                        // Perfectly fine
+                    }
+                }
+            }
+        }
+        $this->adapter->addGroups($this, $plans, true);
 
         return $this;
     }

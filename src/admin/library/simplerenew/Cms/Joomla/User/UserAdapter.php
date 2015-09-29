@@ -445,28 +445,6 @@ class UserAdapter implements UserInterface
     }
 
     /**
-     * Remove all subscriber groups
-     *
-     * @param User $parent
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function resetGroups(User $parent)
-    {
-        // Ensure current data
-        $this->load($parent);
-
-        $groups    = $this->getSubscriberGroups();
-        $expireId  = $parent->getConfig('user.group.expiration');
-
-        $newGroups = array_diff($parent->groups, array_keys($groups));
-
-        $parent->groups = $newGroups ?: array($expireId);
-        $this->update($parent);
-    }
-
-    /**
      * Remove groups from the user's profile based on the selected plans
      *
      * @param User  $parent
