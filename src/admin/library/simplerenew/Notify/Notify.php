@@ -249,6 +249,14 @@ class Notify extends Object
     }
 
     /**
+     * @return Container[]
+     */
+    public function getAllContainers()
+    {
+        return $this->allContainers;
+    }
+
+    /**
      * @param string $className
      *
      * @return null|HandlerInterface
@@ -298,33 +306,5 @@ class Notify extends Object
             }
         }
         return false;
-    }
-
-    /**
-     * Update the user's groups based on subscribed plans in all gateways
-     *
-     * @return void
-     */
-    public function updateUserGroups()
-    {
-        if ($this->user) {
-            $plans = array();
-            foreach ($this->allContainers as $container) {
-                try {
-                    $account       = $container->account->load($this->user);
-                    $subscriptions = $container
-                        ->subscription
-                        ->getList($account, ~Subscription::STATUS_EXPIRED);
-
-                    foreach ($subscriptions as $subscription) {
-                        $plans[] = $subscription->plan;
-                    }
-
-                } catch (NotFound $e) {
-                    // Perfectly fine
-                }
-            }
-            $this->user->addGroups($plans, true);
-        }
     }
 }
