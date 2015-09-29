@@ -29,29 +29,20 @@ class Subscription implements HandlerInterface
         $message = null;
         if (!empty($notice->user->id)) {
             switch ($notice->action) {
-                case Notify::ACTION_NEW:
                 case Notify::ACTION_UPDATE:
                 case Notify::ACTION_RENEW:
-                    $message = 'Update User Groups';
-                    $notice->updateUserGroups();
-                    break;
-
+                case Notify::ACTION_NEW:
                 case Notify::ACTION_EXPIRE:
-                    $message = 'Remove plan user group';
-                    $notice->updateUserGroups();
+                    $message = $notice->user->username . ': Verify User Groups';
+                    $notice->user->resetGroups($notice->getAllContainers());
+                    $notice
+                        ->getContainer()
+                        ->events
+                        ->trigger(
+                            'simplerenewSubscriptionAfterUpdate',
+                            array($notice->subscription, $notice->plan)
+                        );
                     break;
-            }
-
-            // Did we do anything?
-            if ($message) {
-                $message = $notice->user->username . ': ' . $message;
-                $notice
-                    ->getContainer()
-                    ->events
-                    ->trigger(
-                        'simplerenewSubscriptionAfterUpdate',
-                        array($notice->subscription, $notice->plan)
-                    );
             }
         }
         return $message;

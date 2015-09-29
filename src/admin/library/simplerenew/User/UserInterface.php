@@ -112,16 +112,6 @@ interface UserInterface
     public function addGroups(User $parent, array $planCodes, $replace = false);
 
     /**
-     * Remove all subscriber groups
-     *
-     * @param User $parent
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function resetGroups(User $parent);
-
-    /**
      * Remove groups from the user's profile based on the selected plans
      *
      * @param User  $parent

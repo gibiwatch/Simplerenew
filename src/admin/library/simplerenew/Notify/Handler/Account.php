@@ -32,8 +32,7 @@ class Account implements HandlerInterface
                     if (!$notice->user->enabled) {
                         $notice->user->enabled = true;
                         $response .= ': Re-enabled';
-                        $notice->user->update();
-                        $notice->updateUserGroups();
+                        $notice->user->resetGroups($notice->getAllContainers());
                     }
                     return $response;
             }
