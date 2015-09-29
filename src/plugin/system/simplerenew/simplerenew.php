@@ -138,10 +138,10 @@ class plgSystemSimplerenew extends JPlugin
                 }
 
                 $vars = array(
-                    'option' => 'com_simplerenew',
-                    'task'   => 'notify.receive',
+                    'option'  => 'com_simplerenew',
+                    'task'    => 'notify.receive',
                     'gateway' => $gateway,
-                    'format' => 'raw'
+                    'format'  => 'raw'
                 );
                 foreach ($vars as $var => $value) {
                     $app->input->set($var, $value);
