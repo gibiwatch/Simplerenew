@@ -16,13 +16,13 @@ $saveOrder = $listOrder == 'plan.ordering';
 
 ?>
 <script>
-    window.addEvent('domready', function () {
-        $('clear_form').addEvent('click', function (e) {
+    window.addEvent('domready', function() {
+        $('clear_form').addEvent('click', function(e) {
             this.form.filter_search.value = '';
             this.form.submit();
         });
 
-        $$('*[name^=filter_]').addEvent('change', function (e) {
+        $$('*[name^=filter_]').addEvent('change', function(e) {
             this.form.submit();
         });
     });
@@ -175,109 +175,110 @@ $saveOrder = $listOrder == 'plan.ordering';
             <tr>
                 <td colspan="11"><?php echo JText::_('COM_SIMPLERENEW_NO_MATCHING_RESULTS'); ?></td>
             </tr>
-        <?php
+            <?php
         else:
             foreach ($this->items as $i => $item):
                 $ordering = ($listOrder == 'plan.ordering');
                 $link     = 'index.php?option=com_simplerenew&task=plan.edit&id=' . $item->id;
                 ?>
                 <tr class="row<?php echo $i % 2; ?>">
-                <td>
-                    <?php echo $this->pagination->getRowOffset($i); ?>
-                </td>
+                    <td>
+                        <?php echo $this->pagination->getRowOffset($i); ?>
+                    </td>
 
-                <td class="center">
-                    <?php echo JHtml::_('grid.id', $i, $item->id); ?>
-                </td>
+                    <td class="center">
+                        <?php echo JHtml::_('grid.id', $i, $item->id); ?>
+                    </td>
 
-                <td class="center">
-                    <?php echo JHtml::_('jgrid.published', $item->published, $i, 'plans.', true) ?>
-                </td>
+                    <td class="center">
+                        <?php echo JHtml::_('jgrid.published', $item->published, $i, 'plans.', true) ?>
+                    </td>
 
-                <td class="order">
-                <?php
+                    <td class="order">
+                        <?php
                         if ($saveOrder):
                             if ($listDir == 'asc'):
                                 ?>
-                            <span><?php
-                                echo $this->pagination->orderUpIcon(
-                                    $i,
-                                    true,
-                                    'plans.orderup',
-                                    'JLIB_HTML_MOVE_UP',
-                                    $ordering
-                                ); ?></span>
-                            <span><?php
-                                echo $this->pagination->orderDownIcon(
-                                    $i,
-                                    $this->pagination->total,
-                                    true,
-                                    'plans.orderdown',
-                                    'JLIB_HTML_MOVE_DOWN',
-                                    $ordering
-                                ); ?></span>
-                        <?php
-                        elseif ($listDir == 'desc'): ?>
-                            <span><?php
-                                echo $this->pagination->orderUpIcon(
-                                    $i,
-                                    true,
-                                    'plans.orderdown',
-                                    'JLIB_HTML_MOVE_UP',
-                                    $ordering
-                                ); ?></span>
-                            <span><?php
-                                echo $this->pagination->orderDownIcon(
-                                    $i,
-                                    $this->pagination->total,
-                                    true,
-                                    'plans.orderup',
-                                    'JLIB_HTML_MOVE_DOWN',
-                                    $ordering
-                                ); ?></span>
-                        <?php
+                                <span><?php
+                                    echo $this->pagination->orderUpIcon(
+                                        $i,
+                                        true,
+                                        'plans.orderup',
+                                        'JLIB_HTML_MOVE_UP',
+                                        $ordering
+                                    ); ?></span>
+                                <span><?php
+                                    echo $this->pagination->orderDownIcon(
+                                        $i,
+                                        $this->pagination->total,
+                                        true,
+                                        'plans.orderdown',
+                                        'JLIB_HTML_MOVE_DOWN',
+                                        $ordering
+                                    ); ?></span>
+                                <?php
+                            elseif ($listDir == 'desc'): ?>
+                                <span><?php
+                                    echo $this->pagination->orderUpIcon(
+                                        $i,
+                                        true,
+                                        'plans.orderdown',
+                                        'JLIB_HTML_MOVE_UP',
+                                        $ordering
+                                    ); ?></span>
+                                <span><?php
+                                    echo $this->pagination->orderDownIcon(
+                                        $i,
+                                        $this->pagination->total,
+                                        true,
+                                        'plans.orderup',
+                                        'JLIB_HTML_MOVE_DOWN',
+                                        $ordering
+                                    ); ?></span>
+                                <?php
+                            endif;
+
+                            $disabled = $saveOrder ? '' : 'disabled="disabled"'; ?>
+                            <input type="text" name="order[]" size="5"
+                                   value="<?php echo $item->ordering; ?>" <?php echo $disabled ?>
+                                   class="text-area-order"/>
+                            <?php
+                        else:
+                            echo $item->ordering;
                         endif;
+                        ?>
+                    </td>
 
-                        $disabled = $saveOrder ? '' : 'disabled="disabled"'; ?>
-                        <input type="text" name="order[]" size="5"
-                               value="<?php echo $item->ordering; ?>" <?php echo $disabled ?> class="text-area-order"/>
-                    <?php
-                    else:
-                        echo $item->ordering;
-                    endif;
-                    ?>
-                </td>
+                    <td>
+                        <?php echo JHtml::_('link', $link, htmlspecialchars($item->code)); ?>
+                    </td>
 
-                <td>
-                    <?php echo JHtml::_('link', $link, htmlspecialchars($item->code)); ?>
-                </td>
+                    <td>
+                        <?php echo JHtml::_('link', $link, htmlspecialchars($item->name)); ?>
+                    </td>
 
-                <td>
-                    <?php echo JHtml::_('link', $link, htmlspecialchars($item->name)); ?>
-                </td>
+                    <td>
+                        <?php echo $item->usergroup; ?>
+                    </td>
 
-                <td>
-                    <?php echo $item->usergroup; ?>
-                </td>
+                    <td class="right">
+                        <?php echo JHtml::_('currency.format', $item->amount, $item->currency); ?>
+                    </td>
 
-                <td class="right">
-                    <?php echo JHtml::_('currency.format', $item->amount, $item->currency); ?>
-                </td>
+                    <td class="right">
+                        <?php echo JHtml::_('currency.format', $item->setup_cost, $item->currency); ?>
+                    </td>
 
-                <td class="right">
-                    <?php echo JHtml::_('currency.format', $item->setup_cost, $item->currency); ?>
-                </td>
+                    <td>
+                        <?php echo JHtml::_('plan.length', $item) ?: JText::_('COM_SIMPLERENEW_PLAN_LENGTH_NONE'); ?>
+                    </td>
 
-                <td>
-                    <?php echo JHtml::_('plan.length', $item) ?: JText::_('COM_SIMPLERENEW_PLAN_LENGTH_NONE'); ?>
-                </td>
-
-                <td>
-                    <?php echo JHtml::_('plan.trial', $item) ?: JText::_('COM_SIMPLERENEW_PLAN_TRIAL_NONE'); ?>
-                </td>
-            </tr>
-        <?php
-        endforeach;
+                    <td>
+                        <?php echo JHtml::_('plan.trial', $item) ?: JText::_('COM_SIMPLERENEW_PLAN_TRIAL_NONE'); ?>
+                    </td>
+                </tr>
+                <?php
+            endforeach;
         endif;
         ?>
         </tbody>
