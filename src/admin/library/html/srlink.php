@@ -8,7 +8,7 @@
 
 defined('_JEXEC') or die();
 
-abstract class JHTMLSrlink
+abstract class JhtmlSrlink
 {
     /**
      * Generate correct link to configuration options
