@@ -66,6 +66,7 @@ abstract class AbstractRecurlyBase extends AbstractGatewayBase
     {
         if ($this->client instanceof \Recurly_Client
             && ($this->client->apiKey() != '')
+            && ($this->getCfg($this->mode . '.apiKey') != '')
             && ($this->getCfg($this->mode . '.publicKey') != '')
         ) {
             $url = sprintf($this->client->baseUri() . '/accounts');
