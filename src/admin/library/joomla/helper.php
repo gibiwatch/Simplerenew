@@ -173,10 +173,13 @@ abstract class SimplerenewHelper
             if (!$status->configured) {
                 $message->errors[] = JText::_('COM_SIMPLERENEW_ERROR_GATEWAY_CONFIGURATION');
             }
+
             if (!$status->gateway) {
-                $gateway = ucfirst(strtolower(SimplerenewFactory::getContainer()->gateway));
-                if (!JPluginHelper::isEnabled('Simplerenew', $gateway)) {
+                $gateway = SimplerenewFactory::getContainer()->gateway;
+                if (!JPluginHelper::isEnabled('simplerenew', strtolower($gateway))) {
                     $message->errors[] = JText::sprintf('COM_SIMPLERENEW_ERROR_GATEWAY_PLUGIN_UNAVAILABLE', $gateway);
+                } else {
+                    $message->errors[] = JText::sprintf('COM_SIMPLERENEW_ERROR_GATEWAY_MISCONFIGURED', $gateway);
                 }
             }
 
