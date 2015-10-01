@@ -235,15 +235,12 @@ class plgSystemSimplerenew extends JPlugin
         if ($current->id > 0) {
             $user = new JUser($current->id);
 
+            // Make sure to clone any custom properties someone else may have set
             $standardProperties = $user->getProperties();
-            $targetProperties   = get_object_vars($current);
-            $customProperties   = array_diff_key($targetProperties, $standardProperties);
+            $currentProperties  = $current->getProperties();
+            $customProperties   = array_diff_key($currentProperties, $standardProperties);
 
-            foreach ($customProperties as $key => $value) {
-                if ($key[0] !== '_') {
-                    $user->$key = $value;
-                }
-            }
+            $user->setProperties($customProperties);
             JFactory::getSession()->set('user', $user);
         }
     }
