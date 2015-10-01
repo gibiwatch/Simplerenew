@@ -236,8 +236,8 @@ class plgSystemSimplerenew extends JPlugin
             $user = new JUser($current->id);
 
             // Make sure to clone any custom properties someone else may have set
-            $standardProperties = $user->getProperties();
-            $currentProperties  = $current->getProperties();
+            $standardProperties = get_object_vars($user);
+            $currentProperties  = get_object_vars($current);
             $customProperties   = array_diff_key($currentProperties, $standardProperties);
 
             $user->setProperties($customProperties);
