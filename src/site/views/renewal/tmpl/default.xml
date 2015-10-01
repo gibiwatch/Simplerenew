@@ -5,4 +5,50 @@
             <![CDATA[COM_SIMPLERENEW_VIEW_RENEWAL_DEFAULT_DESC]]>
         </message>
     </layout>
+
+    <fields name="params">
+        <fieldset
+            name="funnel"
+            label="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_LABEL"
+            >
+            <fields name="funnel">
+                <field
+                    name="enabled"
+                    label="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_ENABLED_LABEL"
+                    description="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_ENABLED_DESC"
+                    type="list">
+                    <option value="0">COM_SIMPLERENEW_OPTION_DISABLE</option>
+                    <option value="1">COM_SIMPLERENEW_OPTION_ENABLE</option>
+                </field>
+
+                <field
+                    name="support"
+                    label="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_SUPPORT_LABEL"
+                    description="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_SUPPORT_DESC"
+                    type="menuitem">
+                    <option value="">COM_SIMPLERENEW_OPTION_DISABLE</option>
+                </field>
+
+                <field
+                    name="extendTrial"
+                    label="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_EXTEND_TRIAL_LABEL"
+                    description="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_EXTEND_TRIAL_DESC"
+                    type="text"
+                    size="5"/>
+
+                <field
+                    name="pauseBilling"
+                    label="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_EXTEND_BILLING_LABEL"
+                    description="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_EXTEND_BILLING_DESC"
+                    type="text"
+                    size="5"/>
+
+                <field
+                    name="offerCoupon"
+                    label="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_OFFER_COUPON_LABEL"
+                    description="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_OFFER_COUPON_DESC"
+                    type="text"/>
+            </fields>
+        </fieldset>
+    </fields>
 </metadata>
