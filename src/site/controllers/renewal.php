@@ -61,39 +61,52 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
             ->getSubscription()
             ->getList($account, Subscription::STATUS_ACTIVE | Subscription::STATUS_CANCELED);
 
-        $cancel   = array_diff(array_keys($subscriptions), $ids);
-        $activate = array_intersect($ids, array_keys($subscriptions));
+        $cancelCandidates = array_diff(array_keys($subscriptions), $ids);
+        $activateCandidates = array_intersect($ids, array_keys($subscriptions));
+
+        // See if we have any changes to make
+        $cancel = array();
+        $reactivate = array();
         foreach ($subscriptions as $subscription) {
             if ($subscription->status == Subscription::STATUS_ACTIVE
-                && in_array($subscription->id, $cancel)
+                && in_array($subscription->id, $cancelCandidates)
             ) {
-                $subscription->cancel();
-
-                $plan       = $container->getPlan()->load($subscription->plan);
-                $messages[] = JText::sprintf(
-                    'COM_SIMPLERENEW_RENEWAL_CANCELED',
-                    $plan->name,
-                    $subscription->period_end->format('F, j, Y')
-                );
+                $cancel[$subscription->id] = $subscription;
 
             } elseif ($subscription->status == Subscription::STATUS_CANCELED
-                && in_array($subscription->id, $activate)
+                && in_array($subscription->id, $activateCandidates)
             ) {
-                $subscription->reactivate();
-
-                $plan       = $container->getPlan()->load($subscription->plan);
-                $messages[] = JText::sprintf(
-                    'COM_SIMPLERENEW_RENEWAL_REACTIVATED',
-                    $plan->name,
-                    $subscription->period_end->format('F, j, Y')
-                );
-
+                $reactivate[$subscription->id] = $subscription;
             }
         }
 
-        if (!$messages) {
-            $messages[] = JText::_('COM_SIMPLERENEW_RENEWAL_NO_CHANGE');
+        if (empty($cancel) && empty($reactivate)) {
+            return array(JText::_('COM_SIMPLERENEW_RENEWAL_NO_CHANGE'));
         }
+
+        $messages = array();
+        foreach ($reactivate as $subscription) {
+            $subscription->reactivate();
+
+            $plan       = $container->getPlan()->load($subscription->plan);
+            $messages[] = JText::sprintf(
+                'COM_SIMPLERENEW_RENEWAL_REACTIVATED',
+                $plan->name,
+                $subscription->period_end->format('F, j, Y')
+            );
+        }
+
+        foreach ($cancel as $subscription) {
+            $subscription->cancel();
+
+            $plan       = $container->getPlan()->load($subscription->plan);
+            $messages[] = JText::sprintf(
+                'COM_SIMPLERENEW_RENEWAL_CANCELED',
+                $plan->name,
+                $subscription->period_end->format('F, j, Y')
+            );
+        }
+
         return $messages;
     }
 }
