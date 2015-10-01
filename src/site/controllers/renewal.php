@@ -28,9 +28,10 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
         );
 
         try {
-            $messages = $this->changeRenewals($ids);
-            $link     = SimplerenewRoute::get('account');
-            $this->setRedirect(JRoute::_($link), join('<br/>', $messages));
+            if ($this->changeRenewals($ids)) {
+                $link = SimplerenewRoute::get('account');
+                $this->setRedirect(JRoute::_($link));
+            }
 
         } catch (Exception $e) {
             $this->callerReturn(
@@ -41,9 +42,13 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
     }
 
     /**
+     * Update subscriptions.
+     *
+     * Return true if completed, false other action has been taken
+     *
      * @param array $ids
      *
-     * @return array
+     * @return bool
      * @throws Exception
      */
     protected function changeRenewals(array $ids)
@@ -51,6 +56,7 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
         /**
          * @var Subscription $subscription
          */
+        $app       = SimplerenewFactory::getApplication();
         $container = SimplerenewFactory::getContainer();
         $user      = $container->getUser()->load();
         $account   = $container->getAccount()->load($user);
@@ -79,32 +85,64 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
         }
 
         if (empty($cancel) && empty($reactivate)) {
-            return array(JText::_('COM_SIMPLERENEW_RENEWAL_NO_CHANGE'));
+            $app->enqueueMessage(JText::_('COM_SIMPLERENEW_RENEWAL_NO_CHANGE'));
+
+        } else {
+            foreach ($reactivate as $subscription) {
+                $subscription->reactivate();
+
+                $plan    = $container->getPlan()->load($subscription->plan);
+                $message = JText::sprintf(
+                    'COM_SIMPLERENEW_RENEWAL_REACTIVATED',
+                    $plan->name,
+                    $subscription->period_end->format('F, j, Y')
+                );
+                $app->enqueueMessage($message);
+            }
+
+            if (!$cancel || $this->showFunnels(array_keys($cancel))) {
+                $app->input->set('layout', 'cancel');
+
+                $app->input->set('ids', array_keys($cancel));
+                $this->display();
+                return false;
+            }
+
+            foreach ($cancel as $subscription) {
+                $subscription->cancel();
+
+                $plan    = $container->getPlan()->load($subscription->plan);
+                $message = JText::sprintf(
+                    'COM_SIMPLERENEW_RENEWAL_CANCELED',
+                    $plan->name,
+                    $subscription->period_end->format('F, j, Y')
+                );
+                $app->enqueueMessage($message);
+            }
         }
+        return true;
+    }
 
-        $messages = array();
-        foreach ($reactivate as $subscription) {
-            $subscription->reactivate();
+    /**
+     * Determine if cancellation funnels are activated
+     * and if so, display the funnel landing page.
+     *
+     * @param array $ids
+     *
+     * @return bool
+     */
+    protected function showFunnels(array $ids)
+    {
+        $menu = SimplerenewFactory::getApplication()->getMenu()->getActive();
+        if ($menu && $menu->type == 'component') {
+            if ($funnel = $menu->params->get('funnel')) {
+                $funnel = array_filter(is_object($funnel) ? get_object_vars($funnel) : $funnel);
 
-            $plan       = $container->getPlan()->load($subscription->plan);
-            $messages[] = JText::sprintf(
-                'COM_SIMPLERENEW_RENEWAL_REACTIVATED',
-                $plan->name,
-                $subscription->period_end->format('F, j, Y')
-            );
+                if (!empty($funnel['enabled']) && count($funnel) > 1) {
+                    return true;
+                }
+            }
         }
-
-        foreach ($cancel as $subscription) {
-            $subscription->cancel();
-
-            $plan       = $container->getPlan()->load($subscription->plan);
-            $messages[] = JText::sprintf(
-                'COM_SIMPLERENEW_RENEWAL_CANCELED',
-                $plan->name,
-                $subscription->period_end->format('F, j, Y')
-            );
-        }
-
-        return $messages;
+        return false;
     }
 }
