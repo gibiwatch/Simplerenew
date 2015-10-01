@@ -51,8 +51,6 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
         /**
          * @var Subscription $subscription
          */
-        $app = SimplerenewFactory::getApplication();
-
         $container = SimplerenewFactory::getContainer();
         $messages  = array();
 
