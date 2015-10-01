@@ -52,20 +52,18 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
          * @var Subscription $subscription
          */
         $container = SimplerenewFactory::getContainer();
-        $messages  = array();
-
-        $user    = $container->getUser()->load();
-        $account = $container->getAccount()->load($user);
+        $user      = $container->getUser()->load();
+        $account   = $container->getAccount()->load($user);
 
         $subscriptions = $container
             ->getSubscription()
             ->getList($account, Subscription::STATUS_ACTIVE | Subscription::STATUS_CANCELED);
 
-        $cancelCandidates = array_diff(array_keys($subscriptions), $ids);
+        $cancelCandidates   = array_diff(array_keys($subscriptions), $ids);
         $activateCandidates = array_intersect($ids, array_keys($subscriptions));
 
         // See if we have any changes to make
-        $cancel = array();
+        $cancel     = array();
         $reactivate = array();
         foreach ($subscriptions as $subscription) {
             if ($subscription->status == Subscription::STATUS_ACTIVE
