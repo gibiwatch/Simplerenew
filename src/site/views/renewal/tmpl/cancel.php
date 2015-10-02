@@ -15,19 +15,25 @@ defined('_JEXEC') or die();
 $funnel = (object)$this->getParams()->get('funnel');
 $ids    = SimplerenewFactory::getApplication()->input->get('ids');
 
+echo SimplerenewHelper::renderModule('simplerenew_cancel_top');
+
 if (!empty($funnel->support)) :
+    echo SimplerenewHelper::renderModule('simplerenew_cancel_support');
     ?>
     <p><?php echo JHtml::_('link', JRoute::_('index.php?Itemid=' . $funnel->suport), 'Contact Support'); ?></p>
     <?php
 endif;
 
 if (!empty($funnel->extendTrial)) :
+    echo SimplerenewHelper::renderModule('simplerenew_cancel_trial');
     ?>
     <p><?php echo sprintf('Offer to extend trial by %s days', $funnel->extendTrial); ?></p>
     <?php
 endif;
 
 if (!empty($funnel->pauseBilling) && $dateLimit = $this->getDateDiff($funnel->pauseBilling)) :
+    echo SimplerenewHelper::renderModule('simplerenew_cancel_suspend');
+
     $now      = new DateTime();
     $dateDiff = $dateLimit->diff($now);
     ?>
@@ -44,6 +50,8 @@ if (!empty($funnel->pauseBilling) && $dateLimit = $this->getDateDiff($funnel->pa
 endif;
 
 if ($discount = $this->getDiscount($funnel)) :
+    echo SimplerenewHelper::renderModule('simplerenew_cancel_discount');
+
     ?>
     <p>
         <?php
@@ -57,3 +65,5 @@ if ($discount = $this->getDiscount($funnel)) :
 endif;
 ?>
 <p>I'm not interested, just cancel my renewal</p>
+<?php
+echo SimplerenewHelper::renderModule('simplerenew_cancel_bottom');
