@@ -7,6 +7,24 @@
     </layout>
 
     <fields name="params">
+        <fieldset name="basic">
+            <field
+                name="redirect"
+                label="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_REDIRECT_LABEL"
+                description="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_REDIRECT_DESC"
+                type="menuitem">
+                <option value="">COM_SIMPLERENEW_OPTION_SELECT_REACTIVATE</option>
+            </field>
+
+            <field
+                name="feedback"
+                label="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FEEDBACK_LABEL"
+                description="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FEEDBACK_DESC"
+                type="menuitem">
+                <option value="">COM_SIMPLERENEW_OPTION_SELECT_FEEDBACK</option>
+            </field>
+        </fieldset>
+
         <fieldset
             name="funnel"
             label="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_LABEL"
