@@ -6,14 +6,17 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\DateTime as SRDateTime;
+
 defined('_JEXEC') or die();
 
 /**
  * @var SimplerenewViewRenewal $this
  */
+$app = SimplerenewFactory::getApplication();
 
 $funnel = (object)$this->getParams()->get('funnel');
-$ids    = SimplerenewFactory::getApplication()->input->get('ids');
+$ids    = $app->input->get('ids', array(), 'array');
 
 echo SimplerenewHelper::renderModule('simplerenew_cancel_top');
 
@@ -31,11 +34,14 @@ if (!empty($funnel->extendTrial)) :
     <?php
 endif;
 
-if (!empty($funnel->pauseBilling) && $dateLimit = $this->getDateDiff($funnel->pauseBilling)) :
-    echo SimplerenewHelper::renderModule('simplerenew_cancel_suspend');
+if (!empty($funnel->pauseBilling)) :
+    $now       = new SRDateTime();
+    $dateLimit = new SRDateTime();
 
-    $now      = new DateTime();
+    $dateLimit->addFromUserInput($funnel->pauseBilling);
     $dateDiff = $dateLimit->diff($now);
+
+    echo SimplerenewHelper::renderModule('simplerenew_cancel_suspend');
     ?>
     <p>
         <?php
@@ -49,21 +55,23 @@ if (!empty($funnel->pauseBilling) && $dateLimit = $this->getDateDiff($funnel->pa
     <?php
 endif;
 
-if ($discount = $this->getDiscount($funnel)) :
-    echo SimplerenewHelper::renderModule('simplerenew_cancel_discount');
+if (!empty($funnel->offerCoupon)) :
+    if ($discount = $this->getDiscount($funnel->offerCoupon, $ids)) :
+        echo SimplerenewHelper::renderModule('simplerenew_cancel_discount');
 
-    ?>
-    <p>
-        <?php
-        echo sprintf(
-            'I want to save %s on my next renewal!',
-            JHtml::_('currency.format', $discount)
-        );
         ?>
-    </p>
-    <?php
+        <p>
+            <?php
+            echo sprintf(
+                'I want to save %s on my next renewal!',
+                JHtml::_('currency.format', $discount)
+            );
+            ?>
+        </p>
+        <?php
+    endif;
 endif;
 ?>
-<p>I'm not interested, just cancel my renewal</p>
+    <p>I'm not interested, just cancel my renewal</p>
 <?php
 echo SimplerenewHelper::renderModule('simplerenew_cancel_bottom');
