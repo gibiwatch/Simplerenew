@@ -231,22 +231,19 @@ class plgSystemSimplerenew extends JPlugin
      */
     protected function refreshUserSession()
     {
-        if (!$this->params->get('advanced.reloadUser', 1))
-        {
-            return;
-        }
-        
-        $current = JFactory::getUser();
-        if ($current->id > 0) {
-            $user = new JUser($current->id);
+        if ($this->params->get('advanced.reloadUser', 1)) {
+            $current = JFactory::getUser();
+            if ($current->id > 0) {
+                $user = new JUser($current->id);
 
-            // Make sure to clone any custom properties someone else may have set
-            $standardProperties = get_object_vars($user);
-            $currentProperties  = get_object_vars($current);
-            $customProperties   = array_diff_key($currentProperties, $standardProperties);
+                // Make sure to clone any custom properties someone else may have set
+                $standardProperties = get_object_vars($user);
+                $currentProperties  = get_object_vars($current);
+                $customProperties   = array_diff_key($currentProperties, $standardProperties);
 
-            $user->setProperties($customProperties);
-            JFactory::getSession()->set('user', $user);
+                $user->setProperties($customProperties);
+                JFactory::getSession()->set('user', $user);
+            }
         }
     }
 
