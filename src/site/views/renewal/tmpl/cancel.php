@@ -23,7 +23,7 @@ echo SimplerenewHelper::renderModule('simplerenew_cancel_top');
 if (!empty($funnel->support)) :
     echo SimplerenewHelper::renderModule('simplerenew_cancel_support');
     ?>
-    <p><?php echo JHtml::_('link', JRoute::_('index.php?Itemid=' . $funnel->suport), 'Contact Support'); ?></p>
+    <p><?php echo JHtml::_('link', JRoute::_('index.php?Itemid=' . $funnel->support), 'Contact Support'); ?></p>
     <?php
 endif;
 
