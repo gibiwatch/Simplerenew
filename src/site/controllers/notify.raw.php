@@ -16,7 +16,7 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
 {
     public function receive()
     {
-        //JLog::addLogger(array('text_file' => 'simplerenew.log.php'), JLog::ALL, array('simplerenew'));
+        JLog::addLogger(array('text_file' => 'simplerenew.log.php'), JLog::ALL & ~JLog::DEBUG, 'simplerenew');
 
         $user = $this->authenticate();
 
@@ -26,18 +26,22 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
         switch ($method) {
             case 'POST':
                 $package = file_get_contents('php://input');
+                JLog::add("Raw notification body: $package", JLog::DEBUG, 'simplerenew');
                 break;
 
             default:
+                JLog::add("[receive] Error: bad method [$method]", JLog::ERROR, 'simplerenew');
                 throw new Exception(JText::sprintf('COM_SIMPLERENEW_ERROR_NOTIFY_METHOD', $method), 405);
                 break;
         }
 
         // Send request to designated responder
         $containers = SimplerenewFactory::getAllGatewayContainers();
+        JLog::add("Available gateways: " . implode(",", array_keys($containers)), JLog::DEBUG, 'simplerenew');
 
         $gateway = $app->input->getCmd('gateway');
         if (!isset($containers[$gateway])) {
+            JLog::add("[receive] Error: gateway not found [$gateway]", JLog::ERROR, 'simplerenew');
             throw new NotFound(JText::sprintf('COM_SIMPLERENEW_ERROR_NOTIFY_INVALID_GATEWAY', $gateway));
         }
 
@@ -48,6 +52,8 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
         if ($user) {
             $user->logout();
         }
+        
+        JLog::add("Received successfully", JLog::DEBUG, 'simplerenew');
 
         jexit();
     }
