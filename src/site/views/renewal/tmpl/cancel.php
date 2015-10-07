@@ -14,31 +14,39 @@ defined('_JEXEC') or die();
  * @var SimplerenewViewRenewal $this
  */
 $app = SimplerenewFactory::getApplication();
+$now = new DateTime();
 
-$funnel = (object)$this->getParams()->get('funnel');
-$ids    = $app->input->get('ids', array(), 'array');
+$trials = array();
+$billed = array();
+foreach ($this->subscriptions as $subscription) {
+    if ($now >= $subscription->trial_start && $now < $subscription->trial_end) {
+        $trials[$subscription->id] = $subscription;
+    } else {
+        $billed[$subscription->id] = $subscription;
+    }
+}
 
 echo SimplerenewHelper::renderModule('simplerenew_cancel_top');
 
-if (!empty($funnel->support)) :
+if ($support = $this->funnel->get('support')) :
     echo SimplerenewHelper::renderModule('simplerenew_cancel_support');
     ?>
-    <p><?php echo JHtml::_('link', JRoute::_('index.php?Itemid=' . $funnel->support), 'Contact Support'); ?></p>
+    <p><?php echo JHtml::_('link', JRoute::_('index.php?Itemid=' . $support), 'Contact Support'); ?></p>
     <?php
 endif;
 
-if (!empty($funnel->extendTrial)) :
+if ($trials && ($extendTrial = $this->funnel->get('extendTrial'))) :
     echo SimplerenewHelper::renderModule('simplerenew_cancel_trial');
     ?>
-    <p><?php echo sprintf('Offer to extend trial by %s days', $funnel->extendTrial); ?></p>
+    <p><?php echo sprintf('Offer to extend trial by %s days', $extendTrial); ?></p>
     <?php
 endif;
 
-if (!empty($funnel->pauseBilling)) :
+if ($billed && ($pause = $this->funnel->get('pauseBilling'))) :
     $now       = new SRDateTime();
     $dateLimit = new SRDateTime();
 
-    $dateLimit->addFromUserInput($funnel->pauseBilling);
+    $dateLimit->addFromUserInput($pause);
     $dateDiff = $dateLimit->diff($now);
 
     echo SimplerenewHelper::renderModule('simplerenew_cancel_suspend');
@@ -55,10 +63,9 @@ if (!empty($funnel->pauseBilling)) :
     <?php
 endif;
 
-if (!empty($funnel->offerCoupon)) :
-    if ($discount = $this->getDiscount($funnel->offerCoupon, $ids)) :
+if (($coupon = $this->funnel->get('offerCoupon'))) :
+    if ($discount = $this->getDiscount($coupon, $this->subscriptions)) :
         echo SimplerenewHelper::renderModule('simplerenew_cancel_discount');
-
         ?>
         <p>
             <?php

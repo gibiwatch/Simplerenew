@@ -100,7 +100,7 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
                 $app->enqueueMessage($message);
             }
 
-            if (!$cancel || $this->showFunnels(array_keys($cancel))) {
+            if ($cancel && SimplerenewHelper::getFunnel()->get('enabled', false)) {
                 $app->input->set('layout', 'cancel');
 
                 $app->input->set('ids', array_keys($cancel));
@@ -121,28 +121,5 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
             }
         }
         return true;
-    }
-
-    /**
-     * Determine if cancellation funnels are activated
-     * and if so, display the funnel landing page.
-     *
-     * @param array $ids
-     *
-     * @return bool
-     */
-    protected function showFunnels(array $ids)
-    {
-        $menu = SimplerenewFactory::getApplication()->getMenu()->getActive();
-        if ($menu && $menu->type == 'component') {
-            if ($funnel = $menu->params->get('funnel')) {
-                $funnel = array_filter(is_object($funnel) ? get_object_vars($funnel) : $funnel);
-
-                if (!empty($funnel['enabled']) && count($funnel) > 1) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }

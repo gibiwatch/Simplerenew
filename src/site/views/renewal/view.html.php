@@ -6,6 +6,9 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Api\Plan;
+use Simplerenew\Api\Subscription;
+use Simplerenew\Exception\NotFound;
 use Simplerenew\User\User;
 
 defined('_JEXEC') or die();
@@ -18,36 +21,84 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
     protected $user = null;
 
     /**
-     * @var array
+     * @var Subscription[]
      */
     protected $subscriptions = array();
 
     /**
-     * @var Simplerenew\Api\Subscription
+     * @var Subscription
      */
     protected $subscription = null;
 
     /**
-     * @var Simplerenew\Api\Plan
+     * @var Plan
      */
     protected $plan = null;
+
+    /**
+     * @var JRegistry
+     */
+    protected $funnel = null;
 
     public function display($tpl = null)
     {
         /** @var SimplerenewModelRenewal $model */
         $model = $this->getModel();
+
         try {
             $this->user = $model->getUser();
             if (!$this->user) {
                 $this->setLayout('login');
             } else {
-                $this->subscriptions = $model->getSubscriptions();
+                $this->funnel        = SimplerenewHelper::getFunnel($this->getParams());
+                $this->subscriptions = $this->getSubscriptions();
             }
+
+            parent::display($tpl);
+
         } catch (Exception $e) {
             SimplerenewFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
         }
+    }
 
-        parent::display($tpl);
+    /**
+     * Depends on $this->funnel being previously set
+     *
+     * @return Subscription[]
+     */
+    protected function getSubscriptions()
+    {
+        /**
+         * @var SimplerenewModelRenewal $model
+         * @var Subscription            $subscription
+         */
+        $app    = SimplerenewFactory::getApplication();
+        $result = array();
+
+        $cancelIds = $app->input->get('ids', array(), 'array');
+        if ($this->getLayout() == 'cancel' && $cancelIds) {
+            // Already in a cancel layout and have ids to process
+            $container = SimplerenewFactory::getContainer();
+
+            $this->subscriptions = array();
+            foreach ($cancelIds as $cancelId) {
+                $result[$cancelId] = $container->subscription->load($cancelId);
+            }
+
+        } else {
+            // Get all applicable subscriptions
+            $model  = $this->getModel();
+            $result = $model->getSubscriptions();
+            $layout = 'default';
+            if (count($result) == 1 && $this->funnel && $this->funnel->get('enabled')) {
+                $subscription = current($result);
+                if ($subscription->status == Subscription::STATUS_ACTIVE) {
+                    $layout = 'cancel';
+                }
+            }
+            $this->setLayout($layout);
+        }
+        return $result;
     }
 
     /**
@@ -74,7 +125,7 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
                 }
                 $discount = $coupon->getDiscount($plans);
 
-            } catch (\Simplerenew\Exception\NotFound $e) {
+            } catch (NotFound $e) {
                 // coupon or subscription not found
             }
         }

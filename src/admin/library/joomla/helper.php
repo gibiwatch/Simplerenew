@@ -484,4 +484,30 @@ abstract class SimplerenewHelper
             }
         }
     }
+
+    /**
+     * Get active cancellation funnels
+     *
+     * @param JRegistry $params
+     *
+     * @return JRegistry
+     */
+    public static function getFunnel(JRegistry $params = null)
+    {
+        $result = new JRegistry();
+
+        if (!$params) {
+            // Use parameters from the currently active menu
+            $menu = SimplerenewFactory::getApplication()->getMenu()->getActive();
+            if ($menu && $menu->type == 'component') {
+                $params = $menu->params;
+            }
+        }
+        if ($params && ($funnel = $params->get('funnel'))) {
+            $funnel = array_filter(is_object($funnel) ? get_object_vars($funnel) : $funnel);
+            $funnel['enabled'] = !empty($funnel['enabled']) && $funnel['enabled'] && count($funnel) > 1;
+            $result->loadArray($funnel);
+        }
+        return $result;
+    }
 }
