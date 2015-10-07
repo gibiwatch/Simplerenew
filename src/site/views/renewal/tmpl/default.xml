@@ -55,9 +55,9 @@
                     size="5"/>
 
                 <field
-                    name="pauseBilling"
-                    label="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_EXTEND_BILLING_LABEL"
-                    description="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_EXTEND_BILLING_DESC"
+                    name="suspendBilling"
+                    label="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_SUSPEND_BILLING_LABEL"
+                    description="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_SUSPEND_BILLING_DESC"
                     type="text"
                     size="5"/>
 

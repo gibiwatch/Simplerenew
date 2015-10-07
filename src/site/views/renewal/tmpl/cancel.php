@@ -68,22 +68,22 @@ $heading = $this->getHeading(
         <?php
     endif;
 
-    if ($billed && ($pause = $this->funnel->get('pauseBilling'))) :
+    if ($billed && ($suspend = $this->funnel->get('suspendBilling'))) :
         $now      = new SRDateTime();
         $dateLimit = new SRDateTime();
 
-        $dateLimit->addFromUserInput($pause);
+        $dateLimit->addFromUserInput($suspend);
         $dateDiff = $dateLimit->diff($now);
 
         echo SimplerenewHelper::renderModule('simplerenew_cancel_suspend');
         ?>
         <form
-            id="formPauseBilling"
-            name="formPauseBilling"
+            id="formSuspendBilling"
+            name="formSuspendBilling"
             action="index.php"
             method="post">
             <button type="submit" class="btn btn-main btn-small">
-                <?php echo JText::sprintf('COM_SIMPLERENEW_CANCEL_PAUSE_BILLING', $pause); ?>
+                <?php echo JText::sprintf('COM_SIMPLERENEW_CANCEL_SUSPEND_BILLING', $suspend); ?>
             </button>
         </form>
         <?php
