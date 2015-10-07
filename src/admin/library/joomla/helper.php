@@ -505,6 +505,7 @@ abstract class SimplerenewHelper
         }
         if ($params && ($funnel = $params->get('funnel'))) {
             $funnel = array_filter(is_object($funnel) ? get_object_vars($funnel) : $funnel);
+
             $funnel['enabled'] = !empty($funnel['enabled']) && $funnel['enabled'] && count($funnel) > 1;
             $result->loadArray($funnel);
         }
