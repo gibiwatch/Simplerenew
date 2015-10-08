@@ -6,17 +6,21 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Api\Subscription;
 use Simplerenew\DateTime as SRDateTime;
 
 defined('_JEXEC') or die();
 
 /**
  * @var SimplerenewViewRenewal $this
+ * @var Subscription[]         $trials
+ * @var Subscription[]         $billed
  */
 JHtml::_('sr.jquery');
 
-$app = SimplerenewFactory::getApplication();
-$now = new DateTime();
+$app    = SimplerenewFactory::getApplication();
+$itemid = $app->input->getInt('Itemid');
+$now    = new DateTime();
 
 $trials = array('TESTING ONLY'); // @TODO: use empty array when testing is done
 $billed = array();
@@ -64,11 +68,35 @@ $heading = $this->getHeading(
         <form
             id="formExtendTrial"
             name="formExtendTrial"
-            action="index.php"
+            action=""
             method="post">
             <button type="submit" class="btn btn-main btn-small">
                 <?php echo JText::sprintf('COM_SIMPLERENEW_CANCEL_EXTEND_TRIAL', $extendTrial); ?>
             </button>
+            <input
+                type="hidden"
+                name="option"
+                value="com_simplerenew"/>
+            <input
+                type="hidden"
+                name="task"
+                value="renewal.extendTrial"/>
+            <input
+                type="hidden"
+                name="Itemid"
+                value="<?php echo $itemid; ?>"/>
+            <?php
+            foreach ($trials as $subscription) :
+                ?>
+                <input
+                    type="hidden"
+                    name="ids[]"
+                    value="<?php echo $subscription->id; ?>"/>
+                <?php
+            endforeach;
+
+            echo JHtml::_('form.token');
+            ?>
         </form>
         <?php
     endif;
@@ -84,7 +112,7 @@ $heading = $this->getHeading(
         <form
             id="formSuspendBilling"
             name="formSuspendBilling"
-            action="index.php"
+            action=""
             method="post">
             <?php
             echo JText::sprintf(
@@ -96,6 +124,30 @@ $heading = $this->getHeading(
             <button type="submit" class="btn btn-main btn-small">
                 <?php echo JText::_('COM_SIMPLERENEW_CANCEL_SUSPEND_BUTTON'); ?>
             </button>
+            <input
+                type="hidden"
+                name="option"
+                value="com_simplerenew"/>
+            <input
+                type="hidden"
+                name="task"
+                value="renewal.suspendBilling"/>
+            <input
+                type="hidden"
+                name="Itemid"
+                value="<?php echo $itemid; ?>"/>
+            <?php
+            foreach ($billed as $subscription) :
+                ?>
+                <input
+                    type="hidden"
+                    name="ids[]"
+                    value="<?php echo $subscription->id; ?>"/>
+                <?php
+            endforeach;
+
+            echo JHtml::_('form.token');
+            ?>
         </form>
         <?php
     endif;
@@ -107,7 +159,7 @@ $heading = $this->getHeading(
             <form
                 id="formOfferCoupon"
                 name="formOfferCoupon"
-                action="index.php"
+                action=""
                 method="post">
                 <button type="submit" class="btn btn-main btn-small">
                     <?php
@@ -117,6 +169,30 @@ $heading = $this->getHeading(
                     );
                     ?>
                 </button>
+                <input
+                    type="hidden"
+                    name="option"
+                    value="com_simplerenew"/>
+                <input
+                    type="hidden"
+                    name="task"
+                    value="renewal.offerCoupon"/>
+                <input
+                    type="hidden"
+                    name="Itemid"
+                    value="<?php echo $itemid; ?>"/>
+                <?php
+                foreach ($this->subscriptions as $subscription) :
+                    ?>
+                    <input
+                        type="hidden"
+                        name="ids[]"
+                        value="<?php echo $subscription->id; ?>"/>
+                    <?php
+                endforeach;
+
+                echo JHtml::_('form.token');
+                ?>
             </form>
             <?php
         endif;
@@ -125,11 +201,35 @@ $heading = $this->getHeading(
     <form
         id="formCancel"
         name="formCancel"
-        action="index.php"
+        action=""
         method="post">
         <button type="submit" class="btn btn-main btn-small">
             <?php echo JText::_('COM_SIMPLERENEW_CANCEL_NODEALS'); ?>
         </button>
+        <input
+            type="hidden"
+            name="option"
+            value="com_simplerenew"/>
+        <input
+            type="hidden"
+            name="task"
+            value="renewal.cancel"/>
+        <input
+            type="hidden"
+            name="Itemid"
+            value="<?php echo $itemid; ?>"/>
+        <?php
+        foreach ($this->subscriptions as $subscription) :
+            ?>
+            <input
+                type="hidden"
+                name="ids[]"
+                value="<?php echo $subscription->id; ?>"/>
+            <?php
+        endforeach;
+
+        echo JHtml::_('form.token');
+        ?>
     </form>
     <?php
     echo SimplerenewHelper::renderModule('simplerenew_cancel_bottom');

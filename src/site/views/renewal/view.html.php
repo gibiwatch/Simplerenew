@@ -54,18 +54,6 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
                 $this->subscriptions = $this->getSubscriptions();
             }
 
-            // @TODO: Remove after testing done
-            $js = <<<JSCRIPT
-(function($) {
-    $(document).ready(function() {
-        $('form').on('submit', function(evt) {
-            evt.preventDefault();
-            alert('Under Construction');
-        });
-    });
-})(jQuery);
-JSCRIPT;
-
             SimplerenewFactory::getDocument()->addScriptDeclaration($js);
             parent::display($tpl);
 

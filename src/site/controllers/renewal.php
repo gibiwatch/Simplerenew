@@ -13,6 +13,13 @@ defined('_JEXEC') or die();
 
 class SimplerenewControllerRenewal extends SimplerenewControllerBase
 {
+    public function display()
+    {
+        $this->checkToken();
+
+        $this->callerReturn($this->getTask() . ' is under construction');
+    }
+
     public function update()
     {
         $this->checkToken();
