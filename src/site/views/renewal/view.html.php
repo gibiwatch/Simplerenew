@@ -54,6 +54,19 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
                 $this->subscriptions = $this->getSubscriptions();
             }
 
+            // @TODO: Remove after testing done
+            $js = <<<JSCRIPT
+(function($) {
+    $(document).ready(function() {
+        $('form').on('submit', function(evt) {
+            evt.preventDefault();
+            alert('Under Construction');
+        });
+    });
+})(jQuery);
+JSCRIPT;
+
+            SimplerenewFactory::getDocument()->addScriptDeclaration($js);
             parent::display($tpl);
 
         } catch (Exception $e) {
@@ -104,24 +117,23 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
     /**
      * Calculate the total discount for the requested subscription ids
      *
-     * @param string $coupon
-     * @param array  $ids
+     * @param string         $coupon
+     * @param Subscription[] $subscriptions
      *
-     * @return float|int
+     * @return float
      * @throws Exception
      */
-    protected function getDiscount($coupon, array $ids)
+    protected function getDiscount($coupon, array $subscriptions)
     {
         $discount = 0;
-        if ($coupon && $ids) {
+        if ($coupon && $subscriptions) {
             try {
                 $container = SimplerenewFactory::getContainer();
                 $coupon    = $container->coupon->load($coupon);
 
                 $plans = array();
-                foreach ($ids as $id) {
-                    $subscription = $container->subscription->load($id);
-                    $plans[]      = $container->plan->load($subscription->plan);
+                foreach ($subscriptions as $subscription) {
+                    $plans[] = $container->plan->load($subscription->plan);
                 }
                 $discount = $coupon->getDiscount($plans);
 
@@ -129,7 +141,6 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
                 // coupon or subscription not found
             }
         }
-
         return $discount;
     }
 }

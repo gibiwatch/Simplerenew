@@ -13,10 +13,12 @@ defined('_JEXEC') or die();
 /**
  * @var SimplerenewViewRenewal $this
  */
+JHtml::_('sr.jquery');
+
 $app = SimplerenewFactory::getApplication();
 $now = new DateTime();
 
-$trials = array();
+$trials = array('TESTING ONLY'); // @TODO: use empty array when testing is done
 $billed = array();
 foreach ($this->subscriptions as $subscription) {
     if ($now >= $subscription->trial_start && $now < $subscription->trial_end) {
@@ -48,9 +50,12 @@ $heading = $this->getHeading(
 
     if ($support = $this->funnel->get('support')) :
         echo SimplerenewHelper::renderModule('simplerenew_cancel_support');
-        ?>
-        <p><?php echo JHtml::_('link', JRoute::_('index.php?Itemid=' . $support), 'Contact Support'); ?></p>
-        <?php
+        echo JHtml::_(
+            'link',
+            JRoute::_('index.php?Itemid=' . $support),
+            'Contact Support',
+            'class="btn btn-main btn-small"'
+        );
     endif;
 
     if ($trials && ($extendTrial = $this->funnel->get('extendTrial'))) :
@@ -69,11 +74,10 @@ $heading = $this->getHeading(
     endif;
 
     if ($billed && ($suspend = $this->funnel->get('suspendBilling'))) :
-        $now      = new SRDateTime();
+        $now       = new SRDateTime();
         $dateLimit = new SRDateTime();
 
         $dateLimit->addFromUserInput($suspend);
-        $dateDiff = $dateLimit->diff($now);
 
         echo SimplerenewHelper::renderModule('simplerenew_cancel_suspend');
         ?>
@@ -82,8 +86,15 @@ $heading = $this->getHeading(
             name="formSuspendBilling"
             action="index.php"
             method="post">
+            <?php
+            echo JText::sprintf(
+                'COM_SIMPLERENEW_CANCEL_SUSPEND',
+                JHtml::_('datetime.difference', $now, $suspend)
+            );
+            echo JHtml::_('calendar', $dateLimit->format('Y-m-d'), 'billingDate', 'billingDate');
+            ?>
             <button type="submit" class="btn btn-main btn-small">
-                <?php echo JText::sprintf('COM_SIMPLERENEW_CANCEL_SUSPEND_BILLING', $suspend); ?>
+                <?php echo JText::_('COM_SIMPLERENEW_CANCEL_SUSPEND_BUTTON'); ?>
             </button>
         </form>
         <?php
@@ -91,21 +102,35 @@ $heading = $this->getHeading(
 
     if (($coupon = $this->funnel->get('offerCoupon'))) :
         if ($discount = $this->getDiscount($coupon, $this->subscriptions)) :
-            echo SimplerenewHelper::renderModule('simplerenew_cancel_discount');
+            echo SimplerenewHelper::renderModule('simplerenew_cancel_coupon');
             ?>
-            <p>
-                <?php
-                echo sprintf(
-                    'I want to save %s on my next renewal!',
-                    JHtml::_('currency.format', $discount)
-                );
-                ?>
-            </p>
+            <form
+                id="formOfferCoupon"
+                name="formOfferCoupon"
+                action="index.php"
+                method="post">
+                <button type="submit" class="btn btn-main btn-small">
+                    <?php
+                    echo JText::sprintf(
+                        'COM_SIMPLERENEW_CANCEL_OFFER_COUPON',
+                        JHtml::_('currency.format', $discount)
+                    );
+                    ?>
+                </button>
+            </form>
             <?php
         endif;
     endif;
     ?>
-    <p>I'm not interested, just cancel my renewal</p>
+    <form
+        id="formCancel"
+        name="formCancel"
+        action="index.php"
+        method="post">
+        <button type="submit" class="btn btn-main btn-small">
+            <?php echo JText::_('COM_SIMPLERENEW_CANCEL_NODEALS'); ?>
+        </button>
+    </form>
     <?php
     echo SimplerenewHelper::renderModule('simplerenew_cancel_bottom');
     ?>
