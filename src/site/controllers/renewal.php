@@ -19,6 +19,11 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
      */
     protected $validSubscriptions = null;
 
+    /**
+     * @var JRegistry
+     */
+    protected $params = null;
+
     public function display()
     {
         $this->checkToken();
@@ -35,8 +40,7 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
         $ids    = $filter->clean($app->input->get('ids', array(), 'array'), 'array_keys');
 
         try {
-            if ($this->changeRenewals($ids)) {
-                $link = SimplerenewRoute::get('account');
+            if ($link = $this->changeRenewals($ids)) {
                 $this->setRedirect(JRoute::_($link));
             }
 
@@ -70,11 +74,11 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
     /**
      * Reactivate/Cancel selected subscriptions
      *
-     * Return true if completed, false other action has been taken
+     * Return redirect link or null if display is handled here
      *
      * @param array $ids
      *
-     * @return bool
+     * @return string|null
      * @throws Exception
      */
     protected function changeRenewals(array $ids)
@@ -83,6 +87,7 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
         $subscriptions = $this->getValidSubscriptions();
         $cancel        = array();
         $activate      = array();
+        $returnLink    = null;
         foreach ($subscriptions as $subscription) {
             if (!in_array($subscription->id, $ids) && $subscription->status == Subscription::STATUS_ACTIVE) {
                 $cancel[$subscription->id] = $subscription;
@@ -98,38 +103,47 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
         } else {
             $container = SimplerenewFactory::getContainer();
 
-            $activated = $this->activateSubscriptions($activate);
-            foreach ($activated as $subscription) {
-                $plan    = $container->getPlan()->load($subscription->plan);
-                $message = JText::sprintf(
-                    'COM_SIMPLERENEW_RENEWAL_REACTIVATED',
-                    $plan->name,
-                    $subscription->period_end->format('F, j, Y')
-                );
-                $app->enqueueMessage($message);
+            if ($activated = $this->activateSubscriptions($activate)) {
+                foreach ($activated as $subscription) {
+                    $plan    = $container->getPlan()->load($subscription->plan);
+                    $message = JText::sprintf(
+                        'COM_SIMPLERENEW_RENEWAL_REACTIVATED',
+                        $plan->name,
+                        $subscription->period_end->format('F, j, Y')
+                    );
+                    $app->enqueueMessage($message);
+                }
+                if ($itemid = $this->getParams()->get('redirect')) {
+                    $returnLink = 'index.php?Itemid=' . (int)$itemid;
+                }
             }
 
             // If funnels are enabled, funnel them!
-            if ($cancel && SimplerenewHelper::getFunnel()->get('enabled', false)) {
+            $funnel = SimplerenewHelper::getFunnel();
+            if ($cancel && $funnel->get('enabled', false)) {
                 $app->input->set('layout', 'cancel');
 
                 $app->input->set('ids', array_keys($cancel));
                 $this->display();
-                return false;
+                return null;
             }
 
-            $canceled = $this->cancelSubscriptions($cancel);
-            foreach ($canceled as $subscription) {
-                $plan    = $container->getPlan()->load($subscription->plan);
-                $message = JText::sprintf(
-                    'COM_SIMPLERENEW_RENEWAL_CANCELED',
-                    $plan->name,
-                    $subscription->period_end->format('F, j, Y')
-                );
-                $app->enqueueMessage($message);
+            if ($canceled = $this->cancelSubscriptions($cancel)) {
+                foreach ($canceled as $subscription) {
+                    $plan    = $container->getPlan()->load($subscription->plan);
+                    $message = JText::sprintf(
+                        'COM_SIMPLERENEW_RENEWAL_CANCELED',
+                        $plan->name,
+                        $subscription->period_end->format('F, j, Y')
+                    );
+                    $app->enqueueMessage($message);
+                }
+                if ($itemid = $this->getParams()->get('feedback')) {
+                    $returnLink = 'index.php?Itemid=' . (int)$itemid;
+                }
             }
         }
-        return true;
+        return $returnLink ?: SimplerenewRoute::get('account');
     }
 
     /**
@@ -153,7 +167,7 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
 
             } catch (Exception $e) {
                 try {
-                    $plan = SimplerenewFactory::getContainer()->plan->load($subscription->plan);
+                    $plan     = SimplerenewFactory::getContainer()->plan->load($subscription->plan);
                     $planName = $plan->name;
 
                 } catch (NotFound $e) {
@@ -190,7 +204,7 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
 
             } catch (Exception $e) {
                 try {
-                    $plan = SimplerenewFactory::getContainer()->plan->load($subscription->plan);
+                    $plan     = SimplerenewFactory::getContainer()->plan->load($subscription->plan);
                     $planName = $plan->name;
 
                 } catch (NotFound $e) {
@@ -204,4 +218,22 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
         }
         return $success;
     }
+
+    /**
+     * Get the current menu parameters
+     *
+     * @return JRegistry
+     */
+    protected function getParams()
+    {
+        if ($this->params === null) {
+            if ($menu = SimplerenewFactory::getApplication()->getMenu()->getActive()) {
+                $this->params = $menu->params;
+            } else {
+                $this->params = new JRegistry;
+            }
+        }
+        return $this->params;
+    }
+
 }
