@@ -314,6 +314,20 @@ class Subscription extends AbstractApiBase
     }
 
     /**
+     * Subscription in trial or not
+     *
+     * @return bool
+     */
+    public function inTrial()
+    {
+        if ($this->trial_start instanceof \DateTime && $this->trial_end instanceof \DateTime) {
+            $now = new \DateTime();
+            return ($now >= $this->trial_start && $now < $this->trial_end);
+        }
+        return false;
+    }
+
+    /**
      * Reverse sort subscriptions on current period ending date
      * with expired subscriptions on the bottom
      *
