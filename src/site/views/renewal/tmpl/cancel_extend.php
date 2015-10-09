@@ -18,7 +18,7 @@ defined('_JEXEC') or die();
 
 $app    = SimplerenewFactory::getApplication();
 $now    = new DateTime();
-$trials = array('TESTING ONLY'); // @TODO: use empty array when testing is done
+$trials = array();
 
 foreach ($this->subscriptions as $subscription) {
     if ($subscription->inTrial()) {
