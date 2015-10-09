@@ -11,6 +11,8 @@ defined('_JEXEC') or die();
 /**
  * @var SimplerenewViewRenewal $this
  */
+
+echo SimplerenewHelper::renderModule('simplerenew_cancel_cancel');
 ?>
 <form
     id="formCancel"
