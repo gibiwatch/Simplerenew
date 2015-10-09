@@ -433,6 +433,13 @@ abstract class SimplerenewHelper
         $results = JModuleHelper::getModules($position);
         $content = '';
 
+        if (is_string($attribs)) {
+            $attribs = JUtility::parseAttributes($attribs);
+        }
+        if (!isset($attribs['style'])) {
+            $attribs['style'] = 'xhtml';
+        }
+
         ob_start();
         foreach ($results as $result) {
             $content .= JModuleHelper::renderModule($result, $attribs);
