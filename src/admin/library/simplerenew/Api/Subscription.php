@@ -164,7 +164,7 @@ class Subscription extends AbstractApiBase
      * @param Account $account
      * @param int     $bitMask Subscription status codes to retrieve
      *
-     * @return array()
+     * @return Subscription[]
      */
     public function getList(Account $account, $bitMask = null)
     {
@@ -217,9 +217,9 @@ class Subscription extends AbstractApiBase
     }
 
     /**
-     * Cancel this subscription
+     * Turn auto-renew off for this subscription
      *
-     * @return void
+     * @return Subscription
      * @throws Exception
      */
     public function cancel()
@@ -229,12 +229,14 @@ class Subscription extends AbstractApiBase
         $this->imp->cancel($this);
 
         $this->events->trigger('simplerenewSubscriptionAfterCancel', array($this));
+
+        return $this;
     }
 
     /**
-     * Turn autorenew on for this subscription
+     * Turn auto-renew on for this subscription
      *
-     * @return void
+     * @return Subscription
      * @throws Exception
      */
     public function reactivate()
@@ -244,6 +246,8 @@ class Subscription extends AbstractApiBase
         $this->imp->reactivate($this);
 
         $this->events->trigger('simplerenewSubscriptionAfterReactivate', array($this));
+
+        return $this;
     }
 
     /**
@@ -251,7 +255,7 @@ class Subscription extends AbstractApiBase
      *
      * @param int $refundType
      *
-     * @return void
+     * @return Subscription
      * @throws Exception
      */
     public function terminate($refundType = self::REFUND_PARTIAL)
@@ -261,6 +265,8 @@ class Subscription extends AbstractApiBase
         $this->imp->terminate($this, $refundType);
 
         $this->events->trigger('simplerenewSubscriptionAfterTerminate', array($this));
+
+        return $this;
     }
 
     /**
