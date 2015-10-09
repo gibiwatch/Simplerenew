@@ -46,7 +46,6 @@ $heading = $this->getHeading(
     endif;
 
     echo $this->loadTemplate('extend');
-    echo $this->loadTemplate('suspend');
     echo $this->loadTemplate('coupon');
     echo $this->loadTemplate('cancel');
 

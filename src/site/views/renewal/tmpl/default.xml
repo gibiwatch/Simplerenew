@@ -55,13 +55,6 @@
                     size="5"/>
 
                 <field
-                    name="suspendBilling"
-                    label="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_SUSPEND_BILLING_LABEL"
-                    description="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_SUSPEND_BILLING_DESC"
-                    type="text"
-                    size="5"/>
-
-                <field
                     name="offerCoupon"
                     label="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_OFFER_COUPON_LABEL"
                     description="COM_SIMPLERENEW_VIEW_RENEWAL_PARAMS_FUNNEL_OFFER_COUPON_DESC"
