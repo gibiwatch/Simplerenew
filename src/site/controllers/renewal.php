@@ -66,41 +66,42 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
         $ids           = $this->getIdsFromRequest();
         $intervalDays  = $app->input->getInt('intervalDays');
 
+        $success = array();
+        $errors = array();
         foreach ($ids as $id) {
             if (!isset($subscriptions[$id])) {
-                $app->enqueueMessage(
-                    JText::sprintf('COM_SIMPLERENEW_ERROR_NOAUTH_SUBSCRIPTION', $id),
-                    'error'
-                );
+                $errors[] = JText::sprintf('COM_SIMPLERENEW_ERROR_NOAUTH_SUBSCRIPTION', $id);
+
             } else {
                 $plan = $this->getPlan($subscriptions[$id]->plan);
 
                 if (!$subscriptions[$id]->inTrial()) {
-                    $app->enqueueMessage(
-                        JText::sprintf('COM_SIMPLERENEW_ERROR_EXTEND_TRIAL_INVALID', $plan->name),
-                        'error'
-                    );
+                    $errors[] = JText::sprintf('COM_SIMPLERENEW_ERROR_EXTEND_TRIAL_INVALID', $plan->name);
 
                 } elseif ($intervalDays > 0) {
                     try {
                         $interval = new DateInterval("P{$intervalDays}D");
                         $subscriptions[$id]->extendTrial($interval);
-                        $app->enqueueMessage(
-                            JText::sprintf(
-                                'COM_SIMPLERENEW_EXTEND_TRIAL_SUCCESS',
-                                $plan->name,
-                                $subscriptions[$id]->trial_end->format('F j, Y')
-                            )
+                        $success[] = JText::sprintf(
+                            'COM_SIMPLERENEW_EXTEND_TRIAL_SUCCESS',
+                            $plan->name,
+                            $subscriptions[$id]->trial_end->format('F j, Y')
                         );
 
                     } catch (Duplicate $e) {
-                        $app->enqueueMessage(
-                            JText::sprintf('COM_SIMPLERENEW_ERROR_EXTEND_TRIAL_DUPLICATE', $plan->name),
-                            'error'
-                        );
+                        $errors[] = JText::sprintf('COM_SIMPLERENEW_ERROR_EXTEND_TRIAL_DUPLICATE', $plan->name);
+
                     }
                 }
             }
+        }
+
+        if ($success) {
+            $app->enqueueMessage(join('<br/>', $success));
+        }
+        if ($errors) {
+            $this->callerReturn($errors, 'error');
+            return;
         }
 
         $link = SimplerenewRoute::get('account');
