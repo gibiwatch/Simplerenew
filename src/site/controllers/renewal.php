@@ -6,9 +6,10 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
+use Simplerenew\Exception\Duplicate;
 use Simplerenew\Exception\NotFound;
-use Simplerenew\User\User;
 
 defined('_JEXEC') or die();
 
@@ -23,6 +24,11 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
      * @var JRegistry
      */
     protected $params = null;
+
+    /**
+     * @var Plan[]
+     */
+    protected $plans = array();
 
     public function display()
     {
@@ -50,6 +56,57 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
                 'error'
             );
         }
+    }
+
+    public function extendTrial()
+    {
+        $this->checkToken();
+
+        $app           = SimplerenewFactory::getApplication();
+        $filter        = SimplerenewFilterInput::getInstance();
+        $subscriptions = $this->getValidSubscriptions();
+
+        $ids          = $filter->clean($app->input->get('ids', array(), 'array'), 'array_keys');
+        $intervalDays = $app->input->getInt('intervalDays');
+        foreach ($ids as $id) {
+            if (!isset($subscriptions[$id])) {
+                $app->enqueueMessage(
+                    JText::sprintf('COM_SIMPLERENEW_ERROR_NOAUTH_SUBSCRIPTION', $id),
+                    'error'
+                );
+            } else {
+                $plan = $this->getPlan($subscriptions[$id]->plan);
+
+                if (!$subscriptions[$id]->inTrial()) {
+                    $app->enqueueMessage(
+                        JText::sprintf('COM_SIMPLERENEW_ERROR_EXTEND_TRIAL_INVALID', $plan->name),
+                        'error'
+                    );
+
+                } elseif ($intervalDays > 0) {
+                    try {
+                        $interval = new DateInterval("P{$intervalDays}D");
+                        $subscriptions[$id]->extendTrial($interval);
+                        $app->enqueueMessage(
+                            JText::sprintf(
+                                'COM_SIMPLERENEW_EXTEND_TRIAL_SUCCESS',
+                                $plan->name,
+                                $subscriptions[$id]->trial_end->format('F j, Y')
+                            )
+                        );
+
+                    } catch (Duplicate $e) {
+                        $app->enqueueMessage(
+                            JText::sprintf('COM_SIMPLERENEW_ERROR_EXTEND_TRIAL_DUPLICATE', $plan->name),
+                            'error'
+                        );
+                    }
+                }
+            }
+        }
+
+        $link = SimplerenewRoute::get('account');
+        $this->setRedirect(JRoute::_($link));
     }
 
     /**
@@ -101,11 +158,9 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
             $app->enqueueMessage(JText::_('COM_SIMPLERENEW_RENEWAL_NO_CHANGE'));
 
         } else {
-            $container = SimplerenewFactory::getContainer();
-
             if ($activated = $this->activateSubscriptions($activate)) {
                 foreach ($activated as $subscription) {
-                    $plan    = $container->getPlan()->load($subscription->plan);
+                    $plan    = $this->getPlan($subscription->plan);
                     $message = JText::sprintf(
                         'COM_SIMPLERENEW_RENEWAL_REACTIVATED',
                         $plan->name,
@@ -130,7 +185,7 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
 
             if ($canceled = $this->cancelSubscriptions($cancel)) {
                 foreach ($canceled as $subscription) {
-                    $plan    = $container->getPlan()->load($subscription->plan);
+                    $plan    = $this->getPlan($subscription->plan);
                     $message = JText::sprintf(
                         'COM_SIMPLERENEW_RENEWAL_CANCELED',
                         $plan->name,
@@ -166,16 +221,9 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
                 }
 
             } catch (Exception $e) {
-                try {
-                    $plan     = SimplerenewFactory::getContainer()->plan->load($subscription->plan);
-                    $planName = $plan->name;
-
-                } catch (NotFound $e) {
-                    $planName = $subscription->plan;
-
-                }
+                $plan = $this->getPlan($subscription->plan);
                 $app->enqueueMessage(
-                    JText::sprintf('COM_SIMPLERENEW_ERROR_RENEWAL_CANCEL', $planName),
+                    JText::sprintf('COM_SIMPLERENEW_ERROR_RENEWAL_CANCEL', $plan->name),
                     'error'
                 );
             }
@@ -203,15 +251,9 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
                 }
 
             } catch (Exception $e) {
-                try {
-                    $plan     = SimplerenewFactory::getContainer()->plan->load($subscription->plan);
-                    $planName = $plan->name;
-
-                } catch (NotFound $e) {
-                    $planName = $subscription->plan;
-                }
+                $plan = $this->getPlan($subscription->plan);
                 $app->enqueueMessage(
-                    JText::sprintf('COM_SIMPLERENEW_ERROR_RENEWAL_REACTIVATE', $planName),
+                    JText::sprintf('COM_SIMPLERENEW_ERROR_RENEWAL_REACTIVATE', $plan->name),
                     'error'
                 );
             }
@@ -236,4 +278,26 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
         return $this->params;
     }
 
+    /**
+     * Safely get a plan object
+     *
+     * @param $planCode
+     *
+     * @return Plan
+     */
+    protected function getPlan($planCode)
+    {
+        if (!isset($this->plans[$planCode])) {
+            $this->plans[$planCode] = SimplerenewFactory::getContainer()->plan;
+
+            try {
+                $this->plans[$planCode]->load($planCode);
+
+            } catch (Exception $e) {
+                $this->plans[$planCode]->code = $planCode;
+                $this->plans[$planCode]->name = $planCode;
+            }
+        }
+        return $this->plans[$planCode];
+    }
 }

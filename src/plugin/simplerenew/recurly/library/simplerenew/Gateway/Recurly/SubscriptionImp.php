@@ -13,7 +13,9 @@ use Simplerenew\Api\Coupon;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
 use Simplerenew\Exception;
+use Simplerenew\Exception\Duplicate;
 use Simplerenew\Exception\NotFound;
+use Simplerenew\Exception\NotSupported;
 use Simplerenew\Gateway\SubscriptionInterface;
 use Simplerenew\Object;
 
@@ -376,5 +378,51 @@ class SubscriptionImp extends AbstractRecurlyBase implements SubscriptionInterfa
         } catch (\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
+    }
+
+    /**
+     * If the current subscription is in trial, extend it by the specified amount
+     *
+     * @param Subscription  $parent
+     * @param \DateInterval $interval
+     *
+     * @return void
+     * @throws Exception
+     * @throws NotSupported Subscription is not in trial
+     * @throws Duplicate    Trial has already been extended once
+     */
+    public function extendTrial(Subscription $parent, \DateInterval $interval)
+    {
+        /**
+         * @var \DateTime     $start
+         * @var \DateTime     $end
+         * @var \Recurly_Plan $plan
+         */
+        $rawSubscription = $this->getSubscription($parent->id);
+
+        $start = $rawSubscription->trial_started_at;
+        $end   = $rawSubscription->trial_ends_at;
+
+        $plan        = \Recurly_Plan::get($rawSubscription->plan->plan_code, $this->client);
+        $trialLength = $plan->trial_interval_length;
+        $trialUnit   = strtoupper($plan->trial_interval_unit[0]);
+
+        $originalInterval = new \DateInterval("P{$trialLength}{$trialUnit}");
+        $originalEnd      = clone $start;
+        $originalEnd->add($originalInterval);
+
+        if ($originalEnd < $end) {
+            throw new Duplicate(
+                sprintf(
+                    'Trial for %s plan has already been extended',
+                    $plan->name
+                )
+            );
+        }
+
+        $end->add($interval);
+        $rawSubscription->postpone($end->format('c'));
+
+        $this->load($parent);
     }
 }

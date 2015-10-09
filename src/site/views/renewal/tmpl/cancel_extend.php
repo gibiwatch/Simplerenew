@@ -45,6 +45,10 @@ if ($trials && ($extendTrial = $this->funnel->get('extendTrial'))) :
             type="hidden"
             name="task"
             value="renewal.extendTrial"/>
+        <input
+            type="hidden"
+            name="intervalDays"
+            value="<?php echo $extendTrial; ?>"/>
         <?php
         foreach ($trials as $subscription) :
             ?>

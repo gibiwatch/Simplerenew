@@ -13,6 +13,9 @@ use Simplerenew\Api\Coupon;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
 use Simplerenew\Exception;
+use Simplerenew\Exception\Duplicate;
+use Simplerenew\Exception\NotFound;
+use Simplerenew\Exception\NotSupported;
 
 defined('_JEXEC') or die();
 
@@ -104,6 +107,19 @@ interface SubscriptionInterface
     public function update(Subscription $parent, Plan $plan, Coupon $coupon = null, $immediate = false);
 
     /**
+     * If the current subscription is in trial, extend it by the specified amount
+     *
+     * @param Subscription  $parent
+     * @param \DateInterval $interval
+     *
+     * @return void
+     * @throws Exception
+     * @throws NotSupported Subscription is not in trial
+     * @throws Duplicate    Trial has already been extended once
+     */
+    public function extendTrial(Subscription $parent, \DateInterval $interval);
+
+    /**
      * Map raw data from the Gateway to SR fields
      *
      * @param Subscription $parent
@@ -112,5 +128,4 @@ interface SubscriptionInterface
      * @return void
      */
     public function bindSource(Subscription $parent, $data);
-
 }
