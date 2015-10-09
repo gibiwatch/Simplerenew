@@ -41,9 +41,7 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
     {
         $this->checkToken();
 
-        $app    = SimplerenewFactory::getApplication();
-        $filter = SimplerenewFilterInput::getInstance();
-        $ids    = $filter->clean($app->input->get('ids', array(), 'array'), 'array_keys');
+        $ids = $this->getIdsFromRequest();
 
         try {
             if ($link = $this->changeRenewals($ids)) {
@@ -62,12 +60,12 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
     {
         $this->checkToken();
 
-        $app           = SimplerenewFactory::getApplication();
-        $filter        = SimplerenewFilterInput::getInstance();
-        $subscriptions = $this->getValidSubscriptions();
+        $app = SimplerenewFactory::getApplication();
 
-        $ids          = $filter->clean($app->input->get('ids', array(), 'array'), 'array_keys');
-        $intervalDays = $app->input->getInt('intervalDays');
+        $subscriptions = $this->getValidSubscriptions();
+        $ids           = $this->getIdsFromRequest();
+        $intervalDays  = $app->input->getInt('intervalDays');
+
         foreach ($ids as $id) {
             if (!isset($subscriptions[$id])) {
                 $app->enqueueMessage(
@@ -299,5 +297,20 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
             }
         }
         return $this->plans[$planCode];
+    }
+
+    /**
+     * Most tasks expect an array of subscription ids. This will safely
+     * load and sanitise them from the request
+     *
+     * @return array
+     */
+    protected function getIdsFromRequest()
+    {
+        $app    = SimplerenewFactory::getApplication();
+        $filter = SimplerenewFilterInput::getInstance();
+        $ids    = $filter->clean($app->input->get('ids', array(), 'array'), 'array_keys');
+
+        return $ids;
     }
 }
