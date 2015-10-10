@@ -131,7 +131,7 @@ class Coupon extends AbstractApiBase
     /**
      * Calculate the total discount amount for the selected plans
      *
-     * @param Plan|array $plans
+     * @param Plan|Plan[] $plans
      *
      * @return float
      * @throws InvalidArgument
@@ -219,5 +219,23 @@ class Coupon extends AbstractApiBase
     public function deactivate(Account $account)
     {
         $this->imp->deactivate($this, $account);
+    }
+
+    /**
+     * Return a string representation of the coupon amount
+     *
+     * @return string
+     */
+    public function amountAsString()
+    {
+        switch ($this->type) {
+            case static::TYPE_AMOUNT:
+                return $this->currency . number_format($this->amount, 2);
+
+            case static::TYPE_PERCENT:
+                return number_format($this->amount) . '%';
+        }
+
+        return '';
     }
 }
