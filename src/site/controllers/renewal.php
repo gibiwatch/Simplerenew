@@ -6,6 +6,7 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Api\Account;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
 use Simplerenew\Exception\Duplicate;
@@ -15,6 +16,11 @@ defined('_JEXEC') or die();
 
 class SimplerenewControllerRenewal extends SimplerenewControllerBase
 {
+    /**
+     * @var Account
+     */
+    protected $account = null;
+
     /**
      * @var Subscription[]
      */
@@ -67,7 +73,7 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
         $intervalDays  = $app->input->getInt('intervalDays');
 
         $success = array();
-        $errors = array();
+        $errors  = array();
         foreach ($ids as $id) {
             if (!isset($subscriptions[$id])) {
                 $errors[] = JText::sprintf('COM_SIMPLERENEW_ERROR_NOAUTH_SUBSCRIPTION', $id);
@@ -108,6 +114,63 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
         $this->setRedirect(JRoute::_($link));
     }
 
+    public function offerCoupon()
+    {
+        $this->checkToken();
+
+        $app           = SimplerenewFactory::getApplication();
+        $container     = SimplerenewFactory::getContainer();
+        $ids           = $this->getIdsFromRequest();
+        $subscriptions = $this->getValidSubscriptions();
+        $couponCode    = $app->input->getString('coupon');
+
+        try {
+            $coupon = $container->coupon->load($couponCode);
+
+        } catch (NotFound $e) {
+            $this->callerReturn(
+                JText::sprintf(
+                    'COM_SIMPLERENEW_ERROR_COUPON_NOTFOUND',
+                    $couponCode
+                )
+            );
+            return;
+        }
+
+        $plans = array();
+        foreach ($ids as $id) {
+            if (isset($subscriptions[$id])) {
+                $plan = $this->getPlan($subscriptions[$id]->plan);
+                if ($coupon->isAvailable($plan)) {
+                    $plans[$plan->code] = $plan->name;
+                }
+            }
+        }
+
+        if ($plans) {
+            try {
+                $account = $this->getAccount();
+                $coupon->activate($account);
+
+            } catch (Exception $e) {
+                $this->callerReturn(
+                    JText::_('COM_SIMPLERENEW_ERROR_FUNNEL_COUPON'),
+                    'error'
+                );
+                return;
+
+            }
+
+            $link    = SimplerenewRoute::get('account');
+            $message = JText::sprintf(
+                'COM_SIMPLERENEW_FUNNEL_COUPON_APPLIED',
+                $coupon->name,
+                $coupon->amountAsString()
+            );
+            $this->setRedirect(JRoute::_($link), $message);
+        }
+    }
+
     /**
      * Get all existing subscriptions for the current user
      *
@@ -116,12 +179,9 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
     protected function getValidSubscriptions()
     {
         if ($this->validSubscriptions === null) {
-            $container = SimplerenewFactory::getContainer();
-            $user      = $container->getUser()->load();
-            $account   = $container->getAccount()->load($user);
+            $account = $this->getAccount();
 
-            $this->validSubscriptions = $container
-                ->getSubscription()
+            $this->validSubscriptions = SimplerenewFactory::getContainer()->subscription
                 ->getList($account, Subscription::STATUS_ACTIVE | Subscription::STATUS_CANCELED);
         }
         return $this->validSubscriptions;
@@ -313,5 +373,19 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
         $ids    = $filter->clean($app->input->get('ids', array(), 'array'), 'array_keys');
 
         return $ids;
+    }
+
+    /**
+     * Get the membership account for the currently logged in user
+     *
+     * @return Account
+     */
+    protected function getAccount()
+    {
+        if ($this->account === null) {
+            $userId        = SimplerenewFactory::getUser()->id;
+            $this->account = SimplerenewFactory::getContainer()->account->loadByUserid($userId);
+        }
+        return $this->account;
     }
 }

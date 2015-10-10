@@ -15,8 +15,8 @@ defined('_JEXEC') or die();
  * @var SimplerenewViewRenewal $this
  */
 
-if (($coupon = $this->funnel->get('offerCoupon'))) :
-    if ($discount = $this->getDiscount($coupon, $this->subscriptions)) :
+if (($couponCode = $this->funnel->get('offerCoupon'))) :
+    if ($coupon = $this->validateCoupon($couponCode, $this->subscriptions)) :
         echo SimplerenewHelper::renderModule('simplerenew_cancel_coupon');
         ?>
         <form
@@ -28,7 +28,7 @@ if (($coupon = $this->funnel->get('offerCoupon'))) :
                 <?php
                 echo JText::sprintf(
                     'COM_SIMPLERENEW_CANCEL_OFFER_COUPON',
-                    JHtml::_('currency.format', $discount)
+                    $coupon->amountAsString()
                 );
                 ?>
             </button>
@@ -40,6 +40,10 @@ if (($coupon = $this->funnel->get('offerCoupon'))) :
                 type="hidden"
                 name="task"
                 value="renewal.offerCoupon"/>
+            <input
+                type="hidden"
+                name="coupon"
+                value="<?php echo $coupon->code; ?>"/>
             <?php
             foreach ($this->subscriptions as $subscription) :
                 ?>

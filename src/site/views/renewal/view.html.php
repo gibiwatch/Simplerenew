@@ -6,6 +6,7 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\Api\Coupon;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
 use Simplerenew\Exception\NotFound;
@@ -103,32 +104,32 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
     }
 
     /**
-     * Calculate the total discount for the requested subscription ids
+     * Verify that the selected coupon applies to at least one subscription
      *
      * @param string         $coupon
      * @param Subscription[] $subscriptions
      *
-     * @return float
-     * @throws Exception
+     * @return Coupon
      */
-    protected function getDiscount($coupon, array $subscriptions)
+    protected function validateCoupon($coupon, array $subscriptions)
     {
-        $discount = 0;
         if ($coupon && $subscriptions) {
             try {
                 $container = SimplerenewFactory::getContainer();
                 $coupon    = $container->coupon->load($coupon);
 
-                $plans = array();
                 foreach ($subscriptions as $subscription) {
-                    $plans[] = $container->plan->load($subscription->plan);
+                    $planCode = $subscription->pending_plan ?: $subscription->plan;
+                    $plan     = $container->plan->load($planCode);
+                    if ($coupon->isAvailable($plan)) {
+                        return $coupon;
+                    }
                 }
-                $discount = $coupon->getDiscount($plans);
 
             } catch (NotFound $e) {
-                // coupon or subscription not found
+                // coupon or plan not found
             }
         }
-        return $discount;
+        return null;
     }
 }
