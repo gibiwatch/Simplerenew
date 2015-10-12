@@ -171,6 +171,43 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
         }
     }
 
+    public function cancel()
+    {
+        $this->checkToken();
+
+        $subscriptions = $this->getValidSubscriptions();
+        $ids           = $this->getIdsFromRequest();
+
+        $cancel = array();
+        foreach ($ids as $id) {
+            if (isset($subscriptions[$id])) {
+                $cancel[$id] = $subscriptions[$id];
+            }
+        }
+
+        $app     = SimplerenewFactory::getApplication();
+        $success = $this->cancelSubscriptions($cancel);
+        if ($success) {
+            foreach ($success as $subscription) {
+                $plan    = $this->getPlan($subscription->plan);
+                $message = JText::sprintf(
+                    'COM_SIMPLERENEW_RENEWAL_CANCELED',
+                    $plan->name,
+                    $subscription->period_end->format('F, j, Y')
+                );
+                $app->enqueueMessage($message);
+            }
+            if ($link = $this->getParams()->get('feedback')) {
+                $link = 'index.php?Itemid=' . (int)$link;
+            }
+        }
+
+        if (empty($link)) {
+            $link = SimplerenewRoute::get('account');
+        }
+        $this->setRedirect(JRoute::_($link));
+    }
+
     /**
      * Get all existing subscriptions for the current user
      *
