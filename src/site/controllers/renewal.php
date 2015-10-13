@@ -38,9 +38,7 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
 
     public function display()
     {
-        $this->checkToken();
-
-        $this->callerReturn($this->getTask() . ' is under construction');
+        throw new Exception(JText::sprintf('COM_SIMPLERENEW_ERROR_UNKNOWN_TASK', $this->getTask()));
     }
 
     public function update()
