@@ -38,7 +38,7 @@ $heading = $this->getHeading(
     echo SimplerenewHelper::renderModule('simplerenew_cancel_top');
     ?>
 
-    <div class="ost-alert-notify">
+    <div class="ost-alert-notify m-bottom">
         <?php
         if ($support = $this->funnel->get('support')) :
             echo SimplerenewHelper::renderModule('simplerenew_cancel_support');
@@ -52,15 +52,15 @@ $heading = $this->getHeading(
         ?>
     </div>
 
-    <div class="ost-alert-notify">
+    <div class="ost-alert-notify m-bottom">
         <?php echo $this->loadTemplate('extend'); ?>
     </div>
 
-    <div class="ost-alert-notify">
+    <div class="ost-alert-notify m-bottom">
         <?php echo $this->loadTemplate('coupon'); ?>
     </div>
 
-    <div class="ost-alert-warning">
+    <div class="ost-alert-warning m-bottom">
         <?php echo $this->loadTemplate('cancel'); ?>
     </div>
 
