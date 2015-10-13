@@ -54,8 +54,6 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
                 $this->funnel        = SimplerenewHelper::getFunnel($this->getParams());
                 $this->subscriptions = $this->getSubscriptions();
             }
-
-            SimplerenewFactory::getDocument()->addScriptDeclaration($js);
             parent::display($tpl);
 
         } catch (Exception $e) {
@@ -91,14 +89,12 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
             // Get all applicable subscriptions
             $model  = $this->getModel();
             $result = $model->getSubscriptions();
-            $layout = 'default';
             if (count($result) == 1 && $this->funnel && $this->funnel->get('enabled')) {
                 $subscription = current($result);
                 if ($subscription->status == Subscription::STATUS_ACTIVE) {
-                    $layout = 'cancel';
+                    $this->setLayout('cancel');
                 }
             }
-            $this->setLayout($layout);
         }
         return $result;
     }
