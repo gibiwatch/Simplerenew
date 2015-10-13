@@ -25,7 +25,7 @@ if (($couponCode = $this->funnel->get('offerCoupon'))) :
             action=""
             method="post">
             <button type="submit" class="btn btn-main btn-small">
-                <?php
+                <i class="fa fa-tag"></i> <?php
                 echo JText::sprintf(
                     'COM_SIMPLERENEW_CANCEL_OFFER_COUPON',
                     $coupon->amountAsString()

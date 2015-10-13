@@ -35,7 +35,7 @@ if ($trials && ($extendTrial = $this->funnel->get('extendTrial'))) :
         action=""
         method="post">
         <button type="submit" class="btn btn-main btn-small">
-            <?php echo JText::sprintf('COM_SIMPLERENEW_CANCEL_EXTEND_TRIAL', $extendTrial); ?>
+            <i class="fa fa-plus-circle"></i> <?php echo JText::sprintf('COM_SIMPLERENEW_CANCEL_EXTEND_TRIAL', $extendTrial); ?>
         </button>
         <input
             type="hidden"
