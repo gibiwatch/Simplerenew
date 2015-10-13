@@ -20,7 +20,8 @@ defined('_JEXEC') or die();
         action=""
         method="post">
         <button type="submit" class="btn btn-warning btn-small">
-            <i class="fa fa-times"></i> <?php echo JText::_('COM_SIMPLERENEW_CANCEL_NODEALS'); ?>
+            <i class="fa fa-times"></i>
+            <?php echo JText::_('COM_SIMPLERENEW_CANCEL_NODEALS'); ?>
         </button>
         <input
             type="hidden"
