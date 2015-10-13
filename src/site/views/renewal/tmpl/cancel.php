@@ -14,24 +14,14 @@ defined('_JEXEC') or die();
 /**
  * @var SimplerenewViewRenewal $this
  */
-
-$heading = $this->getHeading(
-    JText::plural(
-        'COM_SIMPLERENEW_HEADING_RENEWAL_UPDATE',
-        count($this->subscriptions),
-        false
-    )
-);
 ?>
 <div class="<?php echo $this->getPageClass('ost-container simplerenew-renewal'); ?>">
+    <div class="page-header">
+        <h1><?php
+            echo JText::plural('COM_SIMPLERENEW_HEADING_RENEWAL_CANCEL', count($this->subscriptions), false);
+            ?></h1>
+    </div>
     <?php
-    if ($heading) :
-        ?>
-        <div class="page-header">
-            <h1><?php echo $heading; ?></h1>
-        </div>
-        <?php
-    endif;
 
     echo SimplerenewHelper::renderModule('simplerenew_cancel_top');
     echo $this->loadTemplate('support');
