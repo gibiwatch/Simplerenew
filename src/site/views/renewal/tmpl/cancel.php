@@ -32,39 +32,13 @@ $heading = $this->getHeading(
         </div>
         <?php
     endif;
-    ?>
 
-    <?php
     echo SimplerenewHelper::renderModule('simplerenew_cancel_top');
-    ?>
+    echo $this->loadTemplate('support');
+    echo $this->loadTemplate('extend');
+    echo $this->loadTemplate('coupon');
+    echo $this->loadTemplate('cancel');
 
-    <div class="ost-alert-notify m-bottom">
-        <?php
-        if ($support = $this->funnel->get('support')) :
-            echo SimplerenewHelper::renderModule('simplerenew_cancel_support');
-            echo JHtml::_(
-                'link',
-                JRoute::_('index.php?Itemid=' . $support),
-                '<i class="fa fa-support"></i> Contact Support',
-                'class="btn btn-main btn-small"'
-            );
-        endif;
-        ?>
-    </div>
-
-    <div class="ost-alert-notify m-bottom">
-        <?php echo $this->loadTemplate('extend'); ?>
-    </div>
-
-    <div class="ost-alert-notify m-bottom">
-        <?php echo $this->loadTemplate('coupon'); ?>
-    </div>
-
-    <div class="ost-alert-warning m-bottom">
-        <?php echo $this->loadTemplate('cancel'); ?>
-    </div>
-
-    <?php
     echo SimplerenewHelper::renderModule('simplerenew_cancel_bottom');
     ?>
 </div>

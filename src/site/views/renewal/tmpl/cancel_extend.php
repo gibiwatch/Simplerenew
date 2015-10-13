@@ -27,40 +27,43 @@ foreach ($this->subscriptions as $subscription) {
 }
 
 if ($trials && ($extendTrial = $this->funnel->get('extendTrial'))) :
-    echo SimplerenewHelper::renderModule('simplerenew_cancel_trial');
     ?>
-    <form
-        id="formExtendTrial"
-        name="formExtendTrial"
-        action=""
-        method="post">
-        <button type="submit" class="btn btn-main btn-small">
-            <i class="fa fa-plus-circle"></i> <?php echo JText::sprintf('COM_SIMPLERENEW_CANCEL_EXTEND_TRIAL', $extendTrial); ?>
-        </button>
-        <input
-            type="hidden"
-            name="option"
-            value="com_simplerenew"/>
-        <input
-            type="hidden"
-            name="task"
-            value="renewal.extendTrial"/>
-        <input
-            type="hidden"
-            name="intervalDays"
-            value="<?php echo $extendTrial; ?>"/>
-        <?php
-        foreach ($trials as $subscription) :
-            ?>
+    <div class="ost-alert-notify m-bottom">
+        <?php echo SimplerenewHelper::renderModule('simplerenew_cancel_trial'); ?>
+        <form
+            id="formExtendTrial"
+            name="formExtendTrial"
+            action=""
+            method="post">
+            <button type="submit" class="btn btn-main btn-small">
+                <i class="fa fa-plus-circle"></i>
+                <?php echo JText::sprintf('COM_SIMPLERENEW_CANCEL_EXTEND_TRIAL', $extendTrial); ?>
+            </button>
             <input
                 type="hidden"
-                name="ids[]"
-                value="<?php echo $subscription->id; ?>"/>
+                name="option"
+                value="com_simplerenew"/>
+            <input
+                type="hidden"
+                name="task"
+                value="renewal.extendTrial"/>
+            <input
+                type="hidden"
+                name="intervalDays"
+                value="<?php echo $extendTrial; ?>"/>
             <?php
-        endforeach;
+            foreach ($trials as $subscription) :
+                ?>
+                <input
+                    type="hidden"
+                    name="ids[]"
+                    value="<?php echo $subscription->id; ?>"/>
+                <?php
+            endforeach;
 
-        echo JHtml::_('form.token');
-        ?>
-    </form>
+            echo JHtml::_('form.token');
+            ?>
+        </form>
+    </div>
     <?php
 endif;
