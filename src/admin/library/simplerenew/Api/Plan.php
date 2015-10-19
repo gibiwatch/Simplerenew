@@ -111,7 +111,7 @@ class Plan extends AbstractApiBase
     /**
      * Get list of defined plans on the Gateway
      *
-     * @return array Associative array of plans keyed on plan code
+     * @return Plan[] Associative array of plans keyed on plan code
      * @throws Exception
      */
     public function getList()
