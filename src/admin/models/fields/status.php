@@ -22,13 +22,26 @@ class SimplerenewFormFieldStatus extends JFormFieldList
             Subscription::STATUS_EXPIRED  => JText::_('COM_SIMPLERENEW_OPTION_STATUS_EXPIRED')
         );
 
-        $list = array_filter(explode(',', (string)$this->element['exclude']));
+        $list     = array_filter(explode(',', (string)$this->element['exclude']));
         $excludes = array();
         foreach ($list as $exclude) {
             $key = '\Simplerenew\Api\Subscription::STATUS_' . strtoupper($exclude);
             if (defined($key)) {
                 $excludes[] = constant($key);
             }
+        }
+
+        // Accept string values for default
+        if (!$this->value || !is_numeric($this->value) || !isset($allOptions[(int)$this->value])) {
+            $default     = strtoupper($this->element['default']);
+            $this->value = array_search(
+                $default[0] ?: 'C',
+                array(
+                    Subscription::STATUS_ACTIVE   => 'A',
+                    Subscription::STATUS_CANCELED => 'C',
+                    Subscription::STATUS_EXPIRED  => 'E'
+                )
+            );
         }
 
         $options = array();
