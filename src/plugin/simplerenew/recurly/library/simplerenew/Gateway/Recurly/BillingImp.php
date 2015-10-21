@@ -77,7 +77,7 @@ class BillingImp extends AbstractRecurlyBase implements BillingInterface
             } catch (NotFound $e) {
                 // Let's see if we have what it takes to create
                 if (empty($cc) || empty($cc->number)) {
-                    return;
+                    throw new Exception('credit card number must be provided');
                 }
 
                 $billing               = new \Recurly_BillingInfo(null, $this->client);
