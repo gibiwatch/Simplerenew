@@ -169,9 +169,9 @@ class PlanImp extends AbstractRecurlyBase implements PlanInterface
         $plan->plan_interval_length = $parent->length;
         $plan->plan_interval_unit   = $parent->unit;
 
+        $plan->trial_interval_length = (int)$parent->trial_length;
         if ($parent->trial_length) {
             $this->convertLength($parent->trial_length, $parent->trial_unit);
-            $plan->trial_interval_length = $parent->trial_length;
             $plan->trial_interval_unit   = $parent->trial_unit;
         }
 
