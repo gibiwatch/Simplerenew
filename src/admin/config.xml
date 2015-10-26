@@ -211,6 +211,16 @@
                 <option value="1">COM_SIMPLERENEW_OPTION_SIMPLERNEW_REGISTRATION</option>
             </field>
 
+            <field
+                name="reloadUser"
+                type="list"
+                label="COM_SIMPLERENEW_CONFIG_RELOAD_USER_LABEL"
+                description="COM_SIMPLERENEW_CONFIG_RELOAD_USER_DESC"
+                default="1">
+                <option value="0">JNO</option>
+                <option value="1">JYES</option>
+            </field>
+
         </fieldset>
     </fields>
 

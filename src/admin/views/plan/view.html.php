@@ -40,6 +40,7 @@ class SimplerenewViewPlan extends SimplerenewViewAdmin
         SimplerenewToolbarHelper::apply('plan.apply');
         SimplerenewToolbarHelper::save('plan.save');
         SimplerenewToolbarHelper::save2new('plan.save2new');
+        SimplerenewToolbarHelper::save2copy('plan.save2copy');
 
         $alt = $isNew ? 'JTOOLBAR_CANCEL' : 'JTOOLBAR_CLOSE';
         SimplerenewToolbarHelper::cancel('plan.cancel', $alt);

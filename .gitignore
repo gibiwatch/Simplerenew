@@ -46,8 +46,7 @@ nb-configuration.xml
 
 # Composer downloads
 ####################
-vendor/
-composer.lock
+**/vendor/*
 
 # Phing #
 #########

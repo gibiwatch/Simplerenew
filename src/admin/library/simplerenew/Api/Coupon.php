@@ -10,6 +10,7 @@ namespace Simplerenew\Api;
 
 use Simplerenew\Configuration;
 use Simplerenew\Exception;
+use Simplerenew\Exception\InvalidArgument;
 use Simplerenew\Gateway\CouponInterface;
 
 defined('_JEXEC') or die();
@@ -128,25 +129,35 @@ class Coupon extends AbstractApiBase
     }
 
     /**
-     * Calculate the discount amount for the selected plan
+     * Calculate the total discount amount for the selected plans
      *
-     * @param Plan $plan
+     * @param Plan|Plan[] $plans
      *
      * @return float
+     * @throws InvalidArgument
      */
-    public function getDiscount(Plan $plan)
+    public function getDiscount($plans)
     {
         $amount = 0;
 
-        if ($this->isAvailable($plan)) {
-            switch ($this->type) {
-                case static::TYPE_AMOUNT:
-                    $amount = $this->amount;
-                    break;
+        if ($plans instanceof Plan) {
+            $plans = array($plans);
+        }
+        if (!is_array($plans)) {
+            throw new InvalidArgument(get_class($this) . '::' . __METHOD__ . ' - expecting array or Plan');
+        }
 
-                case static::TYPE_PERCENT:
-                    $amount = $plan->amount * ($this->amount / 100);
-                    break;
+        foreach ($plans as $plan) {
+            if ($plan instanceof Plan && $this->isAvailable($plan)) {
+                switch ($this->type) {
+                    case static::TYPE_AMOUNT:
+                        $amount += $this->amount;
+                        break;
+
+                    case static::TYPE_PERCENT:
+                        $amount += ($plan->amount * ($this->amount / 100));
+                        break;
+                }
             }
         }
 
@@ -208,5 +219,23 @@ class Coupon extends AbstractApiBase
     public function deactivate(Account $account)
     {
         $this->imp->deactivate($this, $account);
+    }
+
+    /**
+     * Return a string representation of the coupon amount
+     *
+     * @return string
+     */
+    public function amountAsString()
+    {
+        switch ($this->type) {
+            case static::TYPE_AMOUNT:
+                return $this->currency . number_format($this->amount, 2);
+
+            case static::TYPE_PERCENT:
+                return number_format($this->amount) . '%';
+        }
+
+        return '';
     }
 }

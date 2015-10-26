@@ -471,6 +471,12 @@ div.ost-alert-notify{
     margin: 2px 0;
 }
 
+div.ost-alert-warning h3,
+div.ost-alert-success h3,
+div.ost-alert-notify h3 {
+    margin-top: 0;
+}
+
 /* Subscribe view
  ========================================================================== */
 .ost-container .tab-disabled  h4,

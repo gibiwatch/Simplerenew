@@ -10,10 +10,11 @@ namespace Simplerenew\Api;
 
 use Simplerenew\Configuration;
 use Simplerenew\Exception;
+use Simplerenew\Exception\Duplicate;
 use Simplerenew\Exception\NotFound;
+use Simplerenew\Exception\NotSupported;
 use Simplerenew\Gateway\SubscriptionInterface;
 use Simplerenew\Plugin\Events;
-use Zend\ServiceManager\Config;
 
 defined('_JEXEC') or die();
 
@@ -164,7 +165,7 @@ class Subscription extends AbstractApiBase
      * @param Account $account
      * @param int     $bitMask Subscription status codes to retrieve
      *
-     * @return array()
+     * @return Subscription[]
      */
     public function getList(Account $account, $bitMask = null)
     {
@@ -217,9 +218,9 @@ class Subscription extends AbstractApiBase
     }
 
     /**
-     * Cancel this subscription
+     * Turn auto-renew off for this subscription
      *
-     * @return void
+     * @return Subscription
      * @throws Exception
      */
     public function cancel()
@@ -229,12 +230,14 @@ class Subscription extends AbstractApiBase
         $this->imp->cancel($this);
 
         $this->events->trigger('simplerenewSubscriptionAfterCancel', array($this));
+
+        return $this;
     }
 
     /**
-     * Turn autorenew on for this subscription
+     * Turn auto-renew on for this subscription
      *
-     * @return void
+     * @return Subscription
      * @throws Exception
      */
     public function reactivate()
@@ -244,6 +247,8 @@ class Subscription extends AbstractApiBase
         $this->imp->reactivate($this);
 
         $this->events->trigger('simplerenewSubscriptionAfterReactivate', array($this));
+
+        return $this;
     }
 
     /**
@@ -251,7 +256,7 @@ class Subscription extends AbstractApiBase
      *
      * @param int $refundType
      *
-     * @return void
+     * @return Subscription
      * @throws Exception
      */
     public function terminate($refundType = self::REFUND_PARTIAL)
@@ -261,6 +266,8 @@ class Subscription extends AbstractApiBase
         $this->imp->terminate($this, $refundType);
 
         $this->events->trigger('simplerenewSubscriptionAfterTerminate', array($this));
+
+        return $this;
     }
 
     /**
@@ -270,7 +277,7 @@ class Subscription extends AbstractApiBase
      * @param Coupon $coupon
      * @param bool   $immediate
      *
-     * @return void
+     * @return Subscription
      * @throws Exception
      */
     public function update(Plan $plan, Coupon $coupon = null, $immediate = null)
@@ -283,6 +290,33 @@ class Subscription extends AbstractApiBase
         $this->imp->update($this, $plan, $coupon, $immediate);
 
         $this->events->trigger('simplerenewSubscriptionAfterUpdate', array($this, $plan));
+
+        return $this;
+    }
+
+    /**
+     * Extend the subscription trial period by the interval amount.
+     * Will throw error if Subscription is not in a trial period or
+     * has already been extended once.
+     *
+     * @TODO: Check for previous extension here rather than in imps
+     *
+     * @param \DateInterval $interval
+     *
+     * @return $this
+     * @throws NotSupported Subscription is not in trial
+     * @throws Duplicate    Trial has already been extended once
+     */
+    public function extendTrial(\DateInterval $interval)
+    {
+        if (!$this->inTrial()) {
+            throw new NotSupported('Subscription is not in trial');
+        }
+        $this->imp->extendTrial($this, $interval);
+
+        $this->events->trigger('simplerenewSubscriptionAfterExtendTrial', array($this, $interval));
+
+        return $this;
     }
 
     /**
@@ -311,6 +345,20 @@ class Subscription extends AbstractApiBase
     public function allowMultiple()
     {
         return $this->configuration->get('subscription.allowMultiple', false);
+    }
+
+    /**
+     * Subscription in trial or not
+     *
+     * @return bool
+     */
+    public function inTrial()
+    {
+        if ($this->trial_start instanceof \DateTime && $this->trial_end instanceof \DateTime) {
+            $now = new \DateTime();
+            return ($now >= $this->trial_start && $now < $this->trial_end);
+        }
+        return false;
     }
 
     /**

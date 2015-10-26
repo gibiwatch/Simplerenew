@@ -173,10 +173,13 @@ abstract class SimplerenewHelper
             if (!$status->configured) {
                 $message->errors[] = JText::_('COM_SIMPLERENEW_ERROR_GATEWAY_CONFIGURATION');
             }
+
             if (!$status->gateway) {
-                $gateway = ucfirst(strtolower(SimplerenewFactory::getContainer()->gateway));
-                if (!JPluginHelper::isEnabled('Simplerenew', $gateway)) {
+                $gateway = SimplerenewFactory::getContainer()->gateway;
+                if (!JPluginHelper::isEnabled('simplerenew', strtolower($gateway))) {
                     $message->errors[] = JText::sprintf('COM_SIMPLERENEW_ERROR_GATEWAY_PLUGIN_UNAVAILABLE', $gateway);
+                } else {
+                    $message->errors[] = JText::sprintf('COM_SIMPLERENEW_ERROR_GATEWAY_MISCONFIGURED', $gateway);
                 }
             }
 
@@ -430,6 +433,13 @@ abstract class SimplerenewHelper
         $results = JModuleHelper::getModules($position);
         $content = '';
 
+        if (is_string($attribs)) {
+            $attribs = JUtility::parseAttributes($attribs);
+        }
+        if (!isset($attribs['style'])) {
+            $attribs['style'] = 'xhtml';
+        }
+
         ob_start();
         foreach ($results as $result) {
             $content .= JModuleHelper::renderModule($result, $attribs);
@@ -480,5 +490,32 @@ abstract class SimplerenewHelper
                     break;
             }
         }
+    }
+
+    /**
+     * Get active cancellation funnels
+     *
+     * @param JRegistry $params
+     *
+     * @return JRegistry
+     */
+    public static function getFunnel(JRegistry $params = null)
+    {
+        $result = new JRegistry();
+
+        if (!$params) {
+            // Use parameters from the currently active menu
+            $menu = SimplerenewFactory::getApplication()->getMenu()->getActive();
+            if ($menu && $menu->type == 'component') {
+                $params = $menu->params;
+            }
+        }
+        if ($params && ($funnel = $params->get('funnel'))) {
+            $funnel = array_filter(is_object($funnel) ? get_object_vars($funnel) : $funnel);
+
+            $funnel['enabled'] = !empty($funnel['enabled']) && $funnel['enabled'] && count($funnel) > 1;
+            $result->loadArray($funnel);
+        }
+        return $result;
     }
 }

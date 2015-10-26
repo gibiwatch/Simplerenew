@@ -267,10 +267,20 @@ class CouponImp extends AbstractRecurlyBase implements CouponInterface
      */
     public function activate(Coupon $parent, Account $account)
     {
-        // @TODO: not clear this will work for percentage coupons because there is no currency setting
         try {
             $coupon = $this->getCoupon($parent->code);
-            $coupon->redeemCoupon($account->code, $parent->currency);
+
+            if (!$parent->currency) {
+                if (!$this->currency) {
+                    // What a hack!! But it will get us the default currency from Recurly
+                    $plans      = iterator_to_array(\Recurly_PlanList::get(array('per_page' => 1), $this->client));
+                    $samplePlan = array_pop($plans);
+                    $this->getCurrency($samplePlan->unit_amount_in_cents);
+                }
+            }
+
+            $currency = $parent->currency ?: $this->currency;
+            $coupon->redeemCoupon($account->code, $currency);
 
         } catch (\Recurly_NotFoundError $e) {
             throw new NotFound($e->getMessage(), 404, $e);

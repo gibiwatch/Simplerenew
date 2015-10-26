@@ -24,17 +24,17 @@ $heading = $this->getHeading(
 ?>
 <div class="<?php echo $this->getPageClass('ost-container simplerenew-renewal'); ?>">
     <?php
-    if ($heading):
+    if ($heading) :
         ?>
         <div class="page-header">
             <h1><?php echo $heading; ?></h1>
         </div>
-    <?php
+        <?php
     endif;
 
-    if (!$this->subscriptions):
+    if (!$this->subscriptions) :
         echo $this->loadTemplate('nosub');
-    else:
+    else :
         ?>
         <div class="ost-section p-bottom b-bottom">
             <?php echo JText::_('COM_SIMPLERENEW_RENEWAL_DESCRIPTION'); ?>
@@ -46,15 +46,15 @@ $heading = $this->getHeading(
             action=""
             method="post">
 
-    <?php
-        foreach ($this->subscriptions as $id => $subscription):
-            $this->subscription = $subscription;
-            ?>
-            <div class="ost-section ost-row-two b-bottom">
-                <?php echo $this->loadTemplate('plan'); ?>
-            </div>
             <?php
-        endforeach; ?>
+            foreach ($this->subscriptions as $id => $subscription) :
+                $this->subscription = $subscription;
+                ?>
+                <div class="ost-section ost-row-two b-bottom">
+                    <?php echo $this->loadTemplate('plan'); ?>
+                </div>
+                <?php
+            endforeach; ?>
             <input
                 type="hidden"
                 name="option"
@@ -76,7 +76,7 @@ $heading = $this->getHeading(
 
             <?php echo JHtml::_('form.token'); ?>
         </form>
-    <?php
+        <?php
     endif;
     ?>
 </div>

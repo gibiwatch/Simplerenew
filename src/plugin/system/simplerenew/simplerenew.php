@@ -138,10 +138,10 @@ class plgSystemSimplerenew extends JPlugin
                 }
 
                 $vars = array(
-                    'option' => 'com_simplerenew',
-                    'task'   => 'notify.receive',
+                    'option'  => 'com_simplerenew',
+                    'task'    => 'notify.receive',
                     'gateway' => $gateway,
-                    'format' => 'raw'
+                    'format'  => 'raw'
                 );
                 foreach ($vars as $var => $value) {
                     $app->input->set($var, $value);
@@ -231,12 +231,19 @@ class plgSystemSimplerenew extends JPlugin
      */
     protected function refreshUserSession()
     {
-        $current = JFactory::getUser();
-        if ($current->id > 0) {
-            $user = new JUser($current->id);
+        if ($this->params->get('advanced.reloadUser', 1)) {
+            $current = JFactory::getUser();
+            if ($current->id > 0) {
+                $user = new JUser($current->id);
 
-            $session = JFactory::getSession();
-            $session->set('user', $user);
+                // Make sure to clone any custom properties someone else may have set
+                $standardProperties = get_object_vars($user);
+                $currentProperties  = get_object_vars($current);
+                $customProperties   = array_diff_key($currentProperties, $standardProperties);
+
+                $user->setProperties($customProperties);
+                JFactory::getSession()->set('user', $user);
+            }
         }
     }
 

@@ -12,9 +12,9 @@ use Simplerenew\Exception;
 
 defined('_JEXEC') or die();
 
-class NotSupported extends Exception
+class InvalidArgument extends Exception
 {
-    public function __construct($message = "", $code = 409, \Exception $previous = null)
+    public function __construct($message = "", $code = 500, \Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

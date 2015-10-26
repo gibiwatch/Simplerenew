@@ -39,11 +39,19 @@ abstract class SimplerenewModelSite extends JModelLegacy
      */
     public function getParams()
     {
+        /**
+         * @var JRegistry $state
+         * @var JRegistry $params
+         */
         $state      = $this->getState();
         $params     = clone $state->get('parameters.component');
-        $menuParams = $state->get('parameters.menu');
+        if ($menuParams = $state->get('parameters.menu')) {
+            if ($menuParams instanceof JRegistry) {
+                $menuParams = $menuParams->toObject();
+            }
+            $params->loadObject($menuParams);
+        }
 
-        $params->merge($menuParams);
         return $params;
     }
 }

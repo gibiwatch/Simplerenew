@@ -21,6 +21,25 @@ defined('_JEXEC') or die();
  */
 abstract class AbstractLogger
 {
+    const DEBUG_INFO  = 1;
+    const DEBUG_WARN  = 2;
+    const DEBUG_ERROR = 4;
+
+    /**
+     * @var float
+     */
+    protected $debugStart       = null;
+
+    /**
+     * @var float
+     */
+    protected $debugLastCall    = null;
+
+    /**
+     * @var float
+     */
+    protected $debugLastHeading = null;
+
     /**
      * Add a new log entry
      *
@@ -49,4 +68,45 @@ abstract class AbstractLogger
      * @return void
      */
     abstract protected function trimLogs();
+
+    /**
+     * @param string $message
+     * @param int    $level
+     *
+     * @return void
+     */
+    abstract protected function debugWrite($message, $level = self::DEBUG_INFO);
+
+    /**
+     * Add a debug log entry including elapsed time
+     *
+     * @param string $message
+     * @param bool   $heading
+     * @param int    $level
+     *
+     * @return void
+     */
+    public function debug($message, $heading = false, $level = self::DEBUG_INFO)
+    {
+        if ($this->debugStart === null) {
+            $this->debugStart    = microtime(true);
+            $this->debugLastCall = $this->debugStart;
+        }
+
+        $now     = microtime(true);
+        $elapsed = $now - $this->debugLastCall;
+
+        $this->debugLastCall = $now;
+        if ($heading) {
+            if ($this->debugLastHeading !== null) {
+                $message .= ' (' . number_format($now - $this->debugLastHeading, 4) . ')';
+            }
+            $message                = str_pad(' ' . $message . ' ', 40, '*', STR_PAD_BOTH);
+            $this->debugLastHeading = $now;
+
+        } else {
+            $message = number_format($elapsed, 4) . ' ' . $message;
+        }
+        $this->debugWrite($message, $level);
+    }
 }

@@ -2,12 +2,12 @@
 <extension version="2.5" type="plugin" group="simplerenew" method="upgrade">
     <name>plg_simplerenew_recurly</name>
     <author>OSTraining</author>
-    <creationDate>July 30, 2015</creationDate>
+    <creationDate>October 2, 2015</creationDate>
     <copyright>Copyright (C) 2014-2105 OSTraining.com</copyright>
     <license>GPL v3</license>
     <authorEmail>info@ostraining.com</authorEmail>
     <authorUrl>http://www.ostraining.com</authorUrl>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <description>plg_simplerenew_recurly_description</description>
 
     <files>

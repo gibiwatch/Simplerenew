@@ -59,8 +59,9 @@ if ($this->subscriptions) :
                 ?>
                 <div class="ost-alert-success">
                     <?php
+                    $type = $subscription->inTrial() ? 'TRIAL' : 'ACTIVE';
                     echo JText::sprintf(
-                        'COM_SIMPLERENEW_SUBSCRIPTION_ACTIVE_PERIOD',
+                        "COM_SIMPLERENEW_SUBSCRIPTION_PERIOD_{$type}",
                         $subscription->period_start->format('F j, Y'),
                         $subscription->period_end->format('F j, Y')
                     );
@@ -92,7 +93,7 @@ if ($this->subscriptions) :
                     <div class="ost-alert-notify">
                         <?php
                         echo JText::sprintf(
-                            'COM_SIMPLERENEW_SUBSCRIPTION_RENEW_DATE',
+                            "COM_SIMPLERENEW_SUBSCRIPTION_RENEW_DATE_{$type}",
                             $subscription->period_end->format('F j, Y')
                         );
                         ?>

@@ -21,11 +21,6 @@ SimplerenewFactory::getLanguage()->load('com_users');
             <?php echo $this->requiredTag; ?>
         </label>
         <input
-            <?php
-            if ($loggedIn) {
-                echo 'readonly';
-            }
-            ?>
             id="usernameLogin"
             name="usernameLogin"
             type="text"

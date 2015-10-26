@@ -69,6 +69,11 @@ class SimplerenewModelPlan extends SimplerenewModelAdmin
      */
     protected function prepareTable($table)
     {
+        if (!$table->id) {
+            // Ensure code gets created when creating a new plan
+            $table->code = null;
+        }
+        
         $table->amount     = preg_replace('/[^\d\.]/', '', $table->amount);
         $table->setup_cost = preg_replace('/[^\d\.]/', '', $table->setup_cost);
     }

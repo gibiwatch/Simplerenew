@@ -254,7 +254,19 @@ $saveOrder = $listOrder == 'plan.ordering';
                     </td>
 
                     <td>
-                        <?php echo JHtml::_('link', $link, htmlspecialchars($item->code)); ?>
+                        <?php
+                        if ($item->checked_out) {
+                            echo JHtml::_(
+                                'jgrid.checkedout',
+                                $i,
+                                $item->editor,
+                                $item->checked_out_time,
+                                'plans.',
+                                true
+                            );
+                        }
+                        echo JHtml::_('link', $link, htmlspecialchars($item->code));
+                        ?>
                     </td>
 
                     <td>
