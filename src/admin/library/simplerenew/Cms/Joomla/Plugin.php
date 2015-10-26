@@ -10,6 +10,8 @@ namespace Simplerenew\Cms\Joomla;
 
 defined('_JEXEC') or die();
 
+jimport('joomla.plugin.plugin');
+
 abstract class Plugin extends \JPlugin
 {
 }
