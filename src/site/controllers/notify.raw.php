@@ -6,6 +6,7 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Simplerenew\AbstractLogger as Logger;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\Notify\Notify;
 use Simplerenew\User\User;
@@ -17,7 +18,7 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
     public function receive()
     {
         $logger = SimplerenewFactory::getContainer()->logger;
-        $logger->debug('Notification: Begin Receive', true);
+        $logger->debug('Notification: Begin Receive', Logger::DEBUG_INFO, true);
 
         $user = $this->authenticate();
 
@@ -30,7 +31,7 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
                 break;
 
             default:
-                $logger->debug("[receive] Error: bad method [{$method}]", JLog::ERROR);
+                $logger->debug("[receive] Error: bad method [{$method}]", Logger::DEBUG_ERROR);
                 throw new Exception(JText::sprintf('COM_SIMPLERENEW_ERROR_NOTIFY_METHOD', $method), 405);
                 break;
         }
@@ -42,7 +43,7 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
 
         $gateway = $app->input->getCmd('gateway');
         if (!isset($containers[$gateway])) {
-            $logger->debug("[receive] Error: gateway not found [{$gateway}]", JLog::ERROR);
+            $logger->debug("[receive] Error: gateway not found [{$gateway}]", Logger::DEBUG_ERROR);
             throw new NotFound(JText::sprintf('COM_SIMPLERENEW_ERROR_NOTIFY_INVALID_GATEWAY', $gateway));
         }
 
@@ -54,7 +55,7 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
             $user->logout();
         }
 
-        $logger->debug("Processed Successfully by {$gateway} plugin", true);
+        $logger->debug("Processed Successfully by {$gateway} plugin", Logger::DEBUG_INFO, true);
 
         jexit();
     }
