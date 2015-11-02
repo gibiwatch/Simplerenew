@@ -81,12 +81,12 @@ abstract class AbstractLogger
      * Add a debug log entry including elapsed time
      *
      * @param string $message
-     * @param bool   $heading
      * @param int    $level
+     * @param bool   $heading
      *
      * @return void
      */
-    public function debug($message, $heading = false, $level = self::DEBUG_INFO)
+    public function debug($message, $level = self::DEBUG_INFO, $heading = false)
     {
         if ($this->debugStart === null) {
             $this->debugStart    = microtime(true);
