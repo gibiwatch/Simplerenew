@@ -17,14 +17,14 @@ if (!defined('SIMPLERENEW_LOADED')) {
     define('SIMPLERENEW_MEDIA', JPATH_SITE . '/media/com_simplerenew');
     define('SIMPLERENEW_LIBRARY', SIMPLERENEW_ADMIN . '/library');
 
-    // Setup autoload libraries
+    // Setup all autoloading
+    require_once SIMPLERENEW_ADMIN . '/vendor/autoload.php';
     require_once SIMPLERENEW_LIBRARY . '/simplerenew/AutoLoader.php';
-    AutoLoader::register('Simplerenew', SIMPLERENEW_LIBRARY . '/simplerenew');
-    AutoLoader::register('Pimple', SIMPLERENEW_LIBRARY . '/pimple');
 
+    AutoLoader::register('Simplerenew', SIMPLERENEW_LIBRARY . '/simplerenew');
     AutoLoader::registerCamelBase('Simplerenew', SIMPLERENEW_LIBRARY . '/joomla');
 
-    // Any additional helper paths
+    // Additional helper paths
     JHtml::addIncludePath(SIMPLERENEW_LIBRARY . '/html');
     SimplerenewHelper::loadOptionLanguage('com_simplerenew', SIMPLERENEW_ADMIN, SIMPLERENEW_SITE);
 
