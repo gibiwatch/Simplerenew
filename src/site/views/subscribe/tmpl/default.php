@@ -25,6 +25,7 @@ $app = SimplerenewFactory::getApplication();
         id="subscribeForm"
         action=""
         method="post"
+        autocomplete="off"
         data-popup-warning="<?php echo JText::sprintf('COM_SIMPLERENEW_WARN_PAYPAL_POPUP_FAIL', JUri::base()); ?>">
 
         <?php
