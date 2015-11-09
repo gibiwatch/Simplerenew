@@ -58,6 +58,6 @@ require_once JPATH_CONFIGURATION . '/configuration.php';
 $_SERVER['HTTP_HOST'] = 'localhost';
 JFactory::getApplication('administrator');
 
-// Init SRSubs
+// Init Simple Renew and plugins
 require_once JPATH_ADMINISTRATOR . '/components/com_simplerenew/include.php';
 JPluginHelper::importPlugin('simplerenew');
