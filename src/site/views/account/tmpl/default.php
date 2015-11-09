@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   Simplerenew
- * @contact   www.simplerenew.com, support@simplerenew.com
+ * @contact   www.ostraining.com, support@ostraining.com
  * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
@@ -28,7 +28,7 @@ defined('_JEXEC') or die();
         );
         ?>
     </div>
-    
+
     <h3>
         <span><i class="fa fa-info-circle"></i></span>
         <?php echo JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'); ?>
