@@ -61,7 +61,7 @@ $saveOrder = $listOrder == 'plan.ordering';
         <tr>
             <th width="1%">&nbsp;</th>
 
-            <th width="1%"><input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)"/></th>
+            <th width="1%"><input type="checkbox" name="checkall-toggle" value="" onclick="Joomla.checkAll(this)"/></th>
 
             <th width="5%">
                 <?php
