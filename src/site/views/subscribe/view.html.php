@@ -8,6 +8,8 @@
 
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Billing;
+use Simplerenew\Api\Plan;
+use Simplerenew\Api\Subscription;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\User\User;
 
@@ -16,12 +18,12 @@ defined('_JEXEC') or die();
 class SimplerenewViewSubscribe extends SimplerenewViewSite
 {
     /**
-     * @var Joomla\Registry\Registry
+     * @var JRegistry
      */
     protected $state = null;
 
     /**
-     * @var array
+     * @var Plan[]
      */
     protected $plans = array();
 
@@ -41,7 +43,7 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
     protected $billing = null;
 
     /**
-     * @var array
+     * @var Subscription[]
      */
     protected $subscriptions = array();
 
@@ -123,28 +125,38 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
         } elseif ($this->subscriptions) {
             // Load current active/canceled subscriptions
             foreach ($this->subscriptions as $subscription) {
-                $selectedPlans[$subscription->plan] = $subscription->id;
+                if (isset($this->plans[$subscription->plan])) {
+                    $selectedPlans[$subscription->plan] = $subscription->id;
+                }
             }
 
-        } elseif (!$this->allowMultiple && !$overrides) {
-            // By default select the first shown plan on single sub sites
-            reset($this->plans);
-            $plan          = current($this->plans);
-            $selectedPlans = array($plan->code => true);
         }
+        if (empty($selectedPlans)) {
+            if (!$overrides && !$this->allowMultiple) {
+                // By default select the first shown plan on single sub sites
+                reset($this->plans);
+                $plan          = current($this->plans);
+                $selectedPlans = array($plan->code => true);
 
-        if ($overrides) {
-            $selectedPlans = array_merge(
-                $selectedPlans,
-                array_fill_keys(
-                    explode(' ', $overrides),
-                    true
-                )
-            );
-            if (!$this->allowMultiple) {
-                // For single sub sites, use only the first one specified
-                reset($selectedPlans);
-                $selectedPlans = array(key($selectedPlans) => true);
+            } elseif ($overrides) {
+                $planList = array_fill_keys(explode(' ', $overrides), true);
+                if (!$this->allowMultiple) {
+                    // On single sub sites, makes sure at least one plan will be selected
+                    $planList = array_merge(
+                        $planList,
+                        array_slice($this->plans, 0, 1, true)
+                    );
+                }
+
+                foreach ($planList as $planCode => $value) {
+                    if (isset($this->plans[$planCode])) {
+                        $selectedPlans[$planCode] = true;
+                        if (!$this->allowMultiple) {
+                            // For single sub sites, use only the first available one we can find
+                            break;
+                        }
+                    }
+                }
             }
         }
 
