@@ -122,8 +122,28 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
             // Plans selected on last form submit
             $selectedPlans = array_fill_keys((array)$formData['planCodes'], true);
 
+        } elseif ($overrides) {
+            // Overrides specified in url and take precedence
+            $planList = array_fill_keys(explode(' ', $overrides), true);
+            if (!$this->allowMultiple) {
+                // On single sub sites, makes sure at least one plan will be selected
+                $planList = array_merge(
+                    $planList,
+                    array_slice($this->plans, 0, 1, true)
+                );
+            }
+
+            foreach ($planList as $planCode => $value) {
+                if (isset($this->plans[$planCode])) {
+                    $selectedPlans[$planCode] = true;
+                    if (!$this->allowMultiple) {
+                        // For single sub sites, use only the first available one we can find
+                        break;
+                    }
+                }
+            }
         } elseif ($this->subscriptions) {
-            // Load current active/canceled subscriptions
+            // Select plans from current active/canceled subscriptions
             foreach ($this->subscriptions as $subscription) {
                 if (isset($this->plans[$subscription->plan])) {
                     $selectedPlans[$subscription->plan] = $subscription->id;
@@ -131,33 +151,15 @@ class SimplerenewViewSubscribe extends SimplerenewViewSite
             }
 
         }
-        if (empty($selectedPlans)) {
-            if (!$overrides && !$this->allowMultiple) {
-                // By default select the first shown plan on single sub sites
-                reset($this->plans);
-                $plan          = current($this->plans);
-                $selectedPlans = array($plan->code => true);
 
-            } elseif ($overrides) {
-                $planList = array_fill_keys(explode(' ', $overrides), true);
-                if (!$this->allowMultiple) {
-                    // On single sub sites, makes sure at least one plan will be selected
-                    $planList = array_merge(
-                        $planList,
-                        array_slice($this->plans, 0, 1, true)
-                    );
-                }
-
-                foreach ($planList as $planCode => $value) {
-                    if (isset($this->plans[$planCode])) {
-                        $selectedPlans[$planCode] = true;
-                        if (!$this->allowMultiple) {
-                            // For single sub sites, use only the first available one we can find
-                            break;
-                        }
-                    }
-                }
-            }
+        if (empty($selectedPlans) && !$this->allowMultiple) {
+            // On single sub sites always default to the first shown plan
+            $selectedPlans = array_fill_keys(
+                array_keys(
+                    array_slice($this->plans, 0, 1, true)
+                ),
+                true
+            );
         }
 
         // Collect all active/canceled subscriptions and add info to plans list
