@@ -61,7 +61,7 @@ class SimplerenewControllerAccount extends SimplerenewControllerBase
             }
 
             // Update Billing
-            if ($account->status === Account::STATUS_ACTIVE) {
+            if ($account->status === Account::STATUS_ACTIVE && $billingToken) {
                 $container->getBilling()->setAccount($account)
                     ->setProperties($data->get('billing'))
                     ->save($billingToken);
