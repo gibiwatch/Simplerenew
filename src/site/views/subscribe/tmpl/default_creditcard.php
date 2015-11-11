@@ -35,7 +35,7 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
                     id="billing_firstname"
                     name="billing[firstname]"
                     type="text"
-                    value="<?php echo $this->billing->firstname; ?>"
+                    value="<?php echo $this->escape($this->billing->firstname); ?>"
                     maxlength="50"
                     required="true"
                     data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_FIRSTNAME_REQUIRED'); ?>"/>
@@ -49,7 +49,7 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
                     id="billing_lastname"
                     name="billing[lastname]"
                     type="text"
-                    value="<?php echo $this->billing->lastname; ?>"
+                    value="<?php echo $this->escape($this->billing->lastname); ?>"
                     maxlength="50"
                     required="true"
                     data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_LASTNAME_REQUIRED'); ?>"/>

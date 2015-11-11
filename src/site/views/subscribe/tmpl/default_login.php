@@ -24,7 +24,7 @@ SimplerenewFactory::getLanguage()->load('com_users');
             id="usernameLogin"
             name="usernameLogin"
             type="text"
-            value="<?php echo $this->user->username; ?>"
+            value="<?php echo $this->escape($this->user->username); ?>"
             maxlength="50"
             required="true"
             data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_USERNAME_REQUIRED'); ?>"/>

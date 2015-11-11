@@ -22,7 +22,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             id="firstname"
             name="firstname"
             type="text"
-            value="<?php echo $this->user->firstname; ?>"
+            value="<?php echo $this->escape($this->user->firstname); ?>"
             required="true"
             autofocus/>
     </div>
@@ -32,7 +32,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             id="lastname"
             name="lastname"
             type="text"
-            value="<?php echo $this->user->lastname; ?>"
+            value="<?php echo $this->escape($this->user->lastname); ?>"
             required="true"/>
     </div>
 </div>
@@ -45,7 +45,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             id="username"
             name="username"
             type="text"
-            value="<?php echo $this->user->username; ?>"
+            value="<?php echo $this->escape($this->user->username); ?>"
             readonly/>
     </div>
     <div class="block6">
@@ -54,7 +54,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             id="email"
             name="email"
             type="email"
-            value="<?php echo $this->user->email; ?>"
+            value="<?php echo $this->escape($this->user->email); ?>"
             required="true"
             class="unique_email"/>
     </div>

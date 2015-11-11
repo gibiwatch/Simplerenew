@@ -40,7 +40,7 @@ if (($couponCode = $this->funnel->get('offerCoupon'))) :
                 <input
                     type="hidden"
                     name="coupon"
-                    value="<?php echo $coupon->code; ?>"/>
+                    value="<?php echo $this->escape($coupon->code); ?>"/>
                 <?php
                 foreach ($this->subscriptions as $subscription) :
                     ?>

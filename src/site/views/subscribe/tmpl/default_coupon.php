@@ -38,7 +38,7 @@ if ($couponCode && $planSelected) {
                         type="text"
                         name="couponCode"
                         id="coupon_code"
-                        value="<?php echo $couponCode; ?>"
+                        value="<?php echo $this->escape($couponCode); ?>"
                         class="check_coupon"
                         data-plan=".plan-code input"/>
                 </div>
