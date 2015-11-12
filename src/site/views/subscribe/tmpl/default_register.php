@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   Simplerenew
- * @contact   www.simplerenew.com, support@simplerenew.com
+ * @contact   www.ostraining.com, support@ostraining.com
  * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
@@ -24,7 +24,7 @@ $loggedIn    = ($this->user->id > 0);
             id="firstname"
             name="firstname"
             type="text"
-            value="<?php echo $this->user->firstname; ?>"
+            value="<?php echo $this->escape($this->user->firstname); ?>"
             required="true"
             maxlength="50"
             data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_FIRSTNAME_REQUIRED'); ?>"
@@ -39,7 +39,7 @@ $loggedIn    = ($this->user->id > 0);
             id="lastname"
             name="lastname"
             type="text"
-            value="<?php echo $this->user->lastname; ?>"
+            value="<?php echo $this->escape($this->user->lastname); ?>"
             maxlength="50"
             required="true"
             data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_LASTNAME_REQUIRED'); ?>"/>
@@ -63,7 +63,7 @@ $loggedIn    = ($this->user->id > 0);
             name="username"
             class="unique_user"
             type="text"
-            value="<?php echo $this->user->username; ?>"
+            value="<?php echo $this->escape($this->user->username); ?>"
             maxlength="50"
             required="true"
             data-include="#email"
@@ -80,7 +80,7 @@ $loggedIn    = ($this->user->id > 0);
             name="email"
             type="email"
             class="unique_email"
-            value="<?php echo $this->user->email; ?>"
+            value="<?php echo $this->escape($this->user->email); ?>"
             maxlength="50"
             required="true"
             data-include="#username"

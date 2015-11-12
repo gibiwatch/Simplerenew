@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   Simplerenew
- * @contact   www.simplerenew.com, support@simplerenew.com
+ * @contact   www.ostraining.com, support@ostraining.com
  * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
@@ -28,12 +28,12 @@ abstract class AbstractLogger
     /**
      * @var float
      */
-    protected $debugStart       = null;
+    protected $debugStart = null;
 
     /**
      * @var float
      */
-    protected $debugLastCall    = null;
+    protected $debugLastCall = null;
 
     /**
      * @var float
@@ -81,12 +81,12 @@ abstract class AbstractLogger
      * Add a debug log entry including elapsed time
      *
      * @param string $message
-     * @param bool   $heading
      * @param int    $level
+     * @param bool   $heading
      *
      * @return void
      */
-    public function debug($message, $heading = false, $level = self::DEBUG_INFO)
+    public function debug($message, $level = self::DEBUG_INFO, $heading = false)
     {
         if ($this->debugStart === null) {
             $this->debugStart    = microtime(true);
@@ -101,7 +101,9 @@ abstract class AbstractLogger
             if ($this->debugLastHeading !== null) {
                 $message .= ' (' . number_format($now - $this->debugLastHeading, 4) . ')';
             }
-            $message                = str_pad(' ' . $message . ' ', 40, '*', STR_PAD_BOTH);
+            $width   = max(40, strlen($message) + 6);
+            $message = str_pad(' ' . $message . ' ', $width, '*', STR_PAD_BOTH);
+
             $this->debugLastHeading = $now;
 
         } else {

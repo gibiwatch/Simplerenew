@@ -1,7 +1,7 @@
 <?php
 /**
- * @package   com_simplerenew
- * @contact   www.simplerenew.com, support@simplerenew.com
+ * @package   Simplerenew
+ * @contact   www.ostraining.com, support@ostraining.com
  * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
@@ -9,6 +9,10 @@
 defined('_JEXEC') or die();
 
 require_once JPATH_COMPONENT_ADMINISTRATOR . '/include.php';
+
+if (SimplerenewComponentHelper::getParams()->get('advanced.enableDebug', false)) {
+    JLog::addLogger(array('text_file' => 'simplerenew.log.php'), JLog::ALL, 'simplerenew');
+}
 
 SimplerenewHelperSite::loadTheme();
 

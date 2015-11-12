@@ -44,10 +44,6 @@ nbdist/
 nbactions.xml
 nb-configuration.xml
 
-# Composer downloads
-####################
-**/vendor/*
-
 # Phing #
 #########
 packages/*

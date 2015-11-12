@@ -1,7 +1,7 @@
 <?php
 /**
- * @package   com_simplerenew
- * @contact   www.simplerenew.com, support@simplerenew.com
+ * @package   Simplerenew
+ * @contact   www.ostraining.com, support@ostraining.com
  * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
@@ -73,7 +73,7 @@ class SimplerenewModelPlan extends SimplerenewModelAdmin
             // Ensure code gets created when creating a new plan
             $table->code = null;
         }
-        
+
         $table->amount     = preg_replace('/[^\d\.]/', '', $table->amount);
         $table->setup_cost = preg_replace('/[^\d\.]/', '', $table->setup_cost);
     }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   Simplerenew
- * @contact   www.simplerenew.com, support@simplerenew.com
+ * @contact   www.ostraining.com, support@ostraining.com
  * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
@@ -40,7 +40,7 @@ if (($couponCode = $this->funnel->get('offerCoupon'))) :
                 <input
                     type="hidden"
                     name="coupon"
-                    value="<?php echo $coupon->code; ?>"/>
+                    value="<?php echo $this->escape($coupon->code); ?>"/>
                 <?php
                 foreach ($this->subscriptions as $subscription) :
                     ?>

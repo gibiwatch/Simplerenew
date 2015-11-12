@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   Simplerenew
- * @contact   www.simplerenew.com, support@simplerenew.com
+ * @contact   www.ostraining.com, support@ostraining.com
  * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
@@ -58,6 +58,6 @@ require_once JPATH_CONFIGURATION . '/configuration.php';
 $_SERVER['HTTP_HOST'] = 'localhost';
 JFactory::getApplication('administrator');
 
-// Init SRSubs
+// Init Simple Renew and plugins
 require_once JPATH_ADMINISTRATOR . '/components/com_simplerenew/include.php';
 JPluginHelper::importPlugin('simplerenew');

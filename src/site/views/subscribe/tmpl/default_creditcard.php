@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   Simplerenew
- * @contact   www.simplerenew.com, support@simplerenew.com
+ * @contact   www.ostraining.com, support@ostraining.com
  * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
@@ -35,7 +35,7 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
                     id="billing_firstname"
                     name="billing[firstname]"
                     type="text"
-                    value="<?php echo $this->billing->firstname; ?>"
+                    value="<?php echo $this->escape($this->billing->firstname); ?>"
                     maxlength="50"
                     required="true"
                     data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_FIRSTNAME_REQUIRED'); ?>"/>
@@ -49,7 +49,7 @@ if ($this->billing->payment instanceof Payment\CreditCard) {
                     id="billing_lastname"
                     name="billing[lastname]"
                     type="text"
-                    value="<?php echo $this->billing->lastname; ?>"
+                    value="<?php echo $this->escape($this->billing->lastname); ?>"
                     maxlength="50"
                     required="true"
                     data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_LASTNAME_REQUIRED'); ?>"/>

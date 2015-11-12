@@ -1,5 +1,5 @@
 {
-    "name"             : "Alledia/Simplerenew",
+    "name"             : "OSTraining/Simplerenew",
     "description"      : "Subscription management made simple",
     "minimum-stability": "stable",
     "license"          : "GPL-2+",
@@ -21,10 +21,13 @@
             "email": "bill@ostraining.com"
         }
     ],
+    "config"           : {
+        "vendor-dir": "src/admin/vendor"
+    },
     "require"          : {
-        "php"          : ">= 5.3",
+        "php"          : ">=5.3",
         "ext-curl"     : "*",
-        "pimple/pimple": "3.0.0"
+        "pimple/pimple": "~3.0"
     },
     "require-dev"      : {
         "phpunit/phpunit": "~4.7"

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   Simplerenew
- * @contact   www.simplerenew.com, support@simplerenew.com
+ * @contact   www.ostraining.com, support@ostraining.com
  * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
@@ -25,6 +25,7 @@ $app = SimplerenewFactory::getApplication();
         id="subscribeForm"
         action=""
         method="post"
+        autocomplete="off"
         data-popup-warning="<?php echo JText::sprintf('COM_SIMPLERENEW_WARN_PAYPAL_POPUP_FAIL', JUri::base()); ?>">
 
         <?php

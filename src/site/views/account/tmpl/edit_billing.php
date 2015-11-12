@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   Simplerenew
- * @contact   www.simplerenew.com, support@simplerenew.com
+ * @contact   www.ostraining.com, support@ostraining.com
  * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
@@ -63,7 +63,7 @@ endif; ?>
                     id="billing_firstname"
                     name="billing[firstname]"
                     type="text"
-                    value="<?php echo $billing->firstname; ?>"/>
+                    value="<?php echo $this->escape($billing->firstname); ?>"/>
             </div>
             <div class="block6">
                 <label for="billing_lastname"><?php echo JText::_('COM_SIMPLERENEW_LASTNAME'); ?></label>
@@ -71,7 +71,7 @@ endif; ?>
                     id="billing_lastname"
                     name="billing[lastname]"
                     type="text"
-                    value="<?php echo $billing->lastname; ?>"/>
+                    value="<?php echo $this->escape($billing->lastname); ?>"/>
             </div>
         </div>
         <!-- /.ost-section -->

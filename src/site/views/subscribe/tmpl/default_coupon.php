@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   Simplerenew
- * @contact   www.simplerenew.com, support@simplerenew.com
+ * @contact   www.ostraining.com, support@ostraining.com
  * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
@@ -38,7 +38,7 @@ if ($couponCode && $planSelected) {
                         type="text"
                         name="couponCode"
                         id="coupon_code"
-                        value="<?php echo $couponCode; ?>"
+                        value="<?php echo $this->escape($couponCode); ?>"
                         class="check_coupon"
                         data-plan=".plan-code input"/>
                 </div>
