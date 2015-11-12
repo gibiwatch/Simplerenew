@@ -52,6 +52,10 @@ class SimplerenewModelAccount extends SimplerenewModelSite
                     try {
                         $account = $container->account->load($user);
                         $this->setState('account', $account);
+
+                        // A bit of a hack - since Joomla doesn't store first/last names
+                        $user->firstname = $account->firstname;
+                        $user->lastname = $account->lastname;
                         break;
 
                     } catch (NotFound $e) {
