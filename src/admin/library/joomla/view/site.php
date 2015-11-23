@@ -46,7 +46,6 @@ abstract class SimplerenewViewSite extends SimplerenewView
             if (!($this->params = $this->get('Params'))) {
                 $this->params = new JRegistry();
             }
-
         }
 
         return $this->params;

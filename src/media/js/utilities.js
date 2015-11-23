@@ -296,6 +296,7 @@
                     current = index;
                 }
             });
+            options.current = current;
         }
         if (panels[options.current]) {
             $(panels[options.current]).show();

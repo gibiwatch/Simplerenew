@@ -12,29 +12,40 @@ defined('_JEXEC') or die();
  * @var SimplerenewViewSubscribe $this
  */
 
-$loggedIn     = ($this->user->id > 0);
-$stepHeading  = JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION');
+$loggedIn    = ($this->user->id > 0);
+$stepHeading = JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION');
 
 if (!$loggedIn) {
-    JHtml::_('sr.toggles', '#simplerenew-toggle-login');
+    $defaultForm = $this->getParams()->get('accountFormDefault', 'register');
+    $buttonText  = array(
+        'register' => JText::_('COM_SIMPLERENEW_SUBSCRIBE_LOGIN_BUTTON'),
+        'login'    => JText::_('COM_SIMPLERENEW_SUBSCRIBE_REGISTER_BUTTON')
+    );
 
-    $stepHeading .= ' <button type="button" id="simplerenew-toggle-login"'
-        . ' class="btn-main btn-small"'
-        . ' data-panels=".simplerenew-toggle-item">'
-        . JText::_('COM_SIMPLERENEW_SUBSCRIBE_LOGIN_BUTTON')
-        . '</button>';
+    JHtml::_('sr.toggles', '#simplerenew-toggle-login', '#simplerenew-form-' . $defaultForm);
+
+    $stepHeading = <<<BUTTONHTML
+{$stepHeading}
+<button
+    type="button"
+    id="simplerenew-toggle-login"
+    class="btn-main btn-small"
+    data-panels=".simplerenew-toggle-item">
+    {$buttonText[$defaultForm]}
+</button>
+BUTTONHTML;
 }
 
 echo $this->stepHeading($stepHeading);
 ?>
 <div class="simplerenew-subscribe-user p-bottom b-bottom">
-    <div class="simplerenew-toggle-item">
+    <div id="simplerenew-form-register" class="simplerenew-toggle-item">
         <?php echo $this->loadTemplate('register'); ?>
     </div>
     <?php
     if (!$loggedIn) :
         ?>
-        <div class="simplerenew-toggle-item">
+        <div id="simplerenew-form-login" class="simplerenew-toggle-item">
             <?php echo $this->loadTemplate('login'); ?>
         </div>
         <?php
