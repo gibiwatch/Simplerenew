@@ -103,6 +103,11 @@ class SimplerenewFormFieldGrouporder extends JFormField
 #{$sortableId} li:nth-child(5) { padding-left: 100px; }
 #{$sortableId} li:nth-child(6) { padding-left: 120px; }
 #{$sortableId} li:nth-child(7) { padding-left: 140px; }
+#{$sortableId} li:nth-child(8) { padding-left: 160px; }
+#{$sortableId} li:nth-child(9) { padding-left: 180px; }
+#{$sortableId} li:nth-child(10) { padding-left: 200px; }
+#{$sortableId} li:nth-child(11) { padding-left: 220px; }
+#{$sortableId} li:nth-child(12) { padding-left: 240px; }
 #{$sortableId} li:hover {cursor: pointer; }
 #{$sortableId} li span { position: absolute; margin-left: -1.3em; }
 CSS;
