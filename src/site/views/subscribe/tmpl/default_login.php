@@ -45,6 +45,7 @@ SimplerenewFactory::getLanguage()->load('com_users');
             name="passwordLogin"
             type="password"
             value=""
+            maxlength="100"
             required="true"
             data-msg-required="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_PASSWORD_REQUIRED'); ?>"/>
 
