@@ -561,6 +561,10 @@ span.simplerenew-plan.simplerenew-plan-selected{
     content: "\f00c";
     opacity: 1;
 }
+#simplerenew-toggle-login {
+    float: right;
+    margin-bottom: 0;
+}
 
 /* Listing
  ========================================================================== */
@@ -643,6 +647,10 @@ span.simplerenew-plan.simplerenew-plan-selected{
     .ost-row-one [class*="block"],
     .ost-row-two [class*="block"]{
         padding: 5px 10px;
+    }
+    /* Subscribe view */
+    #simplerenew-toggle-login {
+        float: none;
     }
 }
 
