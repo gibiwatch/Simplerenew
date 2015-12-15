@@ -36,8 +36,8 @@ if (empty($creditCard)) {
 }
 
 $heading = JText::_('COM_SIMPLERENEW_HEADING_BILLING');
-if ($creditCard->lastFour || $paypal) {
-    $heading .= '<input type="checkbox" value="1" name="clear_billing"/> Clear all billing information';
+if ($creditCard->lastFour || !empty($paypal)) {
+    $heading .= '<input type="checkbox" value="1" name="clear_billing"/> ' . JText::_('COM_SIMPLERENEW_BILLING_CLEAR');
 }
 echo $this->stepHeading($heading);
 
