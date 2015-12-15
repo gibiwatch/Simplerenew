@@ -270,6 +270,13 @@
     color:#ffffff;
 }
 
+#simplerenew-clear-billing {
+    float: right;
+    font-size: 14px;
+    font-weight: 400;
+    color: #555555;
+}
+
 /* Toggle
  ========================================================================== */
 .ost-container input.ost-toggle {
@@ -639,6 +646,10 @@ span.simplerenew-plan.simplerenew-plan-selected{
     .ost-container textarea,
     .ost-container select {
         width: 80%;
+    }
+    #simplerenew-clear-billing {
+        float: none;
+        display: block;
     }
     /* Listing */
     .ost-container .ost-row-heading {
