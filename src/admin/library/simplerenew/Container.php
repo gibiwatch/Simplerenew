@@ -78,6 +78,20 @@ class Container extends \Pimple\Container
         return null;
     }
 
+    public function __construct(array $values = array())
+    {
+        $values = array_merge(
+            array(
+                'cmsNamespace'  => null,
+                'gateway'       => null,
+                'configuration' => null,
+                'debug'         => false
+            ),
+            $values
+        );
+        parent::__construct($values);
+    }
+
     /**
      * Get instance of a class using parameter autodetect
      *
