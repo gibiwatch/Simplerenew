@@ -10,10 +10,6 @@ defined('_JEXEC') or die();
 
 require_once JPATH_COMPONENT_ADMINISTRATOR . '/include.php';
 
-if (SimplerenewComponentHelper::getParams()->get('advanced.enableDebug', false)) {
-    JLog::addLogger(array('text_file' => 'simplerenew.log.php'), JLog::ALL, 'simplerenew');
-}
-
 SimplerenewHelperSite::loadTheme();
 
 $controller = SimplerenewControllerBase::getInstance('Simplerenew');
