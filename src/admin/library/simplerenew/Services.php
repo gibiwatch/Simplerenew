@@ -58,7 +58,7 @@ class Services implements ServiceProviderInterface
 
         $pimple['logger'] = function (Container $c) {
             $className = $c['cmsNamespace'] . '\Logger';
-            return new $className();
+            return new $className($c['debug']);
         };
 
         // User classes
