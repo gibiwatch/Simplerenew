@@ -11,10 +11,12 @@ namespace Simplerenew\Notify;
 use Simplerenew\AbstractLogger;
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Billing;
+use Simplerenew\Api\Coupon;
 use Simplerenew\Api\Invoice;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
 use Simplerenew\Api\Transaction;
+use Simplerenew\Configuration;
 use Simplerenew\Container;
 use Simplerenew\Exception\NotFound;
 use Simplerenew\Gateway\NotifyInterface;
@@ -100,6 +102,11 @@ class Notify extends Object
     public $subscription = null;
 
     /**
+     * @var Coupon
+     */
+    public $coupon = null;
+
+    /**
      * @var Invoice
      */
     public $invoice = null;
@@ -168,25 +175,19 @@ class Notify extends Object
      */
     protected function loadFromGatewayData($package)
     {
+        $data = new Configuration($this->adapter->loadPackage($package));
+
+        $this->type    = $data->get('type', static::TYPE_UNKNOWN);
+        $this->action  = $data->get('action', static::ACTION_UNKNOWN);
         $this->package = $package;
 
-        $this->adapter->loadPackage($this, $package);
-
-        // Account
-        if ($this->account) {
-            $this->account = $this->container->account
-                ->bindSource($this->account);
-
-            $this->account_code = $this->account->code;
-
-            // Load the user for this account
-            $userId = $this->account->getUserId();
-            if ($userId) {
+        // Account and user
+        $this->account = $this->container->account->bindSource($data->get('account'));
+        $this->user    = $this->container->user;
+        if ($this->account->code) {
+            if ($userId = $this->account->getUserId()) {
                 try {
-                    $this->user = $this->container->user
-                        ->load($userId);
-
-                    $this->user_id = $this->user->id;
+                    $this->user->load($userId);
 
                 } catch (NotFound $e) {
                     // User must have been deleted from system
@@ -194,27 +195,18 @@ class Notify extends Object
             }
         }
 
-        if ($this->billing) {
-            $this->billing = $this->container->billing
-                ->bindSource($this->billing);
-        }
+        // Load other expected/possible API objects
+        $this->billing      = $this->container->billing->bindSource($data->get('billing', array()));
+        $this->subscription = $this->container->subscription->bindSource($data->get('subscription', array()));
+        $this->coupon       = $this->container->coupon->bindSource($data->get('coupon', array()));
+        $this->plan         = $this->container->plan->bindSource($data->get('plan', array()));
+        $this->invoice      = $this->container->invoice->bindSource($data->get('invoice', array()));
+        $this->transaction  = $this->container->transaction->bindSource($data->get('transaction', array()));
 
-        if ($this->subscription) {
-            $this->subscription = $this->container->subscription
-                ->bindSource($this->subscription);
-
-            $this->subscription_id = $this->subscription->id;
-        }
-
-        if ($this->invoice) {
-            $this->invoice = $this->container->invoice
-                ->bindSource($this->invoice);
-        }
-
-        if ($this->transaction) {
-            $this->transaction = $this->container->transaction
-                ->bindSource($this->transaction);
-        }
+        // Set the properties used for making log entries
+        $this->account_code    = $this->account->code;
+        $this->user_id         = $this->user->id;
+        $this->subscription_id = $this->subscription->id;
     }
 
     /**

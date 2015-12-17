@@ -74,13 +74,12 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
      * a Notify object. All validation of the message and its
      * source should be done here.
      *
-     * @param Notify $parent
      * @param string $package
      *
-     * @return void
+     * @return array
      * @throws Exception
      */
-    public function loadPackage(Notify $parent, $package)
+    public function loadPackage($package)
     {
         $ip = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
         if (!$this->IPAllowed($ip, $this->validIpAddresses)) {
@@ -91,6 +90,7 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
 
         $data = array(
             'type'    => $xml->getName(),
+            'action'  => $xml->getName(),
             'package' => $package
         );
 
@@ -106,6 +106,10 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
 
         // Reformat subscription data for Subscription class
         if (!empty($data['subscription'])) {
+            if (empty($data['plan'])) {
+                $data['plan'] = $data['subscription']['plan'];
+            }
+
             $data['subscription']['plan_code'] = $data['subscription']['plan']['plan_code'];
             if (!empty($data['account'])) {
                 $data['subscription']['account_code'] = $data['account']['account_code'];
@@ -138,7 +142,8 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
             );
         }
 
-        $parent->setProperties($data, $this->fieldMap);
+
+        return $this->map($data, array_keys($data), $this->fieldMap);
     }
 
     protected function xmlNodeToObject(\SimpleXMLElement $node)
