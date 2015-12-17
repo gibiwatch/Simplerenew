@@ -83,7 +83,7 @@ class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
     public function loadPackage(Notify $parent, $package)
     {
         $ip = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
-        if (!$parent->IPAllowed($ip, $this->validIpAddresses)) {
+        if (!$this->IPAllowed($ip, $this->validIpAddresses)) {
             throw new NotAuthorised('Notice came from unrecognized IP - ' . $ip);
         }
 
