@@ -31,17 +31,31 @@ class Subscription implements HandlerInterface
             switch ($notice->action) {
                 case Notify::ACTION_UPDATE:
                 case Notify::ACTION_RENEW:
-                case Notify::ACTION_NEW:
                 case Notify::ACTION_EXPIRE:
+                case Notify::ACTION_NEW:
                     $message = $notice->user->username . ': Verify User Groups';
                     $notice->user->resetGroups($notice->getAllContainers());
-                    $notice
-                        ->getContainer()
-                        ->events
-                        ->trigger(
-                            'simplerenewSubscriptionAfterUpdate',
-                            array($notice->subscription, $notice->plan)
+
+                    $event = $notice->getContainer()->events;
+                    if ($notice->action == Notify::ACTION_NEW) {
+                        $event->trigger(
+                            'simplerenewSubscriptionAfterCreate',
+                            array(
+                                $notice->subscription,
+                                $notice->plan,
+                                $notice->account,
+                                $notice->coupon
+                            )
                         );
+                    } else {
+                        $event->trigger(
+                            'simplerenewSubscriptionAfterUpdate',
+                            array(
+                                $notice->subscription,
+                                $notice->plan
+                            )
+                        );
+                    }
                     break;
             }
         }
