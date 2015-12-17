@@ -73,6 +73,6 @@ class Logger extends AbstractLogger
         } else {
             $level = $this->debugLevels[JLog::INFO];
         }
-        JLog::add($message, $this->debugLevels[$level], self::$debugId);
+        JLog::add($message, $level, self::$debugId);
     }
 }
