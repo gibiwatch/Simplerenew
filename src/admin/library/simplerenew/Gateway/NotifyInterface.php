@@ -20,11 +20,10 @@ interface NotifyInterface
      * a Notify object. All validation of the message and its
      * source should be done here.
      *
-     * @param Notify $parent
      * @param string $package
      *
-     * @return void
+     * @return array
      * @throws Exception
      */
-    public function loadPackage(Notify $parent, $package);
+    public function loadPackage($package);
 }

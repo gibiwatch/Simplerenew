@@ -270,6 +270,12 @@
     color:#ffffff;
 }
 
+#simplerenew-clear-billing {
+    float: right;
+    font-size: 14px;
+    font-weight: 400;
+}
+
 /* Toggle
  ========================================================================== */
 .ost-container input.ost-toggle {
@@ -561,6 +567,10 @@ span.simplerenew-plan.simplerenew-plan-selected{
     content: "\f00c";
     opacity: 1;
 }
+#simplerenew-toggle-login {
+    float: right;
+    margin-bottom: 0;
+}
 
 /* Listing
  ========================================================================== */
@@ -636,6 +646,10 @@ span.simplerenew-plan.simplerenew-plan-selected{
     .ost-container select {
         width: 80%;
     }
+    #simplerenew-clear-billing {
+        float: none;
+        display: block;
+    }
     /* Listing */
     .ost-container .ost-row-heading {
         display: none;
@@ -643,6 +657,10 @@ span.simplerenew-plan.simplerenew-plan-selected{
     .ost-row-one [class*="block"],
     .ost-row-two [class*="block"]{
         padding: 5px 10px;
+    }
+    /* Subscribe view */
+    #simplerenew-toggle-login {
+        float: none;
     }
 }
 

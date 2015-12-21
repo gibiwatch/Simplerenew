@@ -1,4 +1,4 @@
-/* Admin
+/* Alledia Installer
  ========================================================================== */
 .ost-container .ost-steps{
     text-align: center;
@@ -27,6 +27,9 @@
 .ost-container-dashboard{
     margin: 25px 0;
 }
+
+/* Joomla admin
+=============================================================================== */
 body.admin .page-title {
     background: rgba(0, 0, 0, 0) url("../images/logo-white.png") no-repeat 0 0 / 35px auto;
     padding-left: 12px;
