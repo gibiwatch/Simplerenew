@@ -76,7 +76,8 @@ abstract class SimplerenewFactory extends JFactory
                 array(
                     'cmsNamespace'  => 'Simplerenew\Cms\Joomla',
                     'gateway'       => $gateway,
-                    'configuration' => $config
+                    'configuration' => $config,
+                    'debug'         => $params->get('advanced.enableDebug')
                 )
             );
             $container->register(new Services());

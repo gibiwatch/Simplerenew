@@ -51,7 +51,7 @@ class SimplerenewControllerAccount extends SimplerenewControllerBase
                     ->save(false);
 
             } catch (NotFound $e) {
-                // Create an account only if they supplied a credit card
+                // Create an account only if they supplied a valid credit card
                 if ($billingToken) {
                     $account
                         ->setUser($user)
@@ -61,10 +61,36 @@ class SimplerenewControllerAccount extends SimplerenewControllerBase
             }
 
             // Update Billing
-            if ($account->status === Account::STATUS_ACTIVE && $billingToken) {
-                $container->getBilling()->setAccount($account)
+            if ($billingToken) {
+                $container->billing
+                    ->setAccount($account)
                     ->setProperties($data->get('billing'))
                     ->save($billingToken);
+
+            } elseif ($account->code) {
+                $app = SimplerenewFactory::getApplication();
+                if ($app->input->getBool('clear_billing')) {
+                    try {
+                        $container->billing->load($account)->delete();
+                    } catch (NotFound $e) {
+                        // No billing to clear - that's cool
+                    }
+
+                } else {
+                    try {
+                        $billing = $container->billing->load($account);
+
+                        $entered = (array)$data->get('billing.cc');
+                        $current = $billing->payment->getProperties();
+                        if (array_diff_assoc($entered, $current)) {
+                            throw new Exception(JText::_('COM_SIMPLERENEW_ERROR_CCNUMBER_REQUIRED'));
+                        }
+                        $billing->setProperties($data->get('billing'))->save();
+
+                    } catch (NotFound $e) {
+                        // Not found, ignore this
+                    }
+                }
             }
 
         } catch (Exception $e) {

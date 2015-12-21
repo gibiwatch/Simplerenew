@@ -23,6 +23,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             name="firstname"
             type="text"
             value="<?php echo $this->escape($this->user->firstname); ?>"
+            maxlength="50"
             required="true"
             autofocus/>
     </div>
@@ -32,6 +33,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             id="lastname"
             name="lastname"
             type="text"
+            maxlength="50"
             value="<?php echo $this->escape($this->user->lastname); ?>"
             required="true"/>
     </div>
@@ -45,6 +47,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             id="username"
             name="username"
             type="text"
+            maxlength="50"
             value="<?php echo $this->escape($this->user->username); ?>"
             readonly/>
     </div>
@@ -54,6 +57,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             id="email"
             name="email"
             type="email"
+            maxlength="50"
             value="<?php echo $this->escape($this->user->email); ?>"
             required="true"
             class="unique_email"/>
@@ -66,6 +70,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             id="password"
             name="password"
             type="password"
+            maxlength="100"
             value=""/>
     </div>
     <div class="block6">
@@ -74,6 +79,7 @@ echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
             id="password2"
             name="password2"
             type="password"
+            maxlength="100"
             value=""/>
     </div>
 </div>

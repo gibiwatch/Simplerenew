@@ -68,7 +68,7 @@
                 label="COM_SIMPLERENEW_CONFIG_DEFAULT_PAYMENT_LABEL"
                 description="COM_SIMPLERENEW_CONFIG_DEFAULT_PAYMENT_DESC"
                 type="list"
-                default="pp">
+                default="cc">
                 <option value="pp">COM_SIMPLERENEW_OPTION_PAYPAL</option>
                 <option value="cc">COM_SIMPLERENEW_OPTION_CREDITCARD</option>
             </field>

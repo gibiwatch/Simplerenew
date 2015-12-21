@@ -212,8 +212,6 @@ class Subscription extends AbstractApiBase
         }
         $account->user->addGroups($plan->code);
 
-        $this->events->trigger('simplerenewSubscriptionAfterCreate', array($this, $plan, $account, $coupon));
-
         return $this;
     }
 

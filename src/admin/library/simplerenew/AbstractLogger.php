@@ -26,6 +26,11 @@ abstract class AbstractLogger
     const DEBUG_ERROR = 4;
 
     /**
+     * @var bool
+     */
+    protected $enabled = false;
+
+    /**
      * @var float
      */
     protected $debugStart = null;
@@ -40,6 +45,11 @@ abstract class AbstractLogger
      */
     protected $debugLastHeading = null;
 
+    public function __construct($enabled = false)
+    {
+        $this->enabled = $enabled;
+    }
+
     /**
      * Add a new log entry
      *
@@ -49,8 +59,10 @@ abstract class AbstractLogger
      */
     public function add(AbstractLogEntry $entry)
     {
-        $this->insertEntry($entry);
-        $this->trimLogs();
+        if ($this->enabled) {
+            $this->insertEntry($entry);
+            $this->trimLogs();
+        }
     }
 
     /**
@@ -88,6 +100,10 @@ abstract class AbstractLogger
      */
     public function debug($message, $level = self::DEBUG_INFO, $heading = false)
     {
+        if (!$this->enabled) {
+            return;
+        }
+
         if ($this->debugStart === null) {
             $this->debugStart    = microtime(true);
             $this->debugLastCall = $this->debugStart;

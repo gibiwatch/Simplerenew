@@ -35,7 +35,14 @@ if (empty($creditCard)) {
     $creditCard = new Payment\CreditCard();
 }
 
-echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BILLING'));
+$heading = JText::_('COM_SIMPLERENEW_HEADING_BILLING');
+if ($creditCard->lastFour || !empty($paypal)) {
+    $heading .= '<span id="simplerenew-clear-billing">'
+        . '<input type="checkbox" value="1" name="clear_billing"/> '
+        . JText::_('COM_SIMPLERENEW_BILLING_CLEAR')
+        . '</span>';
+}
+echo $this->stepHeading($heading);
 
 if (!empty($paypal)): ?>
     <div class="ost-alert-notify m-bottom">
@@ -63,6 +70,7 @@ endif; ?>
                     id="billing_firstname"
                     name="billing[firstname]"
                     type="text"
+                    maxlength="50"
                     value="<?php echo $this->escape($billing->firstname); ?>"/>
             </div>
             <div class="block6">
@@ -71,6 +79,7 @@ endif; ?>
                     id="billing_lastname"
                     name="billing[lastname]"
                     type="text"
+                    maxlength="50"
                     value="<?php echo $this->escape($billing->lastname); ?>"/>
             </div>
         </div>
@@ -85,6 +94,7 @@ endif; ?>
                     id="billing_cc_number"
                     type="text"
                     value=""
+                    maxlength="25"
                     placeholder="<?php echo JHtml::_('creditcard.mask', $creditCard->lastFour); ?>"
                     class="check_ccnumber"
                     data-msg-ccnumber="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_CC_NUMBER_INVALID'); ?>"/>
@@ -95,6 +105,7 @@ endif; ?>
                     id="billing_cc_cvv"
                     type="text"
                     value=""
+                    maxlength="5"
                     class="check_cvv small-width"
                     data-ccnumber="#billing_cc_number"
                     data-msg-cvv="<?php echo JText::_('COM_SIMPLERENEW_VALIDATE_BILLING_CC_CVV_INVALID'); ?>"/>
