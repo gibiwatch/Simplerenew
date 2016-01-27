@@ -56,7 +56,7 @@ JSCODE;
         return parent::getInput();
     }
 
-    public function getOptions()
+    protected function getOptions()
     {
         $options = parent::getOptions();
 
