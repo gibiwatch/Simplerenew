@@ -53,7 +53,6 @@ class JFormFieldTablist extends JFormFieldList
 JSCODE;
         JFactory::getDocument()->addScriptDeclaration($js);
 
-        $options = $this->getOptions();
         return parent::getInput();
     }
 
