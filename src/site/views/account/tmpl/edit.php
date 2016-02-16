@@ -16,12 +16,15 @@ $app = SimplerenewFactory::getApplication();
 JHtml::_('sr.validation.init', '#accountForm');
 ?>
 <div class="<?php echo $this->getPageClass('ost-container simplerenew-edit-account'); ?>">
-
-    <?php if ($heading = $this->getHeading('COM_SIMPLERENEW_HEADING_EDIT_ACCOUNT')): ?>
+    <?php
+    if ($heading = $this->getHeading('COM_SIMPLERENEW_HEADING_EDIT_ACCOUNT')) :
+        ?>
         <div class="page-header">
             <h1><?php echo $heading; ?></h1>
         </div>
-    <?php endif; ?>
+        <?php
+    endif;
+    ?>
 
     <form
         name="accountForm"
@@ -71,5 +74,4 @@ JHtml::_('sr.validation.init', '#accountForm');
             <?php echo JHtml::_('form.token'); ?>
         </span>
     </form>
-
 </div>
