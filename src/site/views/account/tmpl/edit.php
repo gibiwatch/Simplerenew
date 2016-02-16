@@ -18,9 +18,9 @@ JHtml::_('sr.validation.init', '#accountForm');
 <div class="<?php echo $this->getPageClass('ost-container simplerenew-edit-account'); ?>">
 
     <?php if ($heading = $this->getHeading('COM_SIMPLERENEW_HEADING_EDIT_ACCOUNT')): ?>
-    <div class="page-header">
-        <h1><?php echo $heading; ?></h1>
-    </div>
+        <div class="page-header">
+            <h1><?php echo $heading; ?></h1>
+        </div>
     <?php endif; ?>
 
     <form
@@ -29,7 +29,11 @@ JHtml::_('sr.validation.init', '#accountForm');
         action=""
         method="post">
 
-        <?php echo $this->loadTemplate('account'); ?>
+        <?php
+        if ($this->getParams()->get('showAccount', 1)) {
+            echo $this->loadTemplate('account');
+        }
+        ?>
 
         <?php echo $this->loadTemplate('billing'); ?>
 
