@@ -11,7 +11,7 @@
             <field
                 name="showAccount"
                 label="COM_SIMPLERENEW_VIEW_ACCOUNT_EDIT_SHOW_ACCOUNT_LABEL"
-                description="COM_SIMPLERENEW_VIEW_ACCOUNT_SHOW_ACCOUNT_ONLY_DESC"
+                description="COM_SIMPLERENEW_VIEW_ACCOUNT_EDIT_SHOW_ACCOUNT_DESC"
                 type="list"
                 default="1">
                 <option value="1">JYES</option>
