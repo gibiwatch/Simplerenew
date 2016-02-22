@@ -59,10 +59,8 @@ abstract class AbstractLogger
      */
     public function add(AbstractLogEntry $entry)
     {
-        if ($this->enabled) {
-            $this->insertEntry($entry);
-            $this->trimLogs();
-        }
+        $this->insertEntry($entry);
+        $this->trimLogs();
     }
 
     /**
