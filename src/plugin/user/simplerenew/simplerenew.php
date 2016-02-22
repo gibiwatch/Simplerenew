@@ -59,7 +59,7 @@ class plgUserSimplerenew extends JPlugin
     public function onUserBeforeDelete(array $data)
     {
         if ($this->isInstalled()) {
-            SimplerenewFactory::getContainer()->events->trigger('simplerenewxUserBeforeDelete', array($data['id']));
+            SimplerenewFactory::getContainer()->events->trigger('simplerenewUserBeforeDelete', array($data['id']));
         }
     }
 
