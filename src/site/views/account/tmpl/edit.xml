@@ -9,13 +9,14 @@
     <fields name="params">
         <fieldset name="basic" label="COM_SIMPLERENEW_VIEW_ACCOUNT_EDIT_PARAMS_LABEL">
             <field
-                name="showAccount"
-                label="COM_SIMPLERENEW_VIEW_ACCOUNT_EDIT_SHOW_ACCOUNT_LABEL"
-                description="COM_SIMPLERENEW_VIEW_ACCOUNT_EDIT_SHOW_ACCOUNT_DESC"
+                name="editForms"
+                label="COM_SIMPLERENEW_VIEW_ACCOUNT_EDIT_FORMS_LABEL"
+                description="COM_SIMPLERENEW_VIEW_ACCOUNT_EDIT_FORMS_DESC"
                 type="list"
-                default="1">
-                <option value="1">JYES</option>
-                <option value="0">JNO</option>
+                default="">
+                <option value="">COM_SIMPLERENEW_OPTION_ACCOUNT_FORM_ALL</option>
+                <option value="account">COM_SIMPLERENEW_OPTION_ACCOUNT_FORM_ACCOUNT</option>
+                <option value="billing">COM_SIMPLERENEW_OPTION_ACCOUNT_FORM_BILLING</option>
             </field>
         </fieldset>
     </fields>

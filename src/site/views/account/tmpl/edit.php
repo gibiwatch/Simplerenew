@@ -32,11 +32,7 @@ JHtml::_('sr.validation.init', '#accountForm');
         action=""
         method="post">
 
-        <?php
-        if ($this->getParams()->get('showAccount', 1)) {
-            echo $this->loadTemplate('account');
-        }
-        ?>
+        <?php echo $this->loadTemplate('account'); ?>
 
         <?php echo $this->loadTemplate('billing'); ?>
 

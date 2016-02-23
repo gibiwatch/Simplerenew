@@ -41,15 +41,15 @@ class SimplerenewViewAccount extends SimplerenewViewSite
             $this->enforceSSL();
         }
 
+        $model = $this->getModel();
+
         $allowMultiple = $this->getParams()->get('basic.allowMultiple');
         $currentSubs   = Subscription::STATUS_ACTIVE | Subscription::STATUS_CANCELED;
         if ($allowMultiple) {
             // On multi-sub sites we won't be interested in expired subscriptions
-            $model = $this->getModel();
             $model->setState('status.subscription', $currentSubs);
         }
 
-        $model = $this->getModel();
         try {
             $this->user = $model->getUser();
             if (!$this->user) {
@@ -108,5 +108,19 @@ class SimplerenewViewAccount extends SimplerenewViewSite
         }
 
         return $plan;
+    }
+
+    /**
+     * Test if the requestd editing form should be displayed
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    protected function showForm($name)
+    {
+        $options = explode(',', $this->getParams()->get('editforms'));
+
+        return empty($options) || in_array(strtolower($name), $options);
     }
 }
