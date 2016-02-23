@@ -111,16 +111,20 @@ class SimplerenewViewAccount extends SimplerenewViewSite
     }
 
     /**
-     * Test if the requestd editing form should be displayed
+     * Test if the requested editing form should be displayed
      *
      * @param string $name
      *
-     * @return bool
+     * @return bool|string[]
      */
-    protected function showForm($name)
+    protected function showForm($name = null)
     {
-        $options = explode(',', $this->getParams()->get('editforms'));
+        $options = array_filter(explode(',', $this->getParams()->get('editForms')));
 
-        return empty($options) || in_array(strtolower($name), $options);
+        if ($name === null) {
+            return $options;
+        }
+
+        return !$options || in_array(strtolower($name), $options);
     }
 }

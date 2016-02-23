@@ -13,7 +13,8 @@ defined('_JEXEC') or die();
  */
 
 if ($this->showForm('account')) :
-    echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION'));
+    $heading = JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION');
+    echo $this->stepHeading($heading, count($this->showForm()) > 1);
     ?>
     <div class="ost-section">
         <div class="block6">
