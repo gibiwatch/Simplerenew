@@ -74,13 +74,13 @@ class SimplerenewRouter //extends JComponentRouterBase
      * This method is meant to transform the human readable URL back into
      * query parameters. It is only executed when SEF mode is switched on.
      *
-     * @param   array &$segments The segments of the URL to parse.
+     * @param   array $segments The segments of the URL to parse.
      *
      * @return  array  The URL attributes to be used by the application.
      *
      * @since   3.3
      */
-    public function parse(&$segments)
+    public function parse($segments)
     {
         $vars = array();
 
