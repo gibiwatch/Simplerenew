@@ -75,6 +75,8 @@ class SimplerenewViewAccount extends SimplerenewViewSite
             SimplerenewFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
         }
 
+        $this->getParams()->def('editAccount', 1);
+
         parent::display($tpl);
     }
 
@@ -108,23 +110,5 @@ class SimplerenewViewAccount extends SimplerenewViewSite
         }
 
         return $plan;
-    }
-
-    /**
-     * Test if the requested editing form should be displayed
-     *
-     * @param string $name
-     *
-     * @return bool|string[]
-     */
-    protected function showForm($name = null)
-    {
-        $options = array_filter(explode(',', $this->getParams()->get('editForms')));
-
-        if ($name === null) {
-            return $options;
-        }
-
-        return !$options || in_array(strtolower($name), $options);
     }
 }

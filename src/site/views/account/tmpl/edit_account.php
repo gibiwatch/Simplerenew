@@ -12,9 +12,10 @@ defined('_JEXEC') or die();
  * @var SimplerenewViewAccount $this
  */
 
-if ($this->showForm('account')) :
+if ($this->getParams()->get('editAccount')) :
     $heading = JText::_('COM_SIMPLERENEW_HEADING_BASICINFORMATION');
-    echo $this->stepHeading($heading, count($this->showForm()) > 1);
+    echo $this->stepHeading($heading);
+
     ?>
     <div class="ost-section">
         <div class="block6">
@@ -85,5 +86,12 @@ if ($this->showForm('account')) :
         </div>
     </div>
     <!-- /.ost-section -->
+    <?php
+else :
+    ?>
+    <input type="hidden" name="firstname" value="<?php echo $this->user->firstname; ?>"/>
+    <input type="hidden" name="lastname" value="<?php echo $this->user->lastname; ?>"/>
+    <input type="hidden" name="username" value="<?php echo $this->user->username; ?>"/>
+    <input type="hidden" name="email" value="<?php echo $this->user->email; ?>"/>
     <?php
 endif;
