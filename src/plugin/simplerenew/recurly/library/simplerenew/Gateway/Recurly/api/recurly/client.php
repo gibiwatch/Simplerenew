@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Recurly_Client provides methods for interacting with the {@link http://docs.recurly.com/api Recurly} API.
+ * Recurly_Client provides methods for interacting with the {@link https://dev.recurly.com/docs/getting-started Recurly} API.
  *
  * @category   Recurly
  * @package    Recurly_Client_PHP
@@ -25,6 +25,16 @@ class Recurly_Client
   public static $apiUrl = 'https://%s.recurly.com/v2';
 
   /**
+   * API Version
+   */
+  public static $apiVersion = '2.1';
+
+  /**
+   * The path to your CA certs. Use only if needed (if you can't fix libcurl/php).
+   */
+  public static $CACertPath = false;
+
+  /**
    * API Key instance, may differ from the static key
    */
   private $_apiKey;
@@ -34,7 +44,7 @@ class Recurly_Client
    */
   private $_acceptLanguage = 'en-US';
 
-  const API_CLIENT_VERSION = '2.4.4';
+  const API_CLIENT_VERSION = '2.5.1';
   const DEFAULT_ENCODING = 'UTF-8';
 
   const GET = 'GET';
@@ -51,6 +61,7 @@ class Recurly_Client
   const PATH_COUPON_REDEMPTION = '/redemption';
   const PATH_COUPON_REDEMPTIONS = '/redemptions';
   const PATH_COUPONS = '/coupons';
+  const PATH_UNIQUE_COUPONS = '/unique_coupon_codes';
   const PATH_INVOICES = '/invoices';
   const PATH_NOTES = '/notes';
   const PATH_PLANS = '/plans';
@@ -113,6 +124,9 @@ class Recurly_Client
     curl_setopt($ch, CURLOPT_URL, $uri);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, TRUE);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+    if (self::$CACertPath) {
+      curl_setopt($ch, CURLOPT_CAINFO, self::$CACertPath);
+    }
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, FALSE);
     curl_setopt($ch, CURLOPT_MAXREDIRS, 1);
     curl_setopt($ch, CURLOPT_HEADER, TRUE);
@@ -123,7 +137,8 @@ class Recurly_Client
       'Content-Type: application/xml; charset=utf-8',
       'Accept: application/xml',
       Recurly_Client::__userAgent(),
-      'Accept-Language: ' . $this->_acceptLanguage
+      'Accept-Language: ' . $this->_acceptLanguage,
+      'X-Api-Version: ' . Recurly_Client::$apiVersion
     ));
     curl_setopt($ch, CURLOPT_USERPWD, $this->apiKey());
 
@@ -188,7 +203,7 @@ class Recurly_Client
       case CURLE_COULDNT_CONNECT:
       case CURLE_COULDNT_RESOLVE_HOST:
       case CURLE_OPERATION_TIMEOUTED:
-        throw new Recurly_ConnectionError("Failed to connect to Recurly.");
+        throw new Recurly_ConnectionError("Failed to connect to Recurly ($message).");
       case CURLE_SSL_CACERT:
       case CURLE_SSL_PEER_CERTIFICATE:
         throw new Recurly_ConnectionError("Could not verify Recurly's SSL certificate.");

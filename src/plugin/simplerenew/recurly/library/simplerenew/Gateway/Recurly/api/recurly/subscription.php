@@ -3,18 +3,16 @@
 class Recurly_Subscription extends Recurly_Resource
 {
   protected static $_writeableAttributes;
-  protected static $_nestedAttributes;
 
   public static function init()
   {
     Recurly_Subscription::$_writeableAttributes = array(
-      'account','plan_code','coupon_code','unit_amount_in_cents','quantity',
+      'account','plan_code','coupon_code','coupon_codes','unit_amount_in_cents','quantity',
       'currency','starts_at','trial_ends_at','total_billing_cycles', 'first_renewal_date',
       'timeframe', 'subscription_add_ons', 'net_terms', 'po_number', 'collection_method',
       'cost_in_cents', 'remaining_billing_cycles', 'bulk', 'terms_and_conditions', 'customer_notes',
       'vat_reverse_charge_notes', 'bank_account_authorized_at'
     );
-    Recurly_Subscription::$_nestedAttributes = array('account', 'subscription_add_ons');
   }
 
   public function __construct($href = null, $client = null) {
@@ -104,7 +102,7 @@ class Recurly_Subscription extends Recurly_Resource
   /**
    * Updates the notes fields of the subscription without generating a SubscriptionChange.
    *
-   * @parameter array of notes, allowed keys: (customer_notes, terms_and_conditions, vat_reverse_charge_notes)
+   * @param array of notes, allowed keys: (customer_notes, terms_and_conditions, vat_reverse_charge_notes)
    **/
   public function updateNotes($notes) {
     $this->setValues($notes)->_save(Recurly_Client::PUT, $this->uri() . '/notes');
