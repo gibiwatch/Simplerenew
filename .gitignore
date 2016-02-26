@@ -5,6 +5,7 @@
 build.properties
 
 !.gitignore
+!.gitkeep
 !.htaccess
 
 # Icon must ends with two \r.
@@ -47,7 +48,6 @@ nb-configuration.xml
 # Phing #
 #########
 packages/*
-!packages/.gitkeep
 
 # misc other files #
 ####################
