@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 
 function SimplerenewBuildRoute(array &$query)
 {
-    $router = new SimplerenewRouter();
+    $router   = new SimplerenewRouter();
     $segments = $router->build($query);
 
     return $segments;
@@ -19,7 +19,7 @@ function SimplerenewBuildRoute(array &$query)
 function SimplerenewParseRoute($segments)
 {
     $router = new SimplerenewRouter();
-    $vars = $router->parse($segments);
+    $vars   = $router->parse($segments);
 
     return $vars;
 }
@@ -53,7 +53,21 @@ class SimplerenewRouter //extends JComponentRouterBase
         if (isset($query['view'])) {
             $view = $query['view'];
             if ($view != $menuView) {
-                $segments[] = $view;
+                switch ($view) {
+                    case 'invoice':
+                        if (!empty($query['format'])) {
+                            unset($query['format']);
+                        }
+                        if (!empty($query['number'])) {
+                            $segments[] = $query['number'];
+                            unset($query['number']);
+                        }
+                        break;
+
+                    default:
+                        $segments[] = $view;
+                        break;
+                }
             }
             unset($query['view']);
         }
@@ -90,7 +104,17 @@ class SimplerenewRouter //extends JComponentRouterBase
             if (isset($menuItem->query['layout'])) {
                 $vars['layout'] = $menuItem->query['layout'];
             } elseif (!empty($segments[0])) {
-                $vars['layout'] = $segments[0];
+                switch ($vars['view']) {
+                    case 'invoices':
+                        $vars['view']   = 'invoice';
+                        $vars['format'] = 'raw';
+                        $vars['number']  = (int)$segments[0];
+                        break;
+
+                    default:
+                        $vars['layout'] = $segments[0];
+                        break;
+                }
             }
         }
 
