@@ -112,13 +112,13 @@
     </fields>
 
         <fieldset
-            name="redirect"
-            label="COM_SIMPLERENEW_CONFIG_FIELDSET_REDIRECT_LABEL"
-            description="COM_SIMPLERENEW_CONFIG_FIELDSET_REDIRECT_DESC">
+            name="redirects"
+            label="COM_SIMPLERENEW_CONFIG_FIELDSET_REDIRECTS_LABEL"
+            description="COM_SIMPLERENEW_CONFIG_FIELDSET_REDIRECTS_DESC">
 
             <field
-                name="redirect"
-                label="COM_SIMPLERENEW_CONFIG_REDIRECT _LABEL"
+                name="redirects"
+                label="COM_SIMPLERENEW_CONFIG_FIELDSET_REDIRECTS_LABEL"
                 type="simplerenew.redirect"/>
 
         </fieldset>
