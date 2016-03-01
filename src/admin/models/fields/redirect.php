@@ -71,32 +71,41 @@ class SimplerenewFormFieldRedirect extends JFormFieldText
         JHtml::_('sr.jquery');
         JHtml::_('script', 'com_simplerenew/jquery-ui.js', false, true);
 
+        SimplerenewFactory::getDocument()
+            ->addStyleSheet('//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css')
+            ->addStyleDeclaration($this->getCss())
+            ->addScriptDeclaration($this->getJavascript());
+    }
+
+    protected function getCss()
+    {
         $css = <<<STYLES
-.simplerenew-sortable label,
-.simplerenew-sortable input {
-    float: none !important;
-    display: inline-block !important;
-}
-#jform_redirects-lbl {
+#{$this->id}-lbl {
     font-weight: 600;
     margin-bottom: 15px;
 }
-#jform_redirects {
+#{$this->id} {
     display: table;
 }
-#jform_redirects > li {
+#{$this->id} > li {
     padding: 5px;
 }
-#jform_redirects > li:nth-child(2n+1) {
+#{$this->id} > li:nth-child(2n+1) {
      background: rgba(242,242,242,0.5);
 }
-#jform_redirects > li > label,
-#jform_redirects > li > input[type="text"] {
+#{$this->id} > li > label,
+#{$this->id} > li > input[type="text"] {
+    float: none;
+    display: inline-block;
     width: 220px;
     margin: 0;
 }
 STYLES;
+        return $css;
+    }
 
+    protected function getJavascript()
+    {
         $js = <<<JSCRIPT
 (function($) {
     $(document).ready(function () {
@@ -106,10 +115,6 @@ STYLES;
     });
 })(jQuery);
 JSCRIPT;
-
-        SimplerenewFactory::getDocument()
-            ->addStyleSheet('//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css')
-            ->addStyleDeclaration($css)
-            ->addScriptDeclaration($js);
+        return $js;
     }
 }
