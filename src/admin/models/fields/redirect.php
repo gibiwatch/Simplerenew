@@ -45,6 +45,7 @@ class SimplerenewFormFieldRedirect extends JFormFieldText
             sprintf('<ul id="%s" class="simplerenew-sortable">', $this->id)
         );
 
+        $label = '<label for="%s"><i class="fa fa-arrows"></i> %s</label>';
         foreach ($values as $value) {
             $attribs = array(
                 'type'  => 'text',
@@ -54,7 +55,7 @@ class SimplerenewFormFieldRedirect extends JFormFieldText
             );
 
             $html[] = '<li>'
-                . sprintf('<label for="%s">%s</label>', $attribs['id'], $value->label)
+                . sprintf($label, $attribs['id'], $value->label)
                 . '<input ' . SimplerenewUtilitiesArray::toString($attribs) . '/>'
                 . '</li>';
         }
@@ -68,6 +69,7 @@ class SimplerenewFormFieldRedirect extends JFormFieldText
 
     protected function loadAssets()
     {
+        JHtml::_('stylesheet', 'com_simplerenew/awesome/css/font-awesome.min.css', null, true);
         JHtml::_('sr.jquery');
         JHtml::_('script', 'com_simplerenew/jquery-ui.js', false, true);
 
