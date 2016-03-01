@@ -72,7 +72,7 @@ class plgUserSimplerenew extends JPlugin
     public function onUserLogin($response, $options)
     {
         $app = JFactory::getApplication();
-        if ($app->isSite() && !empty($response['username']) && $this->isInstalled()) {
+        if ($app->isSite() && !empty($options['return']) && $this->isInstalled()) {
             // Normalize redirects parameter to an integer key array and filter for set levels
             $params = SimplerenewComponentHelper::getParams();
             $redirects = array_filter(
