@@ -64,6 +64,46 @@ class plgUserSimplerenew extends JPlugin
     }
 
     /**
+     * @param array $response
+     * @param array $options
+     *
+     * @return bool
+     */
+    public function onUserLogin($response, $options)
+    {
+        $app = JFactory::getApplication();
+        if ($app->isSite() && !empty($response['username']) && $this->isInstalled()) {
+            // Normalize redirects parameter to an integer key array and filter for set levels
+            $params = SimplerenewComponentHelper::getParams();
+            $redirects = array_filter(
+                json_decode(
+                    json_encode(
+                        $params->get('redirects')
+                    ),
+                    true
+                )
+            );
+
+            if ($redirects) {
+                $userId     = JUserHelper::getUserId($response['username']);
+                $user       = SimplerenewFactory::getUser($userId);
+                $userAccess = $user->getAuthorisedViewLevels();
+
+                if ($keys = array_intersect(array_keys($redirects), $userAccess)) {
+                    // User is in one of the redirected groups, send them to the first one specified
+                    $key = array_shift($keys);
+                    if ($redirect = $redirects[$key]) {
+                        $app->setUserState('users.login.form.return', $redirect);
+                    }
+                }
+            }
+        }
+
+        // There really is no point returning anything but true from this event
+        return true;
+    }
+
+    /**
      * @param array $data
      * @param bool  $success
      */
