@@ -94,6 +94,9 @@ class SimplerenewFormFieldGrouporder extends JFormField
      */
     protected function addAssets($sortableId)
     {
+        JHtml::_('sr.jquery');
+        JHtml::_('script', 'com_simplerenew/jquery-ui.js', false, true);
+
         $css = <<<CSS
 #{$sortableId} { list-style-type: none; margin: 0; padding: 0; float: left; }
 #{$sortableId} li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
@@ -139,7 +142,5 @@ JSCRIPT;
             ->addStyleDeclaration($css)
             ->addStyleSheet('//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css')
             ->addScriptDeclaration($js);
-
-        JHtml::_('script', 'com_simplerenew/jquery-ui.js', false, true);
     }
 }
