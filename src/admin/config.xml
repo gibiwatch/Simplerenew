@@ -111,6 +111,18 @@
         </fieldset>
     </fields>
 
+        <fieldset
+            name="redirect"
+            label="COM_SIMPLERENEW_CONFIG_FIELDSET_REDIRECT_LABEL"
+            description="COM_SIMPLERENEW_CONFIG_FIELDSET_REDIRECT_DESC">
+
+            <field
+                name="redirect"
+                label="COM_SIMPLERENEW_CONFIG_REDIRECT _LABEL"
+                type="simplerenew.redirect"/>
+
+        </fieldset>
+
     <fields name="themes">
         <fieldset
             name="themes"
