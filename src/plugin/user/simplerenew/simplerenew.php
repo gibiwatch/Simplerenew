@@ -73,8 +73,8 @@ class plgUserSimplerenew extends JPlugin
     {
         $app = JFactory::getApplication();
         if ($app->isSite() && !empty($options['return']) && $this->isInstalled()) {
-            // Normalize redirects parameter to an integer key array and filter for set levels
-            $params = SimplerenewComponentHelper::getParams();
+            // Normalize redirects parameter to an integer key array and filter for set groups
+            $params    = SimplerenewComponentHelper::getParams();
             $redirects = array_filter(
                 json_decode(
                     json_encode(
@@ -85,11 +85,11 @@ class plgUserSimplerenew extends JPlugin
             );
 
             if ($redirects) {
-                $userId     = JUserHelper::getUserId($response['username']);
-                $user       = SimplerenewFactory::getUser($userId);
-                $userAccess = $user->getAuthorisedViewLevels();
+                $userId = JUserHelper::getUserId($response['username']);
+                $user   = SimplerenewFactory::getUser($userId);
+                $groups = $user->getAuthorisedGroups();
 
-                if ($keys = array_intersect(array_keys($redirects), $userAccess)) {
+                if ($keys = array_intersect(array_keys($redirects), $groups)) {
                     // User is in one of the redirected groups, send them to the first one specified
                     $key = array_shift($keys);
                     if ($redirect = $redirects[$key]) {

@@ -17,24 +17,24 @@ class SimplerenewFormFieldRedirect extends JFormFieldText
         $db    = JFactory::getDbo();
         $query = $db->getQuery(true)
             ->select('id, title')
-            ->from('#__viewlevels')
+            ->from('#__usergroups')
             ->order('title ASC');
 
-        $levels = $db->setQuery($query)->loadObjectList('id');
+        $groups = $db->setQuery($query)->loadObjectList('id');
 
         $keys = array_unique(
             array_merge(
                 array_keys((array)$this->value),
-                array_keys($levels)
+                array_keys($groups)
             )
         );
 
         $values = array();
         foreach ($keys as $key) {
-            if (isset($levels[$key])) {
+            if (isset($groups[$key])) {
                 $values[] = (object)array(
                     'id'    => $key,
-                    'label' => $levels[$key]->title,
+                    'label' => $groups[$key]->title,
                     'value' => $this->value[$key]
                 );
             }
