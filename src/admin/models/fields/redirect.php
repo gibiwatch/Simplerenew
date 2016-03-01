@@ -77,6 +77,24 @@ class SimplerenewFormFieldRedirect extends JFormFieldText
     float: none !important;
     display: inline-block !important;
 }
+#jform_redirects-lbl {
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+#jform_redirects {
+    display: table;
+}
+#jform_redirects > li {
+    padding: 5px;
+}
+#jform_redirects > li:nth-child(2n+1) {
+     background: rgba(242,242,242,0.5);
+}
+#jform_redirects > li > label,
+#jform_redirects > li > input[type="text"] {
+    width: 220px;
+    margin: 0;
+}
 STYLES;
 
         $js = <<<JSCRIPT
