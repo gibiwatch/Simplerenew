@@ -111,17 +111,19 @@
         </fieldset>
     </fields>
 
-        <fieldset
-            name="redirects"
-            label="COM_SIMPLERENEW_CONFIG_FIELDSET_REDIRECTS_LABEL"
-            description="COM_SIMPLERENEW_CONFIG_FIELDSET_REDIRECTS_DESC">
-
-            <field
+        <fields name="redirects">
+            <fieldset
                 name="redirects"
-                label="COM_SIMPLERENEW_CONFIG_FIELDSET_REDIRECTS_LABEL"
-                type="simplerenew.redirect"/>
+                label="COM_SIMPLERENEW_CONFIG_FIELDSET_REDIRECTS_LABEL">
 
-        </fieldset>
+                <field
+                    name="group"
+                    label="COM_SIMPLERENEW_CONFIG_REDIRECTS_GROUP_LABEL"
+                    description="COM_SIMPLERENEW_CONFIG_REDIRECTS_GROUP_DESC"
+                    type="simplerenew.redirect"/>
+
+            </fieldset>
+        </fields>
 
     <fields name="themes">
         <fieldset

@@ -78,7 +78,7 @@ class plgUserSimplerenew extends JPlugin
             $redirects = array_filter(
                 json_decode(
                     json_encode(
-                        $params->get('redirects')
+                        $params->get('redirects.group')
                     ),
                     true
                 )
