@@ -52,7 +52,7 @@
                 type="menuitem"
                 label="COM_SIMPLERENEW_FIELD_NEW_SUBSCRIPTION_REDIRECT_LABEL"
                 description="COM_SIMPLERENEW_FIELD_NEW_SUBSCRIPTION_REDIRECT_DESC">
-                <option value="">COM_SIMPLERENEW_OPTION_DEFAULT</option>
+                <option value="">COM_SIMPLERENEW_OPTION_GLOBAL_DEFAULT</option>
             </field>
 
             <field

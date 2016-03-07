@@ -9,17 +9,16 @@
 use Simplerenew\Primitive as Payment;
 
 defined('_JEXEC') or die();
-?>
 
-<?php
-if ($this->billing):
+/** @var SimplerenewViewAccount $this */
+
+if ($this->billing) :
     $payment = $this->billing->payment;
 
-    ?>
-
-    <?php
-    if ($payment instanceof Payment\CreditCard): ?>
-        <h3><span><i class="fa fa-credit-card"></i></span> <?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?></h3>
+    if ($payment instanceof Payment\CreditCard) :
+        ?>
+        <h3><span><i class="fa fa-credit-card"></i></span> <?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?>
+        </h3>
 
         <div class="m-bottom b-bottom ost-table">
 
@@ -78,8 +77,9 @@ if ($this->billing):
         </div>
         <!-- .simplerenew-credit-card -->
 
-    <?php
-    elseif ($payment instanceof Payment\PayPal): ?>
+        <?php
+    elseif ($payment instanceof Payment\PayPal) :
+        ?>
         <h3><span><i class="fa fa-paypal"></i></span> <?php echo JText::_('COM_SIMPLERENEW_PAYPAL'); ?></h3>
 
         <div class="simplerenew-paypal-information m-bottom ost-table">
@@ -112,17 +112,19 @@ if ($this->billing):
         </div>
         <!-- .simplerenew-paypal-information -->
 
-    <?php
-    else: ?>
-        <h3><span><i class="fa fa-credit-card"></i></span> <?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?></h3>
+        <?php
+    else :
+        ?>
+        <h3><span><i class="fa fa-credit-card"></i></span> <?php echo JText::_('COM_SIMPLERENEW_CREDITCARD'); ?>
+        </h3>
 
         <div class="ost-alert-warning">
             <?php echo JText::_('COM_SIMPLERENEW_ERROR_PAYMENT_TYPE_UNKNOWN'); ?>
         </div>
 
-    <?php
+        <?php
     endif;
-elseif ($this->subscriptions):
+elseif ($this->subscriptions) :
     ?>
 
     <div class="ost-alert-warning">

@@ -91,7 +91,7 @@ class SimplerenewModelSubscribe extends SimplerenewModelAccount
         $this->setState('status.subscription', $currentSubs);
 
         if ($params = $this->state->get('parameters.menu')) {
-            $globalParams = SimplerenewComponentHelper::getParams();
+            $globalParams = $this->state->get('parameters.component');
 
             $plans = new JRegistry($params->get('plans'));
             $this->setState('filter.plans', $plans->toArray());

@@ -42,15 +42,17 @@ if ($creditCard->lastFour || !empty($paypal)) {
         . JText::_('COM_SIMPLERENEW_BILLING_CLEAR')
         . '</span>';
 }
-echo $this->stepHeading($heading);
 
-if (!empty($paypal)): ?>
+echo $this->stepHeading($heading, $this->getParams()->get('editAccount'));
+
+if (!empty($paypal)) :
+    ?>
     <div class="ost-alert-notify m-bottom">
         <?php echo JText::sprintf('COM_SIMPLERENEW_BILLING_EDIT_PAYPAL', $paypal->agreementId); ?>
     </div>
     <?php
-endif; ?>
-
+endif;
+?>
 <div class="ost-section payment-tabs">
     <div class="block3 tab-enabled" id="tab_card">
         <h4>

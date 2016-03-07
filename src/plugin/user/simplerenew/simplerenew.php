@@ -59,8 +59,48 @@ class plgUserSimplerenew extends JPlugin
     public function onUserBeforeDelete(array $data)
     {
         if ($this->isInstalled()) {
-            SimplerenewFactory::getContainer()->events->trigger('simplerenewxUserBeforeDelete', array($data['id']));
+            SimplerenewFactory::getContainer()->events->trigger('simplerenewUserBeforeDelete', array($data['id']));
         }
+    }
+
+    /**
+     * @param array $response
+     * @param array $options
+     *
+     * @return bool
+     */
+    public function onUserLogin($response, $options)
+    {
+        $app = JFactory::getApplication();
+        if ($app->isSite() && !empty($options['return']) && $this->isInstalled()) {
+            // Normalize redirects parameter to an integer key array and filter for set groups
+            $params    = SimplerenewComponentHelper::getParams();
+            $redirects = array_filter(
+                json_decode(
+                    json_encode(
+                        $params->get('redirects.group')
+                    ),
+                    true
+                )
+            );
+
+            if ($redirects) {
+                $userId = JUserHelper::getUserId($response['username']);
+                $user   = SimplerenewFactory::getUser($userId);
+                $groups = $user->getAuthorisedGroups();
+
+                if ($keys = array_intersect(array_keys($redirects), $groups)) {
+                    // User is in one of the redirected groups, send them to the first one specified
+                    $key = array_shift($keys);
+                    if ($redirect = $redirects[$key]) {
+                        $app->setUserState('users.login.form.return', $redirect);
+                    }
+                }
+            }
+        }
+
+        // There really is no point returning anything but true from this event
+        return true;
     }
 
     /**

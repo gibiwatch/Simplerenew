@@ -3,7 +3,6 @@
 class Recurly_BillingInfo extends Recurly_Resource
 {
   protected static $_writeableAttributes;
-  protected static $_nestedAttributes;
 
   public static function init()
   {
@@ -12,10 +11,9 @@ class Recurly_BillingInfo extends Recurly_Resource
       'address1','address2','city','state','country','zip','phone','vat_number',
       'number','month','year','verification_value','start_year','start_month','issue_number',
       'account_number','routing_number','account_type',
-      'paypal_billing_agreement_id', 'amazon_billing_agreement_id',
+      'paypal_billing_agreement_id', 'amazon_billing_agreement_id', 'currency',
       'token_id'
     );
-    Recurly_BillingInfo::$_nestedAttributes = array('account');
   }
 
   public static function get($accountCode, $client = null) {

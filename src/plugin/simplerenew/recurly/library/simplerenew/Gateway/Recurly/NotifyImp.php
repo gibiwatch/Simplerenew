@@ -19,8 +19,8 @@ defined('_JEXEC') or die();
 class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
 {
     protected $validIpAddresses = array(
-        '74.201.212.0/24',
-        '64.74.141.0/24'
+        '64.74.141.0/24',
+        '8.36.93.0/24'
     );
 
     protected $fieldMap = array(

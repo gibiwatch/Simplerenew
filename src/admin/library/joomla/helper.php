@@ -518,4 +518,23 @@ abstract class SimplerenewHelper
         }
         return $result;
     }
+
+    /**
+     * Check a potentially local, relative url and make sure
+     * it is properly formed
+     *
+     * @param string $url
+     *
+     * @return string
+     */
+    public static function normalizeUrl($url)
+    {
+        if (!preg_match('#https?://#', $url)) {
+            $root = SimplerenewFactory::getURI()->root(true);
+
+            return rtrim($root, '/') . '/' . ltrim($url, '/');
+        }
+
+        return $url;
+    }
 }

@@ -20,16 +20,8 @@ abstract class SimplerenewModelSite extends JModelLegacy
         parent::__construct($config);
 
         $this->context = $this->option . '.' . $this->name;
-    }
 
-    public function getState($property = null, $default = null)
-    {
-        $init  = !$this->__state_set;
-        $state = parent::getState();
-        if ($init) {
-            $state->set('parameters.component', SimplerenewComponentHelper::getParams());
-        }
-        return parent::getState($property, $default);
+        $this->state->set('parameters.component', SimplerenewComponentHelper::getParams());
     }
 
     /**
@@ -43,9 +35,8 @@ abstract class SimplerenewModelSite extends JModelLegacy
          * @var JRegistry $state
          * @var JRegistry $params
          */
-        $state      = $this->getState();
-        $params     = clone $state->get('parameters.component');
-        if ($menuParams = $state->get('parameters.menu')) {
+        $params = clone $this->state->get('parameters.component');
+        if ($menuParams = $this->state->get('parameters.menu')) {
             if ($menuParams instanceof JRegistry) {
                 $menuParams = $menuParams->toObject();
             }

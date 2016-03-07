@@ -41,15 +41,15 @@ class SimplerenewViewAccount extends SimplerenewViewSite
             $this->enforceSSL();
         }
 
+        $model = $this->getModel();
+
         $allowMultiple = $this->getParams()->get('basic.allowMultiple');
         $currentSubs   = Subscription::STATUS_ACTIVE | Subscription::STATUS_CANCELED;
         if ($allowMultiple) {
             // On multi-sub sites we won't be interested in expired subscriptions
-            $model = $this->getModel();
             $model->setState('status.subscription', $currentSubs);
         }
 
-        $model = $this->getModel();
         try {
             $this->user = $model->getUser();
             if (!$this->user) {
@@ -74,6 +74,8 @@ class SimplerenewViewAccount extends SimplerenewViewSite
         } catch (Simplerenew\Exception $e) {
             SimplerenewFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
         }
+
+        $this->getParams()->def('editAccount', 1);
 
         parent::display($tpl);
     }

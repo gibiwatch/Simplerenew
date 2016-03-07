@@ -122,6 +122,28 @@
         </fieldset>
     </fields>
 
+        <fields name="redirects">
+            <fieldset
+                name="redirects"
+                label="COM_SIMPLERENEW_CONFIG_FIELDSET_REDIRECTS_LABEL">
+
+                <field
+                    name="newSubscription"
+                    type="menuitem"
+                    label="COM_SIMPLERENEW_CONFIG_REDIRECTS_NEW_SUBSCRIPTION_LABEL"
+                    description="COM_SIMPLERENEW_CONFIG_REDIRECTS_NEW_SUBSCRIPTION_DESC">
+                    <option value="">COM_SIMPLERENEW_OPTION_DEFAULT</option>
+                </field>
+
+                <field
+                    name="group"
+                    label="COM_SIMPLERENEW_CONFIG_REDIRECTS_GROUP_LABEL"
+                    description="COM_SIMPLERENEW_CONFIG_REDIRECTS_GROUP_DESC"
+                    type="simplerenew.redirect"/>
+
+            </fieldset>
+        </fields>
+
     <fields name="themes">
         <fieldset
             name="themes"

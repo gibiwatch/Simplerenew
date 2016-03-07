@@ -13,12 +13,13 @@ RecurlyLoader::register();
 abstract class RecurlyLoader
 {
     protected static $exceptions = array(
-        'Recurly_CouponRedemption' => 'redemption.php',
-        'Recurly_ClientResponse'   => 'response.php',
-        'Recurly_HmacHash'         => 'util/hmac_hash.php',
-        'Recurly_js'               => 'recurly_js.php',
-        'Recurly_Tax_Detail'       => 'tax_detail.php',
-        'Recurly_TransactionError' => 'transaction_error.php'
+        'Recurly_ClientResponse'       => 'response.php',
+        'Recurly_CouponRedemption'     => 'redemption.php',
+        'Recurly_CouponRedemptionList' => 'redemption_list.php',
+        'Recurly_HmacHash'             => 'util/hmac_hash.php',
+        'Recurly_js'                   => 'recurly_js.php',
+        'Recurly_Tax_Detail'           => 'tax_detail.php',
+        'Recurly_TransactionError'     => 'transaction_error.php'
     );
 
     public static function register()

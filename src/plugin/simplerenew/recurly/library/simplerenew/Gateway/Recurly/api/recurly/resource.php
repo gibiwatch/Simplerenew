@@ -63,7 +63,7 @@ abstract class Recurly_Resource extends Recurly_Base
   /**
    * Does a mass assignment on this resource's values
    *
-   * @parameter array
+   * @param array
    *   The array of values to set on the resource.
    */
   public function setValues($values) {
@@ -73,15 +73,17 @@ abstract class Recurly_Resource extends Recurly_Base
     return $this;
   }
 
-  protected function _save($method, $uri)
+  protected function _save($method, $uri, $data = null)
   {
     $this->_errors = array(); // reset errors
 
-    if (is_null($this->_client))
-      $this->_client = new Recurly_Client();
+    if (is_null($data)) {
+      $data = $this->xml();
+    }
 
-    $response = $this->_client->request($method, $uri, $this->xml());
+    $response = $this->_client->request($method, $uri, $data);
     $response->assertValidResponse();
+
     if (isset($response->body)) {
       Recurly_Resource::__parseXmlToUpdateObject($response->body);
     }
@@ -94,8 +96,6 @@ abstract class Recurly_Resource extends Recurly_Base
     $doc = $this->createDocument();
     $root = $doc->appendChild($doc->createElement($this->getNodeName()));
     $this->populateXmlDoc($doc, $root, $this);
-    // To be able to consistently run tests across different XML libraries,
-    // favor `<foo></foo>` over `<foo/>`.
     return $this->renderXML($doc);
   }
 
@@ -104,6 +104,8 @@ abstract class Recurly_Resource extends Recurly_Base
   }
 
   public function renderXML($doc) {
+    // To be able to consistently run tests across different XML libraries,
+    // favor `<foo></foo>` over `<foo/>`.
     return $doc->saveXML(null, LIBXML_NOEMPTYTAG);
   }
 

@@ -47,7 +47,6 @@ nb-configuration.xml
 # Phing #
 #########
 packages/*
-!packages/.gitkeep
 
 # misc other files #
 ####################

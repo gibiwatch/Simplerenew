@@ -17,6 +17,11 @@ class SimplerenewControllerNotify extends SimplerenewControllerBase
 {
     public function receive()
     {
+        // Back out all buffering so gateway knows we're here
+        while (ob_get_status()) {
+            ob_end_flush();
+        }
+
         $logger = SimplerenewFactory::getContainer()->logger;
         $logger->debug('Notification: Begin Receive', Logger::DEBUG_INFO, true);
 

@@ -24,15 +24,22 @@ abstract class SimplerenewViewSite extends SimplerenewView
      * Display an incrementing step header. Each subsequent
      * use adds one to the step number
      *
-     * @param $text
+     * @param string $text
+     * @param bool   $showStep
      *
      * @return string
      */
-    protected function stepHeading($text)
+    protected function stepHeading($text, $showStep = true)
     {
-        $step = JText::sprintf('COM_SIMPLERENEW_HEADING_STEP', $this->step++);
+        if ($showStep) {
+            $step = '<span>'
+                . JText::sprintf('COM_SIMPLERENEW_HEADING_STEP', $this->step++)
+                . '</span>';
+        } else {
+            $step = '';
+        }
 
-        $html = '<h3><span>' . $step . '</span>' . $text . '</h3>';
+        $html = '<h3>' . $step . $text . '</h3>';
 
         return $html;
     }
