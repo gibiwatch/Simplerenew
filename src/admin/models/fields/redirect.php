@@ -91,6 +91,7 @@ class SimplerenewFormFieldRedirect extends JFormFieldText
 }
 #{$this->id} > li {
     padding: 5px;
+    list-style: none;
 }
 #{$this->id} > li:nth-child(2n+1) {
      background: rgba(242,242,242,0.5);
