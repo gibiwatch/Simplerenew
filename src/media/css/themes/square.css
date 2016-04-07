@@ -369,6 +369,18 @@
     margin-top: 30px;
 }
 
+.ost-container .ost-coupon-box {
+    padding: 15px;
+    margin: 2px 0;
+    background: #fbfbfb;
+    border: 1px dashed #ccc;
+    color: #999;
+}
+
+.ost-container .ost-coupon-box .coupon-toggle {
+    color: #777;
+}
+
 .ost-container #coupon-area{
 	margin-top: 8px;
 }

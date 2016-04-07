@@ -26,7 +26,7 @@ if ($couponCode && $planSelected) {
 ?>
 <div class="ost-section p-bottom m-top b-bottom">
     <div class="block6">
-        <div class="ost-alert-notify">
+        <div class="ost-coupon-box">
 
             <div class="coupon-toggle" data-content="#coupon-area">
                 <?php echo JText::_('COM_SIMPLERENEW_COUPON_CODE_ASK'); ?>
