@@ -91,7 +91,7 @@
     -webkit-transition: all 0.2s linear;
     -o-transition: all 0.2s linear;
     transition: all 0.2s linear;
-    text-decoration: underline;
+    text-decoration: none;
     color: #2184cd;
 }
 
@@ -630,6 +630,7 @@ span.simplerenew-plan.simplerenew-plan-selected{
 .ost-container .simplerenew-plan input[type="checkbox"] {
     display: none;
 }
+
 .simplerenew-plan:before {
     content: "\f10c";
     font-family:'FAwesome';
@@ -638,13 +639,20 @@ span.simplerenew-plan.simplerenew-plan-selected{
     display: inline-block;
     opacity: 0.4;
 }
+
 .simplerenew-plan.simplerenew-plan-selected:before {
     content: "\f00c";
     opacity: 1;
 }
+
 #simplerenew-toggle-login {
     float: right;
     margin-bottom: 0;
+    font-size: 14px;
+}
+
+#simplerenew-toggle-login i:before {
+    color: inherit;
 }
 
 /* Listing

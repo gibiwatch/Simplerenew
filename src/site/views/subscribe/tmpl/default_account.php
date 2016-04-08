@@ -26,13 +26,11 @@ if (!$loggedIn) {
 
     $stepHeading = <<<BUTTONHTML
 {$stepHeading}
-<button
-    type="button"
+<a
     id="simplerenew-toggle-login"
-    class="btn-main btn-small"
     data-panels=".simplerenew-toggle-item">
-    {$buttonText[$defaultForm]}
-</button>
+    <i class="fa fa-user"></i> {$buttonText[$defaultForm]}
+</a>
 BUTTONHTML;
 }
 
