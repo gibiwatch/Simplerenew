@@ -32,7 +32,7 @@ JHtml::_('sr.tabs', '.payment-tabs div', $tabOptions);
 
 echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BILLING'));
 
-if ($payment instanceof Paypal):
+if ($payment instanceof PayPal):
     ?>
     <div class="ost-alert-notify m-bottom">
         <?php echo JText::sprintf('COM_SIMPLERENEW_BILLING_EDIT_PAYPAL', $payment->agreementId); ?>
