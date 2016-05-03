@@ -230,7 +230,12 @@
         if (!options.active) {
             options.active = '#' + $(headers[0]).attr('id');
         }
-        $(headers.filter(options.active)).trigger('click');
+        headers.each(function(idx) {
+            $(options.active)
+                .toggleClass(options.enabled, active === this)
+                .toggleClass(options.disabled, active !== this)
+        });
+
     };
     $.Simplerenew.tabs.options = {
         selector: null,
