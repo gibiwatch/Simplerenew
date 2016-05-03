@@ -216,12 +216,13 @@
             .each(function(idx, active) {
                 $(this)
                     .data('contentPanel', $($(this).attr('data-content')))
-                    .on('click', function(evt) {
+                    .on('click', function(evt, evtOptions) {
+                        $.extend(evtOptions, options);
                         headers.each(function(idx) {
                             $(this)
                                 .toggleClass(options.enabled, active === this)
                                 .toggleClass(options.disabled, active !== this)
-                                .data('contentPanel').closePanel(active !== this, options)
+                                .data('contentPanel').closePanel(active !== this, evtOptions)
                         });
                     });
             });
@@ -230,12 +231,7 @@
         if (!options.active) {
             options.active = '#' + $(headers[0]).attr('id');
         }
-        headers.each(function(idx) {
-            $(options.active)
-                .toggleClass(options.enabled, active === this)
-                .toggleClass(options.disabled, active !== this)
-        });
-
+        $(headers.filter(options.active)).trigger('click', {focus: false});
     };
     $.Simplerenew.tabs.options = {
         selector: null,
