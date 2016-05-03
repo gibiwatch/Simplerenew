@@ -40,7 +40,7 @@ abstract class SrValidation
             if (substr($js, 0, 4) == 'http') {
                 JHtml::_('script', $js);
             } elseif ($js[0] == ':') {
-                jhtml::_('script', substr($js, 1), false, true);
+                JHtml::_('script', substr($js, 1), false, true);
             } else {
                 SimplerenewFactory::getDocument()
                     ->addScriptDeclaration($js);

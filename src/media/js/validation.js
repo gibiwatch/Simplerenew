@@ -101,7 +101,7 @@
      * not have a name attribute will be given a temporary name that can be cleared
      * on submit.
      *
-     * @param {bool} [clear]
+     * @param {boolean} [clear]
      *
      * @returns {$.fn}
      */
@@ -381,7 +381,7 @@
 
                 password_compare: {
                     method : function(value, element, params) {
-                        var text = element.id.match(/(\S+?)(\d+)$/)
+                        var text = element.id.match(/(\S+?)(\d+)$/);
                         if (text && text[2] == 2) {
                             var partner = $('#' + text[1]);
                             if (partner.length) {
