@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="2.5" type="plugin" group="simplerenew" method="upgrade">
+<extension version="3.5" type="plugin" group="simplerenew" method="upgrade">
     <name>plg_simplerenew_recurly</name>
     <author>OSTraining</author>
     <creationDate>October 2, 2015</creationDate>

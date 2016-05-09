@@ -94,6 +94,8 @@
             <folder>/administrator/components/com_simplerenew/library/simplerenew/Gateway/Recurly</folder>
             <folder>/media/com_simplerenew/js/gateway</folder>
             <file>/administrator/components/com_simplerenew/library/simplerenew/Cache.php</file>
+            <file>/administrator/components/com_simplerenew/views/plan/tmpl/edit.j2.php</file>
+            <file>/administrator/components/com_simplerenew/views/plans/tmpl/default.j2.php</file>
         </obsolete>
     </alledia>
 
