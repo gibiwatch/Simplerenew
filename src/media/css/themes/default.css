@@ -91,7 +91,7 @@
     -webkit-transition: all 0.2s linear;
     -o-transition: all 0.2s linear;
     transition: all 0.2s linear;
-    text-decoration: underline;
+    text-decoration: none;
     color: #2184cd;
 }
 
@@ -380,6 +380,18 @@
     margin-top: 30px;
 }
 
+.ost-container .ost-coupon-box {
+    padding: 15px;
+    margin: 2px 0;
+    background: #fbfbfb;
+    border: 1px dashed #ccc;
+    color: #999;
+}
+
+.ost-container .ost-coupon-box .coupon-toggle {
+    color: #777;
+}
+
 .ost-container #coupon-area{
 	margin-top: 8px;
 }
@@ -578,6 +590,7 @@ span.simplerenew-plan.simplerenew-plan-selected{
 .ost-container .simplerenew-plan input[type="checkbox"] {
     display: none;
 }
+
 .simplerenew-plan:before {
     content: "\f10c";
     font-family:'FAwesome';
@@ -586,13 +599,20 @@ span.simplerenew-plan.simplerenew-plan-selected{
     display: inline-block;
     opacity: 0.4;
 }
+
 .simplerenew-plan.simplerenew-plan-selected:before {
     content: "\f00c";
     opacity: 1;
 }
+
 #simplerenew-toggle-login {
     float: right;
     margin-bottom: 0;
+    font-size: 14px;
+}
+
+#simplerenew-toggle-login i:before {
+    color: inherit;
 }
 
 /* Listing

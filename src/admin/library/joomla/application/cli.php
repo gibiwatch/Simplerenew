@@ -2,15 +2,17 @@
 /**
  * @package   Simplerenew
  * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
+ * @copyright 2014-2016 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
+use Joomla\Registry\Registry;
 
 defined('_JEXEC') or die();
 
 class SimplerenewApplicationCli extends JApplicationCli
 {
-    public function __construct(JInputCli $input = null, JRegistry $config = null, JDispatcher $dispatcher = null)
+    public function __construct(JInputCli $input = null, Registry $config = null, JEventDispatcher $dispatcher = null)
     {
         parent::__construct($input, $config, $dispatcher);
 

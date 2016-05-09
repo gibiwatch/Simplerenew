@@ -2,10 +2,11 @@
 /**
  * @package   Simplerenew
  * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
+ * @copyright 2014-2016 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Joomla\Registry\Registry;
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Billing;
 use Simplerenew\Api\Plan;
@@ -18,7 +19,7 @@ defined('_JEXEC') or die();
 class SimplerenewViewSubscribe extends SimplerenewViewSite
 {
     /**
-     * @var JRegistry
+     * @var Registry
      */
     protected $state = null;
 

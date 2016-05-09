@@ -2,11 +2,12 @@
 /**
  * @package   Simplerenew
  * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
+ * @copyright 2014-2016 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 use Alledia\Installer\AbstractScript;
+use Joomla\Registry\Registry;
 
 defined('_JEXEC') or die();
 
@@ -189,7 +190,7 @@ class com_simplerenewInstallerScript extends AbstractScript
         $table = JTable::getInstance('Extension');
         $table->load(array('element' => 'com_simplerenew'));
 
-        $params = new JRegistry($table->params);
+        $params = new Registry($table->params);
 
         $setParams    = ($type == 'install');
         $defaultGroup = JComponentHelper::getParams('com_users')->get('new_usertype');
@@ -272,7 +273,7 @@ class com_simplerenewInstallerScript extends AbstractScript
             $paramsData             = $params->toArray();
             $paramsData['gateways'] = $paramsData['gateway'];
             unset($paramsData['gateway']);
-            $params = new JRegistry($paramsData);
+            $params = new Registry($paramsData);
             $params->set('gateways.recurly', $recurlyNew);
         }
 

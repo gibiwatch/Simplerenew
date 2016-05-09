@@ -101,7 +101,7 @@
      * not have a name attribute will be given a temporary name that can be cleared
      * on submit.
      *
-     * @param {Boolean} [clear]
+     * @param {boolean} [clear]
      *
      * @returns {$.fn}
      */
@@ -531,20 +531,18 @@
         this.coupon = $('#coupon_code');
         this.form = this.plans.parents('form');
 
-        var calculator = this;
-
-        // Init any handlers requesting it
-        $(this.handlers).each(function(idx, handler) {
-            if (typeof handler.init === 'function') {
-                handler.init(calculator);
-            }
-        });
-
-        // Add event handlers
-        this.plans
-            .on('click', function(evt) {
-                if (!calculator.coupon.is(':visible')) {
-                    calculator.calculate();
+                password_compare: {
+                    method : function(value, element, params) {
+                        var text = element.id.match(/(\S+?)(\d+)$/);
+                        if (text && text[2] == 2) {
+                            var partner = $('#' + text[1]);
+                            if (partner.length) {
+                                return value == partner.val();
+                            }
+                        }
+                        return true;
+                    },
+                    message: 'Passwords don\'t match'
                 }
             });
 

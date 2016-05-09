@@ -2,9 +2,11 @@
 /**
  * @package   Simplerenew
  * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
+ * @copyright 2014-2016 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
+use Joomla\Registry\Registry;
 
 defined('_JEXEC') or die();
 
@@ -13,12 +15,12 @@ abstract class SimplerenewHelperSite
     protected static $googleFonts = 'https://fonts.googleapis.com';
 
     /**
-     * @var JRegistry
+     * @var Registry
      */
     protected static $params = null;
 
     /**
-     * @return JRegistry
+     * @return Registry
      */
     public static function getParams()
     {

@@ -2,7 +2,7 @@
 /**
  * @package   Simplerenew
  * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
+ * @copyright 2014-2016 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
@@ -32,49 +32,32 @@ abstract class SimplerenewViewAdmin extends SimplerenewView
      */
     public function display($tpl = null)
     {
-        $this->displayHeader();
+        if ($header = $this->displayHeader()) {
+            echo '<div class="simplerenew-header">' . $header . '</div>';
+        }
 
-        if (version_compare(JVERSION, '3.0', 'lt')) {
-            parent::display($tpl);
+        $hide    = SimplerenewFactory::getApplication()->input->getBool('hidemainmenu', false);
+        $sidebar = count(JHtmlSidebar::getEntries()) + count(JHtmlSidebar::getFilters());
+        if (!$hide && $sidebar > 0) {
+            $start = array(
+                '<div id="j-sidebar-container" class="span2">',
+                JHtmlSidebar::render(),
+                '</div>',
+                '<div id="j-main-container" class="span10">'
+            );
 
         } else {
-            $hide    = SimplerenewFactory::getApplication()->input->getBool('hidemainmenu', false);
-            $sidebar = count(JHtmlSidebar::getEntries()) + count(JHtmlSidebar::getFilters());
-            if (!$hide && $sidebar > 0) {
-                $start = array(
-                    '<div id="j-sidebar-container" class="span2">',
-                    JHtmlSidebar::render(),
-                    '</div>',
-                    '<div id="j-main-container" class="span10">'
-                );
-
-            } else {
-                $start = array('<div id="j-main-container">');
-            }
-
-            echo join("\n", $start) . "\n";
-            parent::display($tpl);
-            echo "\n</div>";
+            $start = array('<div id="j-main-container">');
         }
 
-        $this->displayFooter();
-    }
+        echo join("\n", $start) . "\n";
+        parent::display($tpl);
 
-    /**
-     * Load different layout depending on Joomla 2.5 vs 3.x
-     * For default layout, the j2 version is not required.
-     *
-     * @TODO: Test for existence of j2 non-default layout
-     *
-     * @return string
-     */
-    public function getLayout()
-    {
-        $layout = parent::getLayout();
-        if (version_compare(JVERSION, '3.0', 'lt')) {
-            $layout .= '.j2';
+        if ($footer = $this->displayFooter()) {
+            echo '<div class="simplerenew-footer">' . $footer . '</div>';
         }
-        return $layout;
+
+        echo "\n</div>";
     }
 
     /**
@@ -113,134 +96,31 @@ abstract class SimplerenewViewAdmin extends SimplerenewView
         $user = SimplerenewFactory::getUser();
         if ($user->authorise('core.admin', 'com_simplerenew')) {
             if ($addDivider) {
-                JToolBarHelper::divider();
+                JToolbarHelper::divider();
             }
-            JToolBarHelper::preferences('com_simplerenew');
+            JToolbarHelper::preferences('com_simplerenew');
         }
-    }
-
-    /**
-     * Render a form fieldset with the ability to compact two fields
-     * into a single line
-     *
-     * @param string $fieldSet
-     * @param array  $sameLine
-     * @param bool   $tabbed
-     *
-     * @return string
-     */
-    protected function renderFieldset($fieldSet, array $sameLine = array(), $tabbed = false)
-    {
-        $html = array();
-        if (!empty($this->form) && $this->form instanceof JForm) {
-            $fieldSets = $this->form->getFieldsets();
-
-            if (!empty($fieldSets[$fieldSet])) {
-                $name  = $fieldSets[$fieldSet]->name;
-                $label = $fieldSets[$fieldSet]->label;
-
-                if (version_compare(JVERSION, '3.0', 'lt')) {
-                    $html = $this->renderFieldsetJ2($name, $label, $sameLine, $tabbed);
-                } else {
-                    $html = $this->renderFieldsetJ3($name, $label, $sameLine, $tabbed);
-                }
-            }
-        }
-        return join("\n", $html);
-    }
-
-    protected function renderFieldsetJ3($name, $label, array $sameLine = array(), $tabbed = false)
-    {
-        $html = array();
-        if ($tabbed) {
-            $html[] = JHtml::_('bootstrap.addTab', 'myTab', $name, JText::_($label));
-        }
-        $html[] = '<div class="row-fluid">';
-        $html[] = '<fieldset class="adminform">';
-
-        foreach ($this->form->getFieldset($name) as $field) {
-            if (in_array($field->fieldname, $sameLine)) {
-                continue;
-            }
-
-            $fieldHtml = array(
-                '<div class="control-group">',
-                '<div class="control-label">',
-                $field->label,
-                '</div>',
-                '<div class="controls">',
-                $field->input
-            );
-            $html      = array_merge($html, $fieldHtml);
-
-            if (isset($sameLine[$field->fieldname])) {
-                $html[] = ' ' . $this->form->getField($sameLine[$field->fieldname])->input;
-            }
-
-            $html[] = '</div>';
-            $html[] = '</div>';
-        }
-        $html[] = '</fieldset>';
-        $html[] = '</div>';
-        if ($tabbed) {
-            $html[] = JHtml::_('bootstrap.endTab');
-        }
-
-        return $html;
-    }
-
-    protected function renderFieldsetJ2($name, $label, array $sameLine = array(), $tabbed = false)
-    {
-        $html = array();
-        if ($tabbed) {
-            $html[] = JHtml::_('tabs.panel', JText::_($label), $name . '-page');
-        }
-        $html[] = '<div class="width-100">';
-        $html[] = '<fieldset class="adminform">';
-        $html[] = '<ul class="adminformlist">';
-
-        foreach ($this->form->getFieldset($name) as $field) {
-            if (in_array($field->fieldname, $sameLine)) {
-                continue;
-            }
-
-            $fieldHtml = array(
-                '<li>' . $field->label . $field->input . '</li>'
-            );
-            $html      = array_merge($html, $fieldHtml);
-
-            if (isset($sameLine[$field->fieldname])) {
-                $html[] = ' ' . $this->form->getField($sameLine[$field->fieldname])->input;
-            }
-
-        }
-        $endHtml = array(
-            '</ul>',
-            '</fieldset>',
-            '</div>',
-            '<div class="clr"></div>'
-        );
-
-        return array_merge($html, $endHtml);
     }
 
     /**
      * Display a header on admin pages
      *
-     * @return void
+     * @return string
      */
     protected function displayHeader()
     {
-        // To be set in subclasses
+        return '';
     }
 
     /**
      * Display a standard footer on all admin pages
      *
-     * @return void
+     * @return string
      */
     protected function displayFooter()
     {
-        // To be set in subclassess
+        $info = SimplerenewHelper::getInfo();
+
+        return JText::_($info->get('name')) . ' v' .  $info->get('version');
     }
 }

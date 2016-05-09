@@ -2,7 +2,7 @@
 /**
  * @package   Simplerenew
  * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
+ * @copyright 2014-2016 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
@@ -32,7 +32,7 @@ JHtml::_('sr.tabs', '.payment-tabs div', $tabOptions);
 
 echo $this->stepHeading(JText::_('COM_SIMPLERENEW_HEADING_BILLING'));
 
-if ($payment instanceof Paypal):
+if ($payment instanceof PayPal):
     ?>
     <div class="ost-alert-notify m-bottom">
         <?php echo JText::sprintf('COM_SIMPLERENEW_BILLING_EDIT_PAYPAL', $payment->agreementId); ?>

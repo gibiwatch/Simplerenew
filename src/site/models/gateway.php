@@ -2,10 +2,11 @@
 /**
  * @package   Simplerenew
  * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
+ * @copyright 2014-2016 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Joomla\Registry\Registry;
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Billing;
 use Simplerenew\Api\Coupon;
@@ -28,7 +29,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
     public function saveUser(array $data = null)
     {
         $container = SimplerenewFactory::getContainer();
-        $data      = new JRegistry($data ?: $this->getState()->getProperties());
+        $data      = new Registry($data ?: $this->getState()->getProperties());
         $user      = $container->user;
 
         if (!$data->get('userId')) {
@@ -107,7 +108,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
             // Create a new account
         }
 
-        $data = new JRegistry($data ?: $this->getState()->getProperties());
+        $data = new Registry($data ?: $this->getState()->getProperties());
         $data = $data->toObject();
 
         $account->setProperties($data);
@@ -127,7 +128,7 @@ class SimplerenewModelGateway extends SimplerenewModelSite
      */
     public function saveBilling(Account $account, array $data = null)
     {
-        $data = new JRegistry($data ?: $this->getState('billing'));
+        $data = new Registry($data ?: $this->getState('billing'));
         $data = $data->toArray();
 
         $container = SimplerenewFactory::getContainer();

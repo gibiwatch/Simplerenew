@@ -2,7 +2,7 @@
 /**
  * @package   Simplerenew
  * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
+ * @copyright 2014-2016 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
@@ -26,13 +26,11 @@ if (!$loggedIn) {
 
     $stepHeading = <<<BUTTONHTML
 {$stepHeading}
-<button
-    type="button"
+<a
     id="simplerenew-toggle-login"
-    class="btn-main btn-small"
     data-panels=".simplerenew-toggle-item">
-    {$buttonText[$defaultForm]}
-</button>
+    <i class="fa fa-user"></i> {$buttonText[$defaultForm]}
+</a>
 BUTTONHTML;
 }
 

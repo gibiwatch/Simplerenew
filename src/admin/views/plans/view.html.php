@@ -2,7 +2,7 @@
 /**
  * @package   Simplerenew
  * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
+ * @copyright 2014-2016 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
@@ -78,12 +78,14 @@ class SimplerenewViewPlans extends SimplerenewViewAdmin
 
     protected function displayFooter()
     {
-        parent::displayFooter();
+        $footer = parent::displayFooter();
 
         $update = SimplerenewFactory::getStatus()->update;
         if ($update) {
             $link = 'index.php?option=com_simplerenew&task=update.update';
-            echo JText::sprintf('COM_SIMPLERENEW_UPDATE_AVAILABLE', $link, $update->version);
+            $footer .= '<br/>' . JText::sprintf('COM_SIMPLERENEW_UPDATE_AVAILABLE', $link, $update->version);
         }
+
+        return $footer;
     }
 }

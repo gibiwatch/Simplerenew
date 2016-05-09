@@ -2,10 +2,11 @@
 /**
  * @package   Simplerenew
  * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
+ * @copyright 2014-2016 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Joomla\Registry\Registry;
 use Simplerenew\Api\Subscription;
 
 defined('_JEXEC') or die();
@@ -93,7 +94,7 @@ class SimplerenewModelSubscribe extends SimplerenewModelAccount
         if ($params = $this->state->get('parameters.menu')) {
             $globalParams = $this->state->get('parameters.component');
 
-            $plans = new JRegistry($params->get('plans'));
+            $plans = new Registry($params->get('plans'));
             $this->setState('filter.plans', $plans->toArray());
 
             // Using the coupon URL var overrides couponAllow

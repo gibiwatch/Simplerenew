@@ -2,9 +2,11 @@
 /**
  * @package   Simplerenew
  * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
+ * @copyright 2014-2016 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
+use Joomla\Registry\Registry;
 
 defined('_JEXEC') or die();
 
@@ -72,14 +74,14 @@ abstract class SimplerenewHelper
     /**
      * get component information
      *
-     * @return JRegistry
+     * @return Registry
      */
     public static function getInfo()
     {
-        $info = new jRegistry();
+        $info = new Registry();
         $path = SIMPLERENEW_ADMIN . '/simplerenew.xml';
         if (file_exists($path)) {
-            $xml = JFactory::getXML($path);
+            $xml = simplexml_load_file($path);
 
             foreach ($xml->children() as $e) {
                 if (!$e->children()) {
@@ -415,7 +417,7 @@ abstract class SimplerenewHelper
         ));
 
         $table->load($query);
-        $table->params = new JRegistry($table->params);
+        $table->params = new Registry($table->params);
 
         return $table;
     }
@@ -495,13 +497,13 @@ abstract class SimplerenewHelper
     /**
      * Get active cancellation funnels
      *
-     * @param JRegistry $params
+     * @param Registry $params
      *
-     * @return JRegistry
+     * @return Registry
      */
-    public static function getFunnel(JRegistry $params = null)
+    public static function getFunnel(Registry $params = null)
     {
-        $result = new JRegistry();
+        $result = new Registry();
 
         if (!$params) {
             // Use parameters from the currently active menu

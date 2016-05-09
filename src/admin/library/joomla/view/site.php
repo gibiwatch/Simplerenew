@@ -2,16 +2,18 @@
 /**
  * @package   Simplerenew
  * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
+ * @copyright 2014-2016 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
+use Joomla\Registry\Registry;
 
 defined('_JEXEC') or die();
 
 abstract class SimplerenewViewSite extends SimplerenewView
 {
     /**
-     * @var JRegistry
+     * @var Registry
      */
     protected $params = null;
 
@@ -45,13 +47,13 @@ abstract class SimplerenewViewSite extends SimplerenewView
     }
 
     /**
-     * @return JRegistry
+     * @return Registry
      */
     protected function getParams()
     {
         if ($this->params === null) {
             if (!($this->params = $this->get('Params'))) {
-                $this->params = new JRegistry();
+                $this->params = new Registry();
             }
         }
 

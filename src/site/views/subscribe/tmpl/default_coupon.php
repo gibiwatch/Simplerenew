@@ -2,7 +2,7 @@
 /**
  * @package   Simplerenew
  * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
+ * @copyright 2014-2016 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
@@ -26,7 +26,7 @@ if ($couponCode && $planSelected) {
 ?>
 <div class="ost-section p-bottom m-top b-bottom">
     <div class="block6">
-        <div class="ost-alert-notify">
+        <div class="ost-coupon-box">
 
             <div class="coupon-toggle" data-content="#coupon-area">
                 <?php echo JText::_('COM_SIMPLERENEW_COUPON_CODE_ASK'); ?>

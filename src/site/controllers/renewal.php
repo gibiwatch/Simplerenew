@@ -2,10 +2,11 @@
 /**
  * @package   Simplerenew
  * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
+ * @copyright 2014-2016 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Joomla\Registry\Registry;
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
@@ -27,7 +28,7 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
     protected $validSubscriptions = null;
 
     /**
-     * @var JRegistry
+     * @var Registry
      */
     protected $params = null;
 
@@ -358,7 +359,7 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
     /**
      * Get the current menu parameters
      *
-     * @return JRegistry
+     * @return Registry
      */
     protected function getParams()
     {
@@ -366,7 +367,7 @@ class SimplerenewControllerRenewal extends SimplerenewControllerBase
             if ($menu = SimplerenewFactory::getApplication()->getMenu()->getActive()) {
                 $this->params = $menu->params;
             } else {
-                $this->params = new JRegistry;
+                $this->params = new Registry();
             }
         }
         return $this->params;

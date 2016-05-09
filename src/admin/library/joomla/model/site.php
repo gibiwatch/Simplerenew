@@ -2,9 +2,11 @@
 /**
  * @package   Simplerenew
  * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
+ * @copyright 2014-2016 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
+use Joomla\Registry\Registry;
 
 defined('_JEXEC') or die();
 
@@ -27,17 +29,17 @@ abstract class SimplerenewModelSite extends JModelLegacy
     /**
      * Get component params merged with menu params
      *
-     * @return JRegistry
+     * @return Registry
      */
     public function getParams()
     {
         /**
-         * @var JRegistry $state
-         * @var JRegistry $params
+         * @var Registry $state
+         * @var Registry $params
          */
         $params = clone $this->state->get('parameters.component');
         if ($menuParams = $this->state->get('parameters.menu')) {
-            if ($menuParams instanceof JRegistry) {
+            if ($menuParams instanceof Registry) {
                 $menuParams = $menuParams->toObject();
             }
             $params->loadObject($menuParams);

@@ -2,7 +2,7 @@
 /**
  * @package   Simplerenew
  * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
+ * @copyright 2014-2016 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
@@ -11,6 +11,7 @@ namespace Simplerenew\Cms\Joomla\User;
 use JAuthentication;
 use JFactory;
 use JLoader;
+use Joomla\Registry\Registry;
 use JUser;
 use JUserHelper;
 use Simplerenew\Exception;
@@ -37,7 +38,7 @@ class UserAdapter implements UserInterface
     );
 
     /**
-     * @var \JRegistry
+     * @var Registry
      */
     protected $userParams = null;
 

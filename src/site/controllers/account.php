@@ -2,10 +2,11 @@
 /**
  * @package   Simplerenew
  * @contact   www.ostraining.com, support@ostraining.com
- * @copyright 2014-2015 Open Source Training, LLC. All rights reserved
+ * @copyright 2014-2016 Open Source Training, LLC. All rights reserved
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Joomla\Registry\Registry;
 use Simplerenew\Api\Account;
 use Simplerenew\Exception\NotFound;
 
@@ -19,7 +20,7 @@ class SimplerenewControllerAccount extends SimplerenewControllerBase
 
         /** @var SimplerenewModelGateway $model */
         $model = SimplerenewModel::getInstance('Gateway');
-        $data  = new JRegistry($model->getState()->getProperties());
+        $data  = new Registry($model->getState()->getProperties());
 
         $userId = $data->get('userId');
         $user   = SimplerenewFactory::getUser();
