@@ -6,6 +6,7 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Joomla\Registry\Registry;
 use Simplerenew\Api\Subscription;
 
 defined('_JEXEC') or die();
@@ -93,7 +94,7 @@ class SimplerenewModelSubscribe extends SimplerenewModelAccount
         if ($params = $this->state->get('parameters.menu')) {
             $globalParams = $this->state->get('parameters.component');
 
-            $plans = new JRegistry($params->get('plans'));
+            $plans = new Registry($params->get('plans'));
             $this->setState('filter.plans', $plans->toArray());
 
             // Using the coupon URL var overrides couponAllow

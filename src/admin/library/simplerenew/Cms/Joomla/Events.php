@@ -8,6 +8,7 @@
 
 namespace Simplerenew\Cms\Joomla;
 
+use JEventDispatcher;
 use Simplerenew\Plugin\CmsInterface;
 
 defined('_JEXEC') or die();
@@ -15,17 +16,13 @@ defined('_JEXEC') or die();
 class Events implements CmsInterface
 {
     /**
-     * @var \JEventDispatcher|\JDispatcher
+     * @var JEventDispatcher
      */
     protected $dispatcher = null;
 
     public function __construct()
     {
-        if (version_compare(JVERSION, '3.0', 'ge')) {
-            $this->dispatcher = \JEventDispatcher::getInstance();
-        } else {
-            $this->dispatcher = \JDispatcher::getInstance();
-        }
+        $this->dispatcher = JEventDispatcher::getInstance();
     }
 
     /**

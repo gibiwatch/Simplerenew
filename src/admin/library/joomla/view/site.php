@@ -6,12 +6,14 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Joomla\Registry\Registry;
+
 defined('_JEXEC') or die();
 
 abstract class SimplerenewViewSite extends SimplerenewView
 {
     /**
-     * @var JRegistry
+     * @var Registry
      */
     protected $params = null;
 
@@ -45,13 +47,13 @@ abstract class SimplerenewViewSite extends SimplerenewView
     }
 
     /**
-     * @return JRegistry
+     * @return Registry
      */
     protected function getParams()
     {
         if ($this->params === null) {
             if (!($this->params = $this->get('Params'))) {
-                $this->params = new JRegistry();
+                $this->params = new Registry();
             }
         }
 

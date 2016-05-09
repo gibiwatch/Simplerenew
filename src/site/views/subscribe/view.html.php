@@ -6,6 +6,7 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Joomla\Registry\Registry;
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Billing;
 use Simplerenew\Api\Plan;
@@ -18,7 +19,7 @@ defined('_JEXEC') or die();
 class SimplerenewViewSubscribe extends SimplerenewViewSite
 {
     /**
-     * @var JRegistry
+     * @var Registry
      */
     protected $state = null;
 

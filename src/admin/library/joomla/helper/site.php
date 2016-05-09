@@ -6,6 +6,8 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Joomla\Registry\Registry;
+
 defined('_JEXEC') or die();
 
 abstract class SimplerenewHelperSite
@@ -13,12 +15,12 @@ abstract class SimplerenewHelperSite
     protected static $googleFonts = 'https://fonts.googleapis.com';
 
     /**
-     * @var JRegistry
+     * @var Registry
      */
     protected static $params = null;
 
     /**
-     * @return JRegistry
+     * @return Registry
      */
     public static function getParams()
     {

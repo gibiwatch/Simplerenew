@@ -6,6 +6,7 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Joomla\Registry\Registry;
 use Simplerenew\Api\Coupon;
 use Simplerenew\Api\Plan;
 use Simplerenew\Api\Subscription;
@@ -37,7 +38,7 @@ class SimplerenewViewRenewal extends SimplerenewViewSite
     protected $plan = null;
 
     /**
-     * @var JRegistry
+     * @var Registry
      */
     protected $funnel = null;
 

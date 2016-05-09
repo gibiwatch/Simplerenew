@@ -11,6 +11,7 @@ namespace Simplerenew\Cms\Joomla\User;
 use JAuthentication;
 use JFactory;
 use JLoader;
+use Joomla\Registry\Registry;
 use JUser;
 use JUserHelper;
 use Simplerenew\Exception;
@@ -37,7 +38,7 @@ class UserAdapter implements UserInterface
     );
 
     /**
-     * @var \JRegistry
+     * @var Registry
      */
     protected $userParams = null;
 

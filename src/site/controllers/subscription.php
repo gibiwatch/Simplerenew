@@ -6,6 +6,7 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Joomla\Registry\Registry;
 use Simplerenew\Api\Account;
 use Simplerenew\Api\Subscription;
 
@@ -135,7 +136,7 @@ class SimplerenewControllerSubscription extends SimplerenewControllerBase
         /**
          * Check for global or locally set new subscription redirect
          *
-         * @var JRegistry $params
+         * @var Registry $params
          */
         $params         = $this->getModel('Subscribe', 'SimplerenewModel')->getParams();
         $globalRedirect = $params->get('redirects.newSubscription');

@@ -6,6 +6,8 @@
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Joomla\Registry\Registry;
+
 defined('_JEXEC') or die();
 
 jimport('joomla.plugin.plugin');
@@ -84,7 +86,7 @@ class plgSystemSimplerenew extends JPlugin
                 // Clear the last sync when in config options
                 $table = JTable::getInstance('Extension');
                 $table->load(array('element' => 'com_simplerenew'));
-                $table->params = new JRegistry($table->params);
+                $table->params = new Registry($table->params);
 
                 $table->params->set('log.lastPlanSync', 0);
                 $table->params = $table->params->toString();

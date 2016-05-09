@@ -32,49 +32,32 @@ abstract class SimplerenewViewAdmin extends SimplerenewView
      */
     public function display($tpl = null)
     {
-        $this->displayHeader();
+        if ($header = $this->displayHeader()) {
+            echo '<div class="simplerenew-header">' . $header . '</div>';
+        }
 
-        if (version_compare(JVERSION, '3.0', 'lt')) {
-            parent::display($tpl);
+        $hide    = SimplerenewFactory::getApplication()->input->getBool('hidemainmenu', false);
+        $sidebar = count(JHtmlSidebar::getEntries()) + count(JHtmlSidebar::getFilters());
+        if (!$hide && $sidebar > 0) {
+            $start = array(
+                '<div id="j-sidebar-container" class="span2">',
+                JHtmlSidebar::render(),
+                '</div>',
+                '<div id="j-main-container" class="span10">'
+            );
 
         } else {
-            $hide    = SimplerenewFactory::getApplication()->input->getBool('hidemainmenu', false);
-            $sidebar = count(JHtmlSidebar::getEntries()) + count(JHtmlSidebar::getFilters());
-            if (!$hide && $sidebar > 0) {
-                $start = array(
-                    '<div id="j-sidebar-container" class="span2">',
-                    JHtmlSidebar::render(),
-                    '</div>',
-                    '<div id="j-main-container" class="span10">'
-                );
-
-            } else {
-                $start = array('<div id="j-main-container">');
-            }
-
-            echo join("\n", $start) . "\n";
-            parent::display($tpl);
-            echo "\n</div>";
+            $start = array('<div id="j-main-container">');
         }
 
-        $this->displayFooter();
-    }
+        echo join("\n", $start) . "\n";
+        parent::display($tpl);
 
-    /**
-     * Load different layout depending on Joomla 2.5 vs 3.x
-     * For default layout, the j2 version is not required.
-     *
-     * @TODO: Test for existence of j2 non-default layout
-     *
-     * @return string
-     */
-    public function getLayout()
-    {
-        $layout = parent::getLayout();
-        if (version_compare(JVERSION, '3.0', 'lt')) {
-            $layout .= '.j2';
+        if ($footer = $this->displayFooter()) {
+            echo '<div class="simplerenew-footer">' . $footer . '</div>';
         }
-        return $layout;
+
+        echo "\n</div>";
     }
 
     /**
@@ -122,20 +105,22 @@ abstract class SimplerenewViewAdmin extends SimplerenewView
     /**
      * Display a header on admin pages
      *
-     * @return void
+     * @return string
      */
     protected function displayHeader()
     {
-        // To be set in subclasses
+        return '';
     }
 
     /**
      * Display a standard footer on all admin pages
      *
-     * @return void
+     * @return string
      */
     protected function displayFooter()
     {
-        // To be set in subclassess
+        $info = SimplerenewHelper::getInfo();
+
+        return JText::_($info->get('name')) . ' v' .  $info->get('version');
     }
 }
