@@ -71,6 +71,23 @@
         <namespace>Simplerenew</namespace>
         <license>free</license>
 
+        <relatedExtensions>
+            <extension
+                type="plugin"
+                folder="simplerenew"
+                element="recurly">plg_simplerenew_recurly</extension>
+
+            <extension
+                type="plugin"
+                folder="system"
+                element="simplerenew">plg_system_simplerenew</extension>
+
+            <extension
+                type="plugin"
+                folder="user"
+                element="simplerenew">plg_user_simplerenew</extension>
+        </relatedExtensions>
+
         <obsolete>
             <folder>/administrator/components/com_simplerenew/library/pimple</folder>
             <folder>/administrator/components/com_simplerenew/library/simplerenew/Cms/Joomla/Services</folder>
@@ -84,6 +101,7 @@
         <server
             type="extension"
             priority="1"
-            name="Simplerenew Updates"><![CDATA[https://deploy.ostraining.com/client/update/free/stable/com_simplerenew/extension.xml]]></server>
+            name="Simplerenew Updates">
+            <![CDATA[https://deploy.ostraining.com/client/update/free/stable/com_simplerenew/extension.xml]]></server>
     </updateservers>
 </extension>
