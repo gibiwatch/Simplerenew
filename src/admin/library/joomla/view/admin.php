@@ -113,9 +113,9 @@ abstract class SimplerenewViewAdmin extends SimplerenewView
         $user = SimplerenewFactory::getUser();
         if ($user->authorise('core.admin', 'com_simplerenew')) {
             if ($addDivider) {
-                JToolBarHelper::divider();
+                JToolbarHelper::divider();
             }
-            JToolBarHelper::preferences('com_simplerenew');
+            JToolbarHelper::preferences('com_simplerenew');
         }
     }
 
