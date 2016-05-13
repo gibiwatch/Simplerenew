@@ -99,6 +99,8 @@
         </obsolete>
     </alledia>
 
+    <variant>FREE</variant>
+
     <updateservers>
         <server
             type="extension"
