@@ -2,12 +2,12 @@
 <extension type="component" version="3.5" method="upgrade">
     <name>COM_SIMPLERENEW</name>
     <author>OSTraining</author>
-    <creationDate>May 9, 2016</creationDate>
+    <creationDate>May 24, 2016</creationDate>
     <copyright>Copyright (C) 2014-2016 OSTraining.com</copyright>
     <license>GPL v3</license>
     <authorEmail>info@simplerenew.com</authorEmail>
     <authorUrl>https://simplerenew.com</authorUrl>
-    <version>2.0.0</version>
+    <version>2.0.3b1</version>
     <description>COM_SIMPLERENEW_COMPONENT_DESCRIPTION</description>
 
     <scriptfile>script.simplerenew.php</scriptfile>
@@ -98,6 +98,8 @@
             <file>/administrator/components/com_simplerenew/views/plans/tmpl/default.j2.php</file>
         </obsolete>
     </alledia>
+
+    <variant>FREE</variant>
 
     <updateservers>
         <server
