@@ -19,7 +19,10 @@ defined('_JEXEC') or die();
 class NotifyImp extends AbstractRecurlyBase implements NotifyInterface
 {
     protected $validIpAddresses = array(
+        '50.0.172.150',
         '50.18.192.88',
+        '52.203.102.94',
+        '52.203.192.184',
         '52.8.32.100',
         '52.9.209.233'
     );
