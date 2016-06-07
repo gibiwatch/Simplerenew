@@ -8,6 +8,7 @@
     <authorEmail>info@simplerenew.com</authorEmail>
     <authorUrl>https://simplerenew.com</authorUrl>
     <version>2.0.3b1</version>
+    <variant>PRO</variant>
     <description>COM_SIMPLERENEW_COMPONENT_DESCRIPTION</description>
 
     <scriptfile>script.simplerenew.php</scriptfile>
@@ -69,7 +70,7 @@
     <alledia>
         <element>simplerenew</element>
         <namespace>Simplerenew</namespace>
-        <license>free</license>
+        <license>pro</license>
 
         <relatedExtensions>
             <extension
@@ -86,6 +87,13 @@
                 type="plugin"
                 folder="user"
                 element="simplerenew">plg_user_simplerenew</extension>
+
+            <extension
+                type="plugin"
+                group="system"
+                element="osmylicensesmanager"
+                publish="true"
+                ordering="last">OSMyLicensesManager</extension>
         </relatedExtensions>
 
         <obsolete>
@@ -106,6 +114,6 @@
             type="extension"
             priority="1"
             name="Simplerenew Updates">
-            <![CDATA[https://deploy.ostraining.com/client/update/free/stable/com_simplerenew/]]></server>
+            <![CDATA[https://deploy.ostraining.com/client/update/pro/stable/com_simplerenew/]]></server>
     </updateservers>
 </extension>
