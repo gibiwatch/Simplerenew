@@ -106,6 +106,6 @@
             type="extension"
             priority="1"
             name="Simplerenew Updates">
-            <![CDATA[https://deploy.ostraining.com/client/update/free/stable/com_simplerenew/extension.xml]]></server>
+            <![CDATA[https://deploy.ostraining.com/client/update/free/stable/com_simplerenew/]]></server>
     </updateservers>
 </extension>
