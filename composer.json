@@ -9,7 +9,7 @@
         "element-short"  : "simplerenew",
         "name"           : "SimpleRenew",
         "client"         : "administrator",
-        "package-license": "free"
+        "package-license": "pro"
     },
     "authors"          : [
         {
